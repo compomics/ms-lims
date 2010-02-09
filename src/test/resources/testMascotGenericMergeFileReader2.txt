@@ -1,0 +1,255 @@
+###	
+###	C:\Documents and Settings\Administrator\Desktop\Cyt C 1pmol5 ul MS031211MSMS_LCA_1-D,4_01_88.d\Analysis.yep(Cyt C 1pmol5 ul MS031211MSMS_LCA_1-D,4_01_88.d)
+###    Cyt C 1pmol5 ul MS031211MSMS
+###    PeakWidth 0.10, MiniumIntensity 100, S/N 1
+###    	Retain Residuals no, Create neutrally.. no,
+###    FullScan Parameters: AdductIon (+)+H (-)-H, LowMass 250, HighMass 4000, MaxCharge charge decon 4, MinPeaks 3
+###    Perf. isotope decon yes, Max Charge Istopic decon 2, MW agreement 5.00, Abund. cutoff 10.00, Envelope cutoff 75.00
+###    MaxRes   Parameters: AdductIon (+)+H (-)-H, LowMass 100, HighMass 3000 
+###    Perf. isotope decon yes, Max Charge Istopic decon 3, Abund. cutoff 2.00
+###    MSn		Parameters: AdductIon (+)+H (-)-H, LowMass 50, HighMass 2000 
+###    Perf. isotope decon yes, Max Charge Istopic decon 1, Abund. cutoff 2.00
+###    Global Charge Limit: no 3, Prefer FullScan Result: yes, Export what: 2 (0=non deconv/1=deconv only/2=mixed), NoMSMSSignals: 50, NoMSSignals 2, NormalizeData no
+###FS:    #m/z:   391.10 #charge   1
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #0
+###MSMS: #1
+BEGIN IONS
+TITLE= Cmpd 1, +MSn(391.47) 0.1 min
+PEPMASS=391.096	5610
+CHARGE=1+
+113.112	600	
+148.954	7737	1+
+166.934	1116	
+259.658	169	
+260.181	273	
+260.576	155	
+260.898	274	
+278.003	157	
+278.354	157	
+279.052	1587	
+
+END IONS
+
+###FS:    #m/z:   518.96 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #2
+###MSMS: #3
+BEGIN IONS
+TITLE= Cmpd 2, +MSn(519.34) 0.2 min
+PEPMASS=518.961	2803
+
+238.948	108	
+280.887	126	
+282.951	241	
+298.929	833	1+
+301.316	118	
+414.927	459	
+502.846	563	
+
+END IONS
+
+###FS:    #m/z:   610.97 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #8
+###MSMS: #9
+BEGIN IONS
+TITLE= Cmpd 3, +MSn(611.59) 0.5 min
+PEPMASS=610.966	1139
+
+270.829	104	
+285.838	134	
+
+END IONS
+
+###FS:    #m/z:   419.19 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #12
+###MSMS: #13
+BEGIN IONS
+TITLE= Cmpd 4, +MSn(419.28) 0.7 min
+PEPMASS=419.191	4925
+
+356.697	141	
+
+END IONS
+
+###FS:    #m/z:   354.87 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #14
+###MSMS: #15
+BEGIN IONS
+TITLE= Cmpd 5, +MSn(354.37) 0.9 min
+PEPMASS=354.868	4183
+
+268.971	381	
+284.910	290	
+
+END IONS
+
+###FS:    #m/z:   445.97 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #16
+###MSMS: #17
+BEGIN IONS
+TITLE= Cmpd 6, +MSn(446.27) 1.0 min
+PEPMASS=445.966	2606
+
+221.838	107	
+340.904	124	
+356.884	133	
+358.846	658	
+361.070	111	
+362.924	145	
+365.842	111	
+407.199	137	
+428.921	787	
+429.876	523	
+430.888	332	
+
+END IONS
+
+###FS:    #m/z:   593.00 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #18
+###MSMS: #19
+BEGIN IONS
+TITLE= Cmpd 7, +MSn(594.31) 1.1 min
+PEPMASS=593.000	1767
+
+445.056	228	
+
+END IONS
+
+###FS:    #m/z:   369.00 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #20
+###MSMS: #21
+BEGIN IONS
+TITLE= Cmpd 8, +MSn(369.28) 1.2 min
+PEPMASS=369.002	6206
+
+148.935	234	
+238.176	240	
+298.971	312	1+
+304.468	111	
+390.201	144	
+
+END IONS
+
+###FS:    #m/z:   592.32 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #22
+###MSMS: #23
+BEGIN IONS
+TITLE= Cmpd 9, +MSn(593.06) 1.3 min
+PEPMASS=592.322	1271
+
+354.797	164	
+
+END IONS
+
+###FS:    #m/z:   355.03 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #30
+###MSMS: #31
+BEGIN IONS
+TITLE= Cmpd 12, +MSn(356.45) 1.8 min
+PEPMASS=355.034	2327
+
+220.988	145	
+268.882	180	
+281.698	145	
+284.883	313	
+286.626	240	
+299.766	153	
+
+END IONS
+
+###FS:    #m/z:   610.28 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #32
+###MSMS: #33
+BEGIN IONS
+TITLE= Cmpd 13, +MSn(610.13) 1.9 min
+PEPMASS=610.281	3261
+
+354.963	162	
+
+END IONS
+
+###FS:    #m/z:   519.35 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #34
+###MSMS: #35
+BEGIN IONS
+TITLE= Cmpd 14, +MSn(519.98) 2.0 min
+PEPMASS=519.348	2063
+
+266.943	115	
+280.881	260	1+
+296.968	188	
+298.949	643	
+299.196	103	
+299.910	208	
+304.341	113	
+326.221	114	
+414.925	115	
+415.840	139	
+502.282	138	
+502.828	494	
+503.958	779	
+
+END IONS
+
+###FS:    #m/z:   355.02 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #38
+###MSMS: #39
+BEGIN IONS
+TITLE= Cmpd 16, +MSn(355.51) 2.2 min
+PEPMASS=355.020	7850
+
+268.857	465	
+284.852	360	1+
+298.898	109	
+339.878	163	
+378.762	121	
+
+END IONS
+
+###FS:    #m/z:   369.06 #charge-999
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #40
+###MSMS: #41
+BEGIN IONS
+TITLE= Cmpd 17, +MSn(370.46) 2.3 min
+PEPMASS=369.064	3703
+
+148.988	488	1+
+166.894	247	
+258.957	101	
+282.189	110	
+298.889	306	1+
+354.899	106	
+
+END IONS
+
+###FS:    #m/z:   444.93 #charge   2
+###MaxRes:#m/z:     0.00 #charge-999
+###MS: #44
+###MSMS: #45
+BEGIN IONS
+TITLE= Cmpd 19, +MSn(445.02) 2.6 min
+PEPMASS=444.930	3759
+CHARGE=2+
+340.924	140	
+348.760	148	
+358.905	481	
+424.282	152	
+428.306	219	
+428.926	2578	
+689.074	119	
+
+END IONS
+
