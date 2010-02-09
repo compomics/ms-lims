@@ -1,0 +1,867 @@
+
+Spectrum with: 
+	- sequence: NELCPK	Modified sequence: NH2-N<Dam>ELCPK-COOH
+	- matching: O7:5626(200-205)
+			PR-domain zinc finger protein 1 (Beta-interferon gene positive-regulatory domain I binding factor) 
+	- score: 36
+	- Mr(cal): 703.321045
+	- Mr(exp): 703.3205320000001
+	- ID treshold: 33
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 352.6681 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 647.31, 0.1247, 339.6397)
+	- this was query number 63
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: CDVDIR	Modified sequence: NH2-CDVDIR-COOH
+	- matching: P02570(285-290)
+			Actin, cytoplasmic 1 (Beta-actin).
+	- score: 53
+	- Mr(cal): 719.327194
+	- Mr(exp): 719.2767699999999
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 360.6462 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.1, 703.22, 1.1043, 1352.5736)
+	- this was query number 64
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: VGVDGFGR	Modified sequence: NH2-VGVDGFGR-COOH
+	- matching: P00354(5-12)
+			Glyceraldehyde 3-phosphate dehydrogenase, muscle (EC 1.2.1.12).
+	- score: 37
+	- Mr(cal): 805.408173
+	- Mr(exp): 805.358556
+	- ID treshold: 31
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 403.6871 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.1, 709.35, 0.5578, 351.9053)
+	- this was query number 75
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: VGVNGFGR	Modified sequence: NH2-VGVN<Dam>GFGR-COOH
+	- matching: P04406(5-12)
+			null
+	- score: 37
+	- Mr(cal): 805.408173
+	- Mr(exp): 805.358556
+	- ID treshold: 31
+	- homology treshold: 0
+	- rank: 2
+	- from file: *
+	- precursor mass and charge: 403.6871 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.1, 709.35, 0.5578, 351.9053)
+	- this was query number 75
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: SSLSRGNK	Modified sequence: NH2-SSLSRGNK-COOH
+	- matching: Q09472(1561-1568)
+			E1A-associated protein p300 (EC 2.3.1.48).
+	- score: 38
+	- Mr(cal): 847.451126
+	- Mr(exp): 847.3833360000001
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 424.6995 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (175.12, 1321.82, 5.0E-4, 53.8348)
+	- this was query number 86
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: NSGPVVEK	Modified sequence: Ace-N<Dam>SGPVVEK-COOH
+	- matching: P03956(56-63)
+			Interstitial collagenase precursor (EC 3.4.24.7) (Matrixmetalloproteinase-1) (MMP-1) (Fibroblast co
+	- score: 33
+	- Mr(cal): 871.428665
+	- Mr(exp): 871.349524
+	- ID treshold: 32
+	- homology treshold: 31
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 436.6826 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 715.31, 1.1043, 119.197)
+	- this was query number 93
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: DQVDQLR	Modified sequence: NH2-DQ<Dam>VDQLR-COOH
+	- matching: Q9P2M7(991-997)
+			Cingulin.
+	- score: 33
+	- Mr(cal): 873.419189
+	- Mr(exp): 873.3839479999999
+	- ID treshold: 33
+	- homology treshold: 33
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 437.6998 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (70.08, 728.32, 0.5442, 319.4993)
+	- this was query number 94
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: SCVLPQTK	Modified sequence: NH2-SCVLPQTK-COOH
+	- matching: P08514(503-510)
+			Integrin alpha-IIb precursor (Platelet membrane glycoprotein IIb)(GPalpha IIb) (GPIIb) (CD41 antige
+	- score: 36
+	- Mr(cal): 874.458206
+	- Mr(exp): 874.401342
+	- ID treshold: 32
+	- homology treshold: 29
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 438.2085 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (163.05, 828.53, 1.068, 1139.6602)
+	- this was query number 96
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: AGVAPLQVK	Modified sequence: NH2-AGVAPLQVK-COOH
+	- matching: P21333(1478-1486)
+			Filamin A (Alpha-filamin) (Filamin 1) (Endothelial actin-bindingprotein) (ABP-280) (Nonmuscle filam
+	- score: 39
+	- Mr(cal): 881.533386
+	- Mr(exp): 881.4459579999999
+	- ID treshold: 30
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 441.7308 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (70.09, 754.46, 1.2521, 141.7941)
+	- this was query number 101
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: TGAQELLR	Modified sequence: NH2-TGAQELLR-COOH
+	- matching: P06396(616-623)
+			Gelsolin precursor, plasma (Actin-depolymerizing factor) (ADF)(Brevin) (AGEL).
+	- score: 55
+	- Mr(cal): 886.487183
+	- Mr(exp): 886.40238
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 444.209 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (159.07, 796.41, 1.0181, 102.524)
+	- this was query number 102
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: QTLENER	Modified sequence: NH2-Q<Dam>TLEN<Dam>ER-COOH
+	- matching: P35579(1220-1226)
+			Myosin heavy chain, nonmuscle type A (Cellular myosin heavy chain,type A) (Nonmuscle myosin heavy c
+	- score: 34
+	- Mr(cal): 890.398117
+	- Mr(exp): 890.2879379999999
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 446.1518 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 777.21, 0.0522, 273.435)
+	- this was query number 103
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: ECEEIIR	Modified sequence: NH2-ECEEIIR-COOH
+	- matching: P02675(240-246)
+			Fibrinogen beta chain precursor [Contains: Fibrinopeptide B].
+	- score: 71
+	- Mr(cal): 890.416718
+	- Mr(exp): 890.3605699999999
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 446.1881 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (102.06, 762.38, 0.0091, 508.0771)
+	- this was query number 104
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: SDLEDQR	Modified sequence: Ace-SDLEDQ<Dam>R-COOH
+	- matching: P51159(135-141)
+			Ras-related protein Rab-27A (Rab-27) (GTP-binding protein Ram).
+	- score: 47
+	- Mr(cal): 904.377396
+	- Mr(exp): 904.295752
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 453.1557 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 862.34, 1.0181, 1089.35)
+	- this was query number 105
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: TAVCDIPPR	Modified sequence: NH2-TAVCDIPPR-COOH
+	- matching: P04350(351-359)
+			Tubulin beta-5 chain.
+	- score: 42
+	- Mr(cal): 970.49057
+	- Mr(exp): 970.413122
+	- ID treshold: 31
+	- homology treshold: 30
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 486.2144 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (173.09, 801.45, 2.2086, 106.578)
+	- this was query number 121
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: AGFAGDDAPR	Modified sequence: NH2-AGFAGDDAPR-COOH
+	- matching: P02568(21-30)
+			Actin, alpha skeletal muscle (Alpha-actin 1).
+	- score: 58
+	- Mr(cal): 975.440948
+	- Mr(exp): 975.3653320000001
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 488.6905 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (101.08, 906.37, 0.1995, 601.728)
+	- this was query number 124
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: ALANSLACQGK	Modified sequence: NH2-ALANSLACQGK-COOH
+	- matching: P04075(331-341)
+			Fructose-bisphosphate aldolase A (EC 4.1.2.13) (Muscle-type aldolase)(Lung cancer antigen NY-LU-1).
+	- score: 67
+	- Mr(cal): 1074.549118
+	- Mr(exp): 1074.48435
+	- ID treshold: 32
+	- homology treshold: 25
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 538.25 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (157.13, 911.43, 0.7823, 351.27)
+	- this was query number 157
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: ADQCYEDVR	Modified sequence: NH2-ADQCYEDVR-COOH
+	- matching: P31146(21-29)
+			Coronin-like protein p57 (Coronin 1A).
+	- score: 61
+	- Mr(cal): 1097.444733
+	- Mr(exp): 1097.354712
+	- ID treshold: 31
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 549.6852 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (187.06, 1028.41, 1.1043, 581.265)
+	- this was query number 162
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: IVGPSGAAVPCK	Modified sequence: NH2-IVGPSGAAVPCK-COOH
+	- matching: P21333(1008-1019)
+			Filamin A (Alpha-filamin) (Filamin 1) (Endothelial actin-bindingprotein) (ABP-280) (Nonmuscle filam
+	- score: 61
+	- Mr(cal): 1097.59024
+	- Mr(exp): 1097.491918
+	- ID treshold: 31
+	- homology treshold: 25
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 549.7538 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (185.16, 987.49, 0.0522, 933.612)
+	- this was query number 163
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: GYSFTTTAER	Modified sequence: NH2-GYSFTTTAER-COOH
+	- matching: P02570(197-206)
+			Actin, cytoplasmic 1 (Beta-actin).
+	- score: 46
+	- Mr(cal): 1131.519608
+	- Mr(exp): 1131.3960940000002
+	- ID treshold: 32
+	- homology treshold: 25
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 566.7059 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (120.08, 979.44, 0.2766, 4537.32)
+	- this was query number 169
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: LNECVDHTPK	Modified sequence: NH2-LNECVDHTPK-COOH
+	- matching: P78417(189-198)
+			Glutathione transferase omega 1 (EC 2.5.1.18) (GSTO 1-1).
+	- score: 50
+	- Mr(cal): 1154.538971
+	- Mr(exp): 1154.435766
+	- ID treshold: 31
+	- homology treshold: 18
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 578.2257 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 1055.71, 0.7982, 654.873)
+	- this was query number 174
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: EITALAPSTMK	Modified sequence: NH2-EITALAPSTM<Mox>K-COOH
+	- matching: P02568(318-328)
+			Actin, alpha skeletal muscle (Alpha-actin 1).
+	- score: 40
+	- Mr(cal): 1176.606003
+	- Mr(exp): 1176.471166
+	- ID treshold: 32
+	- homology treshold: 32
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 589.2434 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 1063.46, 0.0703, 3882.924)
+	- this was query number 182
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: EATTEFSVDAR	Modified sequence: NH2-EATTEFSVDAR-COOH
+	- matching: P21333(1273-1283)
+			Filamin A (Alpha-filamin) (Filamin 1) (Endothelial actin-bindingprotein) (ABP-280) (Nonmuscle filam
+	- score: 62
+	- Mr(cal): 1224.562195
+	- Mr(exp): 1224.447606
+	- ID treshold: 31
+	- homology treshold: 29
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 613.2316 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (102.06, 1096.52, 1.0204, 539.404)
+	- this was query number 193
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: YLAEVAAGDDKK	Modified sequence: NH2-YLAEVAAGDDKK-COOH
+	- matching: P29312(128-139)
+			14-3-3 protein zeta/delta (Protein kinase C inhibitor protein-1)(KCIP-1) (Factor activating exoenzy
+	- score: 34
+	- Mr(cal): 1278.645508
+	- Mr(exp): 1278.584343
+	- ID treshold: 32
+	- homology treshold: 30
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 427.2026 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (136.08, 803.4, 0.0091, 88.3583)
+	- this was query number 219
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: KGCPPDDIENPR	Modified sequence: NH2-KGCPPDDIENPR-COOH
+	- matching: P05556(73-84)
+			Integrin beta-1 precursor (Fibronectin receptor beta subunit)(CD29 antigen) (Integrin VLA-4 beta su
+	- score: 57
+	- Mr(cal): 1339.619003
+	- Mr(exp): 1339.517798
+	- ID treshold: 31
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 670.7667 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (129.1, 1215.94, 1.1043, 78.2313)
+	- this was query number 225
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: KGCPPDDIENPR	Modified sequence: NH2-KGCPPDDIENPR-COOH
+	- matching: P05556(73-84)
+			Integrin beta-1 precursor (Fibronectin receptor beta subunit)(CD29 antigen) (Integrin VLA-4 beta su
+	- score: 42
+	- Mr(cal): 1339.619003
+	- Mr(exp): 1339.51818
+	- ID treshold: 31
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 447.5139 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 955.39, 1.1043, 1134.0676)
+	- this was query number 226
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: VCVETVESGAMTK	Modified sequence: NH2-VCVETVESGAM<Mox>TK-COOH
+	- matching: P48735(401-413)
+			Isocitrate dehydrogenase [NADP], mitochondrial precursor (EC 1.1.1.42)(Oxalosuccinate decarboxylase
+	- score: 71
+	- Mr(cal): 1368.62645
+	- Mr(exp): 1368.511206
+	- ID treshold: 31
+	- homology treshold: 25
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 685.2634 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.1, 1272.81, 0.0249, 1959.92)
+	- this was query number 227
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: YICENQDSISSK	Modified sequence: NH2-YICENQDSISSK-COOH
+	- matching: P02768(287-298)
+			Serum albumin precursor.
+	- score: 76
+	- Mr(cal): 1385.613251
+	- Mr(exp): 1385.501806
+	- ID treshold: 31
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 693.7587 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (136.08, 1223.47, 1.1043, 295.705)
+	- this was query number 229
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: AGALQCSPSDAYTK	Modified sequence: NH2-AGALQCSPSDAYTK-COOH
+	- matching: Q9Y490(1934-1947)
+			Talin 1.
+	- score: 46
+	- Mr(cal): 1410.644882
+	- Mr(exp): 1410.5455080000002
+	- ID treshold: 31
+	- homology treshold: 22
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 706.2806 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (200.1, 1283.21, 0.6712, 277.091)
+	- this was query number 231
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: LAQAAQSSVATITR	Modified sequence: NH2-LAQAAQSSVATITR-COOH
+	- matching: Q9Y490(2044-2057)
+			Talin 1.
+	- score: 87
+	- Mr(cal): 1415.773193
+	- Mr(exp): 1415.638768
+	- ID treshold: 32
+	- homology treshold: 21
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 708.8272 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (101.08, 1304.49, 0.0091, 668.2155)
+	- this was query number 233
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: ARFEELCSDLFR	Modified sequence: NH2-ARFEELCSDLFR-COOH
+	- matching: P08107(300-311)
+			Heat shock 70 kDa protein 1 (HSP70.1) (HSP70-1/HSP70-2).
+	- score: 50
+	- Mr(cal): 1484.70813
+	- Mr(exp): 1484.627782
+	- ID treshold: 32
+	- homology treshold: 29
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 743.3217 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (211.12, 1259.58, 0.8163, 119.098)
+	- this was query number 241
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: QEYDESGPSIVHR	Modified sequence: NH2-Q<Pyr>EYDESGPSIVHR-COOH
+	- matching: P02570(360-372)
+			Actin, cytoplasmic 1 (Beta-actin).
+	- score: 64
+	- Mr(cal): 1498.668793
+	- Mr(exp): 1498.5297600000001
+	- ID treshold: 31
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 750.2727 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (175.11, 853.44, 0.9819, 60.0227)
+	- this was query number 243
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: AEGGQCPSLLFDLR	Modified sequence: NH2-AEGGQCPSLLFDLR-COOH
+	- matching: P08514(91-104)
+			Integrin alpha-IIb precursor (Platelet membrane glycoprotein IIb)(GPalpha IIb) (GPIIb) (CD41 antige
+	- score: 93
+	- Mr(cal): 1504.734344
+	- Mr(exp): 1504.579808
+	- ID treshold: 32
+	- homology treshold: 26
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 753.2977 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (101.08, 1307.49, 0.0091, 226.184)
+	- this was query number 244
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: DNCQYVYNVDQR	Modified sequence: NH2-DNCQYVYNVDQR-COOH
+	- matching: P07996(811-822)
+			Thrombospondin 1 precursor.
+	- score: 74
+	- Mr(cal): 1515.64119
+	- Mr(exp): 1515.49619
+	- ID treshold: 31
+	- homology treshold: 30
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 758.7559 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (230.07, 1289.52, 0.5034, 247.0978)
+	- this was query number 245
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: DNCQYVYNVDQR	Modified sequence: NH2-DNCQYVYNVDQR-COOH
+	- matching: P07996(811-822)
+			Thrombospondin 1 precursor.
+	- score: 103
+	- Mr(cal): 1515.64119
+	- Mr(exp): 1515.513524
+	- ID treshold: 31
+	- homology treshold: 31
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 758.7646 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (175.11, 1287.63, 1.1043, 240.757)
+	- this was query number 246
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: SQVLQFFSSDICR	Modified sequence: NH2-SQVLQFFSSDICR-COOH
+	- matching: P16671(260-272)
+			Platelet glycoprotein IV (GPIV) (GPIIIB) (CD36 antigen) (PAS IV)(PAS-4 protein).
+	- score: 78
+	- Mr(cal): 1528.73436
+	- Mr(exp): 1528.5649159999998
+	- ID treshold: 31
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 765.2903 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (105.07, 1455.48, 0.0181, 997.547)
+	- this was query number 250
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: SQVLQFFSSDICR	Modified sequence: NH2-SQVLQFFSSDICR-COOH
+	- matching: P16671(260-272)
+			Platelet glycoprotein IV (GPIV) (GPIIIB) (CD36 antigen) (PAS IV)(PAS-4 protein).
+	- score: 54
+	- Mr(cal): 1528.73436
+	- Mr(exp): 1528.574926
+	- ID treshold: 31
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 765.2953 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (105.07, 1356.45, 0.068, 426.866)
+	- this was query number 251
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: AGALQCSPSDAYTKK	Modified sequence: NH2-AGALQCSPSDAYTKK-COOH
+	- matching: Q9Y490(1934-1948)
+			Talin 1.
+	- score: 60
+	- Mr(cal): 1538.739838
+	- Mr(exp): 1538.628807
+	- ID treshold: 31
+	- homology treshold: 25
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 513.8841 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 1100.5, 0.0091, 104.018)
+	- this was query number 252
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: LESDVSAQMEYCR	Modified sequence: NH2-LESDVSAQM<Mox>EYCR-COOH
+	- matching: P02675(212-224)
+			Fibrinogen beta chain precursor [Contains: Fibrinopeptide B].
+	- score: 76
+	- Mr(cal): 1545.643906
+	- Mr(exp): 1545.537694
+	- ID treshold: 31
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 773.7767 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 1433.43, 0.0181, 919.939)
+	- this was query number 253
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: QELEEICHDLEAR	Modified sequence: NH2-Q<Pyr>ELEEICHDLEAR-COOH
+	- matching: P35579(911-923)
+			Myosin heavy chain, nonmuscle type A (Cellular myosin heavy chain,type A) (Nonmuscle myosin heavy c
+	- score: 74
+	- Mr(cal): 1566.69838
+	- Mr(exp): 1566.65
+	- ID treshold: 31
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 784.3328 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (246.16, 1324.56, 1.1043, 122.608)
+	- this was query number 256
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: NKHEAMITDLEER	Modified sequence: NH2-NKHEAM<Mox>ITDLEER-COOH
+	- matching: P35579(1023-1035)
+			Myosin heavy chain, nonmuscle type A (Cellular myosin heavy chain,type A) (Nonmuscle myosin heavy c
+	- score: 58
+	- Mr(cal): 1600.75148
+	- Mr(exp): 1600.6021349999999
+	- ID treshold: 31
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 534.5419 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1022.27, 1.1043, 176.42)
+	- this was query number 261
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: DIHSGLIGPLLICQK	Modified sequence: NH2-DIHSGLIGPLLICQK-COOH
+	- matching: P12259(1739-1753)
+			Coagulation factor V precursor (Activated protein C cofactor).
+	- score: 58
+	- Mr(cal): 1605.89119
+	- Mr(exp): 1605.729822
+	- ID treshold: 31
+	- homology treshold: 23
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 536.2511 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1003.51, 0.7914, 76.2857)
+	- this was query number 262
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: IHEGCEEPATHNALAK	Modified sequence: NH2-IHEGCEEPATHNALAK-COOH
+	- matching: Q00610(866-881)
+			Clathrin heavy chain 1 (CLH-17).
+	- score: 39
+	- Mr(cal): 1718.80455
+	- Mr(exp): 1718.684289
+	- ID treshold: 31
+	- homology treshold: 21
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 573.9026 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (110.08, 1559.2, 2.0E-4, 356.911)
+	- this was query number 265
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: ATCAPQHGAPGPGPADASK	Modified sequence: NH2-ATCAPQHGAPGPGPADASK-COOH
+	- matching: P21333(2541-2559)
+			Filamin A (Alpha-filamin) (Filamin 1) (Endothelial actin-bindingprotein) (ABP-280) (Nonmuscle filam
+	- score: 84
+	- Mr(cal): 1731.799805
+	- Mr(exp): 1731.67965
+	- ID treshold: 31
+	- homology treshold: 24
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 578.2344 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (52.46, 2111.89, 1.0E-4, 7113.11)
+	- this was query number 266
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: ATCAPQHGAPGPGPADASK	Modified sequence: NH2-ATCAPQHGAPGPGPADASK-COOH
+	- matching: P21333(2541-2559)
+			Filamin A (Alpha-filamin) (Filamin 1) (Endothelial actin-bindingprotein) (ABP-280) (Nonmuscle filam
+	- score: 51
+	- Mr(cal): 1731.799805
+	- Mr(exp): 1731.7702860000002
+	- ID treshold: 32
+	- homology treshold: 21
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 578.2646 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (70.1, 1025.5593, 1.1043, 125.535)
+	- this was query number 267
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: ATCAPQHGAPGPGPADASK	Modified sequence: NH2-ATCAPQHGAPGPGPADASK-COOH
+	- matching: P21333(2541-2559)
+			Filamin A (Alpha-filamin) (Filamin 1) (Endothelial actin-bindingprotein) (ABP-280) (Nonmuscle filam
+	- score: 84
+	- Mr(cal): 1731.799805
+	- Mr(exp): 1731.7945300000001
+	- ID treshold: 32
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 866.9051 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (110.08, 1428.73, 0.4218, 204.1524)
+	- this was query number 269
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: NLDKEYLPIGGLAEFCK	Modified sequence: NH2-NLDKEYLPIGGLAEFCK-COOH
+	- matching: P00505(91-107)
+			Aspartate aminotransferase, mitochondrial precursor (EC 2.6.1.1)(Transaminase A) (Glutamate oxaloac
+	- score: 38
+	- Mr(cal): 1908.965439
+	- Mr(exp): 1908.920982
+	- ID treshold: 31
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 637.3148 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.11, 1037.64, 1.0181, 70.1656)
+	- this was query number 277
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: SADVEPVSASAAHILGEVCR	Modified sequence: NH2-SADVEPVSASAAHILGEVCR-COOH
+	- matching: Q14644(310-329)
+			Ras GTPase-activating protein 3 (GAP1(IP4BP)) (Ins P4-bindingprotein).
+	- score: 49
+	- Mr(cal): 2009.983948
+	- Mr(exp): 2009.774559
+	- ID treshold: 30
+	- homology treshold: 23
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 670.9327 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (159.07, 1509.68, 1.1043, 231.705)
+	- this was query number 282
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: GVAEQQQQQGCGDPEVMQK	Modified sequence: NH2-GVAEQQQQQGCGDPEVM<Mox>QK-COOH
+	- matching: Q13201(305-323)
+			Endothelial cell multimerin precursor.
+	- score: 48
+	- Mr(cal): 2074.904739
+	- Mr(exp): 2074.872216
+	- ID treshold: 31
+	- homology treshold: 18
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 692.6319 3
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (157.11, 1312.57, 0.0544, 237.215)
+	- this was query number 284
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: GVAEQQQQQGCGDPEVMQK	Modified sequence: NH2-GVAEQQQQQGCGDPEVM<Mox>QK-COOH
+	- matching: Q13201(305-323)
+			Endothelial cell multimerin precursor.
+	- score: 62
+	- Mr(cal): 2074.904739
+	- Mr(exp): 2074.885228
+	- ID treshold: 31
+	- homology treshold: 20
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 1038.4504 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (101.09, 1657.49, 0.0181, 1345.24)
+	- this was query number 285
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: GVAEQQQQQGCGDPEVMQK	Modified sequence: NH2-GVAEQQQQQGCGDPEVM<Mox>QK-COOH
+	- matching: Q13201(305-323)
+			Endothelial cell multimerin precursor.
+	- score: 68
+	- Mr(cal): 2074.904739
+	- Mr(exp): 2074.9018300000002
+	- ID treshold: 31
+	- homology treshold: 27
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 1038.4587 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (101.09, 1931.03, 0.0091, 1279.26)
+	- this was query number 286
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE
+
+Spectrum with: 
+	- sequence: LGYAGNTEPQFIIPSCIAIK	Modified sequence: NH2-LGYAGNTEPQFIIPSCIAIK-COOH
+	- matching: P32391(19-38)
+			Actin-like protein 3 (Actin-related protein 3) (Actin-2).
+	- score: 34
+	- Mr(cal): 2134.113174
+	- Mr(exp): 2134.045874
+	- ID treshold: 31
+	- homology treshold: 21
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 1068.0308 2
+	- identified in: SP_human.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (136.08, 1732.55, 0.9819, 219.8165)
+	- this was query number 288
+	- Search title: SP base search (C:\Program Files\Daemon\bart_cys.par), submitted from CHEWIE

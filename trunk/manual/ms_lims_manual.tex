@@ -1,0 +1,500 @@
+%% Based on a TeXnicCenter-Template by Gyorgy SZEIDL.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------
+%
+\documentclass[11pt,a4paper,oneside,dutch,english]{book}%
+%
+%----------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PACKAGE LOADING TIME %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+
+
+%%custom packages
+
+\usepackage{times}
+\usepackage[times]{quotchap}
+\usepackage[a4paper,verbose, asymmetric, centering]{geometry}
+\usepackage{url}
+
+%----------------------------------------------------------
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\newcommand{\npar}{\par \vspace{2.3ex plus 0.3ex minus 0.3ex} \noindent}	% Om witruimte te krijgen tussen paragrafen
+
+%%%%%%%%%%%%%%%%%%%%
+%%  START BOOK    %%
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\graphicspath{{images/}}
+
+\frontmatter
+
+%  Titelblad
+
+\begin{titlepage}
+
+\fontsize{12pt}{14pt}\selectfont
+
+\begin{center}
+
+\begin{figure}[H]
+		\begin{center}
+			\includegraphics[width=3cm, height=4cm]{VIB.pdf}
+			\hfill
+			\includegraphics{ugent.pdf}
+
+		\end{center}
+\end{figure}
+
+
+
+\vspace{0.3cm}
+
+
+\vspace{0.8cm}
+Proteomics and Bioinformatics group
+\linebreak  Departement of Medical Protein Research
+\linebreak  VIB and Faculty of Medicine and Health Sciences, Ghent University
+\vspace{1cm}
+\linebreak  \url{http://www.proteomics.be}
+
+
+\vspace{2.2cm}
+
+	\begin{minipage}[c][4.5cm][c]{15cm}
+	\begin{center}
+	\fontsize{17.28pt}{21pt}\selectfont
+	{\textsc{ms\_lims manual}}
+	\fontseries{m}
+	\vspace{0.2cm}
+	\fontsize{12pt}{14pt}\selectfont
+	\linebreak  Kenny Helsens
+	\linebreak  Niklaas Colaert
+	\linebreak  Steffi Wortelkamp
+	\linebreak  Lennart Martens
+	\end{center}
+	\end{minipage}
+
+
+\vspace{4.5cm}
+
+\date{}
+ \url{http://genesis.ugent.be/ms_lims}
+\end{center}
+\end{titlepage}
+
+\tableofcontents
+
+\chapter{Introduction} 
+\section*{Proteomics lims suite} 
+\npar Mass spectrometry based proteomics approaches produce large amounts of mass spectra that require processing, identification and possibly quantification before interpretation can be undertaken. High-throughput studies require automation of these various steps, as well as management of the data in association with the results obtained. We here present ms\_lims, a freely available, open-source system based on a central database to automate data management and processing in mass spectrometry driven proteomics analyses.
+\npar ms\_lims is mainly designed to automate data flow in the high-throughput proteomics lab. Taking  spectrum files from a variety of \emph{(pluggable)} fileformats (standard Micromass PKL file and Mascot Generic File support is provided), it transforms these to the Mascot Generic Format and stores them in the database, retaining LC information if present, and also allowing additional information to be stored for each individual LC run. \\Another part allows the retrieval of the stored spectra in mergefiles of arbitrary size. These can then be submitted to a search engine, eg. \emph{Mascot }from \emph{Matrix Science}. \\Subsequently, the results of these searches can be parsed and stored in a relational database structure for future reference. \\ms\_lims requires Java version 1.5 or above, which you can get here. Download the binaries here and a start-up script for your platform here.
+
+\mainmatter
+
+\part{Part one, the installation.}
+\chapter{General}
+The installation of ms\_lims cannot be done by a typical installer. The lims system is dependent from multiple instances that you have to process one by one.\\The installation takes four steps.
+\begin{description}
+	\item[Step one] covers the installation of a Java Runtime Environment(JRE). Ms\_lims was created with Java Development Kit(JDK) 1.5  and therefore needs a JRE starting version 1.5 (also known as Java 5) or later.
+	\item[Step two] \textit{(shortly)} covers the installation of a database system. Ms\_lims works around a central Relational Database Management System (RDBMS) to control the proteomics data. By preference, the freely available open source MySQL RDBMS is used for storage and manipulation of the proteomics data.
+	\item[Step three] covers the building of a bridge between Mascot and ms\_lims.
+	\item[Step four] covers the installation of ms\_lims itself.
+\end{description}
+
+%% Chapter on Java installation.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Java}\label{Java} Since ms\_lims was developed in Java, it runs on every operating system that has an up-to-date Java installation.
+\section*{Previous java installation?}
+	Most probably, Java is already installed on your computer due to the widespread use of Java nowadays.\\If you do not know for sure if Java 1.5 or higher is installed, do the following:
+	\begin{itemize}
+		\item Open the shell in linux or the command window in windows
+		\item Enter \texttt{java -version}
+	\end{itemize}
+	If Java is already installed, you will see something as below where x stands for the version.\begin{verbatim}{java version "1.x.0_01"}\end{verbatim}
+	If yours is beyond version 1.5, then you must upgrade Java. If nothing meaningful appears, then Java is not yet installed.
+	In both ways, you have to install a new Java version.
+
+
+\section*{New Java installation}\label{New Java installation}
+The installation of a Java is quite straightforward.
+	\begin{itemize}
+	\item Goto \url{http://java.com}
+	\item Follow the main download link and download the installer
+	\item When finished, open the installer and follow the instructions
+\end{itemize}
+Java should be properly installed by now. Proceed to the next step.
+
+%% Chapter on MySQL installation.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Relational Database Management System (RDBMS)}\label{RDBMS}
+	%% RDBMS
+	\section{Why a RDBMS?}
+		\begin{quote}
+			A short definition of a RDBMS may be a DBMS in which data is stored in the form of tables and the relationship among the data is also stored in the form of tables.\\\emph{Wikipedia}
+		\end{quote}
+		\npar As for a proteomics oriented lims, whether you want to store fragmentation spectra or retrieve peptide identifications - the relation must be saved between the fragmentation spectrum and its peptide identifications. At all times, the database has a central role in the lims for storing, managing and delivering this proteomics data.
+		\npar Multiple RDMBS systems are availlable: MySQL, Oracle, Firebird, PostgreSQL, MS SQL Server are the most common examples. Even though there are all distinct RDBMS, they are similar as they are all SQL implementations. SQL means Structured Query Language and serves as a language for humans to communicate to the database holding all the proteomics data. All of these SQL implementing databases can be used with ms\_lims by using different drivers. Hence, some of these are commercial while other are free open-source driven efforts. We prefer to use the popular open source database MySQL by default and will therefore orient this manual towards this database.
+	%%MYSQL
+	\section{MySQL}
+		\subsection*{About MySQL}
+		\begin{quote}
+			The MySQL® RDBMS has become the world's most popular open source database because of its consistent fast performance, high reliability and ease of use.\\\emph{mysql.com}
+		\end{quote}
+		For this reason amongst others, the developers of the lims system have chosen MySQL as the RDMBS of preference. A list of short instructions on the installation of MySQL follows.
+		\subsection*{Getting MySQL}
+		First, we will download the installer from the MySQL website.
+		\begin{itemize}
+			\item Goto the MySQL website at  \url{http://mysql.com}
+			\item Click on the \textbf{download} tab in the top
+			\item Choose the \textbf{MySQL community server }to continue
+			\item Select the essential installer of your operating system and download it by the link at the right
+		\end{itemize}
+		After downloading has finished, proceed to the installation.
+
+		\subsection*{Installing MySQL}
+		\begin{itemize}
+			\item Open the installer
+			\item Select the typical installation and proceed
+			\item Click the install button to start the intallation of the MySQL server
+			\item Wait for the installation to complete. After completion, enable the \textbf{configure now} checkbox and to proceed to configure the database
+		\end{itemize}
+		Now the installation has completed, the MySQL database needs some extra configurations regarding performance and security.
+		\subsection*{Configuring MySQL}
+		\begin{itemize}
+			\item Verify you are now in the configuration window titled \textbf{'MySQL server instance configuration wizard'}
+			\item Select the standard configuration
+			\item Install as a windows service and name it MySQL and make the service launch automatically each time the computer starts
+			\item Modify the security settings and enter a root pasword. Consider this as the 'Master' password for fully controlling the MySQL database. Obviously this is powerful and should therefore not be known by all users.
+			\item Enable root access from remote machines
+			\item Disable the creation of an anonymous account
+			\item Execute!
+		\end{itemize}
+		The MySQL server is up and running now. We can now proceed installing ms\_lims itself.
+
+%% Chapter on ms\_lims installation.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Mass Spectrometry LIMS(ms\_lims)}\label{mslims}
+	%% ms\_lims
+	\subsection*{Getting ms\_lims}
+	An installer is supplied at \url{http://genesis.ugent.be/download/} for your convenience. The installer runs on both Windows or *NIX platforms, provided they run the Java virtual Machine version 1.5 or above.
+
+	\subsection*{Installing ms\_lims}
+	Open the downloaded installer. The wizard guides you through a few familiar steps such as defining an installation target and license information. After the installation has finished, go to the installation folder.
+	During installation, all required files are copied here. This includes the Java libraries in the core folder, the configuration files in the conf folder. An uninstaller is supplied as well in the corresponding folder.
+	\npar In the root folder, you find two startup scripts (.bat for windows and .sh for *nix operating systems)
+	\begin{description}
+		\item[ms\_lims] starts the main user interface to work with ms\_lims
+		\item[configuration] starts the configuration interface to setup the ms\_lims database or to add users, instruments and protocols into an existing ms\_lims database system
+	\end{description}
+	\npar Upon installing ms\_lims, we are interested in the configuration interface. Hence, we will come back to the main user interface in the next chapter.
+
+	\subsection*{Configuring ms\_lims}
+	The configuration tool of ms\_lims helps to tie up ms\_lims with the MySQL database that was installed before. Different configuration steps are separated in different tabs on the left side.
+
+	\begin{description}
+		\item[summary] Gives an brief overview of the active setup
+		\item[database] Creates the ms\_lims relational database scheme into your MySQL database. A relational schema specifies a collection of table definitions, providing structure for the mass spectrometry data stored in the database instance. Just as fragmentation spectra are stored in one table, peptide identifications are stored in different table. Hence, a connection between both tables is maintained. More, both are connected to another table that reflects which instrument was used. As such, you can eventually retrieve all spectra from a given instrument or all peptides containing a particular sequence.
+		\begin{itemize}
+			\item \textbf{Connect} to the MySQL database system you previously installed by using the 'root' username and password . Fill in the hostname of the computer that has the MySQL database installed. If the MySQL server is installed on this system, fill in \textbf{'localhost' }to refer to this system. Otherwise, fill in the name of the computer as it exists in the network.
+			\item \textbf{Create SQL Datase} to create a new database on the MySQL database server. Fill in an appropriate name such as \textbf{'projects' } to identify the database.
+			\item \textbf{Set SQL Scheme for ms\_lims} to the (ex.) 'projects' database.
+		\end{itemize}
+		Now the database is structured, it is ready to store mass spectrometry data in a relational manner.
+		\item[users] Add or remove ms\_lims users from the database system. An ms\_lims user can be a mass spectrometrist storing fragmentation spectra or a informatician storing peptide identification results.
+		\item[protocols] Add or remove ms\_lims protocols from the database system.
+		\item[instrument] Add or remove ms\_lims instruments from the database system. ms\_lims is independent from mass spectrometer vendors by storing fragmentation spectra in a uniform manner. Hence, as different vendors have different forms of output, .pkl files versus .xml or single versus merged files, ms\_lims has different engines to store each fragmentation spectrum as a single entity independent from vendors. In this panel you are ought to define which instrument is used in order to store the data into ms\_lims appropriately. \\\textit{If your instrument of choice is not listed, please contact the authors}
+	\end{description}
+	\npar Ok, the MySQL database is now running a relational database scheme capable for managing proteomics data. Only a few minor steps to go!
+	
+
+
+%% Chapter on database connections.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Tie up the loose ends}
+	\npar Two more issues remain, both are about tying up the loose ends between ms\_lims and other software. First is about allowing ms\_lims users accessing the MySQL database. Second is about telling ms\_lims where to find the peptides identified from fragmentation spectra by Mascot.
+
+	\subsection*{Adding MySQL users}
+	It is important to distinguish two user identities. First there is an ms\_lims identity for users in the lab environment, being the researchers working on the bench or at the mass spectrometer. These identities are created by configuring ms\_lims. Second there is a MySQL identity to access the database itself. While the former is a simple identifier who the project or data belongs to, the latter comes with a password and purely serves to interact with the MySQL database. Currently, there is only one MySQL user: the 'root' user. As you might remember, we named this the 'master' user as it comes with full control. This user can create other users with equal or minor permissions. We will now add new users to the database to tie up ms\_lims to the MySQL database.To add new users to the MySQL system, we prefer to use the \textbf{MySQL Administrator Tool}.
+
+		\begin{itemize}
+			\item Goto the MySQL website at  \url{http://mysql.com}
+			\item Click on the \textbf{download} tab in the top
+			\item Choose the \textbf{GUI Tools } on the left to continue
+			\item Select the essential installer of your operating system and proceed by the \textbf{'mirror' }link at the right
+			\item To avoid registration, click \textbf{'No thanks, just take me to the downloads!'}
+			\item Select the HTTP or FTP link from a location near to you to download the GUI Tools
+			\item Open the installer and folow the straightforward installation instructions
+		\end{itemize}
+		After the installation of the GUI Tools has finished, locate and start the MySQL Administrator tool. Before the actual Administrator tool starts, we must establish a connection to the MySQL database we want to configure. In our case, this is the MySQL database we have just installed.
+		\begin{itemize}
+			\item Fill in the hostname of the computer that has the MySQL database installed. If the MySQL server is installed on this system, fill in \textbf{'localhost' }to refer to this system. Otherwise, fill in the name of the computer as it exists in the network.
+			\item Enter \textbf{'root' }as the username
+			\item Enter the password you entered while modifying the security settings for the 'root' user (we also referred this as the 'Master' password)
+			\item Establish a connection to the MySQL database
+		\end{itemize}
+This MySQL administrator tool allows you to configure all types of settings of the MySQL system. All of these are thoroughly documented at the website but \textit{we recommend the default settings}. We will now use the  Administrator tool to create new users in the database.
+		\begin{itemize}
+			\item Select the \textbf{'user administration'} in the left
+			\item Select the 'add new user' button in the bottom
+			\item Fill in the name for the MySQL user and a password (you are free to fill in more personal information)
+			\item Select the \textbf{Scheme Privileges'} tab in the top
+			\item Select the ms\_lims database beyond the Schemata header \textbf{Scheme Privileges'} tab in the top
+			\item Enable the 'SELECT', 'INSERT' and 'UPDATE' prilege into the Assigned Privileges by clicking the single arrow buttons
+			\item Save the new user by clicking 'Apply Changes' in the bottom
+			\item ..
+			\item Repeat this procedure untill every user has access to the MySQL database
+		\end{itemize}
+		\npar Ok, by now we have a ms\_lims database scheme running on a MySQL server that can be accessed by multiple users. One last issue remains: peptide identifications by Mascot.
+		
+			\subsection*{Mascot Daemon Task Database}
+			
+		
+		
+
+		
+\part{The Tools}
+%%Here starts the part on the distinct tools that are available in ms\_lims.
+\chapter{Main Tools}\label{Main Tools} 
+\section{The starting point} 
+The main tools of ms\_lims are provided by an application GUI, which can be started by the corresponding script, \emph{ms\_lims.bat} for Windows systems and \emph{ms\_lims.sh} for *nix.\\
+When you start up ms\_lims there'll pop up a database connection dialog. Enter your username and the password here to connect to the lims database. Please note, that the settings for the driver and the database URL of the database connection can be set by a property file (see section XX).
+\begin{figure}[H]
+	\includegraphics[width=0.50\textwidth]{../Images/startup_mslims.png}
+	\centering
+	\label{database connection}
+	\caption{The database connection dialog of ms\_lims. Enter your username and password for the database here.}
+\end{figure}
+
+\section{The main tools in the GUI}
+The appearance of the main GUI for ms\_lims is a menu bar and list of buttons. Here you can choose which tool you would like to start. The buttons from up to down follow the workflow which you should meet when working with ms\_lims. You can use shortcuts to start the tools, e.g. \texttt{Alt+1} starts the ProjectManager. Just try out the pulldown menu in the menu bar. Now we will take a closer look at the tools.	
+\begin{figure}[H]
+	\includegraphics[width=0.50\textwidth]{../Images/startup_mslims2.png}
+	\centering
+	\label{main menu}
+	\caption{The ms\_lims menu consists of several buttons. Just click on the buttons to start the corresponding tool.}
+\end{figure}
+ 
+\subsection{ProjectManager}
+The ProjectManager simply organize the projects which you can create or modify here. A project includes the mass spectra and mascot searches of an experiment. To get a better overview of your projects, you can check the box \emph{Sort projects alphabetically}.
+\begin{figure}[H]
+	\includegraphics[width=0.50\textwidth]{../Images/manager_newproj.png}
+	\centering
+	\label{fig:manager}
+	\caption{The ProjectManager allows you to create new projects.}
+\end{figure}
+To create a new project, click on the button \emph{Create new project}. Enter a meaningful title for your project. In the next steps you will identify your project only by this title. Choose the project responsible person then and select the COFRADIC type if you did a COFRADIC experiment. If you did a other kind of experiment, please select \emph{none} (See figure \ref{fig:manager}).  The project description allows you e.g.\ to make a note of the experimental setup of the project. When you have finished select \emph{Create}. A project number will be assigned automatically to your project. If you just want to edit an existing project, click on the button \emph{Modify project}. Don't forget to save the changes on your project. To exit this tool just close the tool window.
+
+\subsection{SpectrumStorage}
+This tool allows you to store spectra assigned to a project in the database. When you start the tool, there's a dialog where you can choose the mass spectrometer instrument where the spectra were derived from. Please note that the instrument table has to be set up in the database where the correct storage engine class has to be defined for the relevant instrument(see section XX). You can store the local path to the spectra folder for a specific instrument in a property file. (See section XXX)
+
+\begin{figure}[H]
+% \centering
+% \begin{minipage}[b]{0.4\textwidth}
+%    {\label{fig:spectra1}\includegraphics[width=0.9\textwidth]{../Images/spectrum_storage.png}}  
+%  \end{minipage}
+%  \begin{minipage}[b]{0.4\textwidth}
+%    {\label{fig:Comment}\includegraphics[width=0.9\textwidth]{../Images/spectrum_storage_note.png}}
+%  \end{minipage}
+%     \caption{left figure: Here you can assign mass spectra to a project and store them in the database. right figure: Then you can enter a comment to a LC run optionally.}
+%  \label{fig:spectrumstorageGUI}
+%\end{figure}
+
+%%\begin{figure}[H]
+%% \subfloat{\label{fig:Comment}\includegraphics[width=0.3\textwidth]{../Images/spectrum_storage_note.png}}
+
+%%  \subfigure[A]{\includegraphics[width=0.5\textwidth]{../Images/spectrum_storage.png}}\qquad                 
+%%  \subfigure[B]{\includegraphics[width=0.5\textwidth]{../Images/spectrum_storage_note.png}}
+
+\includegraphics[width=0.60\textwidth]{../Images/spectrum_storage.png}
+	\centering
+	\label{spectra1}
+	\caption{Here you can assign mass spectra to a project and store them in the database.}
+\end{figure}
+
+%%\begin{figure}[H]
+%%	\includegraphics[width=0.60\textwidth]{../Images/spectrum_storage_note.png}
+%%	\centering
+%%	\label{spectra2}
+%%	\caption{Here you can enter a comment to a LC run optionally.}
+%% \end{figure}
+%% to solve: you cannot store the same files in a folder in another project again without renaming the filenames
+The window of the SpectrumStorageGUI consists of three parts: left, right and lower window.\\ In the left window (LC run list) you'll see the spectra files you just loaded. By doubleclicking on a file in the LC run list you can add a comment concerning that LC run.\\
+Choose the project to which the spectra belong to in the right window \emph{Project selection}. You also can create or modify the project here. Mark all spectra you want to add to the choosen project in the LC run list. Click on the button \emph{Assign LC run(s) to project}. 
+\begin{figure}[H]
+	\includegraphics[width=0.60\textwidth]{../Images/spectrum_storage_assign.png}
+	\centering
+	\label{spectra3}
+	\caption{Mark the spectra you want to assign to a project in the upper window.}
+\end{figure}
+
+Then you can check your selection in the lower window \emph{Summary}. By pressing \emph{Clear} the selection is cancelled and  can be done again. Finally, to commit the selected spectra to the database click the button \emph{Store}. This process can take a while depending on the size and number of spectra.
+
+\subsection{MergerGUI}
+The job of the MergerGUI is in short, to merge your stored spectra to a set of files before you submit them to the Mascot search engine.\\
+\begin{figure}[H]
+	\includegraphics[width=0.60\textwidth]{../Images/merger.png}
+	\centering
+	\label{merger}
+	\caption{The MergerGUI organizes your spectra to a set of files}
+\end{figure}
+
+First choose the project whose spectra you want to be merged. When you merge the files for the first time, do not check the spectrum select options \emph {NOT searched}, \emph {NOT identified} in the section \emph {Spectrum file options}. In the next step, select your instrument where the spectrafiles have been derived from and optional, choose a file filtername if a limit selection of files is needed, e.g. 'LTQ003*'.
+In the section \emph {Output settings} pick or create a folder where the merged files can be stored. Enter the number of spectra files you want to be merged. A good starting point is a value of 1000 files. %% Anyway this is a Mascot search property, explain further
+The next time if you want to redo a search, check the spectrum select options \emph {searched} and \emph {NOT identified} to get a subset of the spectra which need fitted search parameters for identification for example.
+
+\subsection{Mascot Daemon}
+Up to now, ms\_lims can only process datafiles from the Mascot search engine.
+%% Building up the ODBC coupling to the Mascot task database
+%% Coming up OMSSA interface??
+This menupoint starts up your MascotDaemon application. You can store the local path to the MascotDaemon application permanently in the mascotdaemon.properties file like\begin{verbatim}MASCOTDAEMONFILE=\end{verbatim}\par
+\begin{verbatim}C:/Program files/Matrix Science/Mascot Daemon/Daemon.exe\end{verbatim}or enter the path directly in the field beside the button.\\
+Now select the merged files for searching with Mascot you have created before with the MergerGUI tool. Then start your Mascot search as usual. It is important to use the merged files for searching and not the original spectra files at this point, otherwise ms\_lims will prompt an error message. The merged files are connected to the database and to your project. 
+
+\subsection{IdentificationGUI}
+This tool allows you to parse and view your Mascot search results directly from the Mascot dat files and finally store them in the database. IdentificationGUI connects with your task database from MascotDaemon, so make sure that ODBC coupling with the task database is present (see section XX). A tree list of your actual Mascot Daemon queries stored in the Mascot Task Database should appear, starting with the last task you have performed recently. Here you select the results you want to parse. Click on the tree nodes to see which files belong to you search. Select one or multiple searches from the tree list, then mark your desired result file(s) in the right window. The identity threshold score applied for the extraction of the selected files can be set at the bottom of the window. The default is set at the Mascot standard 95\% confidence which allows a maximum of 5\% false positive identifications.
+\begin{figure}[H]
+	\includegraphics[width=0.70\textwidth]{../Images/identification.png}
+	\centering
+	\label{identification}
+	\caption{Choose the Mascot searches you want to parse}
+\end{figure}
+By selecting the \emph{Preview} button the tool will start to retrieve the results and parse them. The procceding is indicated by a progressbar and according to the filesize this task can take a while. When the parsing of the results has finished, a table is displayed which contains the identified peak list from the selected search. 
+\begin{figure}[H]
+	\includegraphics[width=0.60\textwidth]{../Images/preview.png}
+	\centering
+	\label{preview}
+	\caption{The Preview table shows a list of all identified peptides of the selected search}
+\end{figure}
+Here you can simply copy and paste the results to other applications as spreadsheet for example. {\emph{Hint:} Of course you can use the IdentificationGUI tool just to parse your Mascot searches without storing them to the database.} You can adjust this preview table to your requirements and sort a certain column (descending or ascending), resize or move a column. If the \emph{Column selection mode} is checked you can mark columns for copy and paste instead of marking the rows as normally. The colunms in the preview table presents following data:
+\begin{description}
+	\item [Filename] Refers to the original filename the spectra came from. Sometimes also some spectra header information can be seen here
+	\item [Accession] The protein accession as received from the search database. A left mouse button double click opens the entry the uniprot database
+	\item [Sequence] The peptide sequence as received from the search database
+	\item [Modified sequence] The peptide sequence is supplemented with the fixed or variable modifications if they occur. Note: a star marks the modifcation as fixed e.g. (Cmm*)
+	\item [Ion Coverage] Highlights the ionseries; for y-ions: red font colour, for b-ions: underlined 
+	\item [Start/End] Start/End of the peptide within the protein sequence
+	\item [Description] The description as received from the search database
+	\item [Title] Refers to the search title in mascot
+	\item [Score/Threshold] Refers to the score/threshold from mascot
+	\item [Confidence] As set in IdentificationGUI before parsing
+	\item [Calcutated/Experimental mass] Refers to the calcutated/experimental mass from mascot
+	\item [Isoforms] Lists isoforms to that peptide
+	\item [Precursor (m/z)] The precursor mass of that peptide
+	\item [Charge] The charge of that peptide
+	\item [Enzymatic] Refers to the enzyme cleavage state: FE - correct enzymatic cleavage; NE - n-terminal correct; CE - c-terminal correct; EE - fully incorrect
+	\item [Datfile] The name of datfile which has been generated on this search
+	\item [Search database filename] Exact filename of the search database
+	\item [Search DB] Name of the search database
+\end{description}
+If you decided that the data in the preview table can be stored in the database, just press the \emph{Store} button. Again you will see a progressbar and finally a small box informing you that all identifications have been stored in the database.
+
+\subsection{GenericQuery}\label{chap:GenericQuery}
+GenericQuery allows you to do queries within your database using SQL (Structured Query Language). This feature is for advanced users, because you need a basic knowledge about how to perform a SQL query.
+\begin{figure}[H]
+	\includegraphics[width=0.60\textwidth]{../Images/genericquery.png}
+	\centering
+	\label{genericquery}
+	\caption{The GenericQueryGUI allows access to all tables and stored data by using SQL}
+\end{figure}
+In the upper window you can type your query and submit it. Don't forget to connect to your database first (use projects e.g.). All submitted queries are stored in cache, so you can access recent queries (up to 40 entries). The lower window will show your result table, which one can simply copy and paste to spreadsheet applications or export the data in .html or .csv format.
+\begin{figure}[H]
+	\includegraphics[width=0.60\textwidth]{../Images/genericquery2.png}
+	\centering
+	\label{genericquery_export}
+	\caption{The GenericQueryGUI allows access to all tables and stored data by using SQL}
+\end{figure}
+Some useful queries for proposal are listed below:\\
+\textbf{select * from project where username like 'myname\%'} - List all my projects\\
+\textbf{select s.l\_projectid, i.* from identification as i, spectrumfile as s\\ where i.l\_spectrumfileid=s.spectrumfileid and i.accession like '\%myAccession\%'} - List only projects and identifications where that protein accession has been identified
+
+\subsection{Store Binary file(s)}
+Use this tool to append an informative protocol, image or text-file to a project. Define a descriptor as you like which specifies the binary file e.g. as text document, spreadsheet or picture. 
+\begin{figure}[H]
+	\includegraphics[width=0.60\textwidth]{../Images/binary_file.png}
+	\centering
+	\label{binary_file}
+	\caption{Assign a binary file to your project}
+\end{figure}
+
+\subsection{ProjectAnalyzer}
+The ProjectAnalyzer tool provides a set of three tools for the data analysis to be performed on a selected project: \emph{Binary file retriever tool}, \emph{DescriptiveNumbersTool} and \emph{Descriptive numbers tool}. Just select the tools from the drop-down menu.
+\begin{figure}[H]
+	\includegraphics[width=0.50\textwidth]{../Images/project_analyzer.png}
+	\centering
+	\label{project_analyzer}
+	\caption{Three tools to analyze your projects}
+\end{figure}
+
+\subsubsection{Binary file retriever tool}
+To locate a binary file stored with a project, run the binary file retriever tool. Select your project in the upper window and then run the tool by hitting \emph{Engage tool}. There'll be pop up a dialog where you can select the binary file and save it to any destination.
+
+\subsubsection{Descriptive numbers tool}
+This tool gives a result overview for COFRADIC experiments. If the experiment COFRADIC type \textit{N-term}, \textit{MetOx} or \textit{Cys} has been selected when creating the project, this tool calculates some informative numbers. Some SQL queries will be performed then and generating the report therefore can take a while. A statusbar will inform you about the progress. The final report can be simply copied and pasted to any document.
+
+\subsubsection {Query tool}
+Here you can run a set of predefined SQL queries against the selected project. This option is very useful for beginners to start with analyzing the stored data. The queries are:
+\begin{figure}[H]
+	\includegraphics[width=0.70\textwidth]{../Images/querytool.png}
+	\centering
+	\label{querytool}
+	\caption{Query tool with predefined SQL queries}
+\end{figure}
+\begin{description}
+	\item [Show all identified peptides] Simply list all identified peptides
+	\item [Show only unique peptides] Check the box if only unique peptides with the maximun score should be displayed
+	\item [Only peptides with sequences containing] Enter a searchstring use '\%' as wildcard(s)
+	\item [Only peptides with modified sequences containing] Enter a searchstring; use '\%' as wildcard(s)
+	\item	[Only identifications with title containing] Enter a searchstring; use '\%' as wildcard(s)
+	\item [Show only unique proteins] A list of all unique proteins - you can omit the appearance of cross references from the IPI database
+	\item [Show only peptides detected as single] Choose light, heavy or both kind of peptides
+\end{description}
+When you have selected a query, choose the instrument if required and press \emph{Execute query}. It's useful to enable the checkbox \emph{Include spectrumfile in select} so a spectrum viewer application opens when you right-click on a spectrumfile in the result table. The result table offers investigation features, just take a look at the summary in figure \ref{fig:resulttable}. Again, you can simply copy and past the results to a spreadsheet or export the data as explained in chapter \ref{chap:GenericQuery}.
+\begin{figure}[H]
+	\includegraphics[width=0.90\textwidth]{../Images/results_ext.png}
+	\centering
+	\label{fig:resulttable}
+	\caption{The results table allows interactive exploration features}
+\end{figure}
+
+%% Here something has to be said about the MALDIDiffGUI, SwissPhosphoreader etc.
+%% \section{More Tools}
+
+%% Mention the new CUSTOM button!!
+
+
+
+%%Here starts the example code of the document.
+\part{Frequently Asked Questions}
+
+\end{document}

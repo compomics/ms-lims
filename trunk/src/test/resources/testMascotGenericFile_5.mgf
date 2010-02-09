@@ -1,0 +1,53 @@
+#
+# MS.UncentroidingHalfWidth = 0.025
+# MS.UncentroidingPointsPerDa = 100
+# MS.RegriddingPointsPerDa = 200
+# MS.AggregationMethod = 1
+# MS.MinPeakCount = 1
+# MS.MaxPeakCharge = 7
+# MSMS.UncentroidingHalfWidth = 0.2
+# MSMS.UncentroidingPointsPerDa = 20
+# MSMS.RegriddingPointsPerDa = 20
+# MSMS.AggregationMethod = 2
+# MSMS.MinPeakCount = 10
+# MSMS.MaxPeakCharge = 2
+# MSMS.UsePrecursorAsMaxCharge = 0
+# MSMS.PrecursorChargeSources = 1;0
+# MSMS.PrecursorDefaultCharges = 2;3
+# MSMS.RedeterminePrecursorMZ = 1
+# MSMS.PrecursorMZTolerance = 1.2
+# MSMS.IgnoreSingleChargedPrecursor = 0
+# TimeDomain.MinPrecursorMass = 700
+# TimeDomain.MaxPrecursorMass = 16000
+# TimeDomain.PrecursorGroupingTolerance = 0.1
+# TimeDomain.MaxIntermediateScans = 5
+# TimeDomain.MinScansInGroup = 1
+# PeakSelection.FilteringThreshold = 0.5
+# PeakSelection.MinFilteringPeakMZ = 50
+# PeakSelection.MaxFilteringPeakMZ = 100000
+# PeakSelection.FilteringMinSNRatio = 10
+# PeakSelection.MinPeakWidth = 0.001
+# PeakSelection.ExpectedPeakWidth = 0.05
+# PeakSelection.MaxPeakWidth = 1
+# PeakSelection.MaxIterations = 500
+# PeakSelection.RejectWidthOutliers = 0
+# PeakSelection.BaselineCorrection = 0
+#
+BEGIN IONS
+TITLE=1: Sum of 2 scans in range 548 (rt=20.1265) to 549 (rt=20.1422) [S:\p195\Proteomics\ORBI_1\gerritsb_20070116\20070116_01.RAW]
+CHARGE=2+,3+
+PEPMASS=516.15205 544674.86
+SCANS=548-549
+RTINSECONDS=1207.5892-1208.5323
+166.934	1116
+259.658	169
+260.181	273
+260.576	155
+260.898	274
+278.003	157
+278.354	157
+279.052	1587
+281.63619	427.00085
+314.87193	638.09586
+324.98389	2827.075
+END IONS
