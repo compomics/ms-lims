@@ -21,6 +21,7 @@ import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.gui.JTableForDB;
 import com.compomics.util.gui.renderers.ByteArrayRenderer;
 import com.compomics.util.gui.spectrum.SpectrumPanel;
+import com.compomics.util.io.StartBrowser;
 import com.compomics.util.sun.SwingWorker;
 import com.compomics.util.sun.TableSorter;
 
@@ -153,11 +154,11 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
 
 
     /**
-     * This method represents the 'command-pattern' design of the ProjectAnalyzerTool.
-     * It will actually allow the tool to run.
+     * This method represents the 'command-pattern' design of the ProjectAnalyzerTool. It will actually allow the tool
+     * to run.
      *
      * @param aParent     ProjectAnalyzer with the parent that launched this tool.
-     * @param aToolName String with the name for the tool.
+     * @param aToolName   String with the name for the tool.
      * @param aParameters String with the parameters as stored in the database for this tool.
      * @param aConn       Connection with the DB connection to use.
      * @param aDBName     String with the name of the database we're connected to via 'aConn'.
@@ -198,7 +199,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
      * This method will be called when the tool should show itself on the foreground and request the focus.
      */
     public void setActive() {
-        if(this.getState() == java.awt.Frame.ICONIFIED){
+        if (this.getState() == java.awt.Frame.ICONIFIED) {
             this.setState(java.awt.Frame.NORMAL);
         }
 
@@ -219,11 +220,11 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             Object[] instruments = new Object[temp.length + 1];
             instruments[0] = "All instruments";
             for (int i = 0; i < temp.length; i++) {
-                instruments[i+1] = temp[i];
+                instruments[i + 1] = temp[i];
             }
             iInstruments = instruments;
-        } catch(SQLException sqle) {
-            JOptionPane.showMessageDialog(this, new String[] {"Unable to load instruments from the database: " + sqle.getMessage(), "Exiting SQLTool."}, "Unable to load instruments.", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException sqle) {
+            JOptionPane.showMessageDialog(this, new String[]{"Unable to load instruments from the database: " + sqle.getMessage(), "Exiting SQLTool."}, "Unable to load instruments.", JOptionPane.ERROR_MESSAGE);
             this.close();
         }
     }
@@ -231,7 +232,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
     /**
      * This method returns the button panel.
      *
-     * @return  JPanel with the buttons.
+     * @return JPanel with the buttons.
      */
     private JPanel getButtonPanel() {
         btnExecuteQuery = new JButton("Execute query");
@@ -247,7 +248,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
              * This event occurs when a key press is followed by a key release.
              */
             public void keyTyped(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     executeQueryTriggered();
                 }
             }
@@ -265,7 +266,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
              * This event occurs when a key press is followed by a key release.
              */
             public void keyTyped(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     close();
                 }
             }
@@ -289,16 +290,16 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         final String query = this.constructQuery();
         // See if something sensible was returned by the
         // query constructor. If not, just bail.
-        if(query == null) {
+        if (query == null) {
             return;
         }
         // Okay, we need to go ahead with this.
         try {
-            if(iStatement == null) {
+            if (iStatement == null) {
                 iStatement = iConnection.createStatement();
             }
-        } catch(SQLException sqle) {
-            JOptionPane.showMessageDialog(this, new String[] {"Unfortunately, your query could not be created, (see below for query): " + sqle.getMessage(), query}, "Query failed!", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException sqle) {
+            JOptionPane.showMessageDialog(this, new String[]{"Unfortunately, your query could not be created, (see below for query): " + sqle.getMessage(), query}, "Query failed!", JOptionPane.ERROR_MESSAGE);
             lblStatus.setForeground(Color.red);
             lblStatus.setText("Query creation failed.");
         }
@@ -312,11 +313,12 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                 Object result = null;
                 try {
                     result = iStatement.executeQuery(query);
-                } catch(SQLException e) {
+                } catch (SQLException e) {
                     result = e;
                 }
                 return result;
             }
+
             public void finished() {
                 queryCompleted(this, query, startMillis);
             }
@@ -328,9 +330,9 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
     /**
      * This method will be called by the SwingWorker whenever the query completes.
      *
-     * @param aQuery    SwingWorker that's handled the query. Since it is calling us, the query is now complete.
-     * @param aSQL  String with the actual SQL executed.
-     * @param aStartMillis  long with the original starting time of the query in milliseconds.
+     * @param aQuery       SwingWorker that's handled the query. Since it is calling us, the query is now complete.
+     * @param aSQL         String with the actual SQL executed.
+     * @param aStartMillis long with the original starting time of the query in milliseconds.
      */
     private void queryCompleted(SwingWorker aQuery, String aSQL, long aStartMillis) {
         progress.setIndeterminate(false);
@@ -338,28 +340,28 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         btnExecuteQuery.setEnabled(true);
         try {
             Object temp = aQuery.get();
-            if(temp instanceof ResultSet) {
-                ResultSet result = (ResultSet)temp;
+            if (temp instanceof ResultSet) {
+                ResultSet result = (ResultSet) temp;
                 long endMillis = System.currentTimeMillis();
                 double totalTime = 0.0;
                 boolean inSeconds = false;
-                totalTime = endMillis-aStartMillis;
-                if(totalTime > 1000) {
+                totalTime = endMillis - aStartMillis;
+                if (totalTime > 1000) {
                     totalTime /= 1000.0;
                     inSeconds = true;
                 }
                 DBResultSet dbr = new DBResultSet(result);
                 tblResults.setModel(dbr);
                 result.close();
-                String duration = new BigDecimal(totalTime).setScale(2, BigDecimal.ROUND_HALF_UP).toString()+ (inSeconds?" seconds":" milliseconds");
+                String duration = new BigDecimal(totalTime).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + (inSeconds ? " seconds" : " milliseconds");
                 lblStatus.setForeground(this.getForeground());
                 lblStatus.setText("Query returned " + dbr.getRowCount() + " rows (query took " + duration + ").");
                 progress.setString("Query complete (" + duration + ")!");
-            } else if(temp instanceof SQLException) {
-                throw (SQLException)temp;
+            } else if (temp instanceof SQLException) {
+                throw (SQLException) temp;
             }
-        } catch(SQLException sqle) {
-            JOptionPane.showMessageDialog(this, new String[] {"Unfortunately, your query failed, (see below for query): " + sqle.getMessage(), aSQL}, "Query failed!", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException sqle) {
+            JOptionPane.showMessageDialog(this, new String[]{"Unfortunately, your query failed, (see below for query): " + sqle.getMessage(), aSQL}, "Query failed!", JOptionPane.ERROR_MESSAGE);
             lblStatus.setForeground(Color.red);
             lblStatus.setText("Query failed.");
             progress.setString("Query failed");
@@ -375,7 +377,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         rbtAllPeptides.setMaximumSize(new Dimension(rbtAllPeptides.getMaximumSize().width, rbtAllPeptides.getPreferredSize().height));
         rbtAllPeptides.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtAllPeptides.isSelected()) {
+                if (rbtAllPeptides.isSelected()) {
                     chkIncludeFile.setEnabled(true);
                 }
             }
@@ -384,7 +386,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         rbtUniquePeptides.setMaximumSize(new Dimension(rbtUniquePeptides.getMaximumSize().width, rbtUniquePeptides.getPreferredSize().height));
         rbtUniquePeptides.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtUniquePeptides.isSelected()) {
+                if (rbtUniquePeptides.isSelected()) {
                     chkIncludeFile.setEnabled(true);
                     chkHighestScorePeptide.setEnabled(true);
                 } else {
@@ -409,10 +411,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         rbtModSeq = new JRadioButton("Only peptides with modified sequences containing: ");
         rbtSeq = new JRadioButton("Only peptides with sequences containing: ");
         rbtSeq.setMaximumSize(new Dimension(rbtSeq.getMaximumSize().width, rbtSeq.getPreferredSize().height));
-        rbtSeq.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width,  rbtSeq.getPreferredSize().height));
+        rbtSeq.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width, rbtSeq.getPreferredSize().height));
         rbtSeq.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtSeq.isSelected()) {
+                if (rbtSeq.isSelected()) {
                     txtSeq.setEnabled(true);
                     chkIncludeFile.setEnabled(true);
                 } else {
@@ -435,7 +437,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         rbtModSeq.setMaximumSize(new Dimension(rbtModSeq.getMaximumSize().width, rbtModSeq.getPreferredSize().height));
         rbtModSeq.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtModSeq.isSelected()) {
+                if (rbtModSeq.isSelected()) {
                     txtModSeq.setEnabled(true);
                     chkIncludeFile.setEnabled(true);
                 } else {
@@ -457,10 +459,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
 
         rbtTitle = new JRadioButton("Only identifications with titles containing: ");
         rbtTitle.setMaximumSize(new Dimension(rbtTitle.getMaximumSize().width, rbtTitle.getPreferredSize().height));
-        rbtTitle.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width,  rbtTitle.getPreferredSize().height));
+        rbtTitle.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width, rbtTitle.getPreferredSize().height));
         rbtTitle.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtTitle.isSelected()) {
+                if (rbtTitle.isSelected()) {
                     txtTitle.setEnabled(true);
                     chkIncludeFile.setEnabled(true);
                 } else {
@@ -485,10 +487,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         chkOmitIPIXRefs.setEnabled(false);
         rbtUniqueProteins = new JRadioButton("Show only unique proteins");
         rbtUniqueProteins.setMaximumSize(new Dimension(rbtUniqueProteins.getMaximumSize().width, rbtUniqueProteins.getPreferredSize().height));
-        rbtUniqueProteins.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width,  rbtUniqueProteins.getPreferredSize().height));
+        rbtUniqueProteins.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width, rbtUniqueProteins.getPreferredSize().height));
         rbtUniqueProteins.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtUniqueProteins.isSelected()) {
+                if (rbtUniqueProteins.isSelected()) {
                     chkOmitIPIXRefs.setEnabled(true);
                     chkIncludeFile.setEnabled(false);
                 } else {
@@ -506,10 +508,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
 
         rbtSingles = new JRadioButton("Show only peptides detected as single");
         rbtSingles.setMaximumSize(new Dimension(rbtSingles.getMaximumSize().width, rbtSingles.getPreferredSize().height));
-        rbtSingles.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width,  rbtSingles.getPreferredSize().height));
+        rbtSingles.setPreferredSize(new Dimension(rbtModSeq.getPreferredSize().width, rbtSingles.getPreferredSize().height));
         rbtSingles.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtSingles.isSelected()) {
+                if (rbtSingles.isSelected()) {
                     chkIncludeFile.setEnabled(true);
                     rbtSingleLight.setEnabled(true);
                     rbtSingleHeavy.setEnabled(true);
@@ -634,7 +636,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                 int row = tblResults.rowAtPoint(compLoc);
                 TableCellRenderer comp = tblResults.getCellRenderer(row, col);
 
-                if((e.getModifiers() == MouseEvent.BUTTON3_MASK || e.getModifiers() == MouseEvent.BUTTON2_MASK) && (tblResults.getColumnName(col) != null) && tblResults.getColumnName(col).trim().equalsIgnoreCase("l_datfileid")) {
+                if ((e.getModifiers() == MouseEvent.BUTTON3_MASK || e.getModifiers() == MouseEvent.BUTTON2_MASK) && (tblResults.getColumnName(col) != null) && tblResults.getColumnName(col).trim().equalsIgnoreCase("l_datfileid")) {
                     // Get the data from the 'datfile' table.
                     try {
                         Statement stat = iConnection.createStatement();
@@ -649,43 +651,44 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                         // The URL will be stored here.
                         String url = server + "/cgi/master_results.pl?file=" + folder + filename;
                         // The process.
-                        Runtime.getRuntime().exec("startIexplore.cmd " + url);
-                    } catch(SQLException sqle) {
+                        StartBrowser.start(url);
+
+                    } catch (SQLException sqle) {
                         sqle.printStackTrace();
-                        JOptionPane.showMessageDialog((Component)comp, "Unable to load data for selected datfile (ID=" + tblResults.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
-                    } catch(Exception exc) {
+                        JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected datfile (ID=" + tblResults.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
+                    } catch (Exception exc) {
                         exc.printStackTrace();
-                        JOptionPane.showMessageDialog((Component)comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog((Component) comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
                     }
-                } else if((e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON2) && (comp instanceof ByteArrayRenderer || tblResults.getColumnName(col).trim().equalsIgnoreCase("l_spectrumfileid"))) {
+                } else if ((e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON2) && (comp instanceof ByteArrayRenderer || tblResults.getColumnName(col).trim().equalsIgnoreCase("l_spectrumfileid"))) {
                     byte[] result = null;
                     String filename = "Spectrum";
                     try {
-                        if(tblResults.getColumnName(col).trim().equalsIgnoreCase("l_spectrumfileid")) {
+                        if (tblResults.getColumnName(col).trim().equalsIgnoreCase("l_spectrumfileid")) {
                             try {
-                                Spectrumfile specFile = Spectrumfile.findFromID(((Number)tblResults.getValueAt(row, col)).longValue(), iConnection);
+                                Spectrumfile specFile = Spectrumfile.findFromID(((Number) tblResults.getValueAt(row, col)).longValue(), iConnection);
                                 result = specFile.getUnzippedFile();
                                 filename = specFile.getFilename();
-                            } catch(SQLException sqle) {
+                            } catch (SQLException sqle) {
                                 sqle.printStackTrace();
-                                JOptionPane.showMessageDialog((Component)comp, "Unable to load data for selected spectrumfile (ID=" + tblResults.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load spectrumfile data!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected spectrumfile (ID=" + tblResults.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load spectrumfile data!", JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
                         } else {
                             // Creating the frame with the data from the model.
                             int modelCol = tblResults.convertColumnIndexToModel(col);
-                            byte[] spectrumZipped = (byte[])tblResults.getModel().getValueAt(row, modelCol);
+                            byte[] spectrumZipped = (byte[]) tblResults.getModel().getValueAt(row, modelCol);
                             result = Spectrumfile.getUnzippedFile(spectrumZipped);
                         }
                         MascotGenericFile mgf = new MascotGenericFile(filename, new String(result));
-                        if(mgf.getPeaks() == null || mgf.getPeaks().size() == 0) {
+                        if (mgf.getPeaks() == null || mgf.getPeaks().size() == 0) {
                             JOptionPane.showMessageDialog(ProjectSQLTool.this, "This spectrum contains no peaks and can not be visualized!", "No peaks found in spectrum!", JOptionPane.WARNING_MESSAGE);
                             return;
                         }
                         // See if we have a sensible filename, else try the title.
-                        if(mgf.getFilename() == null || mgf.getFilename().indexOf(".") < 0) {
+                        if (mgf.getFilename() == null || mgf.getFilename().indexOf(".") < 0) {
                             String title = mgf.getTitle();
-                            if(title != null && title.indexOf(".") > 0) {
+                            if (title != null && title.indexOf(".") > 0) {
                                 mgf.setFilename(title);
                             }
                         }
@@ -694,32 +697,32 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                         Vector fragments = new Vector();
                         try {
                             int idColumn = -1;
-                            for(int i=0; i<tblResults.getModel().getColumnCount();i++) {
-                                if(tblResults.getModel().getColumnName(i).trim().toLowerCase().equals("identificationid")) {
+                            for (int i = 0; i < tblResults.getModel().getColumnCount(); i++) {
+                                if (tblResults.getModel().getColumnName(i).trim().toLowerCase().equals("identificationid")) {
                                     idColumn = i;
                                 }
                             }
-                            if(idColumn > -1) {
-                                idid = ((Number)tblResults.getModel().getValueAt(row, idColumn)).longValue();
+                            if (idColumn > -1) {
+                                idid = ((Number) tblResults.getModel().getValueAt(row, idColumn)).longValue();
 
                                 Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConnection, idid);
-                                if(temp.size() == 0) {
-                                    JOptionPane.showMessageDialog((Component)comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
+                                if (temp.size() == 0) {
+                                    JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                                 }
                                 for (Iterator lIterator = temp.iterator(); lIterator.hasNext();) {
-                                    FragmentIon lIon = (FragmentIon)lIterator.next();
-                                    if(lIon.getID() == FragmentIon.Y_ION || lIon.getID() == FragmentIon.B_ION ||
-                                                            lIon.getID() == FragmentIon.PRECURSOR ||
-                                                            lIon.getID() == FragmentIon.IMMONIUM) {
+                                    FragmentIon lIon = (FragmentIon) lIterator.next();
+                                    if (lIon.getID() == FragmentIon.Y_ION || lIon.getID() == FragmentIon.B_ION ||
+                                            lIon.getID() == FragmentIon.PRECURSOR ||
+                                            lIon.getID() == FragmentIon.IMMONIUM) {
                                         fragments.add(lIon);
                                     }
                                 }
                             } else {
                                 JOptionPane.showMessageDialog(ProjectSQLTool.this, new String[]{"Unable to locate identification id in the current result set.", "Could not locate fragment ions."}, "Identification id not found!", JOptionPane.WARNING_MESSAGE);
                             }
-                        } catch(SQLException sqle) {
+                        } catch (SQLException sqle) {
                             sqle.printStackTrace();
-                            JOptionPane.showMessageDialog((Component)comp, "Unable to load fragment ions for selected identification (ID=" + idid + "): " + sqle.getMessage() + ".", "Unable to load fragment ions!", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog((Component) comp, "Unable to load fragment ions for selected identification (ID=" + idid + "): " + sqle.getMessage() + ".", "Unable to load fragment ions!", JOptionPane.ERROR_MESSAGE);
                         }
 
                         SpectrumPanel specPanel = new SpectrumPanel(mgf);
@@ -737,24 +740,24 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                         });
                         frame.setBounds(100, 100, 450, 300);
                         frame.setVisible(true);
-                    } catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         ioe.printStackTrace();
                     }
-                } else if(e.getModifiersEx() == MouseEvent.CTRL_DOWN_MASK  && comp instanceof ByteArrayRenderer) {
+                } else if (e.getModifiersEx() == MouseEvent.CTRL_DOWN_MASK && comp instanceof ByteArrayRenderer) {
                     // Creating the frame with the data from the model.
                     int modelCol = tblResults.convertColumnIndexToModel(col);
-                    byte[] data = (byte[])tblResults.getModel().getValueAt(row, modelCol);
+                    byte[] data = (byte[]) tblResults.getModel().getValueAt(row, modelCol);
                     // Get the output location.
                     try {
                         FileDialog fd = new FileDialog(ProjectSQLTool.this, "Save byte[] to disk...", FileDialog.SAVE);
                         fd.setVisible(true);
                         String select = fd.getFile();
-                        if(select == null) {
+                        if (select == null) {
                             return;
                         } else {
                             select = fd.getDirectory() + select;
                             File output = new File(select);
-                            if(!output.exists()) {
+                            if (!output.exists()) {
                                 output.createNewFile();
                             }
                             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(output));
@@ -763,10 +766,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                             bos.close();
                             JOptionPane.showMessageDialog(ProjectSQLTool.this, "Output written to " + select + ".", "Output written!", JOptionPane.INFORMATION_MESSAGE);
                         }
-                    } catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(ProjectSQLTool.this, "Unable to save data to file: " + ioe.getMessage(), "Unable to write data to file!", JOptionPane.ERROR_MESSAGE);
                     }
-                } else if(e.getClickCount() >= 2 && (tblResults.getColumnName(col) != null) && tblResults.getColumnName(col).trim().equalsIgnoreCase("l_datfileid")) {
+                } else if (e.getClickCount() >= 2 && (tblResults.getColumnName(col) != null) && tblResults.getColumnName(col).trim().equalsIgnoreCase("l_datfileid")) {
                     // Get the data from the 'datfile' table.
                     try {
                         Statement stat = iConnection.createStatement();
@@ -781,41 +784,41 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                         // The URL will be stored here.
                         String url = server + "/x-cgi/ms-showtext.exe?" + folder + filename;
                         // The process.
-                        Runtime.getRuntime().exec("startIexplore.cmd " + url);
-                    } catch(SQLException sqle) {
+                        StartBrowser.start(url);
+                    } catch (SQLException sqle) {
                         sqle.printStackTrace();
-                        JOptionPane.showMessageDialog((Component)comp, "Unable to load data for selected datfile (ID=" + tblResults.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
-                    } catch(Exception exc) {
+                        JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected datfile (ID=" + tblResults.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
+                    } catch (Exception exc) {
                         exc.printStackTrace();
-                        JOptionPane.showMessageDialog((Component)comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog((Component) comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
                     }
-                } else if(e.getClickCount() >= 2 && (tblResults.getColumnName(col) != null) && tblResults.getColumnName(col).trim().equalsIgnoreCase("ion_coverage")) {
+                } else if (e.getClickCount() >= 2 && (tblResults.getColumnName(col) != null) && tblResults.getColumnName(col).trim().equalsIgnoreCase("ion_coverage")) {
                     // Get all the fragment ions for this identification.
                     long idid = -1;
                     String modSeq = null;
                     Vector fragments = new Vector();
                     try {
                         int idColumn = -1;
-                        for(int i=0; i<tblResults.getModel().getColumnCount();i++) {
+                        for (int i = 0; i < tblResults.getModel().getColumnCount(); i++) {
                             String colHeader = tblResults.getModel().getColumnName(i).trim().toLowerCase();
-                            if(colHeader.equals("identificationid")) {
+                            if (colHeader.equals("identificationid")) {
                                 idColumn = i;
-                            } else if(colHeader.equals("modified_sequence")) {
+                            } else if (colHeader.equals("modified_sequence")) {
                                 modSeq = tblResults.getModel().getValueAt(row, i).toString();
                             }
                         }
-                        if(idColumn > -1 && modSeq != null) {
-                            idid = ((Number)tblResults.getModel().getValueAt(row, idColumn)).longValue();
+                        if (idColumn > -1 && modSeq != null) {
+                            idid = ((Number) tblResults.getModel().getValueAt(row, idColumn)).longValue();
 
                             Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConnection, idid);
-                            if(temp.size() == 0) {
-                                JOptionPane.showMessageDialog((Component)comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
+                            if (temp.size() == 0) {
+                                JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                             }
                             for (Iterator lIterator = temp.iterator(); lIterator.hasNext();) {
-                                FragmentIon lIon = (FragmentIon)lIterator.next();
-                                if(lIon.getID() == FragmentIon.Y_ION || lIon.getID() == FragmentIon.B_ION ||
-                                                        lIon.getID() == FragmentIon.PRECURSOR ||
-                                                        lIon.getID() == FragmentIon.IMMONIUM) {
+                                FragmentIon lIon = (FragmentIon) lIterator.next();
+                                if (lIon.getID() == FragmentIon.Y_ION || lIon.getID() == FragmentIon.B_ION ||
+                                        lIon.getID() == FragmentIon.PRECURSOR ||
+                                        lIon.getID() == FragmentIon.IMMONIUM) {
                                     fragments.add(lIon);
                                 }
                             }
@@ -838,9 +841,9 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                         } else {
                             JOptionPane.showMessageDialog(ProjectSQLTool.this, new String[]{"Unable to locate identification id or modified sequence in the current result set.", "Could not locate fragment ions or modified sequence."}, "Identification id or modified sequence not found!", JOptionPane.WARNING_MESSAGE);
                         }
-                    } catch(SQLException sqle) {
+                    } catch (SQLException sqle) {
                         sqle.printStackTrace();
-                        JOptionPane.showMessageDialog((Component)comp, "Unable to load fragment ions for selected identification (ID=" + idid + "): " + sqle.getMessage() + ".", "Unable to load fragment ions!", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog((Component) comp, "Unable to load fragment ions for selected identification (ID=" + idid + "): " + sqle.getMessage() + ".", "Unable to load fragment ions!", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -853,7 +856,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
         btnSelectionMode = new JCheckBox("Column selection mode", false);
         btnSelectionMode.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(btnSelectionMode.isSelected()) {
+                if (btnSelectionMode.isSelected()) {
                     tblResults.setColumnSelectionAllowed(true);
                     tblResults.setRowSelectionAllowed(false);
                 } else {
@@ -917,20 +920,19 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
     }
 
     /**
-     * This method is called whenever the user clicked the button to
-     * export data.
+     * This method is called whenever the user clicked the button to export data.
      */
     private void exportTriggered() {
-        if(tblResults.getModel() == null || tblResults.getModel().getRowCount() == 0) {
+        if (tblResults.getModel() == null || tblResults.getModel().getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "No data in table!", "No data to export!", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        ExportDialog ed = new ExportDialog(this, "Export data to file", (DBResultSet)((TableSorter)tblResults.getModel()).getModel());
+        ExportDialog ed = new ExportDialog(this, "Export data to file", (DBResultSet) ((TableSorter) tblResults.getModel()).getModel());
         ed.setVisible(true);
     }
 
     /**
-     *  This method is called when the user clicks the 'copy selection' button.
+     * This method is called when the user clicks the 'copy selection' button.
      */
     private void copyTriggered() {
         int[] cols = this.tblResults.getSelectedColumns();
@@ -941,25 +943,25 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
 
         String data = null;
 
-        if(tblResults.getRowSelectionAllowed() && rows != null && rows.length > 0) {
+        if (tblResults.getRowSelectionAllowed() && rows != null && rows.length > 0) {
             StringBuffer allRows = new StringBuffer();
-            for(int i = 0; i < rows.length; i++) {
-                for(int j=0;j<nbrCols;j++) {
+            for (int i = 0; i < rows.length; i++) {
+                for (int j = 0; j < nbrCols; j++) {
                     Object tempValue = this.tblResults.getValueAt(rows[i], j);
                     String tempData = null;
-                    if(tempValue != null) {
+                    if (tempValue != null) {
                         tempData = tempValue.toString();
                     } else {
                         tempData = "";
                     }
                     // Remove possible HTML tags.
-                    if(tempData.indexOf("<html>") >= 0 && tempData.indexOf("</html>") > 0){
+                    if (tempData.indexOf("<html>") >= 0 && tempData.indexOf("</html>") > 0) {
                         // Remove 'html' tags.
                         int start = -1;
-                        while((start = tempData.indexOf("<html>")) >= 0) {
+                        while ((start = tempData.indexOf("<html>")) >= 0) {
                             tempData = tempData.substring(0, start) + tempData.substring(start + 6);
                         }
-                        while((start = tempData.indexOf("</html>")) >= 0) {
+                        while ((start = tempData.indexOf("</html>")) >= 0) {
                             tempData = tempData.substring(0, start) + tempData.substring(start + 7);
                         }
                     }
@@ -968,25 +970,25 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                 allRows.append("\n");
             }
             data = allRows.toString();
-        } else if(tblResults.getColumnSelectionAllowed() && cols != null && cols.length > 0) {
+        } else if (tblResults.getColumnSelectionAllowed() && cols != null && cols.length > 0) {
             StringBuffer allCols = new StringBuffer();
-            for(int i = 0; i < nbrRows; i++) {
-                for(int j=0;j<cols.length;j++) {
+            for (int i = 0; i < nbrRows; i++) {
+                for (int j = 0; j < cols.length; j++) {
                     Object tempValue = this.tblResults.getValueAt(i, cols[j]);
                     String tempData = null;
-                    if(tempValue != null) {
+                    if (tempValue != null) {
                         tempData = tempValue.toString();
                     } else {
                         tempData = "";
                     }
                     // Remove possible HTML tags.
-                    if(tempData.indexOf("<html>") >= 0 && tempData.indexOf("</html>") > 0){
+                    if (tempData.indexOf("<html>") >= 0 && tempData.indexOf("</html>") > 0) {
                         // Remove 'html' tags.
                         int start = -1;
-                        while((start = tempData.indexOf("<html>")) >= 0) {
+                        while ((start = tempData.indexOf("<html>")) >= 0) {
                             tempData = tempData.substring(0, start) + tempData.substring(start + 6);
                         }
-                        while((start = tempData.indexOf("</html>")) >= 0) {
+                        while ((start = tempData.indexOf("</html>")) >= 0) {
                             tempData = tempData.substring(0, start) + tempData.substring(start + 7);
                         }
                     }
@@ -999,9 +1001,9 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             JOptionPane.showMessageDialog(this, "No rows or columns selected!", "No data selected!", JOptionPane.ERROR_MESSAGE);
         }
 
-        if(data != null) {
+        if (data != null) {
             Object tempObject = new StringSelection(data);
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents((Transferable)tempObject, (ClipboardOwner)tempObject);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents((Transferable) tempObject, (ClipboardOwner) tempObject);
         }
     }
 
@@ -1011,39 +1013,39 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
     private String constructQuery() {
         StringBuffer query = new StringBuffer();
         String prefix = "select ";
-        if(chkIncludeFile.isSelected()) {
+        if (chkIncludeFile.isSelected()) {
             prefix += "s.file as Spectrum, ";
         }
         Object temp = cmbInstrument.getSelectedItem();
         long instrumentID = -1;
-        if(temp instanceof Instrument) {
-                    instrumentID = ((Instrument)temp).getInstrumentid();
+        if (temp instanceof Instrument) {
+            instrumentID = ((Instrument) temp).getInstrumentid();
         }
-        if(rbtAllPeptides.isSelected()) {
+        if (rbtAllPeptides.isSelected()) {
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumfileid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version" +
                     " from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid());
             // See if there is an instrument selection.
-            if(instrumentID >= 0) {
+            if (instrumentID >= 0) {
                 query.append(" and s.l_instrumentid=" + instrumentID);
             }
-        } else if(rbtUniquePeptides.isSelected()) {
-            if(chkHighestScorePeptide.isSelected()) {
+        } else if (rbtUniquePeptides.isSelected()) {
+            if (chkHighestScorePeptide.isSelected()) {
                 // This query requires subselects. So it wil redefine the query StringBuffer completely.
                 // NOTE that there is no real guarantee that it will work outisde of MySQL 4.1 - I do know it works there.
-                query.append("select count(*) as 'nbr. sequences', sub.* from (select " + (chkIncludeFile.isSelected()?"s.file as Spectrum, ":"") +
-                             "i.* from identification as i, spectrumfile as s where i.l_spectrumfileid=s.spectrumfileid and " +
-                             "s.l_projectid=" + iProject.getProjectid() + " " + (instrumentID >= 0?"and s.l_instrumentid=" + instrumentID + " ":"") + "and i.valid >= 1 order by score DESC) as sub group by sequence");
+                query.append("select count(*) as 'nbr. sequences', sub.* from (select " + (chkIncludeFile.isSelected() ? "s.file as Spectrum, " : "") +
+                        "i.* from identification as i, spectrumfile as s where i.l_spectrumfileid=s.spectrumfileid and " +
+                        "s.l_projectid=" + iProject.getProjectid() + " " + (instrumentID >= 0 ? "and s.l_instrumentid=" + instrumentID + " " : "") + "and i.valid >= 1 order by score DESC) as sub group by sequence");
             } else {
                 query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumfileid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                         "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                         "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version, count(*) as 'Number of spectra' " +
-                        "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + (instrumentID >= 0?" and s.l_instrumentid="+instrumentID:"") +  " group by i.sequence");
+                        "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : "") + " group by i.sequence");
             }
-        } else if(rbtSeq.isSelected()) {
+        } else if (rbtSeq.isSelected()) {
             String param = txtSeq.getText();
-            if(param != null && !param.trim().equals("")) {
+            if (param != null && !param.trim().equals("")) {
                 param = param.trim();
             } else {
                 JOptionPane.showMessageDialog(this, "You need to specify a sequence element to query by!", "No sequence element provided!", JOptionPane.WARNING_MESSAGE);
@@ -1053,10 +1055,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumfileid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version " +
-                    "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + " and i.sequence like '" + param + "'" + (instrumentID >= 0?" and s.l_instrumentid="+instrumentID:""));
-        } else if(rbtModSeq.isSelected()) {
+                    "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + " and i.sequence like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
+        } else if (rbtModSeq.isSelected()) {
             String param = txtModSeq.getText();
-            if(param != null && !param.trim().equals("")) {
+            if (param != null && !param.trim().equals("")) {
                 param = param.trim();
             } else {
                 JOptionPane.showMessageDialog(this, "You need to specify a modified sequence element to query by!", "No modified sequence element provided!", JOptionPane.WARNING_MESSAGE);
@@ -1066,10 +1068,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumfileid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version " +
-                    "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + " and i.modified_sequence like '" + param + "'" + (instrumentID >= 0?" and s.l_instrumentid="+instrumentID:""));
-        } else if(rbtTitle.isSelected()) {
+                    "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + " and i.modified_sequence like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
+        } else if (rbtTitle.isSelected()) {
             String param = txtTitle.getText();
-            if(param != null && !param.trim().equals("")) {
+            if (param != null && !param.trim().equals("")) {
                 param = param.trim();
             } else {
                 JOptionPane.showMessageDialog(this, "You need to specify a title part to query by!", "No title part provided!", JOptionPane.WARNING_MESSAGE);
@@ -1079,10 +1081,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumfileid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version " +
-                    "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + " and i.title like '" + param + "'" + (instrumentID >= 0?" and s.l_instrumentid="+instrumentID:""));
-        } else if(rbtUniqueProteins.isSelected()) {
+                    "from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + " and i.title like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
+        } else if (rbtUniqueProteins.isSelected()) {
             query.append("select substring(i.accession, 1, if((locate('.', i.accession)-1) >0, locate('.', i.accession)-1, length(i.accession))) as versionless_accession, ");
-            if(chkOmitIPIXRefs.isSelected()) {
+            if (chkOmitIPIXRefs.isSelected()) {
                 query.append("trim(substring(i.description, locate(' ', i.description, locate('Tax_ID=', i.description))+1)) as 'description with IPI XRefs removed', ");
             } else {
                 query.append("trim(i.description) as Description, ");
@@ -1138,8 +1140,8 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                     "\t\t\t)\n" +
                     "\t\t)\n" +
                     "\t) as CHAR) as XRef,");
-            query.append("count(*) as 'Number of spectra', count(distinct sequence) as 'Number of unique peptides' from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + (instrumentID >= 0?" and s.l_instrumentid="+instrumentID:""));
-        } else if(rbtSingles.isSelected()) {
+            query.append("count(*) as 'Number of spectra', count(distinct sequence) as 'Number of unique peptides' from identification as i, spectrumfile as s where i.valid >= 1 and s.spectrumfileid = i.l_spectrumfileid and s.l_projectid=" + iProject.getProjectid() + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
+        } else if (rbtSingles.isSelected()) {
             // Query basis.
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumfileid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
@@ -1148,18 +1150,18 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             // See if we need light, heavy or both.
             String singleHeavy = "(i.light_isotope = 0 and i.heavy_isotope>0)";
             String singleLight = "(i.light_isotope>0 and i.heavy_isotope=0)";
-            if(rbtSingleBoth.isSelected()) {
+            if (rbtSingleBoth.isSelected()) {
                 query.append("(" + singleHeavy + " or " + singleLight + ")");
-            } else if(rbtSingleLight.isSelected()) {
+            } else if (rbtSingleLight.isSelected()) {
                 query.append(singleLight);
-            } else if(rbtSingleHeavy.isSelected()) {
+            } else if (rbtSingleHeavy.isSelected()) {
                 query.append(singleHeavy);
             }
-            if(instrumentID >= 0) {
+            if (instrumentID >= 0) {
                 query.append(" and s.l_instrumentid=" + instrumentID);
             }
         }
-        if(rbtUniqueProteins.isSelected()) {
+        if (rbtUniqueProteins.isSelected()) {
             query.append(" group by versionless_accession");
         }
         return query.toString();
@@ -1171,10 +1173,10 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
     public void close() {
         // Notify the parent.
         iParent.toolClosing(this);
-        if(iStatement != null) {
+        if (iStatement != null) {
             try {
                 iStatement.close();
-            } catch(SQLException sqle) {
+            } catch (SQLException sqle) {
                 sqle.printStackTrace();
             }
         }

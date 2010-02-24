@@ -16,6 +16,7 @@ package com.compomics.mslims.gui;
 
 import com.compomics.mslims.db.accessors.Identification;
 import com.compomics.mslims.db.accessors.Spectrumfile;
+import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.gui.table.IdentificationTableModel;
@@ -29,6 +30,7 @@ import com.compomics.util.gui.events.RescalingEvent;
 import com.compomics.util.gui.interfaces.SpectrumPanelListener;
 import com.compomics.util.gui.spectrum.SpectrumPanel;
 import com.compomics.util.interfaces.Connectable;
+import com.compomics.util.io.PropertiesManager;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -59,9 +61,8 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
     private String iDBName = null;
 
     /**
-     * This HashMap will contain the mapping of spectrum filenames (String, key) to
-     * identifications (Identification instances, value) - or is 'null' in the absence of
-     * a DB connection.
+     * This HashMap will contain the mapping of spectrum filenames (String, key) to identifications (Identification
+     * instances, value) - or is 'null' in the absence of a DB connection.
      */
     private HashMap iSpectrumIDMappings = null;
 
@@ -81,14 +82,14 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
      * @param args String[] with the start-up arguments.
      */
     public static void main(String[] args) {
-        
+
         // Check the arguments.
-        if(args == null  || args.length != 1) {
+        if (args == null || args.length != 1) {
             printUsage();
         }
         // Check the file.
         File input = new File(args[0]);
-        if(!input.exists()) {
+        if (!input.exists()) {
             printError("The file you specified ('" + args[0] + "') does not exist!");
         }
         // Okay, let's go!
@@ -99,27 +100,27 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
             BufferedReader br = new BufferedReader(new FileReader(input));
             String currentCluster = null;
             Vector currentSpectra = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
                 // Skip empty lines.
-                if(!line.equals("")) {
+                if (!line.equals("")) {
                     // See if it is a new cluster, or data for the current one.
-                    if(line.toLowerCase().indexOf("cluster number:") >= 0) {
+                    if (line.toLowerCase().indexOf("cluster number:") >= 0) {
                         // Start of a new cluster.
                         // See if we already have a cluster we're working with, in which
                         // case we store it.
-                        if(currentCluster != null && currentSpectra != null) {
+                        if (currentCluster != null && currentSpectra != null) {
                             Collections.sort(currentSpectra);
                             clusters.put(currentCluster, currentSpectra);
                         }
                         currentSpectra = new Vector();
-                        currentCluster = "Cluster " + line.substring(line.indexOf(":")+1).trim();
+                        currentCluster = "Cluster " + line.substring(line.indexOf(":") + 1).trim();
                     } else {
                         // We are in the currentCluster and should add the spectrum name to the
                         // currentSpectra list.
                         // Note that we transform legacy '.pkl' into '.mgf'.
                         int start = line.indexOf(".pkl");
-                        if(start >= 0) {
+                        if (start >= 0) {
                             line = line.substring(0, start) + ".mgf";
                         }
                         currentSpectra.add(line);
@@ -134,21 +135,20 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
             ClusterTreeGUI ctg = new ClusterTreeGUI(clusters);
             ctg.setBounds(250, 250, 550, 450);
             ctg.setVisible(true);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
 
     /**
-     * This constructor initializes a ClusterTreeGUI and attempts to tie it in with a database.
-     * If this succeeds, it will not only show the tree itself, but also a panel on which spectra
-     * can be displayed as well as a table in which identifications can be visualized.
-     * In the case the connection fails (typically because the user cancels the connection),
-     * the panel with spectra and the table will not be displayed.
+     * This constructor initializes a ClusterTreeGUI and attempts to tie it in with a database. If this succeeds, it
+     * will not only show the tree itself, but also a panel on which spectra can be displayed as well as a table in
+     * which identifications can be visualized. In the case the connection fails (typically because the user cancels the
+     * connection), the panel with spectra and the table will not be displayed.
      *
-     * @param aClusters HashMap with the name of the cluster (as String) as key, and the
-     *                  Vector of associated spectra (each a String) as value.
+     * @param aClusters HashMap with the name of the cluster (as String) as key, and the Vector of associated spectra
+     *                  (each a String) as value.
      */
     public ClusterTreeGUI(HashMap aClusters) {
         this.addWindowListener(new WindowAdapter() {
@@ -164,25 +164,28 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
         ArrayList allSpectra = new ArrayList();
         Iterator iter = aClusters.values().iterator();
         while (iter.hasNext()) {
-            Vector v = (Vector)iter.next();
+            Vector v = (Vector) iter.next();
             for (int i = 0; i < v.size(); i++) {
                 allSpectra.add(v.elementAt(i));
             }
         }
         // Now see if we can create a DB connection.
-        ConnectionDialog cd = new ConnectionDialog(this, this, "Connection for the Cluster tree viewer", "ClusterTreeGUI.properties");
+
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        ConnectionDialog cd = new ConnectionDialog(this, this, "Database connection for BackupManager", lConnectionProperties);
+
         cd.setLocation(100, 100);
         cd.setVisible(true);
         int idCount = -1;
-        if(iConn != null) {
-            DefaultProgressBar progress = new DefaultProgressBar(this, "Reading identifications from DB '" + iDBName + "'", 0, allSpectra.size()+1, "Initializing database connection to '" + iDBName + "'...");
+        if (iConn != null) {
+            DefaultProgressBar progress = new DefaultProgressBar(this, "Reading identifications from DB '" + iDBName + "'", 0, allSpectra.size() + 1, "Initializing database connection to '" + iDBName + "'...");
             iSpectrumIDMappings = new HashMap();
             LoadDBDataWorker worker = new LoadDBDataWorker(this, iConn, iSpectrumIDMappings, allSpectra, progress);
             worker.start();
             progress.setVisible(true);
             Iterator iter2 = iSpectrumIDMappings.values().iterator();
             while (iter2.hasNext()) {
-                if(iter2.next() != null) {
+                if (iter2.next() != null) {
                     idCount++;
                 }
             }
@@ -192,13 +195,11 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
      * @param aConn   Connection with the DB connection.
-     * @param aDBName String with an identifier for the connection, typically the
-     *                name of the DB connected to.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
         this.iConn = aConn;
@@ -211,7 +212,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
      * @param aSe ResizinEvent with the details of the rescaling.
      */
     public void rescaled(RescalingEvent aSe) {
-        if(chkRescaleAll.isSelected()) {
+        if (chkRescaleAll.isSelected()) {
             // Rescale all listed specpanels, except for the one who threw the event
             // as this one is already OK.
             JPanel source = aSe.getSource();
@@ -220,8 +221,8 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
             Component[] components = jpanSpectra.getComponents();
             for (int i = 0; i < components.length; i++) {
                 Component lComponent = components[i];
-                if(lComponent != source) {
-                    ((SpectrumPanel)lComponent).rescale(minMass, maxMass, false);
+                if (lComponent != source) {
+                    ((SpectrumPanel) lComponent).rescale(minMass, maxMass, false);
                 }
             }
             jpanSpectra.repaint();
@@ -231,11 +232,11 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
     /**
      * This method lays out and initializes the GUI.
      *
-     * @param aTitle    String with the start of the frame title (some info appended here).
-     * @param aClusters HashMap with the cluster to spectra mappings. Cluster name (String) is key,
-     *                  Vector of spectra names (Strings) is value.
-     * @param aSpecCount    int with the total number of spectra counted.
-     * @param aIDCount  int with the total number of identified spectra counted.
+     * @param aTitle     String with the start of the frame title (some info appended here).
+     * @param aClusters  HashMap with the cluster to spectra mappings. Cluster name (String) is key, Vector of spectra
+     *                   names (Strings) is value.
+     * @param aSpecCount int with the total number of spectra counted.
+     * @param aIDCount   int with the total number of identified spectra counted.
      */
     private void constructScreen(String aTitle, HashMap aClusters, int aSpecCount, int aIDCount) {
         // Prepare the title.
@@ -251,9 +252,9 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
              * This event occurs when a key press is followed by a key release.
              */
             public void keyTyped(KeyEvent e) {
-                if((!btnSearchSpectrum.isEnabled()) && txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
+                if ((!btnSearchSpectrum.isEnabled()) && txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
                     btnSearchSpectrum.setEnabled(true);
-                } else if(btnSearchSpectrum.isEnabled() && (txtSearchSpectrum.getText() == null || txtSearchSpectrum.getText().trim().equals(""))) {
+                } else if (btnSearchSpectrum.isEnabled() && (txtSearchSpectrum.getText() == null || txtSearchSpectrum.getText().trim().equals(""))) {
                     btnSearchSpectrum.setEnabled(false);
                 }
             }
@@ -263,8 +264,8 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if(txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
                         searchPressed();
                     }
                 }
@@ -283,7 +284,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     searchPressed();
                 }
             }
@@ -303,7 +304,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
 
         // Layout changes dramatically if we are connected to the database and therefore have
         // auxillary information.
-        if(iConn == null) {
+        if (iConn == null) {
             jpanMain.add(new JScrollPane(trClusters));
         } else {
             jpanSpectra = new JPanel();
@@ -329,7 +330,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         displayOnTablePressed();
                     }
                 }
@@ -347,7 +348,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         displaySpectraPressed();
                     }
                 }
@@ -365,7 +366,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         alignSpectraPressed();
                     }
                 }
@@ -384,7 +385,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         removeSpectraPressed();
                     }
                 }
@@ -439,7 +440,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
             affix += "; " + aIDCount + " identifications; connected to " + iDBName;
         }
 
-        this.setTitle(aTitle + affix+")");
+        this.setTitle(aTitle + affix + ")");
         this.getContentPane().add(jpanMain, BorderLayout.CENTER);
         this.setLocation(300, 300);
         this.pack();
@@ -449,16 +450,16 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
      * This method is called when the user presses the 'display on table' button.
      */
     private void displayOnTablePressed() {
-        if(iSpectrumIDMappings != null) {
+        if (iSpectrumIDMappings != null) {
             TreePath[] paths = trClusters.getSelectionPaths();
-            if(paths != null && paths.length > 0) {
+            if (paths != null && paths.length > 0) {
                 Vector ids = new Vector(paths.length);
                 for (int i = 0; i < paths.length; i++) {
                     TreePath lPath = paths[i];
                     Object o = lPath.getLastPathComponent();
-                    if(ctmClusters.isLeaf(o)) {
-                        Identification temp = (Identification)iSpectrumIDMappings.get(o);
-                        if(temp != null) {
+                    if (ctmClusters.isLeaf(o)) {
+                        Identification temp = (Identification) iSpectrumIDMappings.get(o);
+                        if (temp != null) {
                             ids.add(temp);
                         }
                     }
@@ -480,13 +481,13 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
         // Find the smalles and largest mass across all spectra.
         for (int i = 0; i < components.length; i++) {
             Component lComponent = components[i];
-            if(lComponent instanceof SpectrumPanel) {
-                double tempMin = ((SpectrumPanel)lComponent).getMinMass();
-                double tempMax = ((SpectrumPanel)lComponent).getMaxMass();
-                if(tempMin < min) {
+            if (lComponent instanceof SpectrumPanel) {
+                double tempMin = ((SpectrumPanel) lComponent).getMinMass();
+                double tempMax = ((SpectrumPanel) lComponent).getMaxMass();
+                if (tempMin < min) {
                     min = tempMin;
                 }
-                if(tempMax > max) {
+                if (tempMax > max) {
                     max = tempMax;
                 }
             }
@@ -494,8 +495,8 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
         // Rescale all to the largest and smallest masses across all spetcra.
         for (int i = 0; i < components.length; i++) {
             Component lComponent = components[i];
-            if(lComponent instanceof SpectrumPanel) {
-                ((SpectrumPanel)lComponent).rescale(min, max, false);
+            if (lComponent instanceof SpectrumPanel) {
+                ((SpectrumPanel) lComponent).rescale(min, max, false);
             }
         }
         // Repaint 'em.
@@ -513,7 +514,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
         Vector path = new Vector();
         path.add(root);
         recurseTree(searchString, root, path, foundOnes);
-        if(foundOnes.size() > 0) {
+        if (foundOnes.size() > 0) {
             // We now have all the matching clusters with the individual spectra.
             collapseTree();
             // Now expand all the matching ones.
@@ -525,7 +526,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
             }
             // Now select all matches.
             trClusters.setSelectionPaths(tpArray);
-            JOptionPane.showMessageDialog(this, new String[] {"Found " + foundOnes.size() + " hits in the tree for query '" + searchString + "'.", "They have been expanded and highlighted."}, foundOnes.size() + " hits found!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, new String[]{"Found " + foundOnes.size() + " hits in the tree for query '" + searchString + "'.", "They have been expanded and highlighted."}, foundOnes.size() + " hits found!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "No hits found in the tree for query '" + searchString + "'.", "No hits found!", JOptionPane.WARNING_MESSAGE);
         }
@@ -543,21 +544,21 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
     }
 
     /**
-     * Recurse the tree, looking for the specified search String, constructing
-     * TreePaths along the way if they are in fact found (only in the leafs, mind you).
+     * Recurse the tree, looking for the specified search String, constructing TreePaths along the way if they are in
+     * fact found (only in the leafs, mind you).
      *
-     * @param aSearch   String to search for (match is case insensitive and is done
-     *                  on substring match, ie 'oba' matches 'FoObAr').
-     * @param aParent   Object with the parent node to explore. This parent should be
-     *                  the last element in the aPath Vector as well.
-     * @param aPath     Vector with the complete path so far.
-     * @param aFound    Vector in which to store the TreePath instances that were found.
-     *                  <b>Please note</b> that this is a reference parameter.
+     * @param aSearch String to search for (match is case insensitive and is done on substring match, ie 'oba' matches
+     *                'FoObAr').
+     * @param aParent Object with the parent node to explore. This parent should be the last element in the aPath Vector
+     *                as well.
+     * @param aPath   Vector with the complete path so far.
+     * @param aFound  Vector in which to store the TreePath instances that were found. <b>Please note</b> that this is a
+     *                reference parameter.
      */
     private void recurseTree(String aSearch, Object aParent, Vector aPath, Vector aFound) {
-        if(trClusters.getModel().isLeaf(aParent)) {
+        if (trClusters.getModel().isLeaf(aParent)) {
             // See if it contains the search String.
-            if(aParent.toString().toLowerCase().indexOf(aSearch) >= 0) {
+            if (aParent.toString().toLowerCase().indexOf(aSearch) >= 0) {
                 // Okay, reconstruct the TreePath.
                 Object[] path = new Object[aPath.size()];
                 aPath.toArray(path);
@@ -566,7 +567,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
             aPath.remove(aParent);
         } else {
             int childCount = trClusters.getModel().getChildCount(aParent);
-            for(int i=0;i<childCount;i++) {
+            for (int i = 0; i < childCount; i++) {
                 Object child = trClusters.getModel().getChild(aParent, i);
                 aPath.add(child);
                 recurseTree(aSearch, child, aPath, aFound);
@@ -592,16 +593,16 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
      */
     private void displaySpectraPressed() {
         TreePath[] nodes = trClusters.getSelectionPaths();
-        if(nodes != null && nodes.length <= 10) {
+        if (nodes != null && nodes.length <= 10) {
             for (int i = 0; i < nodes.length; i++) {
                 TreePath lNode = nodes[i];
                 Object selectObject = lNode.getLastPathComponent();
-                if(ctmClusters.isLeaf(selectObject)) {
-                    String filename = (String)selectObject;
+                if (ctmClusters.isLeaf(selectObject)) {
+                    String filename = (String) selectObject;
                     try {
                         Spectrumfile sf = Spectrumfile.findFromName(filename, iConn);
                         Color filenameColor = null;
-                        if(iSpectrumIDMappings.get(filename) == null) {
+                        if (iSpectrumIDMappings.get(filename) == null) {
                             filenameColor = Color.red;
                         }
                         final SpectrumPanel temp = new SpectrumPanel(new MascotGenericFile(filename, new String(sf.getUnzippedFile())));
@@ -620,7 +621,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                                 Container parent = temp.getParent();
                                 temp.remove(jpanButton);
                                 parent.remove(temp);
-                                if(parent.getComponentCount() == 0) {
+                                if (parent.getComponentCount() == 0) {
                                     btnAlignSpectra.setEnabled(false);
                                     btnRemoveSpectra.setEnabled(false);
                                     chkRescaleAll.setEnabled(false);
@@ -632,34 +633,34 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                         temp.add(Box.createVerticalGlue());
                         temp.add(jpanButton);
                         jpanSpectra.add(temp);
-                        if(jpanSpectra.getComponentCount() > 0) {
+                        if (jpanSpectra.getComponentCount() > 0) {
                             btnAlignSpectra.setEnabled(true);
                             btnRemoveSpectra.setEnabled(true);
                             chkRescaleAll.setEnabled(true);
                         }
                         jpanSpectra.validate();
                         jpanSpectra.repaint();
-                    } catch(Exception ex) {
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             }
-        } else if(nodes.length > 10) {
-            JOptionPane.showMessageDialog(jpanSpectra, new String[] {"A maximum of 10 selections applies to visualising spectra!", "You selected " + nodes.length + "."}, "Too many spectra selected!", JOptionPane.WARNING_MESSAGE);
+        } else if (nodes.length > 10) {
+            JOptionPane.showMessageDialog(jpanSpectra, new String[]{"A maximum of 10 selections applies to visualising spectra!", "You selected " + nodes.length + "."}, "Too many spectra selected!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     /**
-     * This method prints the usage information for this class to the standard
-     * error stream and exits with the error flag raised to '1'.
+     * This method prints the usage information for this class to the standard error stream and exits with the error
+     * flag raised to '1'.
      */
     private static void printUsage() {
         printError("Usage:\n\n\tClusterTreeGUI <cluster_file>");
     }
 
     /**
-     * This method prints two blank lines followed by the the specified error message and another two empty lines
-     * to the standard error stream and exits with the error flag raised to '1'.
+     * This method prints two blank lines followed by the the specified error message and another two empty lines to the
+     * standard error stream and exits with the error flag raised to '1'.
      *
      * @param aMsg String with the message to print.
      */
@@ -672,11 +673,11 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
      * This method is called when the application is closing.
      */
     private void close() {
-        if(iConn != null) {
+        if (iConn != null) {
             try {
                 iConn.close();
                 System.out.println("Database connection closed.");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

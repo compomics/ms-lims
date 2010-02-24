@@ -8,6 +8,7 @@ package com.compomics.mslims.gui;
 
 import com.compomics.mslims.db.accessors.Instrument;
 import com.compomics.mslims.db.accessors.Project;
+import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.dialogs.DifferentialProjectDialog;
 import com.compomics.mslims.gui.frames.DifferentialAnalysisResultsFrame;
@@ -19,6 +20,7 @@ import com.compomics.mslims.util.workers.DiffAnalysisWorker;
 import com.compomics.util.general.CommandLineParser;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.interfaces.Flamable;
+import com.compomics.util.io.PropertiesManager;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -29,6 +31,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Vector;
 
 /*
@@ -39,8 +42,8 @@ import java.util.Vector;
  */
 
 /**
- * This class presents a graphical user interface to perform a differential analyse within
- * one project, or accross different projects.
+ * This class presents a graphical user interface to perform a differential analyse within one project, or accross
+ * different projects.
  *
  * @author Lennart Martens
  * @version $Id: DiffAnalysisGUI.java,v 1.11 2009/07/28 14:48:33 lennart Exp $
@@ -90,23 +93,22 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
     private DifferentialProjectTableModel iModel = null;
 
     /**
-     * When this boolean is 'true', expert mode is enabled and more choices
-     * of configuration are available to the user.
+     * When this boolean is 'true', expert mode is enabled and more choices of configuration are available to the user.
      */
     private boolean iExpert = false;
 
     /**
-     * This constructor takes a boolean indicating the mode as parameter.
-     * The expert mode (enabled when the aExpert boolean is 'true') allows two additional
-     * configuration parameters: the type of averaging used and an optional 'wehere' clause to select
-     * specific identifications only.
+     * This constructor takes a boolean indicating the mode as parameter. The expert mode (enabled when the aExpert
+     * boolean is 'true') allows two additional configuration parameters: the type of averaging used and an optional
+     * 'wehere' clause to select specific identifications only.
      *
-     * @param aExpert boolean that is 'true' for expert mode (more options),
-     *                'false' for default mode.
+     * @param aExpert boolean that is 'true' for expert mode (more options), 'false' for default mode.
      */
     public DiffAnalysisGUI(boolean aExpert) {
         this.iExpert = aExpert;
-        ConnectionDialog cd = new ConnectionDialog(this, this, "Connection for DiffAnalysisGUI" + (iExpert?" (expert mode)":""), "DiffAnalysisGUI.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+
+        ConnectionDialog cd = new ConnectionDialog(this, this, "Connection for DiffAnalysisGUI" + (iExpert ? " (expert mode)" : ""), lConnectionProperties);
         cd.setVisible(true);
         // Frame to show the user that something is indeed happening.
         JFrame tempFrame = new JFrame("Loading data...");
@@ -119,7 +121,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         tempFrame.setVisible(false);
         tempFrame.dispose();
         this.readInstruments();
-        super.setTitle("Differential Analysis " + (iExpert?"- expert mode ":"") + " (reading projects from " + iDBName + ")");
+        super.setTitle("Differential Analysis " + (iExpert ? "- expert mode " : "") + " (reading projects from " + iDBName + ")");
         iModel = new DifferentialProjectTableModel();
         this.constructScreen();
         this.addWindowListener(new WindowAdapter() {
@@ -136,16 +138,14 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
      * @param aConn   Connection with the DB connection.
-     * @param aDBName String with an identifier for the connection, typically the
-     *                name of the DB connected to.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
-        if(aConn == null) {
+        if (aConn == null) {
             System.exit(0);
         } else {
             this.iConnection = aConn;
@@ -169,7 +169,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
      * @param aMessage   String with an extra message to display.
      */
     public void passHotPotato(Throwable aThrowable, String aMessage) {
-        JOptionPane.showMessageDialog(this, new String[] {"An error occurred while attempting to read the data:", aMessage}, "Error occurred!", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, new String[]{"An error occurred while attempting to read the data:", aMessage}, "Error occurred!", JOptionPane.ERROR_MESSAGE);
         aThrowable.printStackTrace();
         this.close(1);
     }
@@ -186,24 +186,24 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
     /**
      * The main method is the entry point for the application.
      *
-     * @param args  String[[]   with the start-up arguments.
+     * @param args String[[]   with the start-up arguments.
      */
     public static void main(String[] args) {
         try {
             CommandLineParser clp = new CommandLineParser(args);
             String[] flags = clp.getFlags();
             boolean expert = false;
-            if(flags != null && flags.length > 0) {
+            if (flags != null && flags.length > 0) {
                 for (int i = 0; i < flags.length; i++) {
                     String lFlag = flags[i];
-                    if("e".equals(lFlag)) {
+                    if ("e".equals(lFlag)) {
                         expert = true;
                     }
                 }
             }
             DiffAnalysisGUI frame = new DiffAnalysisGUI(expert);
             frame.setVisible(true);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             JFrame frame = new JFrame("You won't see me.");
             JOptionPane.showMessageDialog(frame, new String[]{"A start-up error occurred: ", t.getMessage()}, "Application encountered a fatal error!", JOptionPane.ERROR_MESSAGE);
             t.printStackTrace();
@@ -239,7 +239,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     txtLightLabel.requestFocus();
                 }
             }
@@ -249,7 +249,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     txtHeavyLabel.requestFocus();
                 }
             }
@@ -259,7 +259,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     lstProjects.requestFocus();
                 }
             }
@@ -273,7 +273,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when the mouse has been clicked on a component.
              */
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() > 1) {
+                if (e.getClickCount() > 1) {
                     projectListClicked();
                 }
             }
@@ -283,7 +283,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     projectListClicked();
                 }
             }
@@ -300,8 +300,8 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                   projectListClicked();
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    projectListClicked();
                 }
             }
         });
@@ -311,7 +311,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                     deleteRowRequested();
                 }
             }
@@ -328,8 +328,8 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                   deleteRowRequested();
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    deleteRowRequested();
                 }
             }
         });
@@ -357,7 +357,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         txtRecenterProjects.setEnabled(false);
         chkRecenterProjects.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(chkRecenterProjects.isSelected()) {
+                if (chkRecenterProjects.isSelected()) {
                     txtRecenterProjects.setEnabled(true);
                 } else {
                     txtRecenterProjects.setEnabled(false);
@@ -369,7 +369,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
 
         // The button panel.
         JPanel jpanButtons = this.getButtonPanel();
-        jpanButtons.setMaximumSize(new Dimension(jpanButtons.getMaximumSize().width,jpanButtons.getPreferredSize().height));
+        jpanButtons.setMaximumSize(new Dimension(jpanButtons.getMaximumSize().width, jpanButtons.getPreferredSize().height));
 
         // Lay out components.
         // Correct distance between label and textbox (the xWidth variables)
@@ -378,8 +378,8 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         int calibratedWidth = lblCalibratedStDev.getMinimumSize().width;
         int lightWidth = lblLightLabel.getMinimumSize().width;
         int heavyWidth = lblHeavyLabel.getMinimumSize().width;
-        heavyWidth = 5 + (calibratedWidth-heavyWidth);
-        lightWidth = 5 + (calibratedWidth-lightWidth);
+        heavyWidth = 5 + (calibratedWidth - heavyWidth);
+        lightWidth = 5 + (calibratedWidth - lightWidth);
         calibratedWidth = 5;
 
         JPanel jpanTopCalib = new JPanel();
@@ -418,14 +418,14 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         jpanTop.setBorder(BorderFactory.createTitledBorder("Sample label descriptions"));
         jpanTop.add(jpanTopLight);
         jpanTop.add(jpanTopHeavy);
-        jpanTop.setMaximumSize(new Dimension(jpanTop.getMaximumSize().width,jpanTop.getPreferredSize().height));
+        jpanTop.setMaximumSize(new Dimension(jpanTop.getMaximumSize().width, jpanTop.getPreferredSize().height));
 
         JPanel jpanTotalTop = new JPanel();
         jpanTotalTop.setLayout(new BoxLayout(jpanTotalTop, BoxLayout.Y_AXIS));
         jpanTotalTop.add(jpanTopCalib);
         jpanTotalTop.add(Box.createVerticalStrut(5));
         jpanTotalTop.add(jpanTop);
-        jpanTotalTop.setMaximumSize(new Dimension(jpanTotalTop.getMaximumSize().width,jpanTotalTop.getPreferredSize().height));
+        jpanTotalTop.setMaximumSize(new Dimension(jpanTotalTop.getMaximumSize().width, jpanTotalTop.getPreferredSize().height));
 
         JPanel jpanBottomListButton = new JPanel();
         jpanBottomListButton.setLayout(new BoxLayout(jpanBottomListButton, BoxLayout.X_AXIS));
@@ -485,7 +485,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         JLabel lblWhereAddition = new JLabel("Prefix identification columns with 'i.' and spectrumfile columns with 's.'! ");
         Font oldFont = lblWhereAddition.getFont();
         lblWhereAddition.setFont(new Font(oldFont.getName(), Font.BOLD | Font.ITALIC, oldFont.getSize()));
-        if(this.getBackground() != Color.red) {
+        if (this.getBackground() != Color.red) {
             lblWhereAddition.setForeground(Color.red);
         } else {
             lblWhereAddition.setForeground(Color.blue);
@@ -516,7 +516,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         jpanMain.add(Box.createVerticalStrut(10));
         jpanMain.add(jpanStats);
         jpanMain.add(Box.createVerticalStrut(10));
-        if(iExpert) {
+        if (iExpert) {
             jpanMain.add(jpanAverage);
             jpanMain.add(Box.createVerticalStrut(10));
             jpanMain.add(temp);
@@ -532,7 +532,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
     /**
      * This method creates and lays out the buttonpanel, which is returned.
      *
-     * @return  JPanel with the buttons.
+     * @return JPanel with the buttons.
      */
     private JPanel getButtonPanel() {
 
@@ -543,8 +543,8 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                   analyzePressed();
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    analyzePressed();
                 }
             }
         });
@@ -564,18 +564,16 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
     }
 
     /**
-     * This method closes down the application, taking care of the
-     * database connection in the process.
+     * This method closes down the application, taking care of the database connection in the process.
      *
-     * @param aStatus   int with the status to set the status
-     *                  flag to.
+     * @param aStatus int with the status to set the status flag to.
      */
     private void close(int aStatus) {
         try {
-            if(iConnection != null) {
+            if (iConnection != null) {
                 iConnection.close();
             }
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             // Do nothing.
         }
         this.setVisible(false);
@@ -589,7 +587,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
     private void readProjects() {
         try {
             iProjects = Project.getAllDifferentialProjects(iConnection);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(this, "Unable to read projects: " + sqle.getMessage(), "Unable to read project data", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -598,20 +596,19 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
      * This method reads all differentially calibrated instruments from the database.
      */
     private void readInstruments() {
-       try {
+        try {
             iInstruments = Instrument.getAllDifferentialCalibratedInstruments(iConnection);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(this, "Unable to read instruments: " + sqle.getMessage(), "Unable to read instrument data", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     /**
-     * This method is called when the user presses the 'analyze' button and
-     * will perform the differential analysis.
+     * This method is called when the user presses the 'analyze' button and will perform the differential analysis.
      */
     private void analyzePressed() {
         // Get the calibrated standard deviation for the instrument used, as well as its ID.
-        Instrument instrument = (Instrument)cmbCalibratedStDev.getSelectedItem();
+        Instrument instrument = (Instrument) cmbCalibratedStDev.getSelectedItem();
         double calibratedStDev = instrument.getDifferential_calibration().doubleValue();
         long instrumentID = instrument.getInstrumentid();
         // Get the labels.
@@ -621,21 +618,21 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         int projectCount = tblSelectedProjects.getRowCount();
 
         // Validate the projectCount (see if there are any projects selected at all).
-        if(projectCount <= 0) {
+        if (projectCount <= 0) {
             JOptionPane.showMessageDialog(this, "Please select one or more projects to analyze first", "No projects selected!", JOptionPane.WARNING_MESSAGE);
             lstProjects.requestFocus();
             return;
         }
 
         // Validate the labels.
-        if(lightLabel == null || lightLabel.trim().equals("")) {
+        if (lightLabel == null || lightLabel.trim().equals("")) {
             JOptionPane.showMessageDialog(this, "Please specify a short description for the light isotope", "No 'light label' given!", JOptionPane.WARNING_MESSAGE);
             txtLightLabel.requestFocus();
             return;
         } else {
             lightLabel = lightLabel.trim();
         }
-        if(heavyLabel == null || heavyLabel.trim().equals("")) {
+        if (heavyLabel == null || heavyLabel.trim().equals("")) {
             JOptionPane.showMessageDialog(this, "Please specify a short description for the heavy isotope", "No 'heavy label' given!", JOptionPane.WARNING_MESSAGE);
             txtHeavyLabel.requestFocus();
             return;
@@ -645,11 +642,11 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         // Validate potential centering.
         Double recenter = null;
         String centered = "not centered";
-        if(chkRecenterProjects.isSelected()) {
+        if (chkRecenterProjects.isSelected()) {
             String text = txtRecenterProjects.getText();
             try {
                 recenter = new Double(text);
-            } catch(NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(this, "Please specify a valid decimal number for the centering value", "Invalid number for centering!", JOptionPane.WARNING_MESSAGE);
                 txtRecenterProjects.requestFocus();
                 return;
@@ -658,21 +655,21 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         }
         // Get the DifferentialProjects from the table.
         DifferentialProject[] diffProjects = new DifferentialProject[projectCount];
-        for(int i=0;i<projectCount;i++) {
-            diffProjects[i] = (DifferentialProject)tblSelectedProjects.getValueAt(i, DifferentialProjectTableModel.REPORT_INSTANCE);
+        for (int i = 0; i < projectCount; i++) {
+            diffProjects[i] = (DifferentialProject) tblSelectedProjects.getValueAt(i, DifferentialProjectTableModel.REPORT_INSTANCE);
         }
         // Determine the averaging method.
         int averaging = -1;
         String averagingString = "weighted ratios";
-        if(rbtSumIntensities.isSelected()) {
+        if (rbtSumIntensities.isSelected()) {
             averaging = DiffAnalysisCore.WEIGHTED_RATIOS;
-        } else if(rbtAverageRatio.isSelected()) {
+        } else if (rbtAverageRatio.isSelected()) {
             averaging = DiffAnalysisCore.AVERAGE_RATIOS;
             averagingString = "average ratios";
         }
         // See if we have a where clause addition.
         String whereAddition = txtWhereAddition.getText();
-        if(whereAddition == null || whereAddition.trim().equals("")) {
+        if (whereAddition == null || whereAddition.trim().equals("")) {
             whereAddition = null;
         }
         // Start the processing!
@@ -680,7 +677,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         int statType = -1;
         String location = null;
         String scale = null;
-        if(rbtRobustStats.isSelected()) {
+        if (rbtRobustStats.isSelected()) {
             statType = DiffAnalysisCore.ROBUST_STATISTICS;
             location = "median";
             scale = "Huber scale";
@@ -690,26 +687,26 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
             scale = "standard deviation";
         }
         DiffAnalysisCore core = new DiffAnalysisCore(iConnection, calibratedStDev, statType, averaging, recenter, whereAddition);
-        DefaultProgressBar progress = new DefaultProgressBar(this, "Processing search results...", 0, (diffProjects.length*2)+4);
+        DefaultProgressBar progress = new DefaultProgressBar(this, "Processing search results...", 0, (diffProjects.length * 2) + 4);
         progress.setSize(350, 100);
         progress.setMessage("Starting up...");
         DiffAnalysisWorker worker = new DiffAnalysisWorker(core, this, progress, diffProjects, instrumentID, results);
         worker.start();
         progress.setVisible(true);
-        if(results.size() == 0) {
+        if (results.size() == 0) {
             JOptionPane.showMessageDialog(this, "No differential identifications were found in the database using your settings!", "No identifications found!", JOptionPane.WARNING_MESSAGE);
         } else {
-            double mean = new BigDecimal(((Double)results.get(DiffAnalysisCore.MU_HAT)).doubleValue()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
-            double stdev = new BigDecimal(((Double)results.get(DiffAnalysisCore.SIGMA_HAT)).doubleValue()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
-            int count = ((Integer)results.get(DiffAnalysisCore.COUNT)).intValue();
+            double mean = new BigDecimal(((Double) results.get(DiffAnalysisCore.MU_HAT)).doubleValue()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+            double stdev = new BigDecimal(((Double) results.get(DiffAnalysisCore.SIGMA_HAT)).doubleValue()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
+            int count = ((Integer) results.get(DiffAnalysisCore.COUNT)).intValue();
             String type = null;
-            if(statType == DiffAnalysisCore.ROBUST_STATISTICS) {
+            if (statType == DiffAnalysisCore.ROBUST_STATISTICS) {
                 type = "Robust";
             } else {
                 type = "Standard";
             }
             String[] messages = null;
-            if(chkRecenterProjects.isSelected()) {
+            if (chkRecenterProjects.isSelected()) {
                 messages = new String[5 + diffProjects.length];
             } else {
                 messages = new String[5];
@@ -719,10 +716,10 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
             messages[2] = scale + " [log2(ratio)]:  " + stdev;
             messages[3] = "Count:  " + count;
             messages[4] = " ";
-            if(chkRecenterProjects.isSelected()) {
-                for(int i=5;i<messages.length;i++) {
-                    DifferentialProject dp = diffProjects[i-5];
-                    BigDecimal bd = new BigDecimal(((Double)results.get(new Long(dp.getProjectID()))).doubleValue());
+            if (chkRecenterProjects.isSelected()) {
+                for (int i = 5; i < messages.length; i++) {
+                    DifferentialProject dp = diffProjects[i - 5];
+                    BigDecimal bd = new BigDecimal(((Double) results.get(new Long(dp.getProjectID()))).doubleValue());
                     messages[i] = "Correction for project " + dp.getProjectID() + ":  " + bd.setScale(4, BigDecimal.ROUND_HALF_UP);
                 }
             }
@@ -736,45 +733,44 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
             }
 
             // Pop-up a new frame with the results.
-            JFrame resultFrame  = new DifferentialAnalysisResultsFrame("Results from " + type.toLowerCase() + " differential analysis (" + location + ": " + mean + "  " + scale + ": " + stdev + "  count: " + count + "  averaging: " + averagingString + "  centered: " + centered + ")", (Vector)(results.get(DiffAnalysisCore.DIFFCOUPLES)), projectsHash, lightLabel, heavyLabel, averaging);
+            JFrame resultFrame = new DifferentialAnalysisResultsFrame("Results from " + type.toLowerCase() + " differential analysis (" + location + ": " + mean + "  " + scale + ": " + stdev + "  count: " + count + "  averaging: " + averagingString + "  centered: " + centered + ")", (Vector) (results.get(DiffAnalysisCore.DIFFCOUPLES)), projectsHash, lightLabel, heavyLabel, averaging);
             resultFrame.setBounds(200, 200, 600, 500);
             resultFrame.setVisible(true);
         }
     }
 
     /**
-     * This method is called when th suer double-clicks a project in the list.
-     * It will take care of acquiring the necessary details for this project.
+     * This method is called when th suer double-clicks a project in the list. It will take care of acquiring the
+     * necessary details for this project.
      */
     private void projectListClicked() {
         Object selection = lstProjects.getSelectedValue();
-        if(selection == null) {
+        if (selection == null) {
             JOptionPane.showMessageDialog(this, "Please select a project to add from the list!", "No project selected", JOptionPane.WARNING_MESSAGE);
             lstProjects.requestFocus();
             return;
         }
         // Okay, a project was selected.
-        Project project = (Project)lstProjects.getSelectedValue();
+        Project project = (Project) lstProjects.getSelectedValue();
         // See if it is not already present in the selected list. No duplicate selections allowed!
-        if(iModel.containsProject(project.getProjectid(), project.getTitle())) {
+        if (iModel.containsProject(project.getProjectid(), project.getTitle())) {
             JOptionPane.showMessageDialog(this, new String[]{"This project was already selected!", "You are not allowed to perform duplicate selections."}, "Project already selected", JOptionPane.WARNING_MESSAGE);
             return;
         }
         // Everything checks out, proceed!
         DifferentialProjectDialog dpd = new DifferentialProjectDialog(this, "Settings for project no. " + project.getProjectid() + ": '" + project.getTitle() + "'", project);
         Point p = this.getLocation();
-        dpd.setLocation((int)(p.getX()) + 150, (int)(p.getY()) + 150);
+        dpd.setLocation((int) (p.getX()) + 150, (int) (p.getY()) + 150);
         dpd.setVisible(true);
     }
 
     /**
-     * This method is triggered whenever the user attempts to delete an
-     * entry from the 'selected projects' table.
+     * This method is triggered whenever the user attempts to delete an entry from the 'selected projects' table.
      */
     private void deleteRowRequested() {
         // First see if anything was in fact selected.
         int selectedRow = tblSelectedProjects.getSelectedRow();
-        if(selectedRow < 0) {
+        if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "You need to select the row you wish to delete", "No row selected!", JOptionPane.WARNING_MESSAGE);
             tblSelectedProjects.requestFocus();
             return;

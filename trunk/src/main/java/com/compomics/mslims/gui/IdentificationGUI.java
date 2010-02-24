@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.gui;
 
+import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.frames.PreviewSearchResultsFrame;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
@@ -19,6 +20,7 @@ import com.compomics.mslims.gui.tree.renderers.MascotTasksTreeCellRenderer;
 import com.compomics.mslims.util.workers.ReadMascotTaskDBWorker;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.interfaces.Flamable;
+import com.compomics.util.io.PropertiesManager;
 import com.compomics.util.sun.TableSorter;
 
 import javax.swing.*;
@@ -107,8 +109,9 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
     public IdentificationGUI(String aName, Connection aConn, String aDBName) {
         super(aName);
         if (aConn == null) {
+            Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
             ConnectionDialog cd =
-                    new ConnectionDialog(this, this, "Connection for IdentificationGUI", "IdentificationGUI.properties");
+                    new ConnectionDialog(this, this, "Connection for IdentificationGUI", lConnectionProperties);
             cd.setVisible(true);
         } else {
             passConnection(aConn, aDBName);
@@ -448,59 +451,52 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
      */
     private void readTaskDB() {
         try {
-            Properties props = new Properties();
-            try {
-                InputStream is = this.getClass().getClassLoader().getResourceAsStream("IdentificationGUI.properties");
-                if (is == null) {
-                    throw new IOException();
-                }
-                props.load(is);
-                String driver = props.getProperty("TASKDRIVER");
-                String url = props.getProperty("TASKURL");
-                if (driver == null) {
-                    throw new SQLException("Key 'TASKDRIVER' in file 'IdentificationGUI.properties' was not defined or NULL!");
-                }
-                if (url == null) {
-                    throw new SQLException("Key 'TASKURL' in file 'IdentificationGUI.properties' was not defined or NULL!");
-                }
-                Driver d = null;
-                try {
-                    d = (Driver) Class.forName(driver).newInstance();
-                } catch (Exception e) {
-                    throw new SQLException("Unable to load Mascot Dameon TaskDB database driver: " + e.getMessage());
-                }
-                Connection conn = null;
-                try {
-                    conn = d.connect(url, new Properties());
-                } catch (SQLException sqle) {
-                    throw new SQLException("Unable to connect to the Mascot Dameon TaskDB database: " + sqle.getMessage());
-                }
-                try {
-                    // Okay, connected.
-                    // Get the list of tasks.
-                    Statement stat = conn.createStatement();
-                    ResultSet rs = stat.executeQuery("select count(*) from Mascot_Daemon_Tasks");
-                    rs.next();
-                    int count = rs.getInt(1);
-                    rs.close();
-                    stat.close();
-                    DefaultProgressBar dpb =
-                            new DefaultProgressBar(this, "Reading Mascot Daemon Task DB...", 0, count + 2);
-                    dpb.setResizable(false);
-                    dpb.setSize(350, 100);
-                    dpb.setMessage("Connecting...");
-                    iTasks = new Vector(count, 5);
-                    ReadMascotTaskDBWorker worker = new ReadMascotTaskDBWorker(conn, iTasks, this, dpb);
-                    worker.start();
-                    dpb.setVisible(true);
-                    conn.close();
-                    // Better exception handling for the ODBC/JDBC bridge driver!!
-                } catch (SQLException sqle) {
-                    throw new SQLException("Unable to read data from the Mascot Daemon TaskDB '" + sqle.getMessage() + "'!");
-                }
-            } catch (IOException ioe) {
-                throw new SQLException("Could not find configurationfile 'IdentificationGUI.properties' in the classpath!");
+            Properties props = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
+
+            String driver = props.getProperty("TASKDRIVER");
+            String url = props.getProperty("TASKURL");
+            if (driver == null) {
+                throw new SQLException("Key 'TASKDRIVER' in file 'IdentificationGUI.properties' was not defined or NULL!");
             }
+            if (url == null) {
+                throw new SQLException("Key 'TASKURL' in file 'IdentificationGUI.properties' was not defined or NULL!");
+            }
+            Driver d = null;
+            try {
+                d = (Driver) Class.forName(driver).newInstance();
+            } catch (Exception e) {
+                throw new SQLException("Unable to load Mascot Daemon TaskDB database driver: " + e.getMessage());
+            }
+            Connection conn = null;
+            try {
+                conn = d.connect(url, new Properties());
+            } catch (SQLException sqle) {
+                throw new SQLException("Unable to connect to the Mascot Daemon TaskDB database: " + sqle.getMessage());
+            }
+            try {
+                // Okay, connected.
+                // Get the list of tasks.
+                Statement stat = conn.createStatement();
+                ResultSet rs = stat.executeQuery("select count(*) from Mascot_Daemon_Tasks");
+                rs.next();
+                int count = rs.getInt(1);
+                rs.close();
+                stat.close();
+                DefaultProgressBar dpb =
+                        new DefaultProgressBar(this, "Reading Mascot Daemon Task DB...", 0, count + 2);
+                dpb.setResizable(false);
+                dpb.setSize(350, 100);
+                dpb.setMessage("Connecting...");
+                iTasks = new Vector(count, 5);
+                ReadMascotTaskDBWorker worker = new ReadMascotTaskDBWorker(conn, iTasks, this, dpb);
+                worker.start();
+                dpb.setVisible(true);
+                conn.close();
+                // Better exception handling for the ODBC/JDBC bridge driver!!
+            } catch (SQLException sqle) {
+                throw new SQLException("Unable to read data from the Mascot Daemon TaskDB '" + sqle.getMessage() + "'!");
+            }
+
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(this, new String[]{"There were fatal errors trying to access the Mascot Daemon Task DB:", sqle.getMessage()}, "Unable to retrieve data from TaskDB!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);

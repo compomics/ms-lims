@@ -13,8 +13,10 @@ import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;
 import com.compomics.peptizer.util.fileio.ConnectionManager;
 import com.compomics.rover.gui.wizard.WizardFrameHolder;
+import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
+import com.compomics.util.io.PropertiesManager;
 import com.jgoodies.looks.FontPolicies;
 import com.jgoodies.looks.FontPolicy;
 import com.jgoodies.looks.FontSet;
@@ -28,7 +30,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,8 +43,7 @@ import java.util.Properties;
  */
 
 /**
- * This class presents a main GUI for the whole ms_lims suite of
- * applications.
+ * This class presents a main GUI for the whole ms_lims suite of applications.
  *
  * @author Thilo Muth
  * @author Lennart Martens
@@ -580,7 +580,8 @@ public class MS_LIMS extends JFrame implements Connectable {
      * This method creates a dialog which handles the DB connection.
      */
     private void getConnection() {
-        ConnectionDialog cd = new ConnectionDialog(this, this, "Establish DB connection for ms_lims", "queryengine.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        ConnectionDialog cd = new ConnectionDialog(this, this, "Establish DB connection for ms_lims", lConnectionProperties);
         cd.setVisible(true);
     }
 
@@ -662,8 +663,7 @@ public class MS_LIMS extends JFrame implements Connectable {
 
 
     /**
-     * This method accepts an incoming connection to
-     * perform all database queries on.
+     * This method accepts an incoming connection to perform all database queries on.
      *
      * @param aConn Connection on which to perform the queries.
      * @param aDB   String with the name of the DB (for display purposes).
@@ -696,13 +696,8 @@ public class MS_LIMS extends JFrame implements Connectable {
      */
     private void getMascotDaemonFile() {
         try {
-            Properties props = new Properties();
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("mascotdaemon.properties");
-            if (is == null) {
-                throw new IOException("Unable to locate 'mascotdaemon.properties' file in the classpath.");
-            }
-            props.load(is);
-            sourceName = props.getProperty("MASCOTDAEMONFILE");
+            Properties lMascotDaemonProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "mascotdaemon.properties");
+            sourceName = lMascotDaemonProperties.getProperty("MASCOTDAEMONFILE");
             if (sourceName == null) {
                 throw new IOException("Key 'MASCOTDAEMONFILE' in file 'mascotdaemon.properties' was not defined or NULL!");
             }
@@ -773,8 +768,7 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     /**
-     * This class represents a file filter that looks specifically for the mascot daemon
-     * executable ('daemon.exe').
+     * This class represents a file filter that looks specifically for the mascot daemon executable ('daemon.exe').
      */
     private static class InnerDaemonFileFilter extends javax.swing.filechooser.FileFilter {
         public boolean accept(File f) {
