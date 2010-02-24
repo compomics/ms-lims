@@ -1,5 +1,6 @@
 package com.compomics.mslims.db.conversiontool;
 
+import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslims.db.accessors.Identification;
@@ -8,16 +9,14 @@ import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mascotdatfile.util.mascot.*;
 import com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl;
 import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
+import com.compomics.util.io.PropertiesManager;
 
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.HashMap;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -27,17 +26,13 @@ import java.io.*;
 import java.math.BigDecimal;
 
 /**
- * Created by IntelliJ IDEA.
- * User: niklaas
- * Date: 2-mrt-2009
- * Time: 8:16:52
- * To change this template use File | Settings | File Templates.
+ * Created by IntelliJ IDEA. User: niklaas Date: 2-mrt-2009 Time: 8:16:52 To change this template use File | Settings |
+ * File Templates.
  */
 public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
 
     /**
-     * Boolean that indicates whether the tool is ran in
-     * stand-alone mode ('true') or not ('false').
+     * Boolean that indicates whether the tool is ran in stand-alone mode ('true') or not ('false').
      */
     private static boolean iStandAlone = true;
 
@@ -96,11 +91,11 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
 
 
     /**
-     * This constructor takes a database connection and a database name
-     * and automatically sets the frame title to the default value.
+     * This constructor takes a database connection and a database name and automatically sets the frame title to the
+     * default value.
      *
-     * @param aConn Connection with the database connection to use.
-     * @param aDBName   String with the name of the database.
+     * @param aConn   Connection with the database connection to use.
+     * @param aDBName String with the name of the database.
      */
     public MS_LIMS_7_Data_Updater(Connection aConn, String aDBName) {
         this("MS_LIMS 7 data updater - updates old ms_lims data to version 7 data", aConn, aDBName);
@@ -123,7 +118,8 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     public MS_LIMS_7_Data_Updater(String title, Connection aConn, String aDBName) {
         super(title);
         if (aConn == null) {
-            ConnectionDialog cd = new ConnectionDialog(this, this, "Connection for updater", "IdentificationGUI.properties");
+            Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+            ConnectionDialog cd = new ConnectionDialog(this, this, "Connection for updater", lConnectionProperties);
             cd.setVisible(true);
         } else {
             passConnection(aConn, aDBName);
@@ -148,8 +144,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     }
 
     /**
-     * This method will attempt to retrieve all relevant data from the
-     * local filesystem and the DB connection.
+     * This method will attempt to retrieve all relevant data from the local filesystem and the DB connection.
      */
     private void gatherData() {
         JOptionPane.showMessageDialog(this, new String[]{"It takes a moment to load all non ms_lims 7 non empty projects"}, "Warning!", JOptionPane.WARNING_MESSAGE);
@@ -157,8 +152,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     }
 
     /**
-     * This method will use the data retrieved in 'gatherData()' to fill out
-     * a few components.
+     * This method will use the data retrieved in 'gatherData()' to fill out a few components.
      */
     private void initializeComponents() {
         cmbProjects = new JComboBox(iProjects);
@@ -262,6 +256,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     /*
     * update the selected non ms_lims 7 project
     */
+
     public void updateProject(Project aProject) {
         //set the selected project
         iProject = aProject;
@@ -426,6 +421,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     /*
     * Update all the non ms_lims 7 projects
     */
+
     public void btnStartAllProjectsPressed() {
         progress.setIndeterminate(true);
         progress.setString("");
@@ -603,7 +599,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
                     progress.setString("Updated all projects in " + duration);
                     btnCancel.setText("Exit");
                     txtInfo.append("\nUpdated all projects in " + duration);
-                    if(errorProjects.size() > 0){
+                    if (errorProjects.size() > 0) {
                         txtInfo.append("\nAn error occured in the following projects : ");
                         for (int i = 0; i < errorProjects.size(); i++) {
                             Project pro = (Project) errorProjects.get(i);
@@ -629,13 +625,14 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     }
 
     /**
-     * This mehtod will set the update parameters (the homology score and the mascot query number) an a specific position in a Vector.
-     * That position is the same position in the iSpectrumfileName Vector.
+     * This mehtod will set the update parameters (the homology score and the mascot query number) an a specific
+     * position in a Vector. That position is the same position in the iSpectrumfileName Vector.
+     *
      * @param aMDF The mascot dat file
      * @throws IllegalArgumentException
      * @throws NumberFormatException
      */
-    private void setUpdateParameters(MascotDatfile aMDF) throws IllegalArgumentException{
+    private void setUpdateParameters(MascotDatfile aMDF) throws IllegalArgumentException {
         // create the arrays
         iQuery = new int[iIdentifications.length];
         iHomology = new double[iIdentifications.length];
@@ -680,6 +677,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
 
     /**
      * This method will be used id not all the identifications could be updated with the method setUpdateParamters
+     *
      * @param aMDF The mascot dat file
      * @throws IllegalArgumentException
      * @throws NumberFormatException
@@ -741,6 +739,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
 
     /**
      * This method will store the updated identifications in ms_lims
+     *
      * @throws SQLException
      */
     private void updateIdentifications() throws SQLException {
@@ -778,8 +777,8 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
 
 
     /**
-     * This method finds all non empty, non ms_lims 7 project (the ms_lims 7 identification have no query and homology score) entries currently stored in the DB
-     * and fills out the relevant arrays with info.
+     * This method finds all non empty, non ms_lims 7 project (the ms_lims 7 identification have no query and homology
+     * score) entries currently stored in the DB and fills out the relevant arrays with info.
      */
     private void findProjects() {
         try {
@@ -819,13 +818,11 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
      * @param aConn   Connection with the DB connection.
-     * @param aDBName String with an identifier for the connection, typically the
-     *                name of the DB connected to.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
         if (aConn == null) {
@@ -841,12 +838,12 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
      */
     private void close() {
         this.dispose();
-        if(iStandAlone) {
-            if(iConnection != null) {
+        if (iStandAlone) {
+            if (iConnection != null) {
                 try {
                     iConnection.close();
                     System.out.println("DB connection closed.");
-                } catch(Exception e) {
+                } catch (Exception e) {
                     System.err.println("\n\nUnable to close DB connection: " + e.getMessage() + "\n\n");
                 }
             }
@@ -855,8 +852,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
     }
 
     /**
-     * This method should be called when the application is
-     * not launched in stand-alone mode.
+     * This method should be called when the application is not launched in stand-alone mode.
      */
     public static void setNotStandAlone() {
         iStandAlone = false;

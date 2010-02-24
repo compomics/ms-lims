@@ -8,6 +8,7 @@ package com.compomics.mslims.gui;
 
 import com.compomics.mslims.db.accessors.Fragmention;
 import com.compomics.mslims.db.accessors.Spectrumfile;
+import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.dialogs.ExportDialog;
 import com.compomics.mslims.gui.dialogs.QueryCacheDialog;
@@ -23,6 +24,8 @@ import com.compomics.util.gui.JTableForDB;
 import com.compomics.util.gui.renderers.ByteArrayRenderer;
 import com.compomics.util.gui.spectrum.SpectrumPanel;
 import com.compomics.util.interfaces.Connectable;
+import com.compomics.util.io.PropertiesManager;
+import com.compomics.util.io.StartBrowser;
 import com.compomics.util.sun.SwingWorker;
 import com.compomics.util.sun.TableSorter;
 
@@ -40,10 +43,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -55,8 +55,8 @@ import java.util.zip.GZIPOutputStream;
  */
 
 /**
- * This class allows the user to perform a generic SQL query, visualize the results and
- * optionally export them to a CSV file.
+ * This class allows the user to perform a generic SQL query, visualize the results and optionally export them to a CSV
+ * file.
  *
  * @author Lennart Martens
  */
@@ -66,8 +66,8 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss");
 
     /**
-     * boolean that indicates whether this application is launched as a
-     * stand-alone client or as a module form another application.
+     * boolean that indicates whether this application is launched as a stand-alone client or as a module form another
+     * application.
      */
     private static boolean iStandAlone = true;
 
@@ -111,9 +111,8 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     private int iCurrentLocationInCache = 0;
 
     /**
-     * This constructor takes as a single argument the title for the
-     * frame.
-     * It also constructs and lays out the components.
+     * This constructor takes as a single argument the title for the frame. It also constructs and lays out the
+     * components.
      *
      * @param aTitle String with the frame title.
      */
@@ -122,16 +121,13 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This constructor takes as arguments the title for the
-     * frame, the DB connection to read from and a name for this connection.
-     * It also constructs and lays out the components.
+     * This constructor takes as arguments the title for the frame, the DB connection to read from and a name for this
+     * connection. It also constructs and lays out the components.
      *
      * @param aTitle  String with the frame title.
-     * @param aConn   Connection with the database connection
-     *                to use. 'null' means no connection specified
-     *                so create your own (pops up ConnectionDialog).
-     * @param aDBName String with the name for the database connection.
-     *                Only read if aConn != null.
+     * @param aConn   Connection with the database connection to use. 'null' means no connection specified so create
+     *                your own (pops up ConnectionDialog).
+     * @param aDBName String with the name for the database connection. Only read if aConn != null.
      */
     public GenericQuery(String aTitle, Connection aConn, String aDBName) {
         super(aTitle);
@@ -159,8 +155,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method accepts an incoming connection to
-     * perform all database queries on.
+     * This method accepts an incoming connection to perform all database queries on.
      *
      * @param aConn Connection on which to perform the queries.
      * @param aDB   String with the name of the DB (for display purposes).
@@ -176,8 +171,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * Main method to launch the tool.
-     * Start-up args are not used.
+     * Main method to launch the tool. Start-up args are not used.
      *
      * @param args String[] with the start-up args (not used).
      */
@@ -377,7 +371,9 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         // The URL will be stored here.
                         String url = server + "/cgi/master_results.pl?file=" + folder + filename;
                         // The process.
-                        Runtime.getRuntime().exec("startIexplore.cmd " + url);
+                        StartBrowser.start(url);
+
+
                     } catch (SQLException sqle) {
                         sqle.printStackTrace();
                         JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected datfile (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
@@ -509,7 +505,8 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         // The URL will be stored here.
                         String url = server + "/x-cgi/ms-showtext.exe?" + folder + filename;
                         // The process.
-                        Runtime.getRuntime().exec("startIexplore.cmd " + url);
+                        StartBrowser.start(url);
+
                     } catch (SQLException sqle) {
                         sqle.printStackTrace();
                         JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected datfile (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
@@ -690,8 +687,8 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method can be called by a child component (typically a dialog) that wants to inform the
-     * parent class of a certain event.
+     * This method can be called by a child component (typically a dialog) that wants to inform the parent class of a
+     * certain event.
      *
      * @param o Object with the information to transfer.
      */
@@ -863,8 +860,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
 
 
     /**
-     * This method is called whenever the user clicked the button to
-     * export data.
+     * This method is called whenever the user clicked the button to export data.
      */
     private void exportTriggered() {
         ExportDialog ed = new ExportDialog(this, "Export data to file", (DBResultSet) ((TableSorter) tblResult.getModel()).getModel());
@@ -951,7 +947,8 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
      * This method creates a dialog which handles the DB connection.
      */
     private void getConnection() {
-        ConnectionDialog cd = new ConnectionDialog(this, this, "Establish DB connection for GenericQuery application", "queryengine.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        ConnectionDialog cd = new ConnectionDialog(this, this, "Establish DB connection for GenericQuery application", lConnectionProperties);
         cd.setVisible(true);
     }
 
@@ -976,11 +973,9 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method checks the querycache for the presence
-     * of the query. If it is present already, it
-     * is moved to the last position, else it is added.
-     * If the query size after addition grows over the maximum
-     * query cache size, the first element is deleted.
+     * This method checks the querycache for the presence of the query. If it is present already, it is moved to the
+     * last position, else it is added. If the query size after addition grows over the maximum query cache size, the
+     * first element is deleted.
      *
      * @param aQuery String with the executed query.
      */
@@ -1001,8 +996,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method clears the full query cache.
-     * It will pop-up a confirmation dialog.
+     * This method clears the full query cache. It will pop-up a confirmation dialog.
      */
     private void clearQueryCache() {
         int userDecision = JOptionPane.showConfirmDialog(this, "Do you want to clear the entire query cache?", "Clear query cache", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -1030,12 +1024,9 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method triggers a checking of the cache,
-     * scrolling in the direction indicated by the boolean
-     * parameter.
+     * This method triggers a checking of the cache, scrolling in the direction indicated by the boolean parameter.
      *
-     * @param up boolean to indicate upward ('true') or downward
-     *           ('false') scrolling.
+     * @param up boolean to indicate upward ('true') or downward ('false') scrolling.
      */
     private void cacheBrowser(boolean up) {
         int liSize = iQueryCache.size();
@@ -1062,8 +1053,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method selects the query at the specified index in the query cache
-     * and writes it on the query text area.
+     * This method selects the query at the specified index in the query cache and writes it on the query text area.
      *
      * @param aSelectedIndex int with the selected index.
      */
@@ -1078,19 +1068,12 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method saves the queries in memory to the user home folder
-     * as 'queries.txt'.
+     * This method saves the queries in memory to the user home folder as 'queries.txt'.
      */
     private void saveQueries() {
         try {
-            // Get the user home folder.
-            String homeFolder = System.getProperty("user.home");
-            File folder = new File(homeFolder);
-            if (!folder.exists()) {
-                throw new IOException("Unable to find user home folder: '" + homeFolder + "'!");
-            }
             // Output file proper.
-            File output = new File(folder, "queries.txt.gz");
+            File output = new File(PropertiesManager.getInstance().getApplicationFolder(CompomicsTools.MSLIMS), "queries.txt.gz");
             // Just start outputting to the 'queries.txt' file. Silent overwrite!
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(output))));
             for (Iterator lIterator = iQueryCache.iterator(); lIterator.hasNext();) {
@@ -1106,28 +1089,22 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method loads the queries in memory from the 'queries.txt'
-     * file in the user home folder.
+     * This method loads the queries in memory from the 'queries.txt' file in the user home folder.
      */
     private void loadQueries() {
         try {
-            // Get the user home folder.
-            String homeFolder = System.getProperty("user.home");
-            File folder = new File(homeFolder);
-            if (!folder.exists()) {
-                throw new IOException("Unable to find user home folder: '" + homeFolder + "'!");
-            }
             // Input file proper.
-            File input = new File(folder, "queries.txt.gz");
+            File lApplicationFolder = PropertiesManager.getInstance().getApplicationFolder(CompomicsTools.MSLIMS);
+            File lQueriesFile = new File(lApplicationFolder, "queries.txt.gz");
             // Convert pre-existing 'queries.txt' into new 'queries.txt.gz'
-            if (!input.exists()) {
-                File oldFile = new File(folder, "queries.txt");
-                if (oldFile.exists()) {
+            if (!lQueriesFile.exists()) {
+                File lOldFile = new File(lApplicationFolder, "queries.txt");
+                if (lOldFile.exists()) {
                     // Conversion needs to be done.
                     JOptionPane.showMessageDialog(this, new String[]{"Found an old version of the query file.", "This file will now be automatically converted."}, "Old query file found.", JOptionPane.INFORMATION_MESSAGE);
                     try {
-                        BufferedReader br = new BufferedReader(new FileReader(oldFile));
-                        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(input))));
+                        BufferedReader br = new BufferedReader(new FileReader(lOldFile));
+                        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(lQueriesFile))));
                         String line = null;
                         while ((line = br.readLine()) != null) {
                             bw.write(line + "\n");
@@ -1137,14 +1114,14 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         bw.close();
                         boolean gone = false;
                         while (!gone) {
-                            gone = oldFile.delete();
+                            gone = lOldFile.delete();
                         }
                     } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(this, new String[]{"Unable to convert existing query file. Cache will be empty", ioe.getMessage()}, "Unable to convert queries!", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(input))));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(lQueriesFile))));
             parseIncomingQueries(br);
             br.close();
         } catch (IOException ioe) {
@@ -1153,9 +1130,9 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method reads the number of cached queries from the specified BufferedReader. <br />
-     * If there are more queries read from the buffer than the cache currently supports,
-     * only the last read queries will be cached until the cache is full.
+     * This method reads the number of cached queries from the specified BufferedReader. <br /> If there are more
+     * queries read from the buffer than the cache currently supports, only the last read queries will be cached until
+     * the cache is full.
      *
      * @param aQuerySource BufferedReader to read the queries from.
      * @throws IOException when the reading failed.
@@ -1195,10 +1172,8 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     /**
      * Set the cursor image to a specified cursor.
      *
-     * @param cursor One of the constants defined
-     *               by the <code>Cursor</code> class. If this parameter is null
-     *               then the cursor for this window will be set to the type
-     *               Cursor.DEFAULT_CURSOR.
+     * @param cursor One of the constants defined by the <code>Cursor</code> class. If this parameter is null then the
+     *               cursor for this window will be set to the type Cursor.DEFAULT_CURSOR.
      * @see java.awt.Component#getCursor
      * @see java.awt.Cursor
      * @since JDK1.1
@@ -1213,8 +1188,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
 
     /**
-     * This method needs to be called if this class is not running
-     * in standalone mode.
+     * This method needs to be called if this class is not running in standalone mode.
      */
     public static void setNotStandAlone() {
         iStandAlone = false;

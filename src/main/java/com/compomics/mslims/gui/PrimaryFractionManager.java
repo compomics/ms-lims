@@ -7,9 +7,11 @@
 package com.compomics.mslims.gui;
 
 import com.compomics.mslims.db.accessors.LCRun;
+import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.interfaces.Flamable;
+import com.compomics.util.io.PropertiesManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,8 +34,8 @@ import java.util.Vector;
  */
 
 /**
- * This class implements a GUI for LCRun-primary fraction management using the 'primary_fraction'
- * column in the LCRun table.
+ * This class implements a GUI for LCRun-primary fraction management using the 'primary_fraction' column in the LCRun
+ * table.
  *
  * @author Lennart Martens
  */
@@ -50,8 +52,8 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     private LCRun[] iCapLC = null;
 
     /**
-     * This variable holds the identifier for the DB connection, typically the name of the database
-     * that has been connected.
+     * This variable holds the identifier for the DB connection, typically the name of the database that has been
+     * connected.
      */
     private String iDBName = null;
 
@@ -61,9 +63,8 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     private HashMap iAssignments = new HashMap();
 
     /**
-     * This variable holds the maximum age in days that the
-     * lcruns can have in order to be selected for display.
-     * When it is '-1', no maximum age is used.
+     * This variable holds the maximum age in days that the lcruns can have in order to be selected for display. When it
+     * is '-1', no maximum age is used.
      */
     private int iMaximumAgeInDays = -1;
 
@@ -81,7 +82,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     /**
      * This constructor serves as a wrapper for the superclass constructor (JFrame).
      *
-     * @param aTitle    String with the title for the JFrame.
+     * @param aTitle String with the title for the JFrame.
      */
     public PrimaryFractionManager(String aTitle) {
         super(aTitle);
@@ -109,14 +110,14 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         this.pack();
         // Display settings.
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((screen.width/10), (screen.height/10));
+        this.setLocation((screen.width / 10), (screen.height / 10));
         //this.setSize(700, 500);
     }
 
     /**
      * The main method defines the entry point for the application.
      *
-     * @param args  String[] with the start-up parameters.
+     * @param args String[] with the start-up parameters.
      */
     public static void main(String[] args) {
         PrimaryFractionManager bm = new PrimaryFractionManager("Primary fraction manager.");
@@ -124,16 +125,14 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
-     * @param aConn Connection with the DB connection.
-     * @param aDBName   String with an identifier for the connection, typically the
-     *                  name of the DB connected to.
+     * @param aConn   Connection with the DB connection.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
-        if(aConn == null) {
+        if (aConn == null) {
             this.close();
         }
         this.iConn = aConn;
@@ -143,7 +142,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     /**
      * This method takes care of any unrecoverable exception or error, thrown by a child thread.
      *
-     * @param aThrowable    Throwable that represents the unrecoverable error or exception.
+     * @param aThrowable Throwable that represents the unrecoverable error or exception.
      */
     public void passHotPotato(Throwable aThrowable) {
         this.passHotPotato(aThrowable, null);
@@ -152,13 +151,13 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     /**
      * This method takes care of any unrecoverable exception or error, thrown by a child thread.
      *
-     * @param aThrowable    Throwable that represents the unrecoverable error or exception.
-     * @param aMessage  String with an extra message to display.
+     * @param aThrowable Throwable that represents the unrecoverable error or exception.
+     * @param aMessage   String with an extra message to display.
      */
     public void passHotPotato(Throwable aThrowable, String aMessage) {
         String[] messages = null;
-        if(aMessage != null) {
-            messages = new String[] {"Fatal error encountered in application!", aMessage, aThrowable.getMessage(), "\n"};
+        if (aMessage != null) {
+            messages = new String[]{"Fatal error encountered in application!", aMessage, aThrowable.getMessage(), "\n"};
         } else {
             messages = new String[]{"Fatal error encountered in application!", aThrowable.getMessage(), "\n"};
         }
@@ -190,8 +189,8 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         jpanCapLC.setBorder(BorderFactory.createTitledBorder("LC run list"));
         jpanCapLC.add(new JScrollPane(lstCapLC), BorderLayout.CENTER);
         int width = lstCapLC.getPreferredSize().width;
-        if(width > 10) {
-            jpanCapLC.setPreferredSize(new Dimension(width+50, jpanCapLC.getPreferredSize().height));
+        if (width > 10) {
+            jpanCapLC.setPreferredSize(new Dimension(width + 50, jpanCapLC.getPreferredSize().height));
         }
 
         // Medium designation.
@@ -229,6 +228,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
      * This method calls upon a GUI component to handle the connection.
      */
     private void getConnection() {
+
         ConnectionDialog cd = new ConnectionDialog(this, this, "Database connection for PrimaryFractionManager", propsFile);
         cd.setVisible(true);
     }
@@ -236,7 +236,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     /**
      * This method creates a panel with the buttons for this application.
      *
-     * @return  JPanel  with the buttons.
+     * @return JPanel  with the buttons.
      */
     private JPanel createButtonPanel() {
         btnAssign = new JButton("Assign LC run(s) to primary fractions");
@@ -251,7 +251,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     assignTriggered();
                 }
             }
@@ -269,7 +269,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     storeTriggered();
                 }
             }
@@ -287,7 +287,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     clearTriggered();
                 }
             }
@@ -305,7 +305,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     exitTriggered();
                 }
             }
@@ -334,14 +334,14 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         Object[] selection = lstCapLC.getSelectedValues();
         String numberString = txtNumber.getText().trim();
         // See if anything is selected.
-        if(selection == null || selection.length == 0) {
+        if (selection == null || selection.length == 0) {
             JOptionPane.showMessageDialog(this, "No items selected in the LC run list to assign!", "Nothing selected!", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         String primFract = "primary fraction";
         // See if a number has been typed.
-        if(numberString.equals("")) {
+        if (numberString.equals("")) {
             JOptionPane.showMessageDialog(this, "You have to type a " + primFract + " number to assign the LC run files to!", "No " + primFract + " number entered!", JOptionPane.WARNING_MESSAGE);
             txtNumber.requestFocus();
             return;
@@ -349,21 +349,21 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         Long number = null;
         try {
             number = new Long(numberString);
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(this, "The " + primFract + " number has to be a positive integer number, you typed '" + numberString + "' instead!", "Incorrect " + primFract + " number!", JOptionPane.WARNING_MESSAGE);
             return;
         }
         Vector tempVec = new Vector(selection.length);
-        for(int i = 0; i < selection.length; i++) {
-            LCRun tempCaplc = (LCRun)selection[i];
+        for (int i = 0; i < selection.length; i++) {
+            LCRun tempCaplc = (LCRun) selection[i];
             tempCaplc.setAssigned(true);
             tempVec.add(tempCaplc);
         }
         // Add the assignments.
-        if(iAssignments.containsKey(number)) {
-            ((Vector)iAssignments.get(number)).addAll(tempVec);
+        if (iAssignments.containsKey(number)) {
+            ((Vector) iAssignments.get(number)).addAll(tempVec);
         } else {
-            iAssignments.put(number,  tempVec);
+            iAssignments.put(number, tempVec);
         }
         this.fillOutCapLCData();
         this.updateSummary();
@@ -377,12 +377,12 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         try {
             Iterator it = iAssignments.keySet().iterator();
             int count = 0;
-            while(it.hasNext()) {
-                Long number = (Long)it.next();
+            while (it.hasNext()) {
+                Long number = (Long) it.next();
                 long nr = number.longValue();
-                Vector tempVec = (Vector)iAssignments.get(number);
-                for(int i = 0; i < tempVec.size(); i++) {
-                    LCRun lCapLC = (LCRun)tempVec.elementAt(i);
+                Vector tempVec = (Vector) iAssignments.get(number);
+                for (int i = 0; i < tempVec.size(); i++) {
+                    LCRun lCapLC = (LCRun) tempVec.elementAt(i);
                     lCapLC.setPrimary_fraction(nr);
                     lCapLC.update(iConn);
                     count++;
@@ -391,9 +391,9 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
             JOptionPane.showMessageDialog(this, "Completed primary fraction assignments for " + count + " LC runs.", "Store successfully completed!", JOptionPane.INFORMATION_MESSAGE);
             txtSummary.setText("");
             iAssignments = new HashMap();
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(this, new String[]{"Unable to store the assignments in the DB:", sqle.getMessage()}, "Unable to store primary fraction information!", JOptionPane.ERROR_MESSAGE);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             this.passHotPotato(t, "Unable to store primary fraction information!");
         }
     }
@@ -403,9 +403,9 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
      */
     private void clearTriggered() {
         iAssignments = new HashMap();
-        for(int i = 0; i < iCapLC.length; i++) {
+        for (int i = 0; i < iCapLC.length; i++) {
             LCRun lCapLC = iCapLC[i];
-            if(lCapLC.getPrimary_fraction() <= 0) {
+            if (lCapLC.getPrimary_fraction() <= 0) {
                 lCapLC.setAssigned(false);
             }
         }
@@ -430,20 +430,20 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         int counter = 0;
         String primFraction = "Primary fraction";
 
-        while(it.hasNext()) {
-            if(counter != 0) {
+        while (it.hasNext()) {
+            if (counter != 0) {
                 sb.append("\n");
             }
-            Long key = (Long)it.next();
+            Long key = (Long) it.next();
             String number = key.toString();
             sb.append(" " + primFraction + " nr. " + number + ":\n ");
             int length = 6 + primFraction.length() + number.length();
-            for(int i=0;i<length;i++) {
+            for (int i = 0; i < length; i++) {
                 sb.append("-");
             }
             sb.append("\n");
-            Vector tempVec = (Vector)iAssignments.get(key);
-            for(int i = 0; i < tempVec.size(); i++) {
+            Vector tempVec = (Vector) iAssignments.get(key);
+            for (int i = 0; i < tempVec.size(); i++) {
                 sb.append("   + " + tempVec.elementAt(i).toString() + "\n");
             }
             counter++;
@@ -455,11 +455,11 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
      * This method should be called to close this application.
      */
     private void close() {
-        if(this.iConn != null) {
+        if (this.iConn != null) {
             try {
                 this.iConn.close();
                 System.out.println("DB connection closed.");
-            } catch(SQLException sqle) {
+            } catch (SQLException sqle) {
                 sqle.printStackTrace();
             }
         }
@@ -468,15 +468,14 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
     }
 
     /**
-     * This method reads all LCRun entries from the iConn connection
-     * that have 'NULL' for DVD or CD number (depending on storage type
-     * selected by user at start-up) fields.
+     * This method reads all LCRun entries from the iConn connection that have 'NULL' for DVD or CD number (depending on
+     * storage type selected by user at start-up) fields.
      */
     private void readCapLCData() {
-        if(iConn != null) {
+        if (iConn != null) {
             try {
                 iCapLC = LCRun.getLCRunsWithoutPrimFractionNotOlderThan(iConn, iMaximumAgeInDays);
-            } catch(SQLException sqle ) {
+            } catch (SQLException sqle) {
                 this.passHotPotato(sqle, "Unable to retrieve LC run list!");
             }
         }
@@ -486,13 +485,13 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
      * This method sets the LCRun data in iCapLC on the JList 'lstCapLC'.
      */
     private void fillOutCapLCData() {
-        if(lstCapLC == null) {
+        if (lstCapLC == null) {
             lstCapLC = new JList();
         }
         Vector temp = new Vector();
-        for(int i = 0; i < iCapLC.length; i++) {
+        for (int i = 0; i < iCapLC.length; i++) {
             LCRun lCapLC = iCapLC[i];
-            if(!lCapLC.isAssigned()) {
+            if (!lCapLC.isAssigned()) {
                 temp.add(lCapLC);
             }
         }
@@ -506,20 +505,11 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
      * This method attempts to read the maximum age property from the props file.
      */
     private void readProperties() {
-        try {
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream(propsFile);
-            if(is != null) {
-                Properties props = new Properties();
-                props.load(is);
-                is.close();
-                String value = props.getProperty("pastdays");
-                if(value != null) {
-                    value = value.trim();
-                    iMaximumAgeInDays = Integer.parseInt(value);
-                }
-            }
-        } catch(Exception e) {
-            // Do nothing.
+        Properties props = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
+        String value = props.getProperty("pastdays");
+        if (value != null) {
+            value = value.trim();
+            iMaximumAgeInDays = Integer.parseInt(value);
         }
     }
 }

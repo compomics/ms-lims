@@ -17,7 +17,6 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 /*
@@ -28,9 +27,9 @@ import java.util.Vector;
  */
 
 /**
- * This class will read the differential data for all the spectra in the
- * presented CSV file and store this data in tha database.
- * 
+ * This class will read the differential data for all the spectra in the presented CSV file and store this data in tha
+ * database.
+ *
  * @author Lennart Martens
  * @version $Id: StoreDifferentialData.java,v 1.12 2009/03/11 13:57:45 niklaas Exp $
  */
@@ -58,10 +57,10 @@ public class StoreDifferentialData {
 
 
     /**
-     * This constructor creates an instance of this class that uses the specified Vector of
-     * DiffCouple instances as the input data to store in the DB.
+     * This constructor creates an instance of this class that uses the specified Vector of DiffCouple instances as the
+     * input data to store in the DB.
      *
-     * @param aCouples  Vector with the DiffCouple instances to store in the DB.
+     * @param aCouples Vector with the DiffCouple instances to store in the DB.
      */
     public StoreDifferentialData(Vector aCouples) {
         this.iCouples = aCouples;
@@ -75,8 +74,8 @@ public class StoreDifferentialData {
         int liSize = iCouples.size();
         Driver driver = null;
         try {
-            driver = (Driver)Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch(Exception e) {
+            driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception e) {
             throw new SQLException("Unable to load driver class!");
         }
         Properties props = new Properties();
@@ -84,11 +83,11 @@ public class StoreDifferentialData {
         props.put("password", iPwd);
         Connection conn = driver.connect("jdbc:mysql:" + iDBName, props);
         // Cycle all couples.
-        for(int i=0;i<liSize;i++) {
-            DiffCouple dc = (DiffCouple)iCouples.get(i);
+        for (int i = 0; i < liSize; i++) {
+            DiffCouple dc = (DiffCouple) iCouples.get(i);
             String filename = dc.getFilename();
             Identification id = Identification.getIdentification(conn, filename);
-            if(id == null) {
+            if (id == null) {
                 System.err.println("No identification found for filename='" + filename + "'!");
             } else {
                 id.setLight_isotope(new Double(dc.getLightIntensity()));
@@ -102,32 +101,32 @@ public class StoreDifferentialData {
     /**
      * The main method is the entry point in the application.
      *
-     * @param args  String[] with the start-up arguments.
+     * @param args String[] with the start-up arguments.
      */
     public static void main(String[] args) {
-        if(args == null || args.length == 0 || args.length != 4) {
+        if (args == null || args.length == 0 || args.length != 4) {
             printUsage();
         }
         // Set the username & password.
         iUser = args[0];
         iPwd = args[1];
         iDBName = args[2];
-        
+
         // Okay, let's attempt to read the input file.
         try {
             File file = new File(args[3]);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 throw new IOException("File '" + args[3] + "' could not be found!");
             }
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = null;
             int lineCount = 0;
             HashMap allCouples = new HashMap();
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 lineCount++;
                 line = line.trim();
                 // Check fo header line.
-                if(line.toLowerCase().startsWith("filename;")) {
+                if (line.toLowerCase().startsWith("filename;")) {
                     // Header line found; skip it.
                     continue;
                 } else {
@@ -135,15 +134,15 @@ public class StoreDifferentialData {
                     try {
                         DiffCouple dc = parseCouple(line);
                         Object removed = allCouples.put(dc.getFilename(), dc);
-                        if(removed != null) {
+                        if (removed != null) {
                             // Duplicate entry found.
                             // Take the average.
-                            DiffCouple old = (DiffCouple)removed;
-                            dc.setLightIntensity((dc.getLightIntensity()+old.getLightIntensity())/2);
-                            dc.setHeavyIntensity((dc.getHeavyIntensity()+old.getHeavyIntensity())/2);
+                            DiffCouple old = (DiffCouple) removed;
+                            dc.setLightIntensity((dc.getLightIntensity() + old.getLightIntensity()) / 2);
+                            dc.setHeavyIntensity((dc.getHeavyIntensity() + old.getHeavyIntensity()) / 2);
                             System.err.println("Averaged for spectrum " + old.getFilename());
                         }
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         throw new IOException("Unable to parse line nbr. " + lineCount + ": " + e.getMessage());
                     }
                 }
@@ -153,18 +152,17 @@ public class StoreDifferentialData {
             StoreDifferentialData lDa = new StoreDifferentialData(new Vector(allCouples.values()));
             lDa.storeDifferentialData();
             System.out.println("\n\nStored differential data for " + allCouples.size() + " spectra in the projects database.");
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             System.err.println("\n\nUnable to parse input file '" + args[3] + "'!" + ioe.getMessage() + "\n");
             System.exit(1);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             System.err.println("\n\nUnable to store differential data: " + sqle.getMessage() + "\n");
             System.exit(1);
         }
     }
 
     /**
-     * This method prints class usage information to stderr
-     * and exits with error flag raised.
+     * This method prints class usage information to stderr and exits with error flag raised.
      */
     private static void printUsage() {
         System.err.println("\n\nUsage\n\tStoreDifferentialData <db_username> <db_password> <db_URL (e.g.: //muppet03/projects)> <input_csv_file>\n");
@@ -175,8 +173,8 @@ public class StoreDifferentialData {
     /**
      * this method parses an InnerCouple from a line of the CSV file.
      *
-     * @param   aLine String with the line to parse.
-     * @return  InnerCouple representing the data in the specified line.
+     * @param aLine String with the line to parse.
+     * @return InnerCouple representing the data in the specified line.
      */
     private static DiffCouple parseCouple(String aLine) {
         DiffCouple dc = null;
@@ -189,41 +187,41 @@ public class StoreDifferentialData {
             heavyValue = st.nextToken();
         }*/
         int firstSemicolon = aLine.indexOf(";");
-        int secondSemicolon = aLine.indexOf(";", firstSemicolon+1);
+        int secondSemicolon = aLine.indexOf(";", firstSemicolon + 1);
         String filename = aLine.substring(0, firstSemicolon).trim();
-        String lightValue = aLine.substring(firstSemicolon+1, secondSemicolon).trim();
+        String lightValue = aLine.substring(firstSemicolon + 1, secondSemicolon).trim();
         String heavyValue = null;
-        if(aLine.length() > secondSemicolon) {
-            heavyValue = aLine.substring(secondSemicolon+1).trim();
-            while(heavyValue.endsWith(";")) {
-                heavyValue = heavyValue.substring(0, heavyValue.length()-1);
+        if (aLine.length() > secondSemicolon) {
+            heavyValue = aLine.substring(secondSemicolon + 1).trim();
+            while (heavyValue.endsWith(";")) {
+                heavyValue = heavyValue.substring(0, heavyValue.length() - 1);
             }
         }
 
-        if(lightValue == null) {
+        if (lightValue == null) {
             lightValue = "";
         }
-        if(heavyValue == null) {
+        if (heavyValue == null) {
             heavyValue = "";
         }
         // Depending on what's in the light and heavy values,
         // we need to process them differently.
-        if(lightValue.toLowerCase().indexOf("single") >= 0) {
+        if (lightValue.toLowerCase().indexOf("single") >= 0) {
             lightValue = "1";
             heavyValue = "0";
-        } else if(lightValue.toLowerCase().indexOf("c-term") >= 0) {
+        } else if (lightValue.toLowerCase().indexOf("c-term") >= 0) {
             lightValue = "-1";
             heavyValue = "0";
-        } else if(lightValue.toLowerCase().indexOf("ee") >= 0) {
+        } else if (lightValue.toLowerCase().indexOf("ee") >= 0) {
             lightValue = "-2";
             heavyValue = "0";
-        } else if(heavyValue.toLowerCase().indexOf("single") >= 0) {
+        } else if (heavyValue.toLowerCase().indexOf("single") >= 0) {
             lightValue = "0";
             heavyValue = "1";
-        } else if(heavyValue.toLowerCase().indexOf("c-term") >= 0) {
+        } else if (heavyValue.toLowerCase().indexOf("c-term") >= 0) {
             lightValue = "0";
             heavyValue = "-1";
-        } else if(heavyValue.toLowerCase().indexOf("ee") >= 0) {
+        } else if (heavyValue.toLowerCase().indexOf("ee") >= 0) {
             lightValue = "0";
             heavyValue = "-2";
         }
