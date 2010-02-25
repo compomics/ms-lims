@@ -91,22 +91,52 @@
                 <version>2.3</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-resources2</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>target/classes</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources/</directory>
+                                    <directory>src/main/resources</directory>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+
+            <!-- Resources plugin - copy modification conversion. -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/ms-lims-${project.version}/resources
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>modificationConversion.txt</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
 
             <!-- Resources plugin -->
             <plugin>
@@ -126,7 +156,7 @@
                             <outputDirectory>src/test/resources</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources/</directory>
+                                    <directory>src/main/resources</directory>
                                 </resource>
                             </resources>
                         </configuration>

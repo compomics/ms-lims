@@ -39,10 +39,16 @@ public class StorageEngine_Package_Change_StepImpl implements DBConverterStep {
                 lInstrumentCounter++;
                 Instrument lInstrument = new Instrument(rs);
                 String lOldStorageClassName = lInstrument.getStorageclassname();
-                String lNewStorageClassName = lOldStorageClassName.replace("be.proteomics.lims", "com.compomics.mslims");
-                lInstrument.setStorageclassname(lNewStorageClassName);
-                int lUpdatedRows = lInstrument.update(aConn);
-                lInstrumentCounter = lInstrumentCounter + lUpdatedRows;
+                try {
+                    if (lOldStorageClassName != null) {
+                        String lNewStorageClassName = lOldStorageClassName.replace("be.proteomics.lims", "com.compomics.mslims");
+                        lInstrument.setStorageclassname(lNewStorageClassName);
+                        lInstrument.update(aConn);
+                        lInstrumentCounter++;
+                    }
+                } catch (NullPointerException npe) {
+                    // Do nothing. The if condition above throws a nullpointer when lOldStorageClassName is null..
+                }
             }
 
             System.out.println(
