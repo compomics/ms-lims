@@ -73,7 +73,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
     /**
      * Constant String with the database connection properties file.
      */
-    private static final String iConProps = "SpectrumStorageGUI.properties";
+    private static final String iConProps = "ms_lims.properties";
 
     /**
      * The LC run elements that were found in the folder.

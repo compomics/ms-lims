@@ -95,7 +95,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
     private String iConnectionName;
     private final static Color iColor_ok = new Color(0, 100, 0);
     private static boolean iStandAlone = false;
-    private boolean iBoolDatabaseInUse = false;
+    private boolean iDatabaseReady = false;
     /**
      * The cdf file
      */
@@ -123,9 +123,15 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         super(aName);
 
         iConnection = aConnection;
+
+
         iDBName = aDBName;
 
         $$$setupUI$$$();
+
+        if (testConnection()) {
+            iDatabaseReady = true;
+        }
 
         setListeners();
 
@@ -148,6 +154,25 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
             passConnection(iConnection, aDBName);
             lblNoDbCdf.setVisible(false);
         }
+    }
+
+    private boolean testConnection() {
+        boolean lResult = false;
+        if (iConnection != null) {
+            String lQuery = "show tables like 'instrument'";
+            PreparedStatement lPreparedStatement = null;
+            try {
+                lPreparedStatement = iConnection.prepareStatement(lQuery);
+                ResultSet rs = lPreparedStatement.executeQuery();
+                if (rs.next()) {
+                    // The database connection has a table called instrument, seems OK!
+                    lResult = true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return lResult;
     }
 
     /**
@@ -186,7 +211,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                     execute("create database " + aDatabaseName);
                     // Use it!
                     execute("use " + aDatabaseName);
-                    iBoolDatabaseInUse = true;
+                    iDatabaseReady = true;
                     iConnectionName = iConnectionName + "/" + aDatabaseName;
                     lblSummaryConnection.setText(iConnectionName);
                     lblDatabaseScheme.setText(iConnectionName);
@@ -202,7 +227,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                         try {
                             execute("use " + aDatabaseName);
                             status("Database '" + aDatabaseName + "' in use.");
-                            iBoolDatabaseInUse = true;
+                            iDatabaseReady = true;
                         } catch (SQLException e2) {
                             status("Failed to use database '" + aDatabaseName + "'!!");
                             e2.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -210,7 +235,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                     } else {
                         e1.printStackTrace();
                         status("Failed to create '" + aDatabaseName + "'");
-                        iBoolDatabaseInUse = false;
+                        iDatabaseReady = false;
                     }
                 }
             }
@@ -1432,7 +1457,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
      */
     private void updateUserList() {
         try {
-            if (iConnection == null | !iBoolDatabaseInUse) {
+            if (iConnection == null | !iDatabaseReady) {
                 listUsers.setListData(new String[]{"No connection, no users!"});
             } else {
                 ResultSet rs = executeQuery("Select * from user");
@@ -1477,7 +1502,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
         try {
 
-            if (iConnection == null | !iBoolDatabaseInUse) {
+            if (iConnection == null | !iDatabaseReady) {
                 listDatabaseInstruments.setListData(new String[]{"No connection, no instruments!"});
             } else {
                 ResultSet rs = executeQuery("Select * from instrument");
@@ -1508,7 +1533,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
      */
     private void updateProtocolList() {
         try {
-            if (iConnection == null | !iBoolDatabaseInUse) {
+            if (iConnection == null | !iDatabaseReady) {
                 listProtocols.setListData(new String[]{"No connection, no protocols!"});
             } else {
                 ResultSet rs = executeQuery("Select * from protocol");

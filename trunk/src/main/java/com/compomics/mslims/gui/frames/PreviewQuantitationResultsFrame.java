@@ -53,15 +53,18 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
     private Object[] iPreviewData;
 
     /**
-     * This RatioSourceType enum types the source of the quantitation data.
-     * See the Enumeration for the distinct types.
+     * This RatioSourceType enum types the source of the quantitation data. See the Enumeration for the distinct types.
      */
     private RatioSourceType iRatioSourceType;
 
-    /** This Vector will hold all the results from the parsing. */
+    /**
+     * This Vector will hold all the results from the parsing.
+     */
     private Vector<RatioGroupCollection> iQuantitationResults = null;
 
-    /** The working horse for processing the PreviewData. */
+    /**
+     * The working horse for processing the PreviewData.
+     */
     private QuantitationProcessor iQuantitationProcessor = null;
 
     private JTable tblResults = null;
@@ -82,7 +85,7 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         iRatioSourceType = aRatioSourceType;
         if (iRatioSourceType == RatioSourceType.DISTILLER_QUANTITATION_TOOLBOX) {
             iQuantitationProcessor = new MascotQuantitationProcessor(aConnection, this, (MascotSearch[]) aPreviewData);
-        } else if(iRatioSourceType == RatioSourceType.ITRAQ_MS_LIMS){
+        } else if (iRatioSourceType == RatioSourceType.ITRAQ_MS_LIMS) {
             iQuantitationProcessor = new Ms_limsiTraqQuantitationProcessor(aConnection, this, (Long[]) aPreviewData);
         }
         // If the quantitaion processor was created succesfully, go in!
@@ -129,7 +132,7 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         tblResults.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         if (iRatioSourceType == RatioSourceType.DISTILLER_QUANTITATION_TOOLBOX) {
             tblResults.setModel(new DistillerQuantitationTableModel(iQuantitationResults));
-        } else if (iRatioSourceType == RatioSourceType.ITRAQ_MS_LIMS){
+        } else if (iRatioSourceType == RatioSourceType.ITRAQ_MS_LIMS) {
             tblResults.setModel(new ITraqQuantitationTableModel(iQuantitationResults));
         }
         tblResults.setDefaultRenderer(Object.class, new QuantitationCellRenderer());
@@ -238,7 +241,9 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         return jpanButtons;
     }
 
-    /** This method is called when the user presses 'store'. */
+    /**
+     * This method is called when the user presses 'store'.
+     */
     private void storeTriggered() {
         DefaultProgressBar progress =
                 new DefaultProgressBar(this, "Processing quantitation preview results...", 0, iQuantitationResults.size() + 2);
@@ -252,7 +257,7 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         if (iRatioSourceType == RatioSourceType.DISTILLER_QUANTITATION_TOOLBOX) {
             // Ratio's come from Mascot Distiller, create the corresponding storage engine;
             lEngine = new DistillerQuantitationStorageEngine(this, iConnection);
-        } else  if(iRatioSourceType == RatioSourceType.ITRAQ_MS_LIMS) {
+        } else if (iRatioSourceType == RatioSourceType.ITRAQ_MS_LIMS) {
             // Ratio's come from iTraq data
             lEngine = new Ms_limsiTraqStorageEngine(this, iConnection);
         } else {
@@ -271,7 +276,9 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         this.dispose();
     }
 
-    /** This method is called when the user presses 'cancel'. */
+    /**
+     * This method is called when the user presses 'cancel'.
+     */
     private void cancelTriggered() {
         this.close();
     }
@@ -280,7 +287,7 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
      * Creates a String report from the HashMap created upon the worker's actions.
      *
      * @param aWorkerReport The HashMap with reports for each RatioGroupCollection.
-     * @return The report String 
+     * @return The report String
      */
     private String createWorkerReport(HashMap<String, Boolean> aWorkerReport) {
         StringBuffer sb = new StringBuffer();
@@ -304,11 +311,11 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
 
         if (lFailureCounter == 0) {
             // Good news!
-            sb.append(lSuccesCounter + " distiller quantitation xml files were processed correct!");
+            sb.append(lSuccesCounter + " distiller quantitation xml files were processed correctly!");
         } else {
-            sb.append(lSuccesCounter + " distiller quantitation xml files were processed correct");
+            sb.append(lSuccesCounter + " distiller quantitation xml files were processed correctly");
             sb.append("\n");
-            sb.append(lFailureCounter + " distiller quantitation xml files were processed incorrect");
+            sb.append(lFailureCounter + " distiller quantitation xml files were processed incorrectly");
             sb.append("\n");
             for (int i = 0; i < listFailures.size(); i++) {
                 Object o = listFailures.get(i);
@@ -319,7 +326,9 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         return sb.toString();
     }
 
-    /** This method is called when the user presses 'copy'. */
+    /**
+     * This method is called when the user presses 'copy'.
+     */
     private void copyTriggered() {
         int nbrCols = this.tblResults.getColumnCount();
         int nbrRows = this.tblResults.getRowCount();
@@ -373,13 +382,17 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         JOptionPane.showMessageDialog(this, message, "Copy complete.", type);
     }
 
-    /** This method disposes the dialog. It does not close the DB connection, though! */
+    /**
+     * This method disposes the dialog. It does not close the DB connection, though!
+     */
     private void close() {
         this.setVisible(false);
         this.dispose();
     }
 
-    /** This method collects the information needed for the preview from the MascotResultsProcessor. */
+    /**
+     * This method collects the information needed for the preview from the MascotResultsProcessor.
+     */
     private void acquireData() {
         iQuantitationResults = new Vector<RatioGroupCollection>();
 
