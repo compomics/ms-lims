@@ -139,7 +139,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
         this.getContentPane().add($$$getRootComponent$$$());
 
-        super.setTitle("ConfigruationGUI (managing ms_lims database" + aDBName + ")");
+        super.setTitle("ConfigurationGUI (managing ms_lims database" + aDBName + ")");
 
         this.pack();
         this.setLocation(100, 100);
