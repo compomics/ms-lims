@@ -12,9 +12,10 @@
 \usepackage{amsmath}%
 \usepackage{amsfonts}%
 \usepackage{amssymb}%
-\usepackage{graphicx}
-\usepackage{subfigure}
-\usepackage{float}
+\usepackage{graphicx}%
+\usepackage{subfigure}%
+\usepackage{float}%
+
 
 
 %%custom packages
@@ -23,6 +24,7 @@
 \usepackage[times]{quotchap}
 \usepackage[a4paper,verbose, asymmetric, centering]{geometry}
 \usepackage{url}
+\usepackage[colorlinks=true, linkcolor=black, urlcolor=blue]{hyperref}
 
 %----------------------------------------------------------
 \newtheorem{theorem}{Theorem}
@@ -277,95 +279,85 @@ This MySQL administrator tool allows you to configure all types of settings of t
 		\end{itemize}
 		\npar Ok, by now we have a ms\_lims database scheme running on a MySQL server that can be accessed by multiple users. One last issue remains: peptide identifications by Mascot.
 		
-			\subsection*{Mascot Daemon Task Database}
-			
-		
-		
+	
+
+		\subsection*{Mascot Daemon Task Database}
+		\npar ms\_lims does not provide a tool to start Mascot database searches, but relies on well the established Mascot daemon tool instead. All information concerning the searches exerted by Mascot Daemon (e.g., start time, duration, source spectra, etc..)  are stored in a compact Microsoft access database file. By default, this Mascot daemon database file is named \emph{TaskDB.mdb} and can be found in the default Mascot Daemon installation folder. If the appropriate location of this database is provided to ms\_lims, then the searches that have been run by Mascot daemon and the resulting peptide identifications can be directly imported into ms\_lims.
+		\npar The last step in the installation process therefore involves to give ms\_lims access to the Mascot daemon Task database. On a Windows platform, this can be done easily be creating a system data source named TaskDB which links any request to the Mascot daemon Task database.
+		\npar Follow the instructions below to create a new system data source:
+		\begin{itemize}
+			\item Go to \textbf{Control Panel} (via the start menu)
+			\item Go to \textbf{Administrative Tools}
+			\item Go to \textbf{Data Sources}
+			\item Go to the tab named \textbf{System DSN}
+			\item Click on the \textbf{Add...} button to add a new System data source
+			\item Select (one of) the \textbf{Microsoft Access drivers (.mdb)}
+			\item Enter \textit{TaskDB} in the \textbf{Data Source Field} \textit{mind that ms\_lims will only accept a database named 'TaskDB'!!}
+			\item Enter \emph{Mascot deamon task database} in the \textbf{Description} field.
+			\item Click \textbf{Database} and browse to the MascotDaemon installation folder to select the \emph{TaskDB.mdb}. The default setting thereto is \emph{C://program files/mascotdaemon/}.
+			\item Click \textbf{OK} to finish the creation of the system data source.
+		\end{itemize}
+		\npar From now on, ms\_lims can request the "TaskDB" data source to the operating system, and is subsequently able to read all Mascot daemon searches and import the required searches into ms\_lims.
 
 		
-\part{The Tools}
-%%Here starts the part on the distinct tools that are available in ms\_lims.
-\chapter{Main Tools}\label{Main Tools} 
-\section{The starting point} 
-The main tools of ms\_lims are provided by an application GUI, which can be started by the corresponding script, \emph{ms\_lims.bat} for Windows systems and \emph{ms\_lims.sh} for *nix.\\
-When you start up ms\_lims there'll pop up a database connection dialog. Enter your username and the password here to connect to the lims database. Please note, that the settings for the driver and the database URL of the database connection can be set by a property file (see section XX).
-\begin{figure}[H]
-	\includegraphics[width=0.50\textwidth]{../Images/startup_mslims.png}
-	\centering
-	\label{database connection}
-	\caption{The database connection dialog of ms\_lims. Enter your username and password for the database here.}
-\end{figure}
+\part{The End User Tools}
 
-\section{The main tools in the GUI}
-The appearance of the main GUI for ms\_lims is a menu bar and list of buttons. Here you can choose which tool you would like to start. The buttons from up to down follow the workflow which you should meet when working with ms\_lims. You can use shortcuts to start the tools, e.g. \texttt{Alt+1} starts the ProjectManager. Just try out the pulldown menu in the menu bar. Now we will take a closer look at the tools.	
+\chapter{Overview of end-user tools in ms-lims}\label{Overview}
+	\npar After ms-lims has been successfully installed, the end-users can start making use of the client tools that work the database. Some tools serve to insert information in the database, while others assist to extract and interpret the information that has been stored in the database. The hierarchy of the tools is similar to the time course of an experiment. First, a project must be created to encompass all information involved in a single experiment, and this can be done via the ProjectManager tool (\ref{sec:projectmanager}). Second, the MS/MS spectra must be stored in the ms-lims database by the SpectrumStorage tool (\ref{sec:spectrumstorage}), and the MS/MS spectra can be extracted from the database subsequently by MergerGUI  (\ref{sec:merger})  for further analysis by external database search engines. Once the Ms/MS spectra interpretation into peptide identifications by Mascot has been completed, the searches can be stored into ms-lims by IdentificationGUI (\ref{sec:identification}). Furthermore, if peptide quantification was performed in parallel by Mascot, then this can be persisted into the database as well by the QuantitationGUI (\ref{sec:quantitation}). Following these storage tools, all information can be further analyzed via standardized project reports of the ProjectAnalyzer tool (\ref{sec:projectanalyzer}) or via custom SQL queries in the GenericQuery tool (\ref{sec:genericquery}). Finally, the results can be validated in depth on the level of peptide identifications by Peptizer (\ref{sec:peptizer}) or peptide quantitations by Rover (\ref{sec:rover}). \\Each of these tools are explained in the following sections.
+
+\npar The appearance of the main GUI for ms\_lims is a menu bar and list of buttons. Here you can choose which tool you would like to start. The buttons from up to down follow the workflow which you should meet when working with ms\_lims. You can use shortcuts to start the tools, e.g. \texttt{Alt+1} starts the ProjectManager. Just try out the pulldown menu in the menu bar. Now we will take a closer look at the tools.	
 \begin{figure}[H]
-	\includegraphics[width=0.50\textwidth]{../Images/startup_mslims2.png}
+	\includegraphics[width=0.80\textwidth]{../Images/startup_mslims2.png}
 	\centering
-	\label{main menu}
+	\label{fig:overview}
 	\caption{The ms\_lims menu consists of several buttons. Just click on the buttons to start the corresponding tool.}
 \end{figure}
+
+
+\section{Starting ms-lims} 
+The main tools of ms\_lims are provided by an application GUI, which can be started by double clicking the ms-lims jar executable file. When you start up ms\_lims, the database connection dialog will appear. Enter your username and password here to connect to the ms-lims database.
+
  
-\subsection{ProjectManager}
+\section{Managing projects by the ProjectManager}
+\label{sec:projectmanager}
 The ProjectManager simply organize the projects which you can create or modify here. A project includes the mass spectra and mascot searches of an experiment. To get a better overview of your projects, you can check the box \emph{Sort projects alphabetically}.
 \begin{figure}[H]
-	\includegraphics[width=0.50\textwidth]{../Images/manager_newproj.png}
+	\includegraphics[width=0.80\textwidth]{../Images/manager_newproj.png}
 	\centering
-	\label{fig:manager}
+	\label{fig:projectmanager}
 	\caption{The ProjectManager allows you to create new projects.}
 \end{figure}
-To create a new project, click on the button \emph{Create new project}. Enter a meaningful title for your project. In the next steps you will identify your project only by this title. Choose the project responsible person then and select the COFRADIC type if you did a COFRADIC experiment. If you did a other kind of experiment, please select \emph{none} (See figure \ref{fig:manager}).  The project description allows you e.g.\ to make a note of the experimental setup of the project. When you have finished select \emph{Create}. A project number will be assigned automatically to your project. If you just want to edit an existing project, click on the button \emph{Modify project}. Don't forget to save the changes on your project. To exit this tool just close the tool window.
+To create a new project, click on the button \emph{Create new project}. Enter a meaningful title for your project. In the next steps you will identify your project only by this title. Choose the project responsible person then and select the COFRADIC type if you did a COFRADIC experiment. If you did a other kind of experiment, please select \emph{none} (See figure \ref{fig:projectmanager}).  The project description allows you e.g.\ to make a note of the experimental setup of the project. When you have finished select \emph{Create}. A project number will be assigned automatically to your project. If you just want to edit an existing project, click on the button \emph{Modify project}. Don't forget to save the changes on your project. To exit this tool just close the tool window.
 
-\subsection{SpectrumStorage}
-This tool allows you to store spectra assigned to a project in the database. When you start the tool, there's a dialog where you can choose the mass spectrometer instrument where the spectra were derived from. Please note that the instrument table has to be set up in the database where the correct storage engine class has to be defined for the relevant instrument(see section XX). You can store the local path to the spectra folder for a specific instrument in a property file. (See section XXX)
+\section{Storing MS/MS spectra by the SpectrumStorageGUI}
+\label{sec:spectrumstorage}
+This tool allows you to store spectra assigned to a project in the database. When you start the tool, there's a dialog where you can choose the mass spectrometer instrument where the spectra were derived from. Please note that the instrument table has to be set up in the database where the correct storage engine class has to be defined for the relevant instrument.
 
 \begin{figure}[H]
-% \centering
-% \begin{minipage}[b]{0.4\textwidth}
-%    {\label{fig:spectra1}\includegraphics[width=0.9\textwidth]{../Images/spectrum_storage.png}}  
-%  \end{minipage}
-%  \begin{minipage}[b]{0.4\textwidth}
-%    {\label{fig:Comment}\includegraphics[width=0.9\textwidth]{../Images/spectrum_storage_note.png}}
-%  \end{minipage}
-%     \caption{left figure: Here you can assign mass spectra to a project and store them in the database. right figure: Then you can enter a comment to a LC run optionally.}
-%  \label{fig:spectrumstorageGUI}
-%\end{figure}
-
-%%\begin{figure}[H]
-%% \subfloat{\label{fig:Comment}\includegraphics[width=0.3\textwidth]{../Images/spectrum_storage_note.png}}
-
-%%  \subfigure[A]{\includegraphics[width=0.5\textwidth]{../Images/spectrum_storage.png}}\qquad                 
-%%  \subfigure[B]{\includegraphics[width=0.5\textwidth]{../Images/spectrum_storage_note.png}}
-
-\includegraphics[width=0.60\textwidth]{../Images/spectrum_storage.png}
+\includegraphics[width=0.80\textwidth]{../Images/spectrum_storage.png}
 	\centering
-	\label{spectra1}
+	\label{fig:spectra1}
 	\caption{Here you can assign mass spectra to a project and store them in the database.}
 \end{figure}
 
-%%\begin{figure}[H]
-%%	\includegraphics[width=0.60\textwidth]{../Images/spectrum_storage_note.png}
-%%	\centering
-%%	\label{spectra2}
-%%	\caption{Here you can enter a comment to a LC run optionally.}
-%% \end{figure}
-%% to solve: you cannot store the same files in a folder in another project again without renaming the filenames
 The window of the SpectrumStorageGUI consists of three parts: left, right and lower window.\\ In the left window (LC run list) you'll see the spectra files you just loaded. By doubleclicking on a file in the LC run list you can add a comment concerning that LC run.\\
 Choose the project to which the spectra belong to in the right window \emph{Project selection}. You also can create or modify the project here. Mark all spectra you want to add to the choosen project in the LC run list. Click on the button \emph{Assign LC run(s) to project}. 
 \begin{figure}[H]
-	\includegraphics[width=0.60\textwidth]{../Images/spectrum_storage_assign.png}
+	\includegraphics[width=0.80\textwidth]{../Images/spectrum_storage_assign.png}
 	\centering
-	\label{spectra3}
+	\label{fig:spectra3}
 	\caption{Mark the spectra you want to assign to a project in the upper window.}
 \end{figure}
 
 Then you can check your selection in the lower window \emph{Summary}. By pressing \emph{Clear} the selection is cancelled and  can be done again. Finally, to commit the selected spectra to the database click the button \emph{Store}. This process can take a while depending on the size and number of spectra.
 
-\subsection{MergerGUI}
+\section{Extracting MS/MS spectra from ms-lims by the MergerGUI}
+\label{sec:merger}
 The job of the MergerGUI is in short, to merge your stored spectra to a set of files before you submit them to the Mascot search engine.\\
 \begin{figure}[H]
-	\includegraphics[width=0.60\textwidth]{../Images/merger.png}
+	\includegraphics[width=0.80\textwidth]{../Images/merger.png}
 	\centering
-	\label{merger}
+	\label{fig:merger}
 	\caption{The MergerGUI organizes your spectra to a set of files}
 \end{figure}
 
@@ -373,27 +365,29 @@ First choose the project whose spectra you want to be merged. When you merge the
 In the section \emph {Output settings} pick or create a folder where the merged files can be stored. Enter the number of spectra files you want to be merged. A good starting point is a value of 1000 files. %% Anyway this is a Mascot search property, explain further
 The next time if you want to redo a search, check the spectrum select options \emph {searched} and \emph {NOT identified} to get a subset of the spectra which need fitted search parameters for identification for example.
 
-\subsection{Mascot Daemon}
+\section{Identifying MS/MS spectra by Mascot Daemon}
+\label{sec:mascotdaemon}
 Up to now, ms\_lims can only process datafiles from the Mascot search engine.
 %% Building up the ODBC coupling to the Mascot task database
 %% Coming up OMSSA interface??
-This menupoint starts up your MascotDaemon application. You can store the local path to the MascotDaemon application permanently in the mascotdaemon.properties file like\begin{verbatim}MASCOTDAEMONFILE=\end{verbatim}\par
+This button will start your MascotDaemon application. You can store the local path to the MascotDaemon application permanently in the mascotdaemon.properties file like\begin{verbatim}MASCOTDAEMONFILE=\end{verbatim}\par
 \begin{verbatim}C:/Program files/Matrix Science/Mascot Daemon/Daemon.exe\end{verbatim}or enter the path directly in the field beside the button.\\
 Now select the merged files for searching with Mascot you have created before with the MergerGUI tool. Then start your Mascot search as usual. It is important to use the merged files for searching and not the original spectra files at this point, otherwise ms\_lims will prompt an error message. The merged files are connected to the database and to your project. 
 
-\subsection{IdentificationGUI}
+\section{Storing peptide identifications by the IdentificationGUI}
+\label{sec:identification}
 This tool allows you to parse and view your Mascot search results directly from the Mascot dat files and finally store them in the database. IdentificationGUI connects with your task database from MascotDaemon, so make sure that ODBC coupling with the task database is present (see section XX). A tree list of your actual Mascot Daemon queries stored in the Mascot Task Database should appear, starting with the last task you have performed recently. Here you select the results you want to parse. Click on the tree nodes to see which files belong to you search. Select one or multiple searches from the tree list, then mark your desired result file(s) in the right window. The identity threshold score applied for the extraction of the selected files can be set at the bottom of the window. The default is set at the Mascot standard 95\% confidence which allows a maximum of 5\% false positive identifications.
 \begin{figure}[H]
-	\includegraphics[width=0.70\textwidth]{../Images/identification.png}
+	\includegraphics[width=0.80\textwidth]{../Images/identification.png}
 	\centering
-	\label{identification}
+	\label{fig:identification}
 	\caption{Choose the Mascot searches you want to parse}
 \end{figure}
 By selecting the \emph{Preview} button the tool will start to retrieve the results and parse them. The procceding is indicated by a progressbar and according to the filesize this task can take a while. When the parsing of the results has finished, a table is displayed which contains the identified peak list from the selected search. 
 \begin{figure}[H]
-	\includegraphics[width=0.60\textwidth]{../Images/preview.png}
+	\includegraphics[width=0.80\textwidth]{../Images/preview.png}
 	\centering
-	\label{preview}
+	\label{fig:identificationpreview}
 	\caption{The Preview table shows a list of all identified peptides of the selected search}
 \end{figure}
 Here you can simply copy and paste the results to other applications as spreadsheet for example. {\emph{Hint:} Of course you can use the IdentificationGUI tool just to parse your Mascot searches without storing them to the database.} You can adjust this preview table to your requirements and sort a certain column (descending or ascending), resize or move a column. If the \emph{Column selection mode} is checked you can mark columns for copy and paste instead of marking the rows as normally. The colunms in the preview table presents following data:
@@ -419,53 +413,62 @@ Here you can simply copy and paste the results to other applications as spreadsh
 \end{description}
 If you decided that the data in the preview table can be stored in the database, just press the \emph{Store} button. Again you will see a progressbar and finally a small box informing you that all identifications have been stored in the database.
 
-\subsection{GenericQuery}\label{chap:GenericQuery}
+\section{Storing peptide quantitations by the QuantiationGUI}
+\label{sec:quantitation}
+\npar Similar to the IdentificationGUI tool, the QuantitationGUI tool will first process all peptide quantitations associated with a set of peptide identifications from a Mascot search. If the peptide identifications are successfully mapped to peptide quantitations, then they are previewed prior to the final storage into the database.
+
+
+\section{Retrieving information from the database by custom SQL queries in the GenericQuery tool}
+\label{sec:genericquery}
 GenericQuery allows you to do queries within your database using SQL (Structured Query Language). This feature is for advanced users, because you need a basic knowledge about how to perform a SQL query.
+
 \begin{figure}[H]
-	\includegraphics[width=0.60\textwidth]{../Images/genericquery.png}
+	\includegraphics[width=0.80\textwidth]{../Images/genericquery.png}
 	\centering
-	\label{genericquery}
+	\label{fig:genericquery}
 	\caption{The GenericQueryGUI allows access to all tables and stored data by using SQL}
 \end{figure}
 In the upper window you can type your query and submit it. Don't forget to connect to your database first (use projects e.g.). All submitted queries are stored in cache, so you can access recent queries (up to 40 entries). The lower window will show your result table, which one can simply copy and paste to spreadsheet applications or export the data in .html or .csv format.
+
 \begin{figure}[H]
-	\includegraphics[width=0.60\textwidth]{../Images/genericquery2.png}
+	\includegraphics[width=0.80\textwidth]{../Images/genericquery2.png}
 	\centering
-	\label{genericquery_export}
+	\label{fig:genericquery_export}
 	\caption{The GenericQueryGUI allows access to all tables and stored data by using SQL}
 \end{figure}
 Some useful queries for proposal are listed below:\\
 \textbf{select * from project where username like 'myname\%'} - List all my projects\\
 \textbf{select s.l\_projectid, i.* from identification as i, spectrumfile as s\\ where i.l\_spectrumfileid=s.spectrumfileid and i.accession like '\%myAccession\%'} - List only projects and identifications where that protein accession has been identified
 
-\subsection{Store Binary file(s)}
-Use this tool to append an informative protocol, image or text-file to a project. Define a descriptor as you like which specifies the binary file e.g. as text document, spreadsheet or picture. 
+\section{Retrieving standardized reports from the database by the ProjectAnalyzer tool}
+\label{sec:projectanalyzer}
+The ProjectAnalyzer tool provides a set of three tools for the data analysis to be performed on a selected project: \emph{Binary file retriever tool}, \emph{DescriptiveNumbersTool} and \emph{Descriptive numbers tool}. Just select the tools from the drop-down menu.
 \begin{figure}[H]
-	\includegraphics[width=0.60\textwidth]{../Images/binary_file.png}
+	\includegraphics[width=0.80\textwidth]{../Images/project_analyzer.png}
+	\centering
+	\label{fig:project_analyzer}
+	\caption{Three tools to analyze your projects}
+\end{figure}
+
+\subsection{Storing and retrieving Binary file(s) into ms-lims}
+
+\npar Use this tool to append an informative protocol, image or text-file to a project. Define a descriptor as you like which specifies the binary file e.g. as text document, spreadsheet or picture. 
+\begin{figure}[H]
+	\includegraphics[width=0.80\textwidth]{../Images/binary_file.png}
 	\centering
 	\label{binary_file}
 	\caption{Assign a binary file to your project}
 \end{figure}
 
-\subsection{ProjectAnalyzer}
-The ProjectAnalyzer tool provides a set of three tools for the data analysis to be performed on a selected project: \emph{Binary file retriever tool}, \emph{DescriptiveNumbersTool} and \emph{Descriptive numbers tool}. Just select the tools from the drop-down menu.
-\begin{figure}[H]
-	\includegraphics[width=0.50\textwidth]{../Images/project_analyzer.png}
-	\centering
-	\label{project_analyzer}
-	\caption{Three tools to analyze your projects}
-\end{figure}
+\npar To locate a binary file stored with a project, run the binary file retriever tool. Select your project in the upper window and then run the tool by hitting \emph{Engage tool}. There'll be pop up a dialog where you can select the binary file and save it to any destination.
 
-\subsubsection{Binary file retriever tool}
-To locate a binary file stored with a project, run the binary file retriever tool. Select your project in the upper window and then run the tool by hitting \emph{Engage tool}. There'll be pop up a dialog where you can select the binary file and save it to any destination.
-
-\subsubsection{Descriptive numbers tool}
+\subsection{Descriptive numbers tool}
 This tool gives a result overview for COFRADIC experiments. If the experiment COFRADIC type \textit{N-term}, \textit{MetOx} or \textit{Cys} has been selected when creating the project, this tool calculates some informative numbers. Some SQL queries will be performed then and generating the report therefore can take a while. A statusbar will inform you about the progress. The final report can be simply copied and pasted to any document.
 
-\subsubsection {Query tool}
+\subsection {Query tool}
 Here you can run a set of predefined SQL queries against the selected project. This option is very useful for beginners to start with analyzing the stored data. The queries are:
 \begin{figure}[H]
-	\includegraphics[width=0.70\textwidth]{../Images/querytool.png}
+	\includegraphics[width=0.80\textwidth]{../Images/querytool.png}
 	\centering
 	\label{querytool}
 	\caption{Query tool with predefined SQL queries}
@@ -479,22 +482,25 @@ Here you can run a set of predefined SQL queries against the selected project. T
 	\item [Show only unique proteins] A list of all unique proteins - you can omit the appearance of cross references from the IPI database
 	\item [Show only peptides detected as single] Choose light, heavy or both kind of peptides
 \end{description}
-When you have selected a query, choose the instrument if required and press \emph{Execute query}. It's useful to enable the checkbox \emph{Include spectrumfile in select} so a spectrum viewer application opens when you right-click on a spectrumfile in the result table. The result table offers investigation features, just take a look at the summary in figure \ref{fig:resulttable}. Again, you can simply copy and past the results to a spreadsheet or export the data as explained in chapter \ref{chap:GenericQuery}.
+When you have selected a query, choose the instrument if required and press \emph{Execute query}. It's useful to enable the checkbox \emph{Include spectrumfile in select} so a spectrum viewer application opens when you right-click on a spectrumfile in the result table. Again, you can simply copy and past the results to a spreadsheet or export the data as explained in chapter \ref{sec:genericquery}.
 \begin{figure}[H]
-	\includegraphics[width=0.90\textwidth]{../Images/results_ext.png}
+	\includegraphics[width=0.80\textwidth]{../Images/results_ext.png}
 	\centering
 	\label{fig:resulttable}
 	\caption{The results table allows interactive exploration features}
 \end{figure}
 
-%% Here something has to be said about the MALDIDiffGUI, SwissPhosphoreader etc.
-%% \section{More Tools}
+\section{Validating peptide identifications by Peptizer}
+\label{sec:peptizer}
+\npar For manual validation of peptide identifications, ms-lims joins forces with the Peptizer tool. Peptizer supplies a platform allowing you to easily create an automated expert system to assure the quality of the peptide identifications. \\The integration of ms-lims and peptizer is two-sided: Peptizer can inspect peptide identifications by their ms-lims derived identificationID, or by their association to a specific ms-lims project; and, when validation has been performed - the results can be persisted into ms-lims as well.
 
-%% Mention the new CUSTOM button!!
+For more information on Peptizer, please visit \href{http://peptizer.googlecode.com}{the peptizer project site}.
 
+\section{Validating peptide quantitation by Rover}
+\label{sec:rover}
+\npar For manual validation of peptide identifications, ms-lims joins forces with the Rover tool. Rover supplies a platform allowing you to easily filter the relevant outliers in your quantitative experiment. Furthermore, Rover provides an of quality related attributes in a protein centric view and thereby enables an optimal judgement on the reliability of the resulting peptide quantitation. 
 
+For more information on Rover, please visit \href{http://compomics-rover.googlecode.com}{the rover project site}.
 
-%%Here starts the example code of the document.
-\part{Frequently Asked Questions}
 
 \end{document}

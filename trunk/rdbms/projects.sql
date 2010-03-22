@@ -162,7 +162,7 @@ DROP TABLE IF EXISTS `identification_to_quantitation`;
 CREATE TABLE `identification_to_quantitation` (
 `itqid` int(10) unsigned NOT NULL auto_increment,
 `l_identificationid` int(10) unsigned NOT NULL default '0',
-`quantitation_link` int(10) unsigned NOT NULL default '0',
+`l_quantitation_groupid` int(10) unsigned NOT NULL default '0',
 `type` varchar(15) NOT NULL default '',
 `username` varchar(45) NOT NULL default '',
 `creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -170,7 +170,7 @@ CREATE TABLE `identification_to_quantitation` (
 PRIMARY KEY  (`itqid`),
 KEY `identification id` (`l_identificationid`),
 KEY `type` (`type`),
-KEY `quantitation id` USING BTREE (`quantitation_link`)
+KEY `quantitation id` USING BTREE (`l_quantitation_groupid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --
@@ -304,9 +304,7 @@ UNIQUE KEY `type` USING BTREE (`type`)
 DROP TABLE IF EXISTS `quantitation`;
 CREATE TABLE `quantitation` (
 `quantitationid` int(10) unsigned NOT NULL auto_increment,
-`l_quantitation_fileid` int(10) unsigned default NULL,
-`file_ref` varchar(15) default NULL,
-`quantitation_link` int(10) unsigned NOT NULL default '0',
+`l_quantitation_groupid` int(10) unsigned NOT NULL default '0',
 `ratio` double NOT NULL default '0',
 `standard_error` double default NULL,
 `type` varchar(15) NOT NULL default '',
@@ -318,9 +316,24 @@ CREATE TABLE `quantitation` (
 PRIMARY KEY  (`quantitationid`),
 KEY `ratio` (`ratio`),
 KEY `type` (`type`),
-KEY `quantitation_link` (`quantitation_link`),
-KEY `l_quantitation_fileid` (`l_quantitation_fileid`),
+KEY `l_quantitation_groupid` (`l_quantitation_groupid`),
 KEY `valid` (`valid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+
+--
+-- Table structure for table `quantitation_group`
+--
+
+DROP TABLE IF EXISTS `quantitation_group`;
+CREATE TABLE `quantitation_group` (
+`quantitation_groupid` int(10) unsigned NOT NULL auto_increment,
+`l_quantitation_fileid` INTEGER UNSIGNED NOT NULL,
+`file_ref` VARCHAR(15) NOT NULL,
+`username` varchar(45) NOT NULL default '',
+`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
+`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
+PRIMARY KEY  (`quantitation_groupid`),
+KEY `l_quantitation_fileid` (`l_quantitation_fileid`),
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --

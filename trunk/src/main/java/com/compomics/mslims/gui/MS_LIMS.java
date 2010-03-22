@@ -743,7 +743,18 @@ public class MS_LIMS extends JFrame implements Connectable {
     ;
 
     public static void main(String[] args) {
-        new MS_LIMS("ms_lims (version " + AboutDialog.getLastVersion() + ")");
+        new MS_LIMS("ms_lims (version " + getVersion() + ")");
+    }
+
+    /**
+     * Returns the version of MS_LIMS in use.
+     *
+     * @return
+     */
+    public static String getVersion() {
+        Properties lProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        String version = lProperties.get("version").toString();
+        return version;
     }
 
     /**
