@@ -5,9 +5,8 @@ import com.compomics.mslims.db.accessors.Instrument;
 import java.util.HashMap;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Kenny Date: 31-okt-2008 Time: 11:44:09
- * The 'InstrumentFactory ' class was created for
+ * Created by IntelliJ IDEA. User: Kenny Date: 31-okt-2008 Time: 11:44:09 The 'InstrumentFactory ' class was created
+ * for
  */
 public class InstrumentFactory {
 
@@ -20,10 +19,10 @@ public class InstrumentFactory {
     public static final int MICROMASS_QTOF = 6;
     public static final int THERMO_FT_ICR = 7;
     public static final int THERMO_ORBITRAP = 8;
-    public static final int UNKNOWN = 9;
+    //public static final int UNKNOWN = 9;
 
 
-    private static int lInstrumentCount = 10;
+    private static int lInstrumentCount = 9;
 
     public static Instrument createInstrument(int aInstrumentType) {
         HashMap lParams = new HashMap();
@@ -97,13 +96,16 @@ public class InstrumentFactory {
                 lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.14277715);
                 break;
 
-            case UNKNOWN:
-                lParams.put(Instrument.NAME, "Unknown instrument");
-                lParams.put(Instrument.DESCRIPTION, "Spectra coming from an unknown source.");
-                lParams.put(Instrument.STORAGECLASSNAME, null);
-                lParams.put(Instrument.PROPERTIESFILENAME, null);
-                lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.14277715);
-                break;
+            /**
+             * Removed the unknown instrument type since it cannot represent any valid spectrumfile hierarchy.
+             case UNKNOWN:
+             lParams.put(Instrument.NAME, "Unknown instrument");
+             lParams.put(Instrument.DESCRIPTION, "Spectra coming from an unknown source.");
+             lParams.put(Instrument.STORAGECLASSNAME, null);
+             lParams.put(Instrument.PROPERTIESFILENAME, null);
+             lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.14277715);
+             break;
+             */
         }
 
         return new Instrument(lParams);
