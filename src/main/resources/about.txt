@@ -612,3 +612,5 @@ Change log
 
  - Version 7.1
          The 7.1 version of ms_lims adds two columns to spectrumfile (used for peak intensity normalization): total ion count and highest peak in spectrum.
+
+         
