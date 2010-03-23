@@ -142,7 +142,7 @@ public class MsLimsStarter {
                         "ms-lims - Startup Failed", JOptionPane.OK_OPTION);
 
                 File logFile = new File(path +
-                        File.separator + "ms-lim.log");
+                        File.separator + "ms-lims.log");
 
                 FileWriter f = new FileWriter(logFile);
                 f.write(temp);
