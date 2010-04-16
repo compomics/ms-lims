@@ -106,8 +106,8 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
      * This constructor allows the creation of the 'IonscoringTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public IonscoringTableAccessor(HashMap aParams) {
         if (aParams.containsKey(IONSCORINGID)) {
@@ -177,7 +177,7 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Ionscoringid' column
      *
-     * @param    aIonscoringid    long with the value for the Ionscoringid column.
+     * @param aIonscoringid long with the value for the Ionscoringid column.
      */
     public void setIonscoringid(long aIonscoringid) {
         this.iIonscoringid = aIonscoringid;
@@ -187,7 +187,7 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -197,7 +197,7 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -207,7 +207,7 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -217,7 +217,7 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -337,8 +337,8 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

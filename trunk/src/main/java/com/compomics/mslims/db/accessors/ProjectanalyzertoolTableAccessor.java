@@ -139,8 +139,8 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
      * This constructor allows the creation of the 'ProjectanalyzertoolTableAccessor' object based on a set of values in
      * the HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public ProjectanalyzertoolTableAccessor(HashMap aParams) {
         if (aParams.containsKey(PROJECTANALYZERTOOLID)) {
@@ -246,7 +246,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Projectanalyzertoolid' column
      *
-     * @param    aProjectanalyzertoolid    long with the value for the Projectanalyzertoolid column.
+     * @param aProjectanalyzertoolid long with the value for the Projectanalyzertoolid column.
      */
     public void setProjectanalyzertoolid(long aProjectanalyzertoolid) {
         this.iProjectanalyzertoolid = aProjectanalyzertoolid;
@@ -256,7 +256,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Toolname' column
      *
-     * @param    aToolname    String with the value for the Toolname column.
+     * @param aToolname String with the value for the Toolname column.
      */
     public void setToolname(String aToolname) {
         this.iToolname = aToolname;
@@ -266,7 +266,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -276,7 +276,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Toolclassname' column
      *
-     * @param    aToolclassname    String with the value for the Toolclassname column.
+     * @param aToolclassname String with the value for the Toolclassname column.
      */
     public void setToolclassname(String aToolclassname) {
         this.iToolclassname = aToolclassname;
@@ -286,7 +286,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Toolparameters' column
      *
-     * @param    aToolparameters    String with the value for the Toolparameters column.
+     * @param aToolparameters String with the value for the Toolparameters column.
      */
     public void setToolparameters(String aToolparameters) {
         this.iToolparameters = aToolparameters;
@@ -296,7 +296,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -306,7 +306,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -316,7 +316,7 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -444,21 +444,21 @@ public class ProjectanalyzertoolTableAccessor implements Deleteable, Retrievable
         while (lrsKeys.next()) {
             for (int i = 0; i < iKeys.length; i++) {
                 iKeys[i] = lrsKeys.getObject(i + 1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

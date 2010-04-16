@@ -136,10 +136,11 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     }
 
     /**
-     * This constructor allows the creation of the 'DatfileTableAccessor' object based on a set of values in the HashMap.
+     * This constructor allows the creation of the 'DatfileTableAccessor' object based on a set of values in the
+     * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public DatfileTableAccessor(HashMap aParams) {
         if (aParams.containsKey(DATFILEID)) {
@@ -245,7 +246,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Datfileid' column
      *
-     * @param    aDatfileid    long with the value for the Datfileid column.
+     * @param aDatfileid long with the value for the Datfileid column.
      */
     public void setDatfileid(long aDatfileid) {
         this.iDatfileid = aDatfileid;
@@ -255,7 +256,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Filename' column
      *
-     * @param    aFilename    String with the value for the Filename column.
+     * @param aFilename String with the value for the Filename column.
      */
     public void setFilename(String aFilename) {
         this.iFilename = aFilename;
@@ -265,7 +266,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'File' column
      *
-     * @param    aFile    byte[] with the value for the File column.
+     * @param aFile byte[] with the value for the File column.
      */
     public void setFile(byte[] aFile) {
         this.iFile = aFile;
@@ -275,7 +276,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Server' column
      *
-     * @param    aServer    String with the value for the Server column.
+     * @param aServer String with the value for the Server column.
      */
     public void setServer(String aServer) {
         this.iServer = aServer;
@@ -285,7 +286,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Folder' column
      *
-     * @param    aFolder    String with the value for the Folder column.
+     * @param aFolder String with the value for the Folder column.
      */
     public void setFolder(String aFolder) {
         this.iFolder = aFolder;
@@ -295,7 +296,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -305,7 +306,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -315,7 +316,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -461,20 +462,20 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
             for (int i = 0; i < iKeys.length; i++) {
                 iKeys[i] = lrsKeys.getObject(i + 1);
             }
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

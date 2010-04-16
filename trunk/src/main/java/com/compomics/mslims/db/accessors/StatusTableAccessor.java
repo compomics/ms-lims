@@ -72,10 +72,11 @@ public class StatusTableAccessor implements Deleteable, Retrievable, Updateable,
     }
 
     /**
-     * This constructor allows the creation of the 'StatusTableAccessor' object based on a set of values in the HashMap.
+     * This constructor allows the creation of the 'StatusTableAccessor' object based on a set of values in the
+     * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public StatusTableAccessor(HashMap aParams) {
         if (aParams.containsKey(STATUSID)) {
@@ -109,7 +110,7 @@ public class StatusTableAccessor implements Deleteable, Retrievable, Updateable,
     /**
      * This method sets the value for the 'Statusid' column
      *
-     * @param    aStatusid    long with the value for the Statusid column.
+     * @param aStatusid long with the value for the Statusid column.
      */
     public void setStatusid(long aStatusid) {
         this.iStatusid = aStatusid;
@@ -119,7 +120,7 @@ public class StatusTableAccessor implements Deleteable, Retrievable, Updateable,
     /**
      * This method sets the value for the 'Name' column
      *
-     * @param    aName    String with the value for the Name column.
+     * @param aName String with the value for the Name column.
      */
     public void setName(String aName) {
         this.iName = aName;
@@ -234,8 +235,8 @@ public class StatusTableAccessor implements Deleteable, Retrievable, Updateable,
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

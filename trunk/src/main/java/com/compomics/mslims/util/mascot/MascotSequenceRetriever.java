@@ -254,8 +254,8 @@ public class MascotSequenceRetriever {
     }
 
     /**
-     * This method can be used to retrieve a set of raw sequences from a set of accessions.<br /> It results in a
-     * series of calls to the 'getSequence' method, so no network optimization is done.
+     * This method can be used to retrieve a set of raw sequences from a set of accessions.<br /> It results in a series
+     * of calls to the 'getSequence' method, so no network optimization is done.
      *
      * @param aAccessions Vector with the accession numbers for which to retrieve the raw sequences.
      * @return String[] with the results, indexed in the same way as the accession numbers. So in the resultant

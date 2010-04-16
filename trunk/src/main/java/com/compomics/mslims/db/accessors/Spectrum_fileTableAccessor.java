@@ -69,8 +69,8 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
      * This constructor allows the creation of the 'Spectrum_fileTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public Spectrum_fileTableAccessor(HashMap aParams) {
         if (aParams.containsKey(L_SPECTRUMID)) {
@@ -84,11 +84,11 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
 
 
     /**
-     * This constructor allows the creation of the 'Spectrum_fileTableAccessor' object based on a resultset obtained by a
-     * 'select * from Spectrum_file' query.
+     * This constructor allows the creation of the 'Spectrum_fileTableAccessor' object based on a resultset obtained by
+     * a 'select * from Spectrum_file' query.
      *
-     * @param    aResultSet    ResultSet with the required columns to initialize this object with.
-     * @exception SQLException    when the ResultSet could not be read.
+     * @param aResultSet ResultSet with the required columns to initialize this object with.
+     * @throws SQLException when the ResultSet could not be read.
      */
     public Spectrum_fileTableAccessor(ResultSet aResultSet) throws SQLException {
         this.iL_spectrumid = aResultSet.getLong("l_spectrumid");
@@ -134,7 +134,7 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
     /**
      * This method sets the value for the 'L_spectrumid' column
      *
-     * @param    aL_spectrumid    long with the value for the L_spectrumid column.
+     * @param aL_spectrumid long with the value for the L_spectrumid column.
      */
     public void setL_spectrumid(long aL_spectrumid) {
         this.iL_spectrumid = aL_spectrumid;
@@ -144,7 +144,7 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
     /**
      * This method sets the value for the 'File' column
      *
-     * @param    aFile    byte[] with the value for the File column.
+     * @param aFile byte[] with the value for the File column.
      */
     public void setFile(byte[] aFile) {
         this.iFile = aFile;
@@ -309,8 +309,8 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

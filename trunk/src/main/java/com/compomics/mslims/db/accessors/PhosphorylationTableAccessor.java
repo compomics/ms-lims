@@ -163,8 +163,8 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
      * This constructor allows the creation of the 'PhosphorylationTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public PhosphorylationTableAccessor(HashMap aParams) {
         if (aParams.containsKey(PHOSPHORYLATIONID)) {
@@ -294,7 +294,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Phosphorylationid' column
      *
-     * @param    aPhosphorylationid    long with the value for the Phosphorylationid column.
+     * @param aPhosphorylationid long with the value for the Phosphorylationid column.
      */
     public void setPhosphorylationid(long aPhosphorylationid) {
         this.iPhosphorylationid = aPhosphorylationid;
@@ -304,7 +304,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'L_status' column
      *
-     * @param    aL_status    long with the value for the L_status column.
+     * @param aL_status long with the value for the L_status column.
      */
     public void setL_status(long aL_status) {
         this.iL_status = aL_status;
@@ -314,7 +314,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Residue' column
      *
-     * @param    aResidue    String with the value for the Residue column.
+     * @param aResidue String with the value for the Residue column.
      */
     public void setResidue(String aResidue) {
         this.iResidue = aResidue;
@@ -324,7 +324,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Location' column
      *
-     * @param    aLocation    long with the value for the Location column.
+     * @param aLocation long with the value for the Location column.
      */
     public void setLocation(long aLocation) {
         this.iLocation = aLocation;
@@ -334,7 +334,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Accession' column
      *
-     * @param    aAccession    String with the value for the Accession column.
+     * @param aAccession String with the value for the Accession column.
      */
     public void setAccession(String aAccession) {
         this.iAccession = aAccession;
@@ -344,7 +344,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Context' column
      *
-     * @param    aContext    String with the value for the Context column.
+     * @param aContext String with the value for the Context column.
      */
     public void setContext(String aContext) {
         this.iContext = aContext;
@@ -354,7 +354,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Score' column
      *
-     * @param    aScore    Number with the value for the Score column.
+     * @param aScore Number with the value for the Score column.
      */
     public void setScore(Number aScore) {
         this.iScore = aScore;
@@ -364,7 +364,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Threshold' column
      *
-     * @param    aThreshold    Number with the value for the Threshold column.
+     * @param aThreshold Number with the value for the Threshold column.
      */
     public void setThreshold(Number aThreshold) {
         this.iThreshold = aThreshold;
@@ -374,7 +374,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -384,7 +384,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -540,23 +540,23 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
         int colCount = lrsmKeys.getColumnCount();
         iKeys = new Object[colCount];
         while (lrsKeys.next()) {
-            for (int i=0;i<iKeys.length;i++) {
-				iKeys[i] = lrsKeys.getObject(i+1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+            for (int i = 0; i < iKeys.length; i++) {
+                iKeys[i] = lrsKeys.getObject(i + 1);
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

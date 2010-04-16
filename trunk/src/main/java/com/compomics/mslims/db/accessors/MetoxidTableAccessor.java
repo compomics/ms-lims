@@ -314,10 +314,11 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     }
 
     /**
-     * This constructor allows the creation of the 'MetoxidTableAccessor' object based on a set of values in the HashMap.
+     * This constructor allows the creation of the 'MetoxidTableAccessor' object based on a set of values in the
+     * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public MetoxidTableAccessor(HashMap aParams) {
         if (aParams.containsKey(ID)) {
@@ -615,7 +616,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Id' column
      *
-     * @param    aId    long with the value for the Id column.
+     * @param aId long with the value for the Id column.
      */
     public void setId(long aId) {
         this.iId = aId;
@@ -625,7 +626,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Filename' column
      *
-     * @param    aFilename    String with the value for the Filename column.
+     * @param aFilename String with the value for the Filename column.
      */
     public void setFilename(String aFilename) {
         this.iFilename = aFilename;
@@ -635,7 +636,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Accession' column
      *
-     * @param    aAccession    String with the value for the Accession column.
+     * @param aAccession String with the value for the Accession column.
      */
     public void setAccession(String aAccession) {
         this.iAccession = aAccession;
@@ -645,7 +646,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Start' column
      *
-     * @param    aStart    long with the value for the Start column.
+     * @param aStart long with the value for the Start column.
      */
     public void setStart(long aStart) {
         this.iStart = aStart;
@@ -655,7 +656,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'End' column
      *
-     * @param    aEnd    long with the value for the End column.
+     * @param aEnd long with the value for the End column.
      */
     public void setEnd(long aEnd) {
         this.iEnd = aEnd;
@@ -665,7 +666,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Enzymatic' column
      *
-     * @param    aEnzymatic    String with the value for the Enzymatic column.
+     * @param aEnzymatic String with the value for the Enzymatic column.
      */
     public void setEnzymatic(String aEnzymatic) {
         this.iEnzymatic = aEnzymatic;
@@ -675,7 +676,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Sequence' column
      *
-     * @param    aSequence    String with the value for the Sequence column.
+     * @param aSequence String with the value for the Sequence column.
      */
     public void setSequence(String aSequence) {
         this.iSequence = aSequence;
@@ -685,7 +686,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Modified_sequence' column
      *
-     * @param    aModified_sequence    String with the value for the Modified_sequence column.
+     * @param aModified_sequence String with the value for the Modified_sequence column.
      */
     public void setModified_sequence(String aModified_sequence) {
         this.iModified_sequence = aModified_sequence;
@@ -695,7 +696,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Score' column
      *
-     * @param    aScore    long with the value for the Score column.
+     * @param aScore long with the value for the Score column.
      */
     public void setScore(long aScore) {
         this.iScore = aScore;
@@ -705,7 +706,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Exp_mass' column
      *
-     * @param    aExp_mass    Number with the value for the Exp_mass column.
+     * @param aExp_mass Number with the value for the Exp_mass column.
      */
     public void setExp_mass(Number aExp_mass) {
         this.iExp_mass = aExp_mass;
@@ -715,7 +716,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Cal_mass' column
      *
-     * @param    aCal_mass    Number with the value for the Cal_mass column.
+     * @param aCal_mass Number with the value for the Cal_mass column.
      */
     public void setCal_mass(Number aCal_mass) {
         this.iCal_mass = aCal_mass;
@@ -725,7 +726,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Valid' column
      *
-     * @param    aValid    int with the value for the Valid column.
+     * @param aValid int with the value for the Valid column.
      */
     public void setValid(int aValid) {
         this.iValid = aValid;
@@ -735,7 +736,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -745,7 +746,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -755,7 +756,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Datfile' column
      *
-     * @param    aDatfile    String with the value for the Datfile column.
+     * @param aDatfile String with the value for the Datfile column.
      */
     public void setDatfile(String aDatfile) {
         this.iDatfile = aDatfile;
@@ -765,7 +766,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Server' column
      *
-     * @param    aServer    String with the value for the Server column.
+     * @param aServer String with the value for the Server column.
      */
     public void setServer(String aServer) {
         this.iServer = aServer;
@@ -775,7 +776,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Identitythreshold' column
      *
-     * @param    aIdentitythreshold    long with the value for the Identitythreshold column.
+     * @param aIdentitythreshold long with the value for the Identitythreshold column.
      */
     public void setIdentitythreshold(long aIdentitythreshold) {
         this.iIdentitythreshold = aIdentitythreshold;
@@ -785,7 +786,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Db' column
      *
-     * @param    aDb    String with the value for the Db column.
+     * @param aDb String with the value for the Db column.
      */
     public void setDb(String aDb) {
         this.iDb = aDb;
@@ -795,7 +796,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Title' column
      *
-     * @param    aTitle    String with the value for the Title column.
+     * @param aTitle String with the value for the Title column.
      */
     public void setTitle(String aTitle) {
         this.iTitle = aTitle;
@@ -805,7 +806,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Precursor' column
      *
-     * @param    aPrecursor    Number with the value for the Precursor column.
+     * @param aPrecursor Number with the value for the Precursor column.
      */
     public void setPrecursor(Number aPrecursor) {
         this.iPrecursor = aPrecursor;
@@ -815,7 +816,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Charge' column
      *
-     * @param    aCharge    int with the value for the Charge column.
+     * @param aCharge int with the value for the Charge column.
      */
     public void setCharge(int aCharge) {
         this.iCharge = aCharge;
@@ -825,7 +826,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Isoforms' column
      *
-     * @param    aIsoforms    String with the value for the Isoforms column.
+     * @param aIsoforms String with the value for the Isoforms column.
      */
     public void setIsoforms(String aIsoforms) {
         this.iIsoforms = aIsoforms;
@@ -835,7 +836,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Db_filename' column
      *
-     * @param    aDb_filename    String with the value for the Db_filename column.
+     * @param aDb_filename String with the value for the Db_filename column.
      */
     public void setDb_filename(String aDb_filename) {
         this.iDb_filename = aDb_filename;
@@ -845,7 +846,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Mascot_version' column
      *
-     * @param    aMascot_version    String with the value for the Mascot_version column.
+     * @param aMascot_version String with the value for the Mascot_version column.
      */
     public void setMascot_version(String aMascot_version) {
         this.iMascot_version = aMascot_version;
@@ -1084,38 +1085,38 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
         if (iDb_filename == null) {
             lStat.setNull(23, 12);
         } else {
-			lStat.setObject(23, iDb_filename);
-		}
-		if(iMascot_version == null) {
-			lStat.setNull(24, 12);
-		} else {
-			lStat.setObject(24, iMascot_version);
-		}
-		int result = lStat.executeUpdate();
+            lStat.setObject(23, iDb_filename);
+        }
+        if (iMascot_version == null) {
+            lStat.setNull(24, 12);
+        } else {
+            lStat.setObject(24, iMascot_version);
+        }
+        int result = lStat.executeUpdate();
 
-		// Retrieving the generated keys (if any).
-		ResultSet lrsKeys = lStat.getGeneratedKeys();
-		ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
-		int colCount = lrsmKeys.getColumnCount();
-		iKeys = new Object[colCount];
-		while(lrsKeys.next()) {
-			for(int i=0;i<iKeys.length;i++) {
-				iKeys[i] = lrsKeys.getObject(i+1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+        // Retrieving the generated keys (if any).
+        ResultSet lrsKeys = lStat.getGeneratedKeys();
+        ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
+        int colCount = lrsmKeys.getColumnCount();
+        iKeys = new Object[colCount];
+        while (lrsKeys.next()) {
+            for (int i = 0; i < iKeys.length; i++) {
+                iKeys[i] = lrsKeys.getObject(i + 1);
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

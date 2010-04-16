@@ -1377,12 +1377,13 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     }
 
     /**
-     * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
+     * This method will return the automatically generated key for the insert if one was triggered, or 'null'
+     * otherwise.
      *
      * @return Object[]    with the generated keys.
      */
     public Object[] getGeneratedKeys() {
         return this.iKeys;
-	}
+    }
 
 }

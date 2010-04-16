@@ -114,11 +114,11 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
     }
 
     /**
-     * This constructor allows the creation of the 'Quantitation_groupTableAccessor' object based on a set of values in the
-     * HashMap.
+     * This constructor allows the creation of the 'Quantitation_groupTableAccessor' object based on a set of values in
+     * the HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public Quantitation_groupTableAccessor(HashMap aParams) {
         if (aParams.containsKey(QUANTITATION_GROUPID)) {
@@ -144,11 +144,11 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
 
 
     /**
-     * This constructor allows the creation of the 'Quantitation_groupTableAccessor' object based on a resultset obtained
-     * by a 'select * from Quantitation_group' query.
+     * This constructor allows the creation of the 'Quantitation_groupTableAccessor' object based on a resultset
+     * obtained by a 'select * from Quantitation_group' query.
      *
-     * @param    aResultSet    ResultSet with the required columns to initialize this object with.
-     * @exception SQLException    when the ResultSet could not be read.
+     * @param aResultSet ResultSet with the required columns to initialize this object with.
+     * @throws SQLException when the ResultSet could not be read.
      */
     public Quantitation_groupTableAccessor(ResultSet aResultSet) throws SQLException {
         this.iQuantitation_groupid = aResultSet.getLong("quantitation_groupid");
@@ -219,7 +219,7 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
     /**
      * This method sets the value for the 'Quantitation_groupid' column
      *
-     * @param    aQuantitation_groupid    long with the value for the Quantitation_groupid column.
+     * @param aQuantitation_groupid long with the value for the Quantitation_groupid column.
      */
     public void setQuantitation_groupid(long aQuantitation_groupid) {
         this.iQuantitation_groupid = aQuantitation_groupid;
@@ -229,7 +229,7 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
     /**
      * This method sets the value for the 'L_quantitation_fileid' column
      *
-     * @param    aL_quantitation_fileid    long with the value for the L_quantitation_fileid column.
+     * @param aL_quantitation_fileid long with the value for the L_quantitation_fileid column.
      */
     public void setL_quantitation_fileid(long aL_quantitation_fileid) {
         this.iL_quantitation_fileid = aL_quantitation_fileid;
@@ -239,7 +239,7 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
     /**
      * This method sets the value for the 'File_ref' column
      *
-     * @param    aFile_ref    String with the value for the File_ref column.
+     * @param aFile_ref String with the value for the File_ref column.
      */
     public void setFile_ref(String aFile_ref) {
         this.iFile_ref = aFile_ref;
@@ -249,7 +249,7 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -259,7 +259,7 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -269,7 +269,7 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -419,18 +419,18 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
             // one Primary Key column, we can infer that this was the
             // generated column, and we can therefore initialize it here.
             iQuantitation_groupid = ((Number) iKeys[0]).longValue();
-		}
-		this.iUpdated = false;
-		return result;
-	}
+        }
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

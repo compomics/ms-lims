@@ -136,10 +136,11 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     }
 
     /**
-     * This constructor allows the creation of the 'ProjectTableAccessor' object based on a set of values in the HashMap.
+     * This constructor allows the creation of the 'ProjectTableAccessor' object based on a set of values in the
+     * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public ProjectTableAccessor(HashMap aParams) {
         if (aParams.containsKey(PROJECTID)) {
@@ -245,7 +246,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Projectid' column
      *
-     * @param    aProjectid    long with the value for the Projectid column.
+     * @param aProjectid long with the value for the Projectid column.
      */
     public void setProjectid(long aProjectid) {
         this.iProjectid = aProjectid;
@@ -255,7 +256,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'L_userid' column
      *
-     * @param    aL_userid    long with the value for the L_userid column.
+     * @param aL_userid long with the value for the L_userid column.
      */
     public void setL_userid(long aL_userid) {
         this.iL_userid = aL_userid;
@@ -265,7 +266,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'L_protocolid' column
      *
-     * @param    aL_protocolid    long with the value for the L_protocolid column.
+     * @param aL_protocolid long with the value for the L_protocolid column.
      */
     public void setL_protocolid(long aL_protocolid) {
         this.iL_protocolid = aL_protocolid;
@@ -275,7 +276,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Title' column
      *
-     * @param    aTitle    String with the value for the Title column.
+     * @param aTitle String with the value for the Title column.
      */
     public void setTitle(String aTitle) {
         this.iTitle = aTitle;
@@ -285,7 +286,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -295,7 +296,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -305,7 +306,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -315,7 +316,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -444,20 +445,20 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
             for (int i = 0; i < iKeys.length; i++) {
                 iKeys[i] = lrsKeys.getObject(i + 1);
             }
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

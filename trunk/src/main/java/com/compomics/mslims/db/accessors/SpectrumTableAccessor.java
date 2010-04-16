@@ -176,10 +176,11 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     }
 
     /**
-     * This constructor allows the creation of the 'SpectrumTableAccessor' object based on a set of values in the HashMap.
+     * This constructor allows the creation of the 'SpectrumTableAccessor' object based on a set of values in the
+     * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public SpectrumTableAccessor(HashMap aParams) {
         if (aParams.containsKey(SPECTRUMID)) {
@@ -226,8 +227,8 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
      * This constructor allows the creation of the 'SpectrumTableAccessor' object based on a resultset obtained by a
      * 'select * from Spectrum' query.
      *
-     * @param    aResultSet    ResultSet with the required columns to initialize this object with.
-     * @exception SQLException    when the ResultSet could not be read.
+     * @param aResultSet ResultSet with the required columns to initialize this object with.
+     * @throws SQLException when the ResultSet could not be read.
      */
     public SpectrumTableAccessor(ResultSet aResultSet) throws SQLException {
         this.iSpectrumid = aResultSet.getLong("spectrumid");
@@ -358,7 +359,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Spectrumid' column
      *
-     * @param    aSpectrumid    long with the value for the Spectrumid column.
+     * @param aSpectrumid long with the value for the Spectrumid column.
      */
     public void setSpectrumid(long aSpectrumid) {
         this.iSpectrumid = aSpectrumid;
@@ -368,7 +369,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'L_lcrunid' column
      *
-     * @param    aL_lcrunid    long with the value for the L_lcrunid column.
+     * @param aL_lcrunid long with the value for the L_lcrunid column.
      */
     public void setL_lcrunid(long aL_lcrunid) {
         this.iL_lcrunid = aL_lcrunid;
@@ -378,7 +379,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'L_projectid' column
      *
-     * @param    aL_projectid    long with the value for the L_projectid column.
+     * @param aL_projectid long with the value for the L_projectid column.
      */
     public void setL_projectid(long aL_projectid) {
         this.iL_projectid = aL_projectid;
@@ -388,7 +389,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'L_instrumentid' column
      *
-     * @param    aL_instrumentid    long with the value for the L_instrumentid column.
+     * @param aL_instrumentid long with the value for the L_instrumentid column.
      */
     public void setL_instrumentid(long aL_instrumentid) {
         this.iL_instrumentid = aL_instrumentid;
@@ -398,7 +399,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Searched' column
      *
-     * @param    aSearched    long with the value for the Searched column.
+     * @param aSearched long with the value for the Searched column.
      */
     public void setSearched(long aSearched) {
         this.iSearched = aSearched;
@@ -408,7 +409,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Identified' column
      *
-     * @param    aIdentified    long with the value for the Identified column.
+     * @param aIdentified long with the value for the Identified column.
      */
     public void setIdentified(long aIdentified) {
         this.iIdentified = aIdentified;
@@ -418,7 +419,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Filename' column
      *
-     * @param    aFilename    String with the value for the Filename column.
+     * @param aFilename String with the value for the Filename column.
      */
     public void setFilename(String aFilename) {
         this.iFilename = aFilename;
@@ -428,7 +429,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Total_spectrum_intensity' column
      *
-     * @param    aTotal_spectrum_intensity    Number with the value for the Total_spectrum_intensity column.
+     * @param aTotal_spectrum_intensity Number with the value for the Total_spectrum_intensity column.
      */
     public void setTotal_spectrum_intensity(Number aTotal_spectrum_intensity) {
         this.iTotal_spectrum_intensity = aTotal_spectrum_intensity;
@@ -438,7 +439,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Highest_peak_in_spectrum' column
      *
-     * @param    aHighest_peak_in_spectrum    Number with the value for the Highest_peak_in_spectrum column.
+     * @param aHighest_peak_in_spectrum Number with the value for the Highest_peak_in_spectrum column.
      */
     public void setHighest_peak_in_spectrum(Number aHighest_peak_in_spectrum) {
         this.iHighest_peak_in_spectrum = aHighest_peak_in_spectrum;
@@ -448,7 +449,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -458,7 +459,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -468,7 +469,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -657,21 +658,21 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
         // Verify that we have a single, generated key.
         if (iKeys != null && iKeys.length == 1) {
             // Since we have exactly one key specified, and only
-			// one Primary Key column, we can infer that this was the
-			// generated column, and we can therefore initialize it here.
-			iSpectrumid = ((Number) iKeys[0]).longValue();
-		}
-		this.iUpdated = false;
-		return result;
-	}
+            // one Primary Key column, we can infer that this was the
+            // generated column, and we can therefore initialize it here.
+            iSpectrumid = ((Number) iKeys[0]).longValue();
+        }
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

@@ -125,11 +125,11 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     }
 
     /**
-     * This constructor allows the creation of the 'Quantitation_fileTableAccessor' object based on a set of values in the
-     * HashMap.
+     * This constructor allows the creation of the 'Quantitation_fileTableAccessor' object based on a set of values in
+     * the HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public Quantitation_fileTableAccessor(HashMap aParams) {
         if (aParams.containsKey(QUANTITATION_FILEID)) {
@@ -158,11 +158,11 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
 
 
     /**
-     * This constructor allows the creation of the 'Quantitation_fileTableAccessor' object based on a resultset obtained by
-     * a 'select * from Quantitation_file' query.
+     * This constructor allows the creation of the 'Quantitation_fileTableAccessor' object based on a resultset obtained
+     * by a 'select * from Quantitation_file' query.
      *
-     * @param    aResultSet    ResultSet with the required columns to initialize this object with.
-     * @exception SQLException    when the ResultSet could not be read.
+     * @param aResultSet ResultSet with the required columns to initialize this object with.
+     * @throws SQLException when the ResultSet could not be read.
      */
     public Quantitation_fileTableAccessor(ResultSet aResultSet) throws SQLException {
         this.iQuantitation_fileid = aResultSet.getLong("quantitation_fileid");
@@ -258,7 +258,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     /**
      * This method sets the value for the 'Quantitation_fileid' column
      *
-     * @param    aQuantitation_fileid    long with the value for the Quantitation_fileid column.
+     * @param aQuantitation_fileid long with the value for the Quantitation_fileid column.
      */
     public void setQuantitation_fileid(long aQuantitation_fileid) {
         this.iQuantitation_fileid = aQuantitation_fileid;
@@ -268,7 +268,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     /**
      * This method sets the value for the 'Filename' column
      *
-     * @param    aFilename    String with the value for the Filename column.
+     * @param aFilename String with the value for the Filename column.
      */
     public void setFilename(String aFilename) {
         this.iFilename = aFilename;
@@ -278,7 +278,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     /**
      * This method sets the value for the 'Type' column
      *
-     * @param    aType    String with the value for the Type column.
+     * @param aType String with the value for the Type column.
      */
     public void setType(String aType) {
         this.iType = aType;
@@ -288,7 +288,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     /**
      * This method sets the value for the 'File' column
      *
-     * @param    aFile    byte[] with the value for the File column.
+     * @param aFile byte[] with the value for the File column.
      */
     public void setFile(byte[] aFile) {
         this.iFile = aFile;
@@ -298,7 +298,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -308,7 +308,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -318,7 +318,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -469,8 +469,8 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

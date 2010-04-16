@@ -117,8 +117,8 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
      * This constructor allows the creation of the 'FiledescriptorTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public FiledescriptorTableAccessor(HashMap aParams) {
         if (aParams.containsKey(FILEDESCRIPTORID)) {
@@ -200,7 +200,7 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Filedescriptorid' column
      *
-     * @param    aFiledescriptorid    long with the value for the Filedescriptorid column.
+     * @param aFiledescriptorid long with the value for the Filedescriptorid column.
      */
     public void setFiledescriptorid(long aFiledescriptorid) {
         this.iFiledescriptorid = aFiledescriptorid;
@@ -210,7 +210,7 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Short_label' column
      *
-     * @param    aShort_label    String with the value for the Short_label column.
+     * @param aShort_label String with the value for the Short_label column.
      */
     public void setShort_label(String aShort_label) {
         this.iShort_label = aShort_label;
@@ -220,7 +220,7 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -230,7 +230,7 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -240,7 +240,7 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -250,7 +250,7 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -369,16 +369,16 @@ public class FiledescriptorTableAccessor implements Deleteable, Retrievable, Upd
         lrsKeys.close();
         lStat.close();
         this.iUpdated = false;
-		return result;
-	}
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

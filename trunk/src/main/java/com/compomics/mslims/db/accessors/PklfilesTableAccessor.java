@@ -98,10 +98,11 @@ public class PklfilesTableAccessor implements Deleteable, Retrievable, Updateabl
     }
 
     /**
-     * This constructor allows the creation of the 'PklfilesTableAccessor' object based on a set of values in the HashMap.
+     * This constructor allows the creation of the 'PklfilesTableAccessor' object based on a set of values in the
+     * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public PklfilesTableAccessor(HashMap aParams) {
         if (aParams.containsKey(FILENAME)) {
@@ -159,7 +160,7 @@ public class PklfilesTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Filename' column
      *
-     * @param    aFilename    String with the value for the Filename column.
+     * @param aFilename String with the value for the Filename column.
      */
     public void setFilename(String aFilename) {
         this.iFilename = aFilename;
@@ -169,7 +170,7 @@ public class PklfilesTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'File' column
      *
-     * @param    aFile    byte[] with the value for the File column.
+     * @param aFile byte[] with the value for the File column.
      */
     public void setFile(byte[] aFile) {
         this.iFile = aFile;
@@ -179,7 +180,7 @@ public class PklfilesTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Identified' column
      *
-     * @param    aIdentified    int with the value for the Identified column.
+     * @param aIdentified int with the value for the Identified column.
      */
     public void setIdentified(int aIdentified) {
         this.iIdentified = aIdentified;
@@ -189,7 +190,7 @@ public class PklfilesTableAccessor implements Deleteable, Retrievable, Updateabl
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -334,8 +335,8 @@ public class PklfilesTableAccessor implements Deleteable, Retrievable, Updateabl
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }
