@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.workers;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.util.interfaces.QuantitationProcessor;
 import com.compomics.mslims.util.quantitation.fileio.Ms_limsiTraqQuantitationProcessor;
@@ -30,6 +32,8 @@ import java.util.Vector;
  * @version $Id: QuantitationWorker.java,v 1.3 2009/05/18 08:01:11 niklaas Exp $
  */
 public class QuantitationWorker extends SwingWorker {
+    // Class specific log4j logger for QuantitationWorker instances.
+    private static Logger logger = Logger.getLogger(QuantitationWorker.class);
 
     /**
      * RovFileProcessorWorker that will handling all the effective processing.
@@ -52,14 +56,14 @@ public class QuantitationWorker extends SwingWorker {
     private DefaultProgressBar iProgress = null;
 
     /**
-     * This constructor allows the creation and initialization of this Runner.
-     * It takes the necessary arguments to create a workable runner.
+     * This constructor allows the creation and initialization of this Runner. It takes the necessary arguments to
+     * create a workable runner.
      *
-     * @param aQuantitationProcessor   RovFileProcessorWorker that will handling all the effective processing.
-     * @param aResultsByReference Vector to hold the results of the processed searches. Note that this is a reference
-*                    parameter!
-     * @param aParent   Flamable instance that called this worker.
-     * @param aProgress DefaultProgressBar to show the progress on.
+     * @param aQuantitationProcessor RovFileProcessorWorker that will handling all the effective processing.
+     * @param aResultsByReference    Vector to hold the results of the processed searches. Note that this is a reference
+     *                               parameter!
+     * @param aParent                Flamable instance that called this worker.
+     * @param aProgress              DefaultProgressBar to show the progress on.
      */
     public QuantitationWorker(QuantitationProcessor aQuantitationProcessor, Vector aResultsByReference, Flamable aParent, DefaultProgressBar aProgress) {
         iQuantitationProcessor = aQuantitationProcessor;
@@ -70,22 +74,22 @@ public class QuantitationWorker extends SwingWorker {
 
 
     /**
-     * This method performs all the processing to be done by the QuantitationProcessor.
-     * All resulting RatioGroupCollections are stored in a Reference Vector.
+     * This method performs all the processing to be done by the QuantitationProcessor. All resulting
+     * RatioGroupCollections are stored in a Reference Vector.
      */
     public Object construct() {
         Vector<RatioGroupCollection> tempAll = new Vector<RatioGroupCollection>(100, 50);
-        while (iQuantitationProcessor.hasNext()){
+        while (iQuantitationProcessor.hasNext()) {
             RatioGroupCollection lCollection = iQuantitationProcessor.next();
 
             try {
-                if(iProgress != null && lCollection!= null) {
-                    iProgress.setValue(iProgress.getValue()+1);
+                if (iProgress != null && lCollection != null) {
+                    iProgress.setValue(iProgress.getValue() + 1);
                     tempAll.add(lCollection);
-                    if(Class.forName("com.compomics.mslims.util.quantitation.fileio.Ms_limsiTraqQuantitationProcessor").isInstance ( iQuantitationProcessor )){
+                    if (Class.forName("com.compomics.mslims.util.quantitation.fileio.Ms_limsiTraqQuantitationProcessor").isInstance(iQuantitationProcessor)) {
                         String lDatfileName = lCollection.getMetaData(QuantitationMetaType.FILENAME).toString();
                         iProgress.setMessage("Processing datfile '" + lDatfileName + "'");
-                    } else if (Class.forName("com.compomics.mslims.util.quantitation.fileio.MascotQuantitationProcessor").isInstance ( iQuantitationProcessor )){
+                    } else if (Class.forName("com.compomics.mslims.util.quantitation.fileio.MascotQuantitationProcessor").isInstance(iQuantitationProcessor)) {
                         String lRunName = lCollection.getMetaData(QuantitationMetaType.RUNNAME).toString();
                         iProgress.setMessage("Processing Distiller rov file for run '" + lRunName + "'");
                     }
@@ -94,7 +98,7 @@ public class QuantitationWorker extends SwingWorker {
                 iFlamable.passHotPotato(new Throwable(e.getMessage()));
             }
         }
-        
+
         iResultsByReference.addAll(tempAll);
         iProgress.setValue(iProgress.getMaximum());
         return "";

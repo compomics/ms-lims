@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Id_to_phosphoTableAccessor;
 import com.compomics.mslims.db.accessors.Identification;
 import com.compomics.mslims.db.accessors.Phosphorylation;
@@ -39,13 +41,14 @@ import java.util.Vector;
  */
 
 /**
- * This class allows the user to connect to a 'projects' database and select a project, after
- * which a netphos output file for that project is selected and the class will enter all prediction
- * info into the projects DB.
+ * This class allows the user to connect to a 'projects' database and select a project, after which a netphos output
+ * file for that project is selected and the class will enter all prediction info into the projects DB.
  *
  * @author Lennart Martens
  */
 public class NetphosPredictionsParser extends FlamableJFrame implements Connectable {
+    // Class specific log4j logger for NetphosPredictionsParser instances.
+    private static Logger logger = Logger.getLogger(NetphosPredictionsParser.class);
 
     /**
      * Database connection.
@@ -68,8 +71,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
     private NetphosOutputReader iReader = null;
 
     /**
-     * A HashMap with the Netphos-reported accession number as key, and the 'real'
-     * accession number as value.
+     * A HashMap with the Netphos-reported accession number as key, and the 'real' accession number as value.
      */
     private HashMap iSequences = null;
 
@@ -118,21 +120,19 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
         this.constructScreen();
         // Display settings.
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((screen.width/10), (screen.height/10));
+        this.setLocation((screen.width / 10), (screen.height / 10));
         this.pack();
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
-     * @param aConn Connection with the DB connection.
-     * @param aDBName   String with an identifier for the connection, typically the
-     *                  name of the DB connected to.
+     * @param aConn   Connection with the DB connection.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
-        if(aConn == null) {
+        if (aConn == null) {
             this.dispose();
             System.exit(0);
         }
@@ -142,8 +142,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
     }
 
     /**
-     * Here we just close the DB connection, and then call
-     * the dispose() method of the superclass.
+     * Here we just close the DB connection, and then call the dispose() method of the superclass.
      */
     public void dispose() {
         this.closeConnection();
@@ -156,8 +155,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
     }
 
     /**
-     * Here we just close the DB connection, and then call
-     * the finalize() method of the superclass.
+     * Here we just close the DB connection, and then call the finalize() method of the superclass.
      */
     protected void finalize() throws Throwable {
         this.closeConnection();
@@ -185,7 +183,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     browseOutputPressed();
                 }
             }
@@ -207,7 +205,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     browseSequencesPressed();
                 }
             }
@@ -285,22 +283,22 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
     }
 
     /**
-     * This method is called when the user presses the browse button
-     * for the Netphos output file.
+     * This method is called when the user presses the browse button for the Netphos output file.
      */
     private void browseOutputPressed() {
         File toOpen = null;
-        while(toOpen == null) {
+        while (toOpen == null) {
             JFileChooser jfc = new JFileChooser("/");
             int returnVal = jfc.showOpenDialog(NetphosPredictionsParser.this);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
                 toOpen = jfc.getSelectedFile();
                 String path = null;
                 try {
                     path = toOpen.getCanonicalPath();
                     iReader = new NetphosOutputReader(toOpen);
                     txtNetphosOutput.setText(path);
-                } catch(IOException ioe) {
+                } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
                     JOptionPane.showMessageDialog(NetphosPredictionsParser.this, new String[]{"Unable to read '" + toOpen.getName() + "' as Netphos output file!", ioe.getMessage()}, "Unable to load Netphos output file!", JOptionPane.ERROR_MESSAGE);
                     toOpen = null;
                 }
@@ -311,22 +309,22 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
     }
 
     /**
-     * This method is called when the user presses the browse button
-     * for the original sequence file.
+     * This method is called when the user presses the browse button for the original sequence file.
      */
     private void browseSequencesPressed() {
         File toOpen = null;
-        while(toOpen == null) {
+        while (toOpen == null) {
             JFileChooser jfc = new JFileChooser("/");
             int returnVal = jfc.showOpenDialog(NetphosPredictionsParser.this);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
                 toOpen = jfc.getSelectedFile();
                 String path = null;
                 try {
                     path = toOpen.getCanonicalPath();
                     iSequences = InnerFastaReader.toHashMap(toOpen);
                     txtSequences.setText(path);
-                } catch(IOException ioe) {
+                } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
                     JOptionPane.showMessageDialog(NetphosPredictionsParser.this, new String[]{"Unable to read '" + toOpen.getName() + "' as a FASTA sequences file!", ioe.getMessage()}, "Unable to load Netphos output file!", JOptionPane.ERROR_MESSAGE);
                     toOpen = null;
                 }
@@ -339,7 +337,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
     /**
      * This method creates the buttonpanel.
      *
-     * @return  JPanel with the buttons.
+     * @return JPanel with the buttons.
      */
     private JPanel createButtonPanel() {
         JPanel jpanButtons = new JPanel();
@@ -357,7 +355,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     parsePressed();
                 }
             }
@@ -371,15 +369,15 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
             }
         });
         btnCancel.addKeyListener(new KeyAdapter() {
-                    /**
-                     * Invoked when a key has been pressed.
-                     */
-                    public void keyPressed(KeyEvent e) {
-                        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                            cancelPressed();
-                        }
-                    }
-                });
+            /**
+             * Invoked when a key has been pressed.
+             */
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    cancelPressed();
+                }
+            }
+        });
 
 
         jpanButtons.add(Box.createHorizontalGlue());
@@ -409,39 +407,39 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
         boolean fillOutError = false;
         double threshold = -1;
 
-        if(iReader == null) {
+        if (iReader == null) {
             needsFocus = btnBrowseOutput;
             message = "You need to specify a Netphos output file first!";
             fillOutError = true;
-        } else if(iSequences == null) {
+        } else if (iSequences == null) {
             needsFocus = btnBrowseSequences;
             message = "You need to specify an original sequence input file first!";
             fillOutError = true;
-        } else if(!txtThreshold.getText().trim().equals("")) {
-           try {
-               threshold = Double.parseDouble(txtThreshold.getText().trim());
-               if(threshold < 0) {
-                   throw new NumberFormatException("Threshold must be positive!");
-               }
-           } catch(NumberFormatException nfe) {
-               needsFocus = txtThreshold;
-               message = "The threshold value must be a positive decimal number or blank for no threshold!";
-               fillOutError = true;
-           }
+        } else if (!txtThreshold.getText().trim().equals("")) {
+            try {
+                threshold = Double.parseDouble(txtThreshold.getText().trim());
+                if (threshold < 0) {
+                    throw new NumberFormatException("Threshold must be positive!");
+                }
+            } catch (NumberFormatException nfe) {
+                needsFocus = txtThreshold;
+                message = "The threshold value must be a positive decimal number or blank for no threshold!";
+                fillOutError = true;
+            }
         }
 
-        if(fillOutError) {
+        if (fillOutError) {
             JOptionPane.showMessageDialog(this, message, "Not all input fields correctly filled out!", JOptionPane.WARNING_MESSAGE);
             needsFocus.requestFocus();
             return;
         } else {
             // If no threshold was specified, set it to '0.0'.
-            if(threshold < 0) {
+            if (threshold < 0) {
                 threshold = 0.0;
             }
 
             // Find the project ID.
-            long projectid = ((Project)cmbProject.getSelectedItem()).getProjectid();
+            long projectid = ((Project) cmbProject.getSelectedItem()).getProjectid();
 
             // OK, we're all revved up with a place to go!
             // First things first: we should get all the predicted phosphorylation sites,
@@ -453,14 +451,14 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
             DefaultProgressBar progress = new DefaultProgressBar(this, "Parsing and storing Netphos output", 0, maximum);
             Thread t = new Thread(new InnerRunnable(all, threshold, projectid, progress));
             t.start();
-            progress.setSize(this.getWidth()/2, progress.getPreferredSize().height);
+            progress.setSize(this.getWidth() / 2, progress.getPreferredSize().height);
             progress.setVisible(true);
         }
     }
 
     /**
-     * This inner class implements the working logic behind the 'parsePressed' method. <br />
-     * It is a Runnable for progressbar purposes.
+     * This inner class implements the working logic behind the 'parsePressed' method. <br /> It is a Runnable for
+     * progressbar purposes.
      */
     private class InnerRunnable implements Runnable {
 
@@ -480,13 +478,14 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
          * The progressbar.
          */
         private DefaultProgressBar iProgress = null;
+
         /**
          * The constructor takes the necessary parameters.
          *
-         * @param aAllPredictions   HashMap with all the phosphorylation predictions.
-         * @param aThreshold    double with the threshold.
-         * @param aProjectid    long with the link to the project we're using.
-         * @param aProgress DefaultProgressBar for indicating the progress on.
+         * @param aAllPredictions HashMap with all the phosphorylation predictions.
+         * @param aThreshold      double with the threshold.
+         * @param aProjectid      long with the link to the project we're using.
+         * @param aProgress       DefaultProgressBar for indicating the progress on.
          */
         public InnerRunnable(HashMap aAllPredictions, double aThreshold, long aProjectid, DefaultProgressBar aProgress) {
             this.iAllPredictions = aAllPredictions;
@@ -494,6 +493,7 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
             this.iProjectid = aProjectid;
             this.iProgress = aProgress;
         }
+
         /**
          * Workhorse method for a Thread.
          */
@@ -501,28 +501,28 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
             // Accession translation, threshold filtering and DB storage.
             Iterator iter = iAllPredictions.values().iterator();
             int counter = 0;
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 iProgress.setValue(counter);
-                NetphosPrediction lNetphosPrediction = (NetphosPrediction)iter.next();
+                NetphosPrediction lNetphosPrediction = (NetphosPrediction) iter.next();
                 // First accession nbr translation.
                 String accession = lNetphosPrediction.getAccession();
                 // NCBI or swissprot?
-                if(accession.startsWith("gi")) {
+                if (accession.startsWith("gi")) {
                     // NCBI. Just remove the leading 'gi_'.
-                    int start = accession.indexOf("gi_")+3;
+                    int start = accession.indexOf("gi_") + 3;
                     accession = accession.substring(start);
                     // See if a trailing '_' is present, as well.
-                    if(accession.endsWith("_")) {
-                        accession = accession.substring(0, accession.length()-1);
+                    if (accession.endsWith("_")) {
+                        accession = accession.substring(0, accession.length() - 1);
                     }
                 } else {
                     // Should be SwissProt.
                     Object temp = iSequences.get(accession);
-                    if(temp == null) {
-                        System.err.println("\n\nUnidentified accession String '" + accession + "' encountered!\nIgnoring entry!!\n\n");
+                    if (temp == null) {
+                        logger.error("\n\nUnidentified accession String '" + accession + "' encountered!\nIgnoring entry!!\n\n");
                         continue;
                     } else {
-                        accession = (String)temp;
+                        accession = (String) temp;
                     }
                 }
                 // Reset accession.
@@ -531,18 +531,18 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
                 // Get all predictions for this accession nbr.
                 Vector temps = lNetphosPrediction.getLocations(iThreshold);
                 int liSize = temps.size();
-                for(int i=0;i<liSize;i++) {
+                for (int i = 0; i < liSize; i++) {
                     // What we'll need to do now, is find all the identifications that correspond to the
                     // predicted phosphorylation sites, then extract their ID's, and link all to their
                     // respective phosphorylations.
-                    PredictedLocation pl = (PredictedLocation)temps.get(i);
+                    PredictedLocation pl = (PredictedLocation) temps.get(i);
                     int location = pl.getLocation();
                     long link = 0l;
                     try {
                         Vector matches = Identification.getIdentifications(accession, location, iProjectid, iConn);
                         int liMatches = matches.size();
                         // See if this prediction has any relevance (ie.: we found at least one match in the DB.
-                        if(liMatches > 0) {
+                        if (liMatches > 0) {
                             // Create a new Phosphorylation entry.
                             HashMap hm = new HashMap(7);
                             hm.put(Phosphorylation.ACCESSION, accession);
@@ -556,13 +556,13 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
                             Phosphorylation p = new Phosphorylation(hm);
                             p.persist(iConn);
                             // Find the PK.
-                            Long tempLong = (Long)p.getGeneratedKeys()[0];
+                            Long tempLong = (Long) p.getGeneratedKeys()[0];
                             link = tempLong.longValue();
                         }
-                        for(int j=0;j<liMatches;j++) {
+                        for (int j = 0; j < liMatches; j++) {
                             // All these are identifications corresponding to this phosphorylation.
                             // We need to store the relation in the id_to_phospho lookup table.
-                            long idid = ((Identification)matches.get(j)).getIdentificationid();
+                            long idid = ((Identification) matches.get(j)).getIdentificationid();
                             HashMap hm = new HashMap(2);
                             hm.put(Id_to_phosphoTableAccessor.L_ID, new Long(idid));
                             hm.put(Id_to_phosphoTableAccessor.L_PHOSPHORYLATIONID, new Long(link));
@@ -570,8 +570,8 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
                             Id_to_phosphoTableAccessor conv = new Id_to_phosphoTableAccessor(hm);
                             conv.persist(iConn);
                         }
-                    } catch(SQLException sqle) {
-                        System.err.println("Error retrieving matches for accession '" + accession + "', location '" + location + "' and project '" + cmbProject.getSelectedItem() + "': " + sqle.getMessage());
+                    } catch (SQLException sqle) {
+                        logger.error("Error retrieving matches for accession '" + accession + "', location '" + location + "' and project '" + cmbProject.getSelectedItem() + "': " + sqle.getMessage());
                     }
                 }
                 counter++;
@@ -601,30 +601,28 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
      */
     private void closeConnection() {
         try {
-            if(iConn != null) {
+            if (iConn != null) {
                 iConn.close();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
     /**
-     * This method will attempt to retrieve all relevant data from the
-     * local filesystem and the DB connection.
+     * This method will attempt to retrieve all relevant data from the local filesystem and the DB connection.
      */
     private void gatherData() {
         this.findProjects();
     }
 
     /**
-     * This method finds all project entries currently stored in the DB
-     * and fills out the relevant arrays with info.
+     * This method finds all project entries currently stored in the DB and fills out the relevant arrays with info.
      */
     private void findProjects() {
         try {
             this.iProjects = Project.getAllProjects(iConn);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             this.passHotPotato(sqle, "Unable to retrieve project data!");
         }
     }
@@ -636,34 +634,34 @@ public class NetphosPredictionsParser extends FlamableJFrame implements Connecta
             BufferedReader br = new BufferedReader(new FileReader(aFASTAFile));
             String line = null;
             boolean isFASTA = false;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
                 // Skip empty lines.
-                if(line.equals("")) {
+                if (line.equals("")) {
                     continue;
-                } else if(line.startsWith(">")) {
-                    if(!isFASTA) {
+                } else if (line.startsWith(">")) {
+                    if (!isFASTA) {
                         isFASTA = true;
                     }
                     // Remove the leading '>'.
                     line = line.substring(1);
                     // Find the accession number for Netphos, and that for the DB.
-                    if(line.startsWith("gi|")) {
+                    if (line.startsWith("gi|")) {
                         // Skip these.
                     } else {
                         int start = line.indexOf(" (");
                         int end = line.indexOf(") ");
-                        if(start < 0 || end < 0) {
-                            System.err.println("Could not find accession number conversion in: " + line + ".");
+                        if (start < 0 || end < 0) {
+                            logger.error("Could not find accession number conversion in: " + line + ".");
                             throw new IOException("Unable to parse FASTA entries in sequence file '" + aFASTAFile.getCanonicalPath() + "'!");
                         }
-                        temp.put(line.substring(0, start), line.substring(start+2, end));
+                        temp.put(line.substring(0, start), line.substring(start + 2, end));
                     }
                 }
             }
             br.close();
 
-            if(!isFASTA) {
+            if (!isFASTA) {
                 throw new IOException("Probably not a FASTA formatted file!");
             }
 

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.mascot;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.mascot.MascotHeader;
 import junit.TestCaseLM;
 import junit.framework.Assert;
@@ -24,6 +26,8 @@ import junit.framework.Assert;
  * @see com.compomics.mslims.util.mascot.MascotHeader
  */
 public class TestMascotHeader extends TestCaseLM {
+    // Class specific log4j logger for TestMascotHeader instances.
+    private static Logger logger = Logger.getLogger(TestMascotHeader.class);
 
     public TestMascotHeader() {
         this("Test scenario for the MascotHeader class.");
@@ -34,8 +38,8 @@ public class TestMascotHeader extends TestCaseLM {
     }
 
     /**
-     * This method test the creation of a header object and the
-     * corresponding parsing of the start and end information, if present.
+     * This method test the creation of a header object and the corresponding parsing of the start and end information,
+     * if present.
      */
     public void testCreation() {
         // Without localization.

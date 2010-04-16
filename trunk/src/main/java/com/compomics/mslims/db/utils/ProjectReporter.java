@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.utils;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Protocol;
 import com.compomics.mslims.db.accessors.Project;
 
@@ -28,14 +30,15 @@ import java.util.TreeSet;
  */
 
 /**
- * This class actually creates the queries, executes them and writes up a report on the
- * findings for a project report. It takes into account the projects PROTOCOL type in generating
- * certain detailed reports.
+ * This class actually creates the queries, executes them and writes up a report on the findings for a project report.
+ * It takes into account the projects PROTOCOL type in generating certain detailed reports.
  *
  * @author Lennart
  * @version $Id: ProjectReporter.java,v 1.13 2009/03/11 13:57:45 niklaas Exp $
  */
 public class ProjectReporter {
+    // Class specific log4j logger for ProjectReporter instances.
+    private static Logger logger = Logger.getLogger(ProjectReporter.class);
 
     /**
      * The PROTOCOL type.
@@ -71,8 +74,8 @@ public class ProjectReporter {
     }
 
     /**
-     * This method returns the number of individual SQL queries that will be executed against
-     * the database during the generation of this report.
+     * This method returns the number of individual SQL queries that will be executed against the database during the
+     * generation of this report.
      *
      * @return int with the number of SQL queries to be executed against the database.
      */
@@ -90,12 +93,11 @@ public class ProjectReporter {
     }
 
     /**
-     * This method generates the report for the current project, showing
-     * it's progress on the progressbar if it is specified.
+     * This method generates the report for the current project, showing it's progress on the progressbar if it is
+     * specified.
      *
-     * @param aProgress JProgressBar on which to show the progress.
-     *                  Each executed query will set the value of the progressbar to (getValue()+1).
-     *                  Note that this parameter can be 'null'.
+     * @param aProgress JProgressBar on which to show the progress. Each executed query will set the value of the
+     *                  progressbar to (getValue()+1). Note that this parameter can be 'null'.
      * @return String with the report.
      * @throws java.sql.SQLException when the report generation failed.
      */
@@ -111,7 +113,7 @@ public class ProjectReporter {
         // Write and execute the queries.
         // 1. Standard queries.
         //  1.a. Number of spectra in the DB.
-        String numSpectraQuery = "select count(*) from spectrumfile where l_projectid = " + iProject.getProjectid();
+        String numSpectraQuery = "select count(*) from spectrumwhere l_projectid = " + iProject.getProjectid();
         long startTime = System.currentTimeMillis();
         ResultSet rs = stat.executeQuery(numSpectraQuery);
         rs.next();
@@ -126,7 +128,7 @@ public class ProjectReporter {
             advanceProgressBar(aProgress);
         }
         //  1.b. Group spectra count per instrument.
-        String grpSpectraPerInstrumentQuery = "select i.name, count(*) from spectrumfile as f, instrument as i where f.l_instrumentid = i.instrumentid and f.l_projectid = " + iProject.getProjectid() + " group by i.instrumentid";
+        String grpSpectraPerInstrumentQuery = "select i.name, count(*) from spectrum as f, instrument as i where f.l_instrumentid = i.instrumentid and f.l_projectid = " + iProject.getProjectid() + " group by i.instrumentid";
         startTime = System.currentTimeMillis();
         rs = stat.executeQuery(grpSpectraPerInstrumentQuery);
         report.append(" (");
@@ -148,7 +150,7 @@ public class ProjectReporter {
             advanceProgressBar(aProgress);
         }
         //  1.c. Number of identified spectra.
-        String numIdedSpectraQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
+        String numIdedSpectraQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
         startTime = System.currentTimeMillis();
         rs = stat.executeQuery(numIdedSpectraQuery);
         rs.next();
@@ -164,7 +166,7 @@ public class ProjectReporter {
         // Only do the rest if we have in fact got identifications.
         if (numIdedSpectra > 0) {
             //  1.d. Enzymicity of the identifications.
-            String notFeCountQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic <> 'FE' and i.valid > 0";
+            String notFeCountQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic <> 'FE' and i.valid > 0";
             startTime = System.currentTimeMillis();
             rs = stat.executeQuery(notFeCountQuery);
             rs.next();
@@ -181,7 +183,7 @@ public class ProjectReporter {
                 percent = new BigDecimal((((double) notFeCount) / ((double) numIdedSpectra)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
                 report.append("\t- " + notFeCount + " (" + percent + "%) did not correspond fully with enzymatic cleavage:\n");
                 // 1.d.1. N-terminally correct ones.
-                String ntermCorrectCountQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic = 'NE' and i.valid > 0";
+                String ntermCorrectCountQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic = 'NE' and i.valid > 0";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(ntermCorrectCountQuery);
                 rs.next();
@@ -196,7 +198,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 // 1.d.2. C-terminally correct ones.
-                String ctermCorrectCountQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic = 'CE' and i.valid > 0";
+                String ctermCorrectCountQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic = 'CE' and i.valid > 0";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(ctermCorrectCountQuery);
                 rs.next();
@@ -211,7 +213,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 // 1.d.3. Fully incorrect ones.
-                String inCorrectCountQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic = 'EE' and i.valid > 0";
+                String inCorrectCountQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.enzymatic = 'EE' and i.valid > 0";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(inCorrectCountQuery);
                 rs.next();
@@ -234,7 +236,7 @@ public class ProjectReporter {
             if (iProtocol.getType().toLowerCase().indexOf("nterm") >= 0) {
                 //  2.a. N-terminal COFRADIC
                 //   2.a.1. Count the number of N-terminal peptides.
-                String numNtermQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.start<=2 and i.start>0";
+                String numNtermQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.start<=2 and i.start>0";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numNtermQuery);
                 rs.next();
@@ -249,7 +251,7 @@ public class ProjectReporter {
                 }
                 report.append("\t- Modifications summary (against total number of identified spectra):\n");
                 //   2.a.2. Count the number of pryo-glu peptides.
-                String numPygQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^NH2-Q<Pyr>.*'";
+                String numPygQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^NH2-Q<Pyr>.*'";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numPygQuery);
                 rs.next();
@@ -263,7 +265,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 //   2.a.3. Count the number of pyro-Cmc peptides.
-                String numPycQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^NH2-C<Pyc>.*'";
+                String numPycQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^NH2-C<Pyc>.*'";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numPycQuery);
                 rs.next();
@@ -277,18 +279,18 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 //   2.a.4. Count the number of proline-starting peptides (3 queries).
-                String numProQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.sequence regexp '^P.*'";
+                String numProQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.sequence regexp '^P.*'";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numProQuery);
                 rs.next();
                 int numPro = rs.getInt(1);
                 rs.close();
                 endTime = System.currentTimeMillis();
-                perfAuditing.add(new Object[] {numProQuery, new Long(endTime-startTime)});
-                if(numPro > 0) {
-                    percent = new BigDecimal((((double)numPro)/((double)numIdedSpectra))*100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                    numProQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^Ace-P.*'";
-                    String numProQuery2 = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^AcD3-P.*'";
+                perfAuditing.add(new Object[]{numProQuery, new Long(endTime - startTime)});
+                if (numPro > 0) {
+                    percent = new BigDecimal((((double) numPro) / ((double) numIdedSpectra)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
+                    numProQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^Ace-P.*'";
+                    String numProQuery2 = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^AcD3-P.*'";
                     startTime = System.currentTimeMillis();
                     rs = stat.executeQuery(numProQuery);
                     rs.next();
@@ -317,7 +319,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress, 2);
                 }
                 //   2.a.5. Count the number of internal (non pyro, non-proline starting) peptides.
-                String numInternalQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^NH2-.*' and i.sequence not regexp '^P.*' and i.modified_sequence not regexp '^NH2-Q<Pyr>.*' and i.modified_sequence not regexp '^NH2-C<Pyc>.*'";
+                String numInternalQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^NH2-.*' and i.sequence not regexp '^P.*' and i.modified_sequence not regexp '^NH2-Q<Pyr>.*' and i.modified_sequence not regexp '^NH2-C<Pyc>.*'";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numInternalQuery);
                 rs.next();
@@ -331,7 +333,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 //   2.a.6. Count the number of N-terminal acetylated peptides.
-                String numNtermAceQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^Ace-.*' and (start=1 or start=2)";
+                String numNtermAceQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^Ace-.*' and (start=1 or start=2)";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numNtermAceQuery);
                 rs.next();
@@ -344,7 +346,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 //   2.a.7. Count the number of internal acetylated peptides.
-                String numInternalAceQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^Ace-.*' and start > 2";
+                String numInternalAceQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^Ace-.*' and start > 2";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numInternalAceQuery);
                 rs.next();
@@ -367,7 +369,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 //   2.a.8. Count the number of N-terminal 3-deutero acetylated peptides.
-                String numNtermAcD3Query = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^AcD3-.*' and (start=1 or start=2)";
+                String numNtermAcD3Query = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^AcD3-.*' and (start=1 or start=2)";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numNtermAcD3Query);
                 rs.next();
@@ -380,7 +382,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 //   2.a.9. Count the number of internal 3-deutero acetylated peptides.
-                String numInternalAcD3Query = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^AcD3-.*' and start > 2";
+                String numInternalAcD3Query = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^AcD3-.*' and start > 2";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numInternalAcD3Query);
                 rs.next();
@@ -410,7 +412,7 @@ public class ProjectReporter {
                     advanceProgressBar(aProgress);
                 }
                 //   2.a.10. Show all N-terminal modifications.
-                String nterMods = "select substring(i.modified_sequence, 1, locate('-', i.modified_sequence)-1) as 'N-terminus', count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 group by 'N-terminus'";
+                String nterMods = "select substring(i.modified_sequence, 1, locate('-', i.modified_sequence)-1) as 'N-terminus', count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 group by 'N-terminus'";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(nterMods);
                 HashMap ntermModsTable = new HashMap();
@@ -435,7 +437,7 @@ public class ProjectReporter {
             } else if (iProtocol.getType().toLowerCase().indexOf("met") >= 0) {
                 //  2.b. MetOx COFRADIC
                 //   2.b.1. Count the number of met-containing peptides.
-                String numMetQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.sequence regexp '.*M.*'";
+                String numMetQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.sequence regexp '.*M.*'";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numMetQuery);
                 rs.next();
@@ -450,7 +452,7 @@ public class ProjectReporter {
                 }
                 //ToDo change the met ox counter
                 //   2.b.2. Count the number of met-containing peptides that have at least one oxidized methioine.
-                String numMetOxQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '.*M<.{0,6}\\(ox\\){1,1}.{0,4}\\(>\\){1,1}.*'"; // This regular expression takes labeled methionine oxidations as well. M<Mox>, M<C13N15ox>, M<MoxC13>
+                String numMetOxQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '.*M<.{0,6}\\(ox\\){1,1}.{0,4}\\(>\\){1,1}.*'"; // This regular expression takes labeled methionine oxidations as well. M<Mox>, M<C13N15ox>, M<MoxC13>
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numMetOxQuery);
                 rs.next();
@@ -466,7 +468,7 @@ public class ProjectReporter {
                 }
             } else if (iProtocol.getType().toLowerCase().indexOf("cys") >= 0) {
                 //  2.c. Cys COFRADIC
-                String numCysQuery = "select count(*) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.sequence regexp '.*C.*'";
+                String numCysQuery = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.sequence regexp '.*C.*'";
                 startTime = System.currentTimeMillis();
                 rs = stat.executeQuery(numCysQuery);
                 rs.next();
@@ -486,7 +488,7 @@ public class ProjectReporter {
 
             // 3. Final, shared summary.
             //  3.a. Number of unique peptides.
-            String numUniquePeptidesQuery = "select count(distinct i.sequence) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
+            String numUniquePeptidesQuery = "select count(distinct i.sequence) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
             startTime = System.currentTimeMillis();
             rs = stat.executeQuery(numUniquePeptidesQuery);
             rs.next();
@@ -499,7 +501,7 @@ public class ProjectReporter {
                 advanceProgressBar(aProgress);
             }
             // 3.b. Number of unique proteins (no isoforms).
-            String numUniqueAccessionsQuery = "select count(distinct substring(i.accession, 1, if((locate('.', i.accession)-1) >0, locate('.', i.accession)-1, length(i.accession)))) from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
+            String numUniqueAccessionsQuery = "select count(distinct substring(i.accession, 1, if((locate('.', i.accession)-1) >0, locate('.', i.accession)-1, length(i.accession)))) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
             startTime = System.currentTimeMillis();
             rs = stat.executeQuery(numUniqueAccessionsQuery);
             rs.next();
@@ -512,7 +514,7 @@ public class ProjectReporter {
                 advanceProgressBar(aProgress);
             }
             // 3.c. Number of unique proteins (with isoforms).
-            String accessionsQuery = "select i.accession, i.isoforms from identification as i, spectrumfile as f where i.l_spectrumfileid=f.spectrumfileid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
+            String accessionsQuery = "select i.accession, i.isoforms from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0";
             startTime = System.currentTimeMillis();
             rs = stat.executeQuery(accessionsQuery);
             HashMap allAccessions = new HashMap();
@@ -571,12 +573,12 @@ public class ProjectReporter {
         }
         // Print out the performance report, if desired.
         if (PERFOUTPUT) {
-            System.out.println("Query performance report:");
-            System.out.println("Query;Time (milliseconds):");
+            logger.info("Query performance report:");
+            logger.info("Query;Time (milliseconds):");
             int liSize = perfAuditing.size();
             for (int i = 0; i < liSize; i++) {
                 Object[] temp = (Object[]) perfAuditing.get(i);
-                System.out.println(temp[0] + ";" + temp[1]);
+                logger.info(temp[0] + ";" + temp[1]);
             }
         }
 
@@ -587,9 +589,8 @@ public class ProjectReporter {
     }
 
     /**
-     * This method takes care of advancing the progress bar. It simply sets the
-     * new value to current value + 1 and updates the label to indicate the new percentage of
-     * progress.
+     * This method takes care of advancing the progress bar. It simply sets the new value to current value + 1 and
+     * updates the label to indicate the new percentage of progress.
      *
      * @param aProgress JProgressBar to advance with one 'tick'.
      */
@@ -598,9 +599,8 @@ public class ProjectReporter {
     }
 
     /**
-     * This method takes care of advancing the progress bar. It simply sets the
-     * new value to current value + aNumberOfTicks and updates the label to indicate the new percentage of
-     * progress.
+     * This method takes care of advancing the progress bar. It simply sets the new value to current value +
+     * aNumberOfTicks and updates the label to indicate the new percentage of progress.
      *
      * @param aProgress JProgressBar to advance with one 'tick'.
      */

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.mascot;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.*;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
@@ -38,6 +40,8 @@ import java.util.*;
  * @version $Id: MascotResultsProcessor.java,v 1.33 2009/12/17 14:08:39 kenny Exp $
  */
 public class MascotResultsProcessor {
+    // Class specific log4j logger for MascotResultsProcessor instances.
+    private static Logger logger = Logger.getLogger(MascotResultsProcessor.class);
 
     /**
      * The database connection from which to retrieve the accessions.
@@ -55,8 +59,8 @@ public class MascotResultsProcessor {
     private HashMap iDatfilenameToDatfileid = new HashMap();
 
     /**
-     * HashMap that will hold a datfile as key, and the collection of searched spectra found
-     * in that datfile, as values.
+     * HashMap that will hold a datfile as key, and the collection of searched spectra found in that datfile, as
+     * values.
      */
     private HashMap iAllSpectraInDatfiles = new HashMap();
 
@@ -76,7 +80,8 @@ public class MascotResultsProcessor {
      *
      * @param aConn                      Connection with the database connection.
      * @param aThreshold                 double with the confidence interval for the parsing (eg. 0.05 for 95%)
-     * @param aMascotDistillerProcessing This boolean indicates whether Mascot Distiller was used for generating the spectrum files.
+     * @param aMascotDistillerProcessing This boolean indicates whether Mascot Distiller was used for generating the
+     *                                   spectrum files.
      */
     public MascotResultsProcessor(Connection aConn, double aThreshold, final boolean aMascotDistillerProcessing) {
         this.iConn = aConn;
@@ -86,8 +91,8 @@ public class MascotResultsProcessor {
 
 
     /**
-     * This method processes all the ID's and returns a Vector filled with instances of the Persistable
-     * elements that have been parsed.
+     * This method processes all the ID's and returns a Vector filled with instances of the Persistable elements that
+     * have been parsed.
      *
      * @param aMergefile String with the filename for the mergefile
      * @param aDatfile   String with the URL for the datfile.
@@ -97,8 +102,8 @@ public class MascotResultsProcessor {
     }
 
     /**
-     * This method processes all the ID's and returns a Vector filled with instances of the Persistable
-     * elements that have been parsed.
+     * This method processes all the ID's and returns a Vector filled with instances of the Persistable elements that
+     * have been parsed.
      *
      * @param aMergefile String with the filename for the mergefile
      * @param aDatfile   String with the URL for the datfile.
@@ -163,8 +168,8 @@ public class MascotResultsProcessor {
                 is.close();
             }
         } catch (IOException ioe) {
-            System.err.println("Unable to retrieve list of accession numbers from preferences list: " + ioe.getMessage() + "!");
-            ioe.printStackTrace();
+            logger.error("Unable to retrieve list of accession numbers from preferences list: " + ioe.getMessage() + "!");
+            logger.error(ioe.getMessage(), ioe);
         }
 
         // Get all known accession numbers from the db (if any).
@@ -402,8 +407,8 @@ public class MascotResultsProcessor {
     }
 
     /**
-     * This method will store all the specified persistables (expected are Datfile and
-     * IdentificationTableAccessors) to the database and updates the corresponding spectrumfiles as well.
+     * This method will store all the specified persistables (expected are Datfile and IdentificationTableAccessors) to
+     * the database and updates the corresponding spectrumfiles as well.
      *
      * @param aPersistables Vector with the persistables to store.
      * @param aParent       Flamable with the instance to notify when something goes wrong.
@@ -413,9 +418,9 @@ public class MascotResultsProcessor {
     }
 
     /**
-     * This method will store all the specified persistables (expected are Datfile and
-     * IdentificationTableAccessors) to the database and updates the corresponding spectrumfiles as well,
-     * displaying a progressbar on screen if one is specified.
+     * This method will store all the specified persistables (expected are Datfile and IdentificationTableAccessors) to
+     * the database and updates the corresponding spectrumfiles as well, displaying a progressbar on screen if one is
+     * specified.
      *
      * @param aPersistables Vector with the persistables to store.
      * @param aParent       Flamable with the instance to notify when something goes wrong.
@@ -451,19 +456,19 @@ public class MascotResultsProcessor {
             for (int i = 0; i < liSize; i++) {
                 Persistable ps = (Persistable) persistable.get(i);
                 // See if we have:
-                //  - identification: update spectrumfile + l_spectrumfileid + l_datfileid.
+                //  - identification: update spectrumfile + l_spectrumid + l_datfileid.
                 if (ps instanceof Identification) {
                     Identification ita = (Identification) ps;
                     // We need to update the spectrumfile as well.
-                    Spectrumfile specFile = Spectrumfile.findFromName(ita.getTemporarySpectrumfilename(), iConn);
-                    if (specFile.getIdentified() > 0) {
-                        specFile.setIdentified(specFile.getIdentified() + 1);
+                    Spectrum lSpectrum = Spectrum.findFromName(ita.getTemporarySpectrumfilename(), iConn);
+                    if (lSpectrum.getIdentified() > 0) {
+                        lSpectrum.setIdentified(lSpectrum.getIdentified() + 1);
                     } else {
-                        specFile.setIdentified(1);
+                        lSpectrum.setIdentified(1);
                     }
                     // Update it.
-                    specFile.update(iConn);
-                    ita.setL_spectrumfileid(specFile.getSpectrumfileid());
+                    lSpectrum.update(iConn);
+                    ita.setL_spectrumid(lSpectrum.getSpectrumid());
                     // Now to find the datfile ID.
                     Object l_datfileid = iDatfilenameToDatfileid.get(ita.getTemporaryDatfilename());
                     if (l_datfileid == null) {
@@ -516,7 +521,7 @@ public class MascotResultsProcessor {
                 Set names = (Set) iter.next();
                 String[] filenames = new String[names.size()];
                 names.toArray(filenames);
-                Spectrumfile.addOneToSearchedFlag(filenames, iConn);
+                Spectrum.addOneToSearchedFlag(filenames, iConn);
             }
             if (aProgress != null) {
                 aProgress.setValue(aProgress.getValue() + 1);
@@ -794,9 +799,8 @@ public class MascotResultsProcessor {
     }
 
     /**
-     * This method adds all the searched spectra from this datfile to the
-     * 'iAllSpectraInDatfiles' map, if the spectra are already present, it
-     * will update their count.
+     * This method adds all the searched spectra from this datfile to the 'iAllSpectraInDatfiles' map, if the spectra
+     * are already present, it will update their count.
      *
      * @param aMDF MascotDatfile from which the spectra are read.
      */
@@ -813,7 +817,7 @@ public class MascotResultsProcessor {
         }
         Object result = iAllSpectraInDatfiles.put(aMDF.getFileName(), filenames);
         if (result != null) {
-            System.err.println("\n\nFound duplicate processed datfilename: '" + aMDF.getFileName() + "'!");
+            logger.error("\n\nFound duplicate processed datfilename: '" + aMDF.getFileName() + "'!");
         }
     }
 

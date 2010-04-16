@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.frames.PreviewSearchResultsFrame;
@@ -54,6 +56,8 @@ import java.util.Vector;
  * @version $Id: IdentificationGUI.java,v 1.14 2009/07/28 14:48:33 lennart Exp $
  */
 public class IdentificationGUI extends JFrame implements Connectable, Flamable {
+    // Class specific log4j logger for IdentificationGUI instances.
+    private static Logger logger = Logger.getLogger(IdentificationGUI.class);
 
     private JTree trSearches = null;
     private JTable tblSummary = null;
@@ -108,6 +112,12 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
      */
     public IdentificationGUI(String aName, Connection aConn, String aDBName) {
         super(aName);
+        logger.info("Starting IdentificationGUI");
+        /*
+        logger.error("Invoke error", new IOException("Faulty error in IdentificationGUI"));
+
+        */
+
         if (aConn == null) {
             Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
             ConnectionDialog cd =
@@ -160,6 +170,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
             frame.setVisible(true);
         } catch (Throwable t) {
             JFrame frame = new JFrame("You won't see me.");
+            logger.error(t.getMessage(), t);
             JOptionPane.showMessageDialog(frame, new String[]{"An error occurred: ", t.getMessage()}, "Application encountered a fatal error!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -372,7 +383,9 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
     private void previewPressed() {
         int selectionCount = tblSummary.getSelectedRowCount();
         if (selectionCount == 0) {
-            JOptionPane.showMessageDialog(this, "You need to select one or more rows in the table to process.", "No rows selected!", JOptionPane.ERROR_MESSAGE);
+            String lMessage = "You need to select one or more rows in the table to process.";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, lMessage, "No rows selected!", JOptionPane.ERROR_MESSAGE);
             tblSummary.requestFocus();
             return;
         }
@@ -380,7 +393,9 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
         // First get the identification threshold!
         String threshold = txtThreshold.getText();
         if (threshold == null || threshold.trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "You need to specify an identity threshold!", "No threshold specified!", JOptionPane.ERROR_MESSAGE);
+            String lMessage = "You need to specify an identity threshold!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, lMessage, "No threshold specified!", JOptionPane.ERROR_MESSAGE);
             txtThreshold.requestFocus();
             return;
         }
@@ -391,6 +406,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException nfe) {
+            logger.error(nfe.getMessage(), nfe);
             JOptionPane.showMessageDialog(this, "You need to specify a positive number between 0 and 1 for the threshold!", "Incorrect threshold specified!", JOptionPane.ERROR_MESSAGE);
             txtThreshold.requestFocus();
             return;
@@ -498,7 +514,10 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
             }
 
         } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
+
             JOptionPane.showMessageDialog(this, new String[]{"There were fatal errors trying to access the Mascot Daemon Task DB:", sqle.getMessage()}, "Unable to retrieve data from TaskDB!", JOptionPane.ERROR_MESSAGE);
+
             System.exit(1);
         }
     }
@@ -519,6 +538,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
      * @param aMessage   String with an extra message to display.
      */
     public void passHotPotato(Throwable aThrowable, String aMessage) {
+        logger.error(aThrowable.getMessage(), aThrowable);
         JOptionPane.showMessageDialog(this, new String[]{"An error occurred while attempting to read the data:", aMessage}, "Error occurred!", JOptionPane.ERROR_MESSAGE);
     }
 

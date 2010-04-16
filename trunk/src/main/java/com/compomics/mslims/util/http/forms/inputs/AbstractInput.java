@@ -8,6 +8,8 @@
  */
 package com.compomics.mslims.util.http.forms.inputs;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 
 /*
@@ -18,52 +20,45 @@ import java.io.BufferedReader;
  */
 
 /**
- * This class is the abstraction for any input corresponding to the InputInterface
- * contract. It deals with the getter-and-setter topic and provides a neat variable for
- * checking a 'set' value versus a default initialized value (this can be useful when
- * setting a field programmatically).
+ * This class is the abstraction for any input corresponding to the InputInterface contract. It deals with the
+ * getter-and-setter topic and provides a neat variable for checking a 'set' value versus a default initialized value
+ * (this can be useful when setting a field programmatically).
  */
 public abstract class AbstractInput implements InputInterface {
 
     /**
-     * When reading from redirected input, this reader is shared among all implementations.
-     * This averts some serious 'stream closed' problems.
+     * When reading from redirected input, this reader is shared among all implementations. This averts some serious
+     * 'stream closed' problems.
      */
     protected static BufferedReader bReader = null;
 
     /**
-     * For text-mode (command-line) inputs, setting this boolean to true stops them from
-     * outputting their info and just read a value. <br />
-     * Comes in handy when input redirection to a file is used.
+     * For text-mode (command-line) inputs, setting this boolean to true stops them from outputting their info and just
+     * read a value. <br /> Comes in handy when input redirection to a file is used.
      */
     public static boolean silent = false;
 
     /**
-     * This boolean allows to differentiate between a confirmed value (either
-     * directly by the user in a normal input-sequence) or programmatically by
-     * a caller of the 'setValue()') and a default one (which has to be confirmed
-     * and not blindly submitted, of course). <br />
-     * <b>Please note that it is not a good idea to call 'setValue()' to initialize
-     * a default value, as the user will no longer be prompted!!
+     * This boolean allows to differentiate between a confirmed value (either directly by the user in a normal
+     * input-sequence) or programmatically by a caller of the 'setValue()') and a default one (which has to be confirmed
+     * and not blindly submitted, of course). <br /> <b>Please note that it is not a good idea to call 'setValue()' to
+     * initialize a default value, as the user will no longer be prompted!!
      */
     protected boolean valueConfirmed = false;
 
     /**
-     * The name of the input. <br />
-     * This name is in fact the KEY for the POST submit!!
+     * The name of the input. <br /> This name is in fact the KEY for the POST submit!!
      */
     protected String name = null;
 
     /**
-     * The comment is what the user will want to know about the input, such as
-     * what does it do and why do I want to set anything. Consider it the label. <br />
-     * RadioButtons do not have regular comments!
+     * The comment is what the user will want to know about the input, such as what does it do and why do I want to set
+     * anything. Consider it the label. <br /> RadioButtons do not have regular comments!
      */
     protected String comment = null;
 
     /**
-     * The value is what the user (or the caller of the 'setValue()' method) has
-     * submitted to the input.
+     * The value is what the user (or the caller of the 'setValue()' method) has submitted to the input.
      */
     protected String value = null;
 

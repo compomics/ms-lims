@@ -1,17 +1,24 @@
 package com.compomics.mslims;
 
+import com.compomics.util.io.StartBrowser;
+import org.apache.log4j.Appender;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.io.PropertiesManager;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.SkyKrupp;
 
+
 import java.io.*;
+import java.util.Enumeration;
 import java.util.Properties;
 
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+
+import javax.swing.*;
+
 
 /**
  * A wrapper class used to start the jar file with parameters. The parameters are read from the JavaOptions file in the
@@ -20,6 +27,8 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Kenny Helsens
  */
 public class MsLimsStarter {
+    // Class specific log4j logger for MsLimsStarter instances.
+    private static Logger logger = Logger.getLogger(MsLimsStarter.class);
 
     private boolean debug = false;
 
@@ -38,7 +47,7 @@ public class MsLimsStarter {
         try {
             launch();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -48,24 +57,34 @@ public class MsLimsStarter {
      * @throws java.lang.Exception
      */
     private void launch() throws Exception {
+        // Since we are launching mslims via the starter, mslims is in use for the end user.
+        // As such, we want to redirect the log file to the compomics application folder.
+        PropertiesManager.getInstance().updateLog4jConfiguration(CompomicsTools.MSLIMS);
+
+        logger.debug("starting ms-lims");
+        logger.debug(System.getProperties().getProperty("os.name"));
 
         // get the version number set in the pom file
-        Properties properties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        Properties lProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
+        File lApplicationFolder = PropertiesManager.getInstance().getApplicationFolder(CompomicsTools.MSLIMS);
 
         /**
          * The name of the omssa parser jar file. Must be equal to the name
          * given in the pom file.
          */
-        String jarFileName = "ms-lims-" + properties.get("version").toString() + ".jar";
+        String jarFileName = "ms-lims-" + lProperties.get("version") + ".jar";
 
         // Get the jarFile path.
         String path;
         path = this.getClass().getResource("MsLimsStarter.class").getPath();
+        logger.debug(path);
         path = path.substring(5, path.indexOf(jarFileName));
+        logger.debug(path);
         path = path.replace("%20", " ");
+        logger.debug(path);
 
         // Get Java vm options.
-        String options = properties.get("java").toString();
+        String options = lProperties.get("java").toString();
 
 
         String quote = "";
@@ -81,77 +100,47 @@ public class MsLimsStarter {
                 + quote + " com.compomics.mslims.gui.MS_LIMS";
 
         if (debug) {
-            System.out.println(cmdLine);
+            logger.info(cmdLine);
         }
 
         try {
             Process p = Runtime.getRuntime().exec(cmdLine);
-
-            InputStream stderr = p.getErrorStream();
-            InputStreamReader isr = new InputStreamReader(stderr);
-            BufferedReader br = new BufferedReader(isr);
-            String line = null;
-            String temp = null;
-
-            temp += "<ERROR>\n\n";
-
-            if (debug) {
-                System.out.println("<ERROR>");
-            }
-
-            line = br.readLine();
-
-            boolean error = false;
-
-            while (line != null) {
-
-                if (debug) {
-                    System.out.println(line);
-                }
-
-                temp += line + "\n";
-                line = br.readLine();
-                error = true;
-            }
-
-            if (debug) {
-                System.out.println("</ERROR>");
-            }
-
-            temp += "\nThe command line executed:\n";
-            temp += cmdLine + "\n";
-            temp += "\n</ERROR>\n";
             int exitVal = p.waitFor();
 
-            if (debug) {
-                System.out.println("Process exitValue: " + exitVal);
+            String lMessage =
+                    "Failed to exit ms-lims appropriately.\n\n" +
+                            "For more details see: ms-lims.log\n\n"
+                            + "If the error persists, please report the issue at http://ms-lims.googlecode.com/issues/" +
+                            "\n\t-describe latest action" +
+                            "\n\t-attach screenshot" +
+                            "\n\t-attach ms-lims.log file";
+            if (exitVal != 0) {
+
+                logger.error(lMessage);
+                int lResult = javax.swing.JOptionPane.showOptionDialog(null,
+                        lMessage,
+                        "ms-lims: unexpected failure",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.ERROR_MESSAGE,
+                        UIManager.getIcon("OptionPane.errorIcon"),
+                        new Object[]{"Report issue", "Exit"},
+                        "Report issue");
+
+                if (lResult == JOptionPane.OK_OPTION) {
+                    String lIssuesPage = new String("http://code.google.com/p/ms-lims/issues/list");
+                    StartBrowser.start(lIssuesPage);
+                }
+
             }
-
-            if (error) {
-
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "Failed to start ms-lims.\n\n" +
-                                "Make sure that ms-lims is installed in a path not containing\n" +
-                                "special characters. On Linux it has to be run from a path without spaces.\n\n" +
-                                "The upper memory limit used may be too high for your computer to handle.\n" +
-                                "Try reducing it and see if this helps.\n\n" +
-                                "For more details see:\n" +
-                                path +
-                                File.separator + "ms-lims.log\n\n"
-                                + "Or see \'Troubleshooting\' at http://ms-lims.googlecode.com",
-                        "ms-lims - Startup Failed", JOptionPane.OK_OPTION);
-
-                File logFile = new File(path +
-                        File.separator + "ms-lims.log");
-
-                FileWriter f = new FileWriter(logFile);
-                f.write(temp);
-                f.close();
-
-                System.exit(0);
-            }
+        } catch (IOException e1) {
+            logger.error(e1.getMessage(), e1);
+            logger.error(e1.getMessage(), e1);
         } catch (Throwable t) {
-            t.printStackTrace();
+            logger.error(t.getMessage(), t);
+            logger.error(t.getMessage(), t);
+        }
+        finally {
+            logger.info("Exiting ms-lims");
             System.exit(0);
         }
     }

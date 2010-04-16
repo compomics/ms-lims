@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,14 +20,16 @@ import java.util.HashMap;
  */
 
 /**
- * This class provides the following enhancements over the ProjectTableAccessor:
- * <ul> <li><i>constructor</i>: to read a single Project from a ResultSet.</li> <li><b>toString()</b>: returns the title
- * of the project.</li> <li><b>hashCode()</b>: returns a hashcode for the project (which is just the Project's ID).</li>
- * <li><b>clone()</b>: returns an identical copy of the project.</li> </ul>
+ * This class provides the following enhancements over the ProjectTableAccessor: <ul> <li><i>constructor</i>: to read a
+ * single Project from a ResultSet.</li> <li><b>toString()</b>: returns the title of the project.</li>
+ * <li><b>hashCode()</b>: returns a hashcode for the project (which is just the Project's ID).</li> <li><b>clone()</b>:
+ * returns an identical copy of the project.</li> </ul>
  *
  * @author Lennart Martens
  */
 public class Validation extends ValidationTableAccessor {
+    // Class specific log4j logger for Validation instances.
+    private static Logger logger = Logger.getLogger(Validation.class);
 
     /**
      * Default constructor.
@@ -45,15 +49,9 @@ public class Validation extends ValidationTableAccessor {
 
     /**
      * This constructor reads the project from a resultset. The ResultSet should be positioned such that a single row
-     * can be read directly (i.e., without calling the 'next()' method on the ResultSet). <br />
-     * The columns should be in this order: <br />
-     * Column 1: validation ID <br />
-     * Column 2: l_identificationid <br />
-     * Column 3: comment <br />
-     * Column 4: status <br />
-     * Column 5: username <br />
-     * Column 6: creationdate <br />
-     * Column 8: modificationdate.
+     * can be read directly (i.e., without calling the 'next()' method on the ResultSet). <br /> The columns should be
+     * in this order: <br /> Column 1: validation ID <br /> Column 2: l_identificationid <br /> Column 3: comment <br />
+     * Column 4: status <br /> Column 5: username <br /> Column 6: creationdate <br /> Column 8: modificationdate.
      *
      * @param aRS ResultSet to read the data from.
      * @throws java.sql.SQLException when reading the ResultSet failed.

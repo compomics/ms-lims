@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.FTPSatellite;
 import com.compomics.util.gui.JLabelAndComponentPanel;
 import com.compomics.util.io.FTPClient2;
@@ -31,12 +33,13 @@ import java.util.Vector;
  */
 
 /**
- * This class implements the 'Settings' dialog for the FTPSatellite
- * JFrame.
+ * This class implements the 'Settings' dialog for the FTPSatellite JFrame.
  *
  * @author Lennart Martens
  */
 public class SettingsDialog extends JDialog {
+    // Class specific log4j logger for SettingsDialog instances.
+    private static Logger logger = Logger.getLogger(SettingsDialog.class);
 
     /**
      * The parent component.
@@ -130,10 +133,9 @@ public class SettingsDialog extends JDialog {
 
 
     /**
-     * This constructor will initialize the component and
-     * construct the GUI.
+     * This constructor will initialize the component and construct the GUI.
      *
-     * @param   aParent FTPSatellite, which is the parent component for this dialog.
+     * @param aParent FTPSatellite, which is the parent component for this dialog.
      */
     public SettingsDialog(FTPSatellite aParent) {
         super(aParent, "Settings", true);
@@ -143,7 +145,7 @@ public class SettingsDialog extends JDialog {
         this.pack();
         this.setResizable(false);
         Point p = aParent.getLocation();
-        this.setLocation(p.x + (aParent.getWidth()/2), p.y + (aParent.getHeight()/2));
+        this.setLocation(p.x + (aParent.getWidth() / 2), p.y + (aParent.getHeight() / 2));
         this.addWindowListener(new WindowAdapter() {
             /**
              * Invoked when a window is in the process of being closed.
@@ -198,7 +200,7 @@ public class SettingsDialog extends JDialog {
         */
         JPanel jpanFTP = new JPanel(new BorderLayout());
         jpanFTP.setBorder(BorderFactory.createTitledBorder("FTP settings"));
-        JPanel jpanSubFTP = new JLabelAndComponentPanel(new JLabel[] {new JLabel("Hostname"), new JLabel("Username"), new JLabel("Password")}, new JTextField[] {txtHost, txtUser, txtPassword});
+        JPanel jpanSubFTP = new JLabelAndComponentPanel(new JLabel[]{new JLabel("Hostname"), new JLabel("Username"), new JLabel("Password")}, new JTextField[]{txtHost, txtUser, txtPassword});
         jpanFTP.add(jpanSubFTP, BorderLayout.WEST);
         jpanFTP.add(chkMergeFiles, BorderLayout.SOUTH);
 
@@ -216,7 +218,7 @@ public class SettingsDialog extends JDialog {
         chkUSeDB = new JCheckBox("Store files in database (also performs merging)", true);
         chkUSeDB.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(chkUSeDB.isSelected()) {
+                if (chkUSeDB.isSelected()) {
                     txtDriver.setEnabled(true);
                     txtUrl.setEnabled(true);
                     txtDBUser.setEnabled(true);
@@ -252,7 +254,7 @@ public class SettingsDialog extends JDialog {
         btnBrowse.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String currentDir = txtFolder.getText().trim();
-                if(currentDir == null || currentDir.equals("")) {
+                if (currentDir == null || currentDir.equals("")) {
                     currentDir = "/";
                 }
                 JFileChooser jfc = new JFileChooser(currentDir);
@@ -264,10 +266,11 @@ public class SettingsDialog extends JDialog {
                 jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int value = jfc.showDialog(SettingsDialog.this, "Select folder");
 
-                if(value == JFileChooser.APPROVE_OPTION) {
+                if (value == JFileChooser.APPROVE_OPTION) {
                     try {
                         txtFolder.setText(jfc.getSelectedFile().getCanonicalPath());
-                    } catch(IOException ioe) {
+                    } catch (IOException ioe) {
+                        logger.error(ioe.getMessage(), ioe);
                         JOptionPane.showMessageDialog(SettingsDialog.this, new String[]{"Unable to find the folder you've selected!", "\n", ioe.getMessage(), "\n"}, "Folder was not found!", JOptionPane.ERROR_MESSAGE);
                         txtFolder.setText("");
                     }
@@ -283,7 +286,7 @@ public class SettingsDialog extends JDialog {
         jpanFolderLabel.setLayout(new BoxLayout(jpanFolderLabel, BoxLayout.Y_AXIS));
 
         jpanFolderLabel.add(new JLabel("Select folder: "));
-        jpanFolderLabel.add(Box.createRigidArea(new Dimension(txtFilter.getWidth(), (int)(btnBrowse.getPreferredSize().getHeight()/2))));
+        jpanFolderLabel.add(Box.createRigidArea(new Dimension(txtFilter.getWidth(), (int) (btnBrowse.getPreferredSize().getHeight() / 2))));
         jpanFolderLabel.add(new JLabel("File filter: "));
         jpanFolderLabel.add(Box.createRigidArea(new Dimension(txtFilter.getWidth(), 5)));
         jpanFolderLabel.add(new JLabel("Checking interval: "));
@@ -333,7 +336,7 @@ public class SettingsDialog extends JDialog {
     /**
      * This method will construct the buttonpanel.
      *
-     * @return  JPanel  with the buttons.
+     * @return JPanel  with the buttons.
      */
     private JPanel getButtonPanel() {
         JPanel buttons = new JPanel();
@@ -392,19 +395,19 @@ public class SettingsDialog extends JDialog {
 
         // Do validations on FTP sepcific components.
         String host = txtHost.getText().trim();
-        if(host == null || host.equals("")) {
+        if (host == null || host.equals("")) {
             this.fillOutComponentWarning("hostname");
             txtHost.requestFocus();
             return;
         }
         String user = txtUser.getText().trim();
-        if(user == null || user.equals("")) {
+        if (user == null || user.equals("")) {
             this.fillOutComponentWarning("username");
             txtUser.requestFocus();
             return;
         }
         String password = txtPassword.getText().trim();
-        if(password == null || password.equals("")) {
+        if (password == null || password.equals("")) {
             this.fillOutComponentWarning("password");
             txtPassword.requestFocus();
             return;
@@ -418,7 +421,8 @@ public class SettingsDialog extends JDialog {
             ftp.testFTPConnection();
             messages.add(main + "was successful!");
             messages.add("FTP server settings are correct.");
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
             messageType = JOptionPane.ERROR_MESSAGE;
             messages.add(main + "failed!");
             messages.add("Error message was '" + ioe.getMessage() + "'");
@@ -445,13 +449,13 @@ public class SettingsDialog extends JDialog {
 
         // Do validations on DB sepcific components.
         String driver = txtDriver.getText().trim();
-        if(driver == null || driver.equals("")) {
+        if (driver == null || driver.equals("")) {
             this.fillOutComponentWarning("Driver");
             txtDriver.requestFocus();
             return;
         }
         String url = txtUrl.getText().trim();
-        if(url == null || url.equals("")) {
+        if (url == null || url.equals("")) {
             this.fillOutComponentWarning("URL");
             txtUrl.requestFocus();
             return;
@@ -460,12 +464,12 @@ public class SettingsDialog extends JDialog {
         String dbpassword = txtDBPassword.getText().trim();
 
         // Try the connection.
-        String main = "Test for database '" + url + (dbuser.equals("")?"' ":"' with user '" + dbuser + "' ");
+        String main = "Test for database '" + url + (dbuser.equals("") ? "' " : "' with user '" + dbuser + "' ");
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         try {
-            Driver d = (Driver)Class.forName(driver).newInstance();
+            Driver d = (Driver) Class.forName(driver).newInstance();
             Properties props = new Properties();
-            if(!dbuser.equals("")) {
+            if (!dbuser.equals("")) {
                 props.put("user", dbuser);
                 props.put("password", dbpassword);
             }
@@ -473,7 +477,8 @@ public class SettingsDialog extends JDialog {
             c.close();
             messages.add(main + "was successful!");
             messages.add("DB connection settings are correct.");
-        } catch(Exception e) {
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             messageType = JOptionPane.ERROR_MESSAGE;
             messages.add(main + "failed!");
             messages.add("Error message was '" + e.getMessage() + "'");
@@ -497,68 +502,73 @@ public class SettingsDialog extends JDialog {
     private void okPressed() {
         // Do validations on all components.
         String host = txtHost.getText().trim();
-        if(host == null || host.equals("")) {
+        if (host == null || host.equals("")) {
             this.fillOutComponentWarning("hostname");
             txtHost.requestFocus();
             return;
         }
         String user = txtUser.getText().trim();
-        if(user == null || user.equals("")) {
+        if (user == null || user.equals("")) {
             this.fillOutComponentWarning("username");
             txtUser.requestFocus();
             return;
         }
         String password = txtPassword.getText().trim();
-        if(password == null || password.equals("")) {
+        if (password == null || password.equals("")) {
             this.fillOutComponentWarning("password");
             txtPassword.requestFocus();
             return;
         }
         String driver = txtDriver.getText().trim();
-        if(chkUSeDB.isSelected() && (driver == null || driver.equals(""))) {
+        if (chkUSeDB.isSelected() && (driver == null || driver.equals(""))) {
             this.fillOutComponentWarning("Driver");
             txtDriver.requestFocus();
             return;
         }
         String url = txtUrl.getText().trim();
-        if(chkUSeDB.isSelected() && (url == null || url.equals(""))) {
+        if (chkUSeDB.isSelected() && (url == null || url.equals(""))) {
             this.fillOutComponentWarning("URL");
             txtUrl.requestFocus();
             return;
         }
         String folder = txtFolder.getText().trim();
         File f = null;
-        if(folder == null || folder.equals("")) {
+        if (folder == null || folder.equals("")) {
             this.fillOutComponentWarning("target folder");
             txtFolder.requestFocus();
             return;
         } else {
             // Check for existance, and see that it is in fact a folder!
             f = new File(folder);
-            if(!f.exists()) {
-                JOptionPane.showMessageDialog(this, "The folder you specified (" + folder + ") does not exist!", "Folder does not exist!", JOptionPane.ERROR_MESSAGE);
+            if (!f.exists()) {
+                String lMessage = "The folder you specified (" + folder + ") does not exist!";
+                logger.error(lMessage);
+                JOptionPane.showMessageDialog(this, lMessage, "Folder does not exist!", JOptionPane.ERROR_MESSAGE);
                 txtFolder.requestFocus();
                 return;
-            } else if(!f.isDirectory()) {
-                JOptionPane.showMessageDialog(this, "The folder you specified (" + folder + ") is not a directory!", "Folder is not a directory!", JOptionPane.ERROR_MESSAGE);
+            } else if (!f.isDirectory()) {
+                String lMessage = "The folder you specified (" + folder + ") is not a directory!";
+                logger.error(lMessage);
+                JOptionPane.showMessageDialog(this, lMessage, "Folder is not a directory!", JOptionPane.ERROR_MESSAGE);
                 txtFolder.requestFocus();
                 return;
             }
         }
         String filter = txtFilter.getText().trim();
-        if(filter.equals("")) {
+        if (filter.equals("")) {
             filter = null;
         }
         String interval = txtInterval.getText().trim();
         long check = 0l;
-        if(interval == null || interval.equals("")) {
+        if (interval == null || interval.equals("")) {
             this.fillOutComponentWarning("checking interval");
             txtInterval.requestFocus();
             return;
         } else {
             try {
                 check = Long.parseLong(interval);
-            } catch(Exception e) {
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
                 JOptionPane.showMessageDialog(this, "The interval you specified (" + interval + ") is not a whole number!", "Checking interval is not a whole number!", JOptionPane.ERROR_MESSAGE);
                 txtInterval.requestFocus();
                 return;
@@ -568,7 +578,7 @@ public class SettingsDialog extends JDialog {
         // All components survived their validations.
         // Now set these components on the main GUI.
         iParent.setFTPParams(host, user, password, chkMergeFiles.isSelected());
-        if(chkUSeDB.isSelected()) {
+        if (chkUSeDB.isSelected()) {
             iParent.setDBParams(driver, url, txtDBUser.getText().trim(), txtDBPassword.getText().trim());
         }
         iParent.setMonitoringParams(f, filter, check);
@@ -594,12 +604,13 @@ public class SettingsDialog extends JDialog {
     }
 
     /**
-     * This method displays an error message about the necessity of filling out
-     * the specified component first.
+     * This method displays an error message about the necessity of filling out the specified component first.
      *
-     * @param   aComponent  String with the description of the data for the component that needs to be filled out.
+     * @param aComponent String with the description of the data for the component that needs to be filled out.
      */
     private void fillOutComponentWarning(String aComponent) {
-        JOptionPane.showMessageDialog(this, "You need to fill out the " + aComponent + " first!", aComponent + " not filled out!", JOptionPane.ERROR_MESSAGE);
+        String lMessage = "You need to fill out the " + aComponent + " first!";
+        logger.error(lMessage);
+        JOptionPane.showMessageDialog(this, lMessage, aComponent + " not filled out!", JOptionPane.ERROR_MESSAGE);
     }
 }

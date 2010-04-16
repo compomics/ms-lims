@@ -5,6 +5,8 @@
  * Time: 14:55:49
  */
 package com.compomics.mslims.util.interfaces;
+
+import org.apache.log4j.Logger;
 /*
  * CVS information:
  *

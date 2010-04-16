@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.sequence;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.mascot.MascotSequenceRetriever;
 
 import java.io.BufferedReader;
@@ -23,13 +25,14 @@ import java.util.Vector;
  */
 
 /**
- * This class allows the user to obtain a sequence region from a protein,
- * based on an accession number and a peptide of that protein.
- * E.G., when searching for patterns around identified sequences.
+ * This class allows the user to obtain a sequence region from a protein, based on an accession number and a peptide of
+ * that protein. E.G., when searching for patterns around identified sequences.
  *
  * @author Lennart Martens
  */
 public class PeptideSequenceRegionRetriever {
+    // Class specific log4j logger for PeptideSequenceRegionRetriever instances.
+    private static Logger logger = Logger.getLogger(PeptideSequenceRegionRetriever.class);
 
     /**
      * The MascotSequenceRetriever that will return all FASTA sequences.
@@ -37,60 +40,57 @@ public class PeptideSequenceRegionRetriever {
     MascotSequenceRetriever msr = null;
 
     /**
-     * This constructor allows the creation of a PeptideSequenceRegionRetriever
-     * through the specification of a Mascot server hostname and an optional database name.
+     * This constructor allows the creation of a PeptideSequenceRegionRetriever through the specification of a Mascot
+     * server hostname and an optional database name.
      *
-     * @param   aHostname   String with the hostname for the Mascot server machine.
-     * @param   aDatabase   String with the optional Mascot database name.
-     *                      If this is absent, it will be autodetected.
+     * @param aHostname String with the hostname for the Mascot server machine.
+     * @param aDatabase String with the optional Mascot database name. If this is absent, it will be autodetected.
      */
     public PeptideSequenceRegionRetriever(String aHostname, String aDatabase) {
         msr = new MascotSequenceRetriever(aHostname, aDatabase);
     }
 
     /**
-     * This method allows the caller to retrieve a single sequence region
-     * based on the SequenceRegion passed in.
+     * This method allows the caller to retrieve a single sequence region based on the SequenceRegion passed in.
      *
-     * @param   aRegion     SequenceRegion to query with.
-     * @return  SequenceRegion    with the filled-in SequenceRegion.
-     * @exception   IOException when reading the database failed.
+     * @param aRegion SequenceRegion to query with.
+     * @return SequenceRegion    with the filled-in SequenceRegion.
+     * @throws IOException when reading the database failed.
      */
     public SequenceRegion retrieveSequenceRegion(SequenceRegion aRegion) throws IOException {
         Vector v = new Vector(1);
         v.add(aRegion);
         v = this.retrieveSequenceRegions(v);
-        SequenceRegion result = (SequenceRegion)v.get(0);
+        SequenceRegion result = (SequenceRegion) v.get(0);
         return result;
     }
 
     /**
-     * This method allows the caller to retrieve a set of sequence regions
-     * based on the SequenceRegions contained in the Vector.
+     * This method allows the caller to retrieve a set of sequence regions based on the SequenceRegions contained in the
+     * Vector.
      *
-     * @param   aRegions    Vector with the SequenceRegion instances to
-     *                      query with.
-     * @return  Vector    with the filled-in SequenceRegions in the Vector.
-     * @exception   IOException when reading the database failed.
+     * @param aRegions Vector with the SequenceRegion instances to query with.
+     * @return Vector    with the filled-in SequenceRegions in the Vector.
+     * @throws IOException when reading the database failed.
      */
-    public Vector retrieveSequenceRegions(Vector aRegions) throws IOException{
+    public Vector retrieveSequenceRegions(Vector aRegions) throws IOException {
         int liSize = aRegions.size();
         HashMap all = new HashMap(liSize);
-        for(int i = 0; i < liSize; i++) {
+        for (int i = 0; i < liSize; i++) {
             Object o = aRegions.elementAt(i);
-            if(o instanceof SequenceRegion) {
-                SequenceRegion s = (SequenceRegion)o;
+            if (o instanceof SequenceRegion) {
+                SequenceRegion s = (SequenceRegion) o;
                 s.setQueried(true);
                 // Chances are a single accession number is present more than once in
                 // the query. We should allow for this! So first check whether it is present
                 // already.
-                if(all.containsKey(s.getAccession())) {
+                if (all.containsKey(s.getAccession())) {
                     // See if a subdivision has been made.
                     Object check = all.get(s.getAccession());
-                    if(check instanceof Integer) {
+                    if (check instanceof Integer) {
                         // Already a subdivision in progress.
                         // Find out how deep.
-                        int count = ((Integer)check).intValue();
+                        int count = ((Integer) check).intValue();
                         // Add it to the end.
                         count++;
                         all.put(s.getAccession() + "§" + count, s);
@@ -116,10 +116,10 @@ public class PeptideSequenceRegionRetriever {
         }
         // Get all results.
         Iterator iter = all.keySet().iterator();
-        while(iter.hasNext()) {
-            String accession = (String)iter.next();
+        while (iter.hasNext()) {
+            String accession = (String) iter.next();
             int start = accession.indexOf("§");
-            if(start  >= 0) {
+            if (start >= 0) {
                 accession = accession.substring(0, start);
             }
             String sequence = null;
@@ -129,10 +129,10 @@ public class PeptideSequenceRegionRetriever {
                 BufferedReader br = new BufferedReader(sr);
                 String line = null;
                 StringBuffer sb = new StringBuffer();
-                while((line=br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     line = line.trim();
                     // Skip all headers.
-                    if(line.startsWith(">")) {
+                    if (line.startsWith(">")) {
                         continue;
                     }
                     // Store sequence.
@@ -141,64 +141,63 @@ public class PeptideSequenceRegionRetriever {
                 br.close();
                 sr.close();
                 sequence = sb.toString();
-            } catch(IOException ioe) {
-                System.err.println("\nAccession number '" + accession + "' did not yield any hits. It was skipped.");
-                ioe.printStackTrace();
+            } catch (IOException ioe) {
+                logger.error("\nAccession number '" + accession + "' did not yield any hits. It was skipped.");
+                logger.error(ioe.getMessage(), ioe);
                 continue;
             }
             Object stored = all.get(accession);
-                // The item can either be a SequenceRegion alone,
-                // or a collection of SequenceRegions (different pieces of
-                // sequences yet with the same accession number).
-                if(stored instanceof SequenceRegion) {
-                    this.processRegionInProtein((SequenceRegion)stored, sequence);
-                } else {
-                    // Find out how many similar ones we have.
-                    int count = ((Integer)stored).intValue();
-                    // Simply cycle them all.
-                    for(int i=1;i<=count;i++) {
-                        this.processRegionInProtein((SequenceRegion)all.get(accession + "§" + i), sequence);
-                    }
+            // The item can either be a SequenceRegion alone,
+            // or a collection of SequenceRegions (different pieces of
+            // sequences yet with the same accession number).
+            if (stored instanceof SequenceRegion) {
+                this.processRegionInProtein((SequenceRegion) stored, sequence);
+            } else {
+                // Find out how many similar ones we have.
+                int count = ((Integer) stored).intValue();
+                // Simply cycle them all.
+                for (int i = 1; i <= count; i++) {
+                    this.processRegionInProtein((SequenceRegion) all.get(accession + "§" + i), sequence);
                 }
+            }
         }
 
         return aRegions;
     }
 
     /**
-     * This method does the real searching and retrieving per query sequence and protein sequence.
-     * The parameters are changed due to a pass by reference... Don't mess with this unless
-     * you are very sure what you're doing.
-     * This is NOT a very good piece of Java code!
+     * This method does the real searching and retrieving per query sequence and protein sequence. The parameters are
+     * changed due to a pass by reference... Don't mess with this unless you are very sure what you're doing. This is
+     * NOT a very good piece of Java code!
      *
-     * @param   aRegion SequenceRegion to update after being queried.
-     * @param   aSequence String with the sequence we want to query.
+     * @param aRegion   SequenceRegion to update after being queried.
+     * @param aSequence String with the sequence we want to query.
      */
     private void processRegionInProtein(SequenceRegion aRegion, String aSequence) {
         int location = aSequence.indexOf(aRegion.getQuerySequence());
-        if(location<0) {
+        if (location < 0) {
             aRegion.setFound(false);
         } else {
             aRegion.setFound(true);
             // N-terminal fragment.
-            int startLoc = location-aRegion.getNterminalResidueCount();
-            if(startLoc < 0) {
+            int startLoc = location - aRegion.getNterminalResidueCount();
+            if (startLoc < 0) {
                 startLoc = 0;
             }
             String ntermAdd = aSequence.substring(startLoc, location).trim();
-            if(ntermAdd.startsWith("\n")) {
+            if (ntermAdd.startsWith("\n")) {
                 ntermAdd = ntermAdd.substring(1);
             }
             aRegion.setNterminalAddition(ntermAdd);
             // C-terminal fragment.
             startLoc = location + aRegion.getQuerySequence().length();
             int endLoc = startLoc + aRegion.getCterminalResidueCount();
-            if(endLoc > aSequence.length()) {
+            if (endLoc > aSequence.length()) {
                 endLoc = aSequence.length();
             }
             String ctermAdd = aSequence.substring(startLoc, endLoc).trim();
-            if(ctermAdd.endsWith("\n")) {
-                ctermAdd = ctermAdd.substring(0, ctermAdd.length()-1);
+            if (ctermAdd.endsWith("\n")) {
+                ctermAdd = ctermAdd.substring(0, ctermAdd.length() - 1);
             }
             aRegion.setCterminalAddition(ctermAdd);
         }

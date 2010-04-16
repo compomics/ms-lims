@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.table;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.table.renderers.ErrorObject;
 import com.compomics.mslims.gui.tree.MascotSearch;
 
@@ -20,13 +22,14 @@ import java.awt.*;
  */
 
 /**
- * This class provides a TableModel implementation that is based on
- * Mascot Searches.
- * 
+ * This class provides a TableModel implementation that is based on Mascot Searches.
+ *
  * @author Lennart Martens
  * @version $Id: MascotSearchTableModel.java,v 1.4 2005/02/03 14:27:45 lennart Exp $
  */
 public class MascotSearchTableModel extends AbstractTableModel {
+    // Class specific log4j logger for MascotSearchTableModel instances.
+    private static Logger logger = Logger.getLogger(MascotSearchTableModel.class);
 
     /**
      * The MascotSearch[] with all the Mascot searches to display on the GUI.
@@ -49,16 +52,15 @@ public class MascotSearchTableModel extends AbstractTableModel {
 
 
     /**
-     * Returns a default name for the column using spreadsheet conventions:
-     * A, B, C, ... Z, AA, AB, etc.  If <code>column</code> cannot be found,
-     * returns an empty string.
+     * Returns a default name for the column using spreadsheet conventions: A, B, C, ... Z, AA, AB, etc.  If
+     * <code>column</code> cannot be found, returns an empty string.
      *
      * @param column the column being queried
      * @return a string containing the default name of <code>column</code>
      */
     public String getColumnName(int column) {
         String result = null;
-        switch(column) {
+        switch (column) {
             case TITLE:
                 result = "Title";
                 break;
@@ -88,8 +90,7 @@ public class MascotSearchTableModel extends AbstractTableModel {
     }
 
     /**
-     * This contructor builds a TableModel based on the MascotSearch instances
-     * provided.
+     * This contructor builds a TableModel based on the MascotSearch instances provided.
      *
      * @param aSearches MascotSearch[] with the searches.
      */
@@ -108,9 +109,8 @@ public class MascotSearchTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of columns in the model. A
-     * <code>JTable</code> uses this method to determine how many columns it
-     * should create and display by default.
+     * Returns the number of columns in the model. A <code>JTable</code> uses this method to determine how many columns
+     * it should create and display by default.
      *
      * @return the number of columns in the model
      * @see #getRowCount
@@ -120,35 +120,32 @@ public class MascotSearchTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of rows in the model. A
-     * <code>JTable</code> uses this method to determine how many rows it
-     * should display.  This method should be quick, as it
-     * is called frequently during rendering.
+     * Returns the number of rows in the model. A <code>JTable</code> uses this method to determine how many rows it
+     * should display.  This method should be quick, as it is called frequently during rendering.
      *
      * @return the number of rows in the model
      * @see #getColumnCount
      */
     public int getRowCount() {
         int colCount = 0;
-        if(iSearches != null) {
+        if (iSearches != null) {
             colCount = this.iSearches.length;
         }
         return colCount;
     }
 
     /**
-     * Returns the value for the cell at <code>columnIndex</code> and
-     * <code>rowIndex</code>. If the column index is -1, the MascotSearch instance in this
-     * row is returned instead.
+     * Returns the value for the cell at <code>columnIndex</code> and <code>rowIndex</code>. If the column index is -1,
+     * the MascotSearch instance in this row is returned instead.
      *
-     * @param	rowIndex	the row whose value is to be queried
-     * @param	columnIndex the column whose value is to be queried
-     * @return	the value Object at the specified cell
+     * @param    rowIndex    the row whose value is to be queried
+     * @param    columnIndex the column whose value is to be queried
+     * @return the value Object at the specified cell
      */
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object result = null;
-        if(this.iSearches != null) {
-            switch(columnIndex) {
+        if (this.iSearches != null) {
+            switch (columnIndex) {
                 case REPORT_INSTANCE:
                     result = iSearches[rowIndex];
                     break;
@@ -173,13 +170,13 @@ public class MascotSearchTableModel extends AbstractTableModel {
             }
         }
         // Correct for 'null' or empty String values.
-        if(result == null || result.equals("")) {
+        if (result == null || result.equals("")) {
             result = "<No data>";
         }
         // Error rows need to become ErrorObjects.
-        if(columnIndex != REPORT_INSTANCE && iSearches[rowIndex].isError()) {
+        if (columnIndex != REPORT_INSTANCE && iSearches[rowIndex].isError()) {
             result = new ErrorObject("" + result, "This search produced an error and will not be parsed by IdentificationGUI!", ERROR_FOREGROUND, ERROR_BACKGROUND);
-        } else if(columnIndex != REPORT_INSTANCE && iSearches[rowIndex].isWarning()) {
+        } else if (columnIndex != REPORT_INSTANCE && iSearches[rowIndex].isWarning()) {
             result = new ErrorObject("" + result, "A warning was generated for this search. It will be parsed but certain data may be missing.", WARNING_FOREGROUND, WARNING_BACKGROUND);
         }
         return result;

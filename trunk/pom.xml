@@ -11,7 +11,11 @@
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.2.1</version.number>
+        <version.number>7.3</version.number>
+        <logging.level.default>ALL</logging.level.default>
+        <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
+        <logging.file.max.size>5000KB</logging.file.max.size>
+        <logging.pattern>[%d{dd-MMM-yyyy HH:mm:ss} - %p] "%m" (%C:%L)%n</logging.pattern>
     </properties>
 
     <!-- Licence -->
@@ -158,6 +162,7 @@
                             <resources>
                                 <resource>
                                     <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
                                 </resource>
                             </resources>
                         </configuration>
@@ -275,7 +280,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>utilities</artifactId>
-            <version>3.0.2</version>
+            <version>3.0.3</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the Mascot Datfile JAR file.
@@ -283,7 +288,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.
@@ -319,6 +324,17 @@
             <version>1.3.1</version>
             <type>jar</type>
         </dependency>
+
+
+        <!-- This project depends on the apache log4j framework.
+          -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.12</version>
+            <type>jar</type>
+        </dependency>
+
         <!-- This project depends on the commons-logging JAR file.
           -->
         <dependency>

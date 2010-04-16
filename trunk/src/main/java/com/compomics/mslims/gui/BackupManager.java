@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
@@ -17,8 +19,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -39,6 +39,8 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class BackupManager extends JFrame implements Connectable, Flamable {
+    // Class specific log4j logger for BackupManager instances.
+    private static Logger logger = Logger.getLogger(BackupManager.class);
 
     /**
      * This int holds the code for the storage medium to use.
@@ -166,7 +168,7 @@ public class BackupManager extends JFrame implements Connectable, Flamable {
         } else {
             messages = new String[]{"Fatal error encountered in application!", aThrowable.getMessage(), "\n"};
         }
-        aThrowable.printStackTrace();
+        logger.error(aThrowable.getMessage(), aThrowable);
         JFrame tempFrame = new JFrame();
         JOptionPane.showMessageDialog(tempFrame, messages, "Application unexpectedly terminated!", JOptionPane.ERROR_MESSAGE);
         tempFrame.dispose();
@@ -233,7 +235,7 @@ public class BackupManager extends JFrame implements Connectable, Flamable {
      * This method calls upon a GUI component to handle the connection.
      */
     private void getConnection() {
-        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
 
         ConnectionDialog cd = new ConnectionDialog(this, this, "Database connection for BackupManager", lConnectionProperties);
         cd.setVisible(true);
@@ -406,6 +408,7 @@ public class BackupManager extends JFrame implements Connectable, Flamable {
             iAssignments = new HashMap();
         } catch (SQLException sqle) {
             JOptionPane.showMessageDialog(this, new String[]{"Unable to store the assignments in the DB:", sqle.getMessage()}, "Unable to store backup information!", JOptionPane.ERROR_MESSAGE);
+            logger.error(sqle.getMessage(), sqle);
         } catch (Throwable t) {
             this.passHotPotato(t, "Unable to store backup information!");
         }
@@ -515,9 +518,9 @@ public class BackupManager extends JFrame implements Connectable, Flamable {
         if (this.iConn != null) {
             try {
                 this.iConn.close();
-                System.out.println("DB connection closed.");
+                logger.info("DB connection closed.");
             } catch (SQLException sqle) {
-                sqle.printStackTrace();
+                logger.error(sqle.getMessage(), sqle);
             }
         }
         this.dispose();

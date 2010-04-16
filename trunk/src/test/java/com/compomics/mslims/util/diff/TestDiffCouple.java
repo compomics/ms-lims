@@ -6,9 +6,10 @@
  */
 package com.compomics.mslims.util.diff;
 
+import org.apache.log4j.Logger;
+
 import junit.TestCaseLM;
 import junit.framework.Assert;
-import com.compomics.mslims.util.diff.DiffCouple;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,10 +29,13 @@ import java.util.Iterator;
  * @see com.compomics.mslims.util.diff.DiffCouple
  */
 public class TestDiffCouple extends TestCaseLM {
+    // Class specific log4j logger for TestDiffCouple instances.
+    private static Logger logger = Logger.getLogger(TestDiffCouple.class);
 
     public TestDiffCouple() {
         this("This class provides the test scenario for the DiffCouple class.");
     }
+
     public TestDiffCouple(String aName) {
         super(aName);
     }
@@ -202,7 +206,7 @@ public class TestDiffCouple extends TestCaseLM {
         Assert.assertEquals(98, dc.isOutlier(stats[0], stats[1]));
         Collection children = dc.getMergedEntries();
         for (Iterator lIterator = children.iterator(); lIterator.hasNext();) {
-            DiffCouple lDiffCouple = (DiffCouple)lIterator.next();
+            DiffCouple lDiffCouple = (DiffCouple) lIterator.next();
             Assert.assertEquals(0, lDiffCouple.isOutlier(stats[0], stats[1]));
         }
 

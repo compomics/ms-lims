@@ -1,5 +1,7 @@
 package com.compomics.mslims.db.conversiontool.implementations;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Instrument;
 import com.compomics.mslims.db.conversiontool.interfaces.DBConverterStep;
 
@@ -14,6 +16,8 @@ import java.sql.SQLException;
  * This class
  */
 public class StorageEngine_Package_Change_StepImpl implements DBConverterStep {
+    // Class specific log4j logger for StorageEngine_Package_Change_StepImpl instances.
+    private static Logger logger = Logger.getLogger(StorageEngine_Package_Change_StepImpl.class);
 
     public StorageEngine_Package_Change_StepImpl() {
         // Empty constructor.
@@ -51,13 +55,12 @@ public class StorageEngine_Package_Change_StepImpl implements DBConverterStep {
                 }
             }
 
-            System.out.println(
-                    "StorageEngine_Package_Change dbconverter step has successfully updated the " +
-                            "classname of the StorageEngine in " + lInstrumentCounter + " instruments");
+            logger.info("StorageEngine_Package_Change dbconverter step has successfully updated the " +
+                    "classname of the StorageEngine in " + lInstrumentCounter + " instruments");
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
 

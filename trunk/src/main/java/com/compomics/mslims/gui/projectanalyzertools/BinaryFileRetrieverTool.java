@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.projectanalyzertools;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Binfile;
 import com.compomics.mslims.db.accessors.Filedescriptor;
 import com.compomics.mslims.db.accessors.Project;
@@ -31,13 +33,15 @@ import java.util.HashMap;
  */
 
 /**
- * This class implements a ProjectAnalyzerTool that allows retrieval of the stored binary files associated with
- * a specified project.
+ * This class implements a ProjectAnalyzerTool that allows retrieval of the stored binary files associated with a
+ * specified project.
  *
  * @author Lennart Martens
  * @version $Id: BinaryFileRetrieverTool.java,v 1.3 2007/04/03 11:32:43 lennart Exp $
  */
 public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAnalyzerTool {
+    // Class specific log4j logger for BinaryFileRetrieverTool instances.
+    private static Logger logger = Logger.getLogger(BinaryFileRetrieverTool.class);
 
     /**
      * The parent that started this application.
@@ -114,8 +118,8 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
     }
 
     /**
-     * This method represents the 'command-pattern' design of the ProjectAnalyzerTool.
-     * It will actually allow the tool to run.
+     * This method represents the 'command-pattern' design of the ProjectAnalyzerTool. It will actually allow the tool
+     * to run.
      *
      * @param aParent     ProjectAnalyzer with the parent that launched this tool.
      * @param aToolName   String with the name for the tool.
@@ -135,8 +139,8 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
         this.getFileDescriptors();
         this.getBinfiles();
         // See if we have anything to display at all.
-        if(iBinfiles == null || iBinfiles.length == 0) {
-            JOptionPane.showMessageDialog(this, new String[] {"No binary files in the database for this project.", "Exiting Binary file retrieval Tool."}, "No binary files found.", JOptionPane.WARNING_MESSAGE);
+        if (iBinfiles == null || iBinfiles.length == 0) {
+            JOptionPane.showMessageDialog(this, new String[]{"No binary files in the database for this project.", "Exiting Binary file retrieval Tool."}, "No binary files found.", JOptionPane.WARNING_MESSAGE);
             this.close();
             return;
         }
@@ -168,7 +172,7 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
      * This method will be called when the tool should show itself on the foreground and request the focus.
      */
     public void setActive() {
-        if(this.getState() == java.awt.Frame.ICONIFIED){
+        if (this.getState() == java.awt.Frame.ICONIFIED) {
             this.setState(java.awt.Frame.NORMAL);
         }
 
@@ -406,21 +410,21 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
     }
 
     /**
-     * This method retrieves all binfile entries for the current project,
-     * albeit lazily cached (actual bytes are not yet retrieved).
+     * This method retrieves all binfile entries for the current project, albeit lazily cached (actual bytes are not yet
+     * retrieved).
      */
     private void getBinfiles() {
         try {
             iBinfiles = Binfile.getAllBinfilesLazy(iConnection, iProject.getProjectid());
-        } catch(SQLException sqle) {
-            JOptionPane.showMessageDialog(this, new String[] {"Unable to load binary files from the database: " + sqle.getMessage(), "Exiting Binary file retrieval Tool."}, "Unable to load binary files.", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
+            JOptionPane.showMessageDialog(this, new String[]{"Unable to load binary files from the database: " + sqle.getMessage(), "Exiting Binary file retrieval Tool."}, "Unable to load binary files.", JOptionPane.ERROR_MESSAGE);
             this.close();
         }
     }
 
     /**
-     * This method reads all known file descriptors from the DB and stores them in the
-     * 'iFileDescriptors' HashMap.
+     * This method reads all known file descriptors from the DB and stores them in the 'iFileDescriptors' HashMap.
      */
     private void getFileDescriptors() {
         try {
@@ -430,7 +434,7 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
                 Filedescriptor lFiledescriptor = temp[i];
                 iFiledescriptors.put(new Long(lFiledescriptor.getFiledescriptorid()), lFiledescriptor);
             }
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             passHotPotato(sqle, "Unable to read file descriptors from the database: " + sqle.getMessage());
         }
     }
@@ -454,7 +458,7 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     saveTriggered();
                 }
             }
@@ -473,7 +477,7 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     close();
                 }
             }
@@ -496,22 +500,23 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
     private void saveTriggered() {
         // Firstly, load the actual binary file from the DB (remember that we
         //  were displaying a lazily cached version).
-        Binfile bf = (Binfile)cmbBinfile.getSelectedItem();
+        Binfile bf = (Binfile) cmbBinfile.getSelectedItem();
         JFrame tempFrame = new JFrame("Loading file...");
         JLabel label = new JLabel("Loading the file from the database...", JLabel.CENTER);
         JPanel jpanLabel = new JPanel(new BorderLayout());
         jpanLabel.add(label, BorderLayout.CENTER);
         tempFrame.getContentPane().add(jpanLabel, BorderLayout.CENTER);
-        tempFrame.setSize((int)(label.getPreferredSize().width*1.5), label.getPreferredSize().height*5);
-        tempFrame.setLocation(this.getLocation().x+((this.getWidth()-tempFrame.getWidth())/2), this.getLocation().y+((this.getHeight()-tempFrame.getHeight())/2));
+        tempFrame.setSize((int) (label.getPreferredSize().width * 1.5), label.getPreferredSize().height * 5);
+        tempFrame.setLocation(this.getLocation().x + ((this.getWidth() - tempFrame.getWidth()) / 2), this.getLocation().y + ((this.getHeight() - tempFrame.getHeight()) / 2));
         tempFrame.setEnabled(false);
         tempFrame.setVisible(true);
         // Force-paint the label.
         label.paint(jpanLabel.getGraphics());
         try {
             bf.loadBLOB(iConnection);
-        } catch(SQLException sqle) {
-            JOptionPane.showMessageDialog(this, new String[] {"Unable to retrieve file from the database:", sqle.getMessage(), "Could not complete save operation!"}, "File retrieval failed!", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
+            JOptionPane.showMessageDialog(this, new String[]{"Unable to retrieve file from the database:", sqle.getMessage(), "Could not complete save operation!"}, "File retrieval failed!", JOptionPane.ERROR_MESSAGE);
             return;
         } finally {
             tempFrame.setVisible(false);
@@ -521,7 +526,7 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
         // Now find out where to put it.
         boolean lbContinue = true;
         String selectedLocation = "/";
-        while(lbContinue) {
+        while (lbContinue) {
             JFileChooser jfc = new JFileChooser(selectedLocation);
             jfc.setDialogType(JFileChooser.CUSTOM_DIALOG);
             jfc.setApproveButtonText("Select output location");
@@ -530,24 +535,25 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
             jfc.setDialogTitle("Select output location");
             jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             int value = jfc.showDialog(BinaryFileRetrieverTool.this, "Select output location");
-            if(value == JFileChooser.APPROVE_OPTION) {
+            if (value == JFileChooser.APPROVE_OPTION) {
                 try {
                     File selection = jfc.getSelectedFile();
                     selectedLocation = selection.getAbsolutePath();
                     String filename = bf.getFilename();
                     File output = new File(selection, filename);
-                    if(output.exists()) {
-                        JOptionPane.showMessageDialog(this, new String[] {"Output object '" + output.getAbsolutePath() + "' exists,", "please provide a new output location!"}, "Output object exists!", JOptionPane.WARNING_MESSAGE);
+                    if (output.exists()) {
+                        JOptionPane.showMessageDialog(this, new String[]{"Output object '" + output.getAbsolutePath() + "' exists,", "please provide a new output location!"}, "Output object exists!", JOptionPane.WARNING_MESSAGE);
                         continue;
                     } else {
                         bf.saveBinfileToDisk(selection);
                         JOptionPane.showMessageDialog(this, "Wrote unzipped contents of binary file to: " + output.getAbsolutePath(), "File written.", JOptionPane.INFORMATION_MESSAGE);
                         lbContinue = false;
                     }
-                } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(this, new String[] {"Unable to write file to '" + selectedLocation + "':", ioe.getMessage(), "Please provide a new output location!"}, "Unable to write object!", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
+                    JOptionPane.showMessageDialog(this, new String[]{"Unable to write file to '" + selectedLocation + "':", ioe.getMessage(), "Please provide a new output location!"}, "Unable to write object!", JOptionPane.ERROR_MESSAGE);
                 }
-            } else if(value == JFileChooser.CANCEL_OPTION) {
+            } else if (value == JFileChooser.CANCEL_OPTION) {
                 lbContinue = false;
             }
         }
@@ -557,13 +563,13 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
      * This method initiliazes all the detailed fields on the GUI.
      */
     private void updateDetails() {
-        Binfile bf = (Binfile)cmbBinfile.getSelectedItem();
+        Binfile bf = (Binfile) cmbBinfile.getSelectedItem();
         // The file descriptor stuff.
         long fdID = bf.getL_filedescriptionid();
-        Filedescriptor fd = (Filedescriptor)iFiledescriptors.get(new Long(fdID));
+        Filedescriptor fd = (Filedescriptor) iFiledescriptors.get(new Long(fdID));
         txtFDLabel.setText(fd.getShort_label());
         txtFDDescription.setText(fd.getDescription());
-        if(txtFDDescription.getText() != null && txtFDDescription.getText().length() > 0) {
+        if (txtFDDescription.getText() != null && txtFDDescription.getText().length() > 0) {
             txtFDDescription.setCaretPosition(1);
         }
         // The binfile details.
@@ -575,7 +581,7 @@ public class BinaryFileRetrieverTool extends FlamableJFrame implements ProjectAn
         txtCreationdate.setText(iSDF.format(bf.getCreationdate()));
         txtModificationdate.setText(iSDF.format(bf.getModificationdate()));
         txtComments.setText(bf.getComments());
-        if(txtComments.getText() != null && txtComments.getText().length() > 0) {
+        if (txtComments.getText() != null && txtComments.getText().length() > 0) {
             txtComments.setCaretPosition(1);
         }
     }

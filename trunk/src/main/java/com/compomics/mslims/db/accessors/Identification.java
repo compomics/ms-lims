@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +30,8 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class Identification extends IdentificationTableAccessor {
+    // Class specific log4j logger for Identification instances.
+    private static Logger logger = Logger.getLogger(Identification.class);
 
     /**
      * Temporary storage of spectrumfilename (primarily for IdentificationGUI stuff)
@@ -80,7 +84,7 @@ public class Identification extends IdentificationTableAccessor {
      */
     public Identification(ResultSet aRS) throws SQLException {
         this.iIdentificationid = aRS.getLong(1);
-        this.iL_spectrumfileid = aRS.getLong(2);
+        this.iL_spectrumid = aRS.getLong(2);
         this.iL_datfileid = aRS.getLong(3);
         this.iDatfile_query = aRS.getLong(4);
         this.iAccession = aRS.getString(5);
@@ -160,7 +164,7 @@ public class Identification extends IdentificationTableAccessor {
         Vector temp = new Vector();
 
         PreparedStatement ps =
-                aConn.prepareStatement("select i.* from identification as i, spectrumfile as f where i.accession = ? and i.start <= ? and i.end >= ? and i.l_spectrumfileid = f.spectrumfileid and f.l_projectid=?");
+                aConn.prepareStatement("select i.* from identification as i, spectrum as f where i.accession = ? and i.start <= ? and i.end >= ? and i.l_spectrumid = f.spectrumid and f.l_projectid=?");
         ps.setString(1, aAccession);
         ps.setInt(2, aLocation);
         ps.setInt(3, aLocation);
@@ -209,7 +213,7 @@ public class Identification extends IdentificationTableAccessor {
     public static Identification getIdentification(Connection aConn, String aFilename) throws SQLException {
         Identification result = null;
         PreparedStatement ps =
-                aConn.prepareStatement("select i.* from identification as i, spectrumfile as s where i.l_spectrumfileid=s.spectrumfileid and s.filename = ? ORDER BY i.score ASC");
+                aConn.prepareStatement("select i.* from identification as i, spectrum as s where i.l_spectrumid=s.spectrumid and s.filename = ? ORDER BY i.score ASC");
         ps.setString(1, aFilename);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
@@ -232,7 +236,7 @@ public class Identification extends IdentificationTableAccessor {
     public static HashMap getIdentifications(Connection aConn, Collection aFilenames) throws SQLException {
         HashMap result = new HashMap();
         PreparedStatement ps =
-                aConn.prepareStatement("select i.* from identification as i, spectrumfile as s where i.l_spectrumfileid=s.spectrumfileid and s.filename = ? ORDER BY i.score ASC");
+                aConn.prepareStatement("select i.* from identification as i, spectrum as s where i.l_spectrumid=s.spectrumid and s.filename = ? ORDER BY i.score ASC");
         for (Iterator lIterator = aFilenames.iterator(); lIterator.hasNext();) {
             String filename = (String) lIterator.next();
             ps.setString(1, filename);
@@ -263,7 +267,7 @@ public class Identification extends IdentificationTableAccessor {
      */
     public static Identification[] getAllIdentificationsforProject(Connection aConn, long aProjectID, String aWhereAddition) throws SQLException {
         String sql =
-                "select i.* from identification as i, spectrumfile as s where i.l_spectrumfileid = s.spectrumfileid and s.l_projectid=?";
+                "select i.* from identification as i, spectrum as s where i.l_spectrumid = s.spectrumid and s.l_projectid=?";
         if (aWhereAddition != null) {
             sql += " AND " + aWhereAddition;
         }
@@ -298,7 +302,7 @@ public class Identification extends IdentificationTableAccessor {
      */
     public static Identification[] getAllIdentificationsforProjectAndInstrument(Connection aConn, long aProjectID, long aInstrumentID, String aWhereAddition) throws SQLException {
         String sql =
-                "select i.* from identification as i, spectrumfile as s where i.l_spectrumfileid = s.spectrumfileid and s.l_projectid=? and s.l_instrumentid=?";
+                "select i.* from identification as i, spectrum as s where i.l_spectrumid = s.spectrumid and s.l_projectid=? and s.l_instrumentid=?";
         if (aWhereAddition != null) {
             sql += " AND " + aWhereAddition;
         }
@@ -332,7 +336,7 @@ public class Identification extends IdentificationTableAccessor {
      */
     public static Identification[] getAllIdentificationsforWhereclause(Connection aConn, String aWhereAddition) throws SQLException {
         String sql =
-                "select i.* from identification as i, spectrumfile as s where i.l_spectrumfileid = s.spectrumfileid";
+                "select i.* from identification as i, spectrum as s where i.l_spectrumid = s.spectrumid";
         // Addition of the whereclause.
         sql += " AND " + aWhereAddition;
         PreparedStatement prep = aConn.prepareStatement(sql);

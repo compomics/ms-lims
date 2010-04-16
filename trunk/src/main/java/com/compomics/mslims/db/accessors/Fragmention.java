@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
 import com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl;
 
@@ -31,6 +33,8 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class Fragmention extends FragmentionTableAccessor {
+    // Class specific log4j logger for Fragmention instances.
+    private static Logger logger = Logger.getLogger(Fragmention.class);
 
     /**
      * Default constructor.
@@ -39,8 +43,7 @@ public class Fragmention extends FragmentionTableAccessor {
     }
 
     /**
-     * This constructor maps directly to the equivalent parent
-     * precursor.
+     * This constructor maps directly to the equivalent parent precursor.
      *
      * @param aHm HashMap with the parameters.
      * @see FragmentionTableAccessor
@@ -50,23 +53,14 @@ public class Fragmention extends FragmentionTableAccessor {
     }
 
     /**
-     * This constructor reads the fragmention from a resultset. The ResultSet should be positioned such that
-     * a single row can be read directly (i.e., without calling the 'next()' method on the ResultSet).
-     * The columns should be in this order: <br />
+     * This constructor reads the fragmention from a resultset. The ResultSet should be positioned such that a single
+     * row can be read directly (i.e., without calling the 'next()' method on the ResultSet). The columns should be in
+     * this order: <br />
      * <p/>
-     * Column 1: fragmentionid <br />
-     * Column 2: l_identificationid <br />
-     * Column 3: iontype <br />
-     * Column 4: ionname <br />
-     * Column 5: l_ionscoringid <br />
-     * Column 6: mz <br />
-     * Column 7: intensity <br />
-     * Column 8: fragmentionnumber <br />
-     * Column 9: massdelta <br />
-     * Column 10: masserrormargin <br />
-     * Column 11: username <br />
-     * Column 12: creationdate <br />
-     * Column 13: modificationdate.
+     * Column 1: fragmentionid <br /> Column 2: l_identificationid <br /> Column 3: iontype <br /> Column 4: ionname <br
+     * /> Column 5: l_ionscoringid <br /> Column 6: mz <br /> Column 7: intensity <br /> Column 8: fragmentionnumber <br
+     * /> Column 9: massdelta <br /> Column 10: masserrormargin <br /> Column 11: username <br /> Column 12:
+     * creationdate <br /> Column 13: modificationdate.
      *
      * @param aRS ResultSet to read the data from.
      * @throws java.sql.SQLException when reading the ResultSet failed.
@@ -88,8 +82,7 @@ public class Fragmention extends FragmentionTableAccessor {
     }
 
     /**
-     * This method finds all fragmentions from the DB and stores them in a Collection
-     * of Fragmention instances.
+     * This method finds all fragmentions from the DB and stores them in a Collection of Fragmention instances.
      *
      * @param aConn             Connection from which to read the fragmentions.
      * @param aIdentificationID long with the identificationid to retrieve the fragmentions for.
@@ -124,8 +117,8 @@ public class Fragmention extends FragmentionTableAccessor {
     }
 
     /**
-     * This method finds all fragmentions from the DB and stores them in a Collection
-     * of MascotDatfile FragmentIonImpl instances.
+     * This method finds all fragmentions from the DB and stores them in a Collection of MascotDatfile FragmentIonImpl
+     * instances.
      *
      * @param aConn             Connection from which to read the fragmentions.
      * @param aIdentificationID long with the identificationid to retrieve the fragmentions for.
@@ -144,8 +137,8 @@ public class Fragmention extends FragmentionTableAccessor {
     }
 
     /**
-     * This method finds all fragmentions from the DB and stores them in a Collection
-     * of MascotDatfile FragmentIonImpl instances.
+     * This method finds all fragmentions from the DB and stores them in a Collection of MascotDatfile FragmentIonImpl
+     * instances.
      *
      * @param aConn             Connection from which to read the fragmentions.
      * @param aIdentificationID long with the identificationid to retrieve the fragmentions for.
@@ -172,8 +165,8 @@ public class Fragmention extends FragmentionTableAccessor {
 
 
     /**
-     * This method finds all fragmentions from the DB and stores them in a Collection
-     * of MascotDatfile FragmentIonImpl instances for the selected ion type.
+     * This method finds all fragmentions from the DB and stores them in a Collection of MascotDatfile FragmentIonImpl
+     * instances for the selected ion type.
      *
      * @param aConn             Connection from which to read the fragmentions.
      * @param aIdentificationID long with the identificationid to retrieve the fragmentions for.

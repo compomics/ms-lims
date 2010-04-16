@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Protocol;
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslims.db.accessors.User;
@@ -30,12 +32,13 @@ import java.util.HashMap;
  */
 
 /**
- * This class implements a generic interface to a Project (can be used to add, change or
- * delete a project).
+ * This class implements a generic interface to a Project (can be used to add, change or delete a project).
  *
  * @author Lennart Martens
  */
 public class ProjectDialog extends JDialog {
+    // Class specific log4j logger for ProjectDialog instances.
+    private static Logger logger = Logger.getLogger(ProjectDialog.class);
 
     /**
      * The mode of alteration for which this dialog was opened.
@@ -101,47 +104,41 @@ public class ProjectDialog extends JDialog {
 
 
     /**
-     * Wrapper for the superclass constructor that creates a modal JDialog
-     * with given parent and title. This Dialog should always be modal, so
-     * that's why the boolean is ommitted here. <br />
-     * It also takes an int that tells of the mode of editing that is required, along
-     * with the project that needs be altered (if any). <br />
-     * Valid settings are:
-     * <ul>
-     *   <li><b>ProjectDialog.NEW</b>: creation of a new project</li>
-     *   <li><b>ProjectDialog.CHANGE</b>: perform some changes to an existing project</li>
-     * </ul>
+     * Wrapper for the superclass constructor that creates a modal JDialog with given parent and title. This Dialog
+     * should always be modal, so that's why the boolean is ommitted here. <br /> It also takes an int that tells of the
+     * mode of editing that is required, along with the project that needs be altered (if any). <br /> Valid settings
+     * are: <ul> <li><b>ProjectDialog.NEW</b>: creation of a new project</li> <li><b>ProjectDialog.CHANGE</b>: perform
+     * some changes to an existing project</li> </ul>
      *
-     * @param aParent   Frame that is the owner of this JDialog
-     * @param aTitle    String with the title for the DIalog
-     * @param aMode int with the mode of editing required.
-     * @param aProject  Project to be altered.
-     *                  This need NOT be specified for the creation of a new project
-     *                  and therefore can be 'null'.
-     * @param aConn Connection to store all alterations on.
+     * @param aParent  Frame that is the owner of this JDialog
+     * @param aTitle   String with the title for the DIalog
+     * @param aMode    int with the mode of editing required.
+     * @param aProject Project to be altered. This need NOT be specified for the creation of a new project and therefore
+     *                 can be 'null'.
+     * @param aConn    Connection to store all alterations on.
      */
     public ProjectDialog(Frame aParent, String aTitle, int aMode, Project aProject, Connection aConn) {
         super(aParent, aTitle, true);
 
         // Check the parameters.
-        if(aMode == ProjectDialog.CHANGE && aProject == null) {
+        if (aMode == ProjectDialog.CHANGE && aProject == null) {
             throw new IllegalArgumentException("Attempting to change a project that is 'null'!");
         }
 
-        if(aParent instanceof ProjectManager) {
-            this.iSS = (ProjectManager)aParent;
+        if (aParent instanceof ProjectManager) {
+            this.iSS = (ProjectManager) aParent;
         }
         this.iConn = aConn;
         this.iMode = aMode;
         this.iProject = aProject;
 
         // Load user data.
-        if(iUsers == null) {
+        if (iUsers == null) {
             this.loadUsers();
         }
 
         // Load PROTOCOL data.
-        if(iProtocol == null) {
+        if (iProtocol == null) {
             this.loadProtocol();
 
         }
@@ -277,7 +274,7 @@ public class ProjectDialog extends JDialog {
         main.add(jpanProjects, BorderLayout.CENTER);
         main.add(jpanButtons, BorderLayout.SOUTH);
 
-        if(iMode == ProjectDialog.CHANGE) {
+        if (iMode == ProjectDialog.CHANGE) {
             this.fillComponents();
         }
 
@@ -288,7 +285,7 @@ public class ProjectDialog extends JDialog {
     /**
      * This method creates the buttonpanel for this dialog.
      *
-     * @return  JPanel  with the buttons.
+     * @return JPanel  with the buttons.
      */
     private JPanel createButtonPanel() {
         btnCancel = new JButton("Cancel");
@@ -303,7 +300,7 @@ public class ProjectDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     cancelPressed();
                 }
             }
@@ -313,7 +310,7 @@ public class ProjectDialog extends JDialog {
         jpanButtons.setLayout(new BoxLayout(jpanButtons, BoxLayout.X_AXIS));
         jpanButtons.add(Box.createHorizontalGlue());
 
-        if(iMode == ProjectDialog.NEW) {
+        if (iMode == ProjectDialog.NEW) {
             btnCreate = new JButton("Create");
             btnCreate.setMnemonic(KeyEvent.VK_R);
             btnCreate.addActionListener(new ActionListener() {
@@ -326,7 +323,7 @@ public class ProjectDialog extends JDialog {
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         createPressed();
                     }
                 }
@@ -345,7 +342,7 @@ public class ProjectDialog extends JDialog {
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         savePressed();
                     }
                 }
@@ -375,7 +372,7 @@ public class ProjectDialog extends JDialog {
             // Get all the data + do validations.
             HashMap hm = this.getDataFromScreen();
             // See if the validations passed.
-            if(hm == null) {
+            if (hm == null) {
                 // Apparently not.
                 return;
             }
@@ -383,21 +380,22 @@ public class ProjectDialog extends JDialog {
             Project p = new Project(hm);
             // Persist it.
             p.persist(iConn);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, new String[]{"Unable to create project:  ", sqle.getMessage()}, "Unable to create project!", JOptionPane.ERROR_MESSAGE);
             return;
-        } catch(Throwable t) {
+        } catch (Throwable t) {
 
-            if(iSS != null) {
+            if (iSS != null) {
                 iSS.passHotPotato(t, "Unable to create new project!");
             } else {
-                t.printStackTrace();
+                logger.error(t.getMessage(), t);
             }
         }
         // Confirm creation of new project to user.
         JOptionPane.showMessageDialog(this, "Created project '" + txtTitle.getText().trim() + "'.", "Create successufl!", JOptionPane.INFORMATION_MESSAGE);
         // Notify QTOFSpectrumStorage (if any).
-        if(iSS != null) {
+        if (iSS != null) {
             iSS.projectsChanged();
         }
         // Begone!
@@ -413,32 +411,33 @@ public class ProjectDialog extends JDialog {
             // Get all the data + do validations.
             HashMap hm = this.getDataFromScreen();
             // See if the validations passed.
-            if(hm == null) {
+            if (hm == null) {
                 // Apparently not.
                 return;
             }
             // Change the existing project.
-            iProject.setTitle((String)hm.get(Project.TITLE));
-            iProject.setL_userid(((Long)hm.get(Project.L_USERID)).longValue());
-            iProject.setL_protocolid(((Long)hm.get(Project.L_PROTOCOLID)).longValue());
-            iProject.setDescription((String)hm.get(Project.DESCRIPTION));
+            iProject.setTitle((String) hm.get(Project.TITLE));
+            iProject.setL_userid(((Long) hm.get(Project.L_USERID)).longValue());
+            iProject.setL_protocolid(((Long) hm.get(Project.L_PROTOCOLID)).longValue());
+            iProject.setDescription((String) hm.get(Project.DESCRIPTION));
             iProject.update(iConn);
             error = false;
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, new String[]{"Unable to save modified project:  ", sqle.getMessage()}, "Unable to save modified project!", JOptionPane.ERROR_MESSAGE);
-        } catch(Throwable t) {
-             if(iSS != null) {
+        } catch (Throwable t) {
+            if (iSS != null) {
                 iSS.passHotPotato(t, "Unable to save modified project!");
             } else {
-                t.printStackTrace();
+                logger.error(t.getMessage(), t);
             }
         }
         // Confirm save to user.
-        if(!error) {
+        if (!error) {
             JOptionPane.showMessageDialog(this, "Saved modified project '" + txtTitle.getText().trim() + "'.", "Save successufl!", JOptionPane.INFORMATION_MESSAGE);
         }
         // Notify QTOFSpectrumStorage (if any).
-        if(iSS != null) {
+        if (iSS != null) {
             iSS.projectsChanged();
         }
         // Begone!
@@ -452,18 +451,18 @@ public class ProjectDialog extends JDialog {
         txtTitle.setText(iProject.getTitle());
         long temp = iProject.getL_userid();
         int index = 0;
-        for(int i = 0; i < iUsers.length; i++) {
+        for (int i = 0; i < iUsers.length; i++) {
             User lUser = iUsers[i];
-            if(lUser.getUserid() == temp) {
+            if (lUser.getUserid() == temp) {
                 index = i;
             }
         }
         cmbUser.setSelectedIndex(index);
         temp = iProject.getL_protocolid();
         index = 0;
-        for(int i = 0; i < iProtocol.length; i++) {
+        for (int i = 0; i < iProtocol.length; i++) {
             Protocol lCof = iProtocol[i];
-            if(lCof.getProtocolid() == temp) {
+            if (lCof.getProtocolid() == temp) {
                 index = i;
             }
         }
@@ -475,23 +474,22 @@ public class ProjectDialog extends JDialog {
     }
 
     /**
-     * This method gets all data from the GUI components and does the validations.
-     * If it returns 'null', a validation has failed and the operation should be aborted.
+     * This method gets all data from the GUI components and does the validations. If it returns 'null', a validation
+     * has failed and the operation should be aborted.
      *
-     * @return  HashMap with the filled-out parameters from the GUI, or 'null' if a
-     *                  validation failed.
+     * @return HashMap with the filled-out parameters from the GUI, or 'null' if a validation failed.
      */
     private HashMap getDataFromScreen() {
         HashMap hm = null;
         // Get the data in the textfields.
         String title = txtTitle.getText().trim();
-        long userid = ((User)cmbUser.getSelectedItem()).getUserid();
-        long protocolid = ((Protocol)cmbProtocol.getSelectedItem()).getProtocolid();
+        long userid = ((User) cmbUser.getSelectedItem()).getUserid();
+        long protocolid = ((Protocol) cmbProtocol.getSelectedItem()).getProtocolid();
         String description = txtDescription.getText();
 
 
         // See if the not-NULL fields are filled out.
-        if(title.equals("")) {
+        if (title.equals("")) {
             JOptionPane.showMessageDialog(this, "Project title must be filled out!", "Title has to be filled out!", JOptionPane.WARNING_MESSAGE);
             txtTitle.requestFocus();
         } else {
@@ -512,7 +510,7 @@ public class ProjectDialog extends JDialog {
     private void loadUsers() {
         try {
             iUsers = User.getAllUsers(iConn);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             iSS.passHotPotato(sqle, "Unable to load users from DB!");
         }
     }
@@ -523,7 +521,7 @@ public class ProjectDialog extends JDialog {
     private void loadProtocol() {
         try {
             iProtocol = Protocol.getAllProtocols(iConn);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             iSS.passHotPotato(sqle, "Unable to load protocol types from DB!");
         }
     }

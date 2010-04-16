@@ -6,7 +6,10 @@
  */
 package com.compomics.mslims.util;
 
-import com.compomics.mslims.db.accessors.Spectrumfile;
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import org.apache.log4j.Logger;
+
+import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.util.fileio.MascotGenericFile;
 import com.compomics.util.general.CommandLineParser;
 
@@ -28,6 +31,8 @@ import java.util.Properties;
  * @author Lennart Martens
  */
 public class GetAllPKLFiles {
+    // Class specific log4j logger for GetAllPKLFiles instances.
+    private static Logger logger = Logger.getLogger(GetAllPKLFiles.class);
 
     private static final int ALL = 0;
     private static final int NOT_IDENTIFIED = 1;
@@ -37,7 +42,7 @@ public class GetAllPKLFiles {
     public static void main(String[] args) {
         GetAllPKLFiles gap = new GetAllPKLFiles();
         if (args == null || args.length == 0) {
-            System.err.println("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
+            logger.error("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
             System.exit(1);
         }
         CommandLineParser clp = new CommandLineParser(args, new String[]{"user", "password", "driver", "db", "where"});
@@ -49,21 +54,21 @@ public class GetAllPKLFiles {
 
         String[] temp = clp.getParameters();
         if (temp == null || temp.length != 1) {
-            System.err.println("\n\nYou must specify a destination folder!\n");
-            System.err.println("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
+            logger.error("\n\nYou must specify a destination folder!\n");
+            logger.error("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
             System.exit(1);
         }
         String output = temp[0];
         File lFile = new File(output);
         if (!lFile.exists() && !lFile.isDirectory()) {
-            System.err.println("\n\nYou must specify an output folder that exists!\n\n");
+            logger.error("\n\nYou must specify an output folder that exists!\n\n");
             System.exit(1);
         }
 
         temp = clp.getFlags();
         if (temp == null || temp.length != 1) {
-            System.err.println("\n\nPlease specify -a for all, -n for the not-identified and -i for the identified spectra.\n");
-            System.err.println("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
+            logger.error("\n\nPlease specify -a for all, -n for the not-identified and -i for the identified spectra.\n");
+            logger.error("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
             System.exit(1);
         }
         String modeString = temp[0].trim();
@@ -79,8 +84,8 @@ public class GetAllPKLFiles {
             mode = WHERE_QUERY;
             where = clp.getOptionParameter("where");
             if (where == null || where.trim().equals("")) {
-                System.err.println("\n\nPlease specify a 'where'-clause ('--where' paramater) when using the '-q' flag!\n");
-                System.err.println("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
+                logger.error("\n\nPlease specify a 'where'-clause ('--where' paramater) when using the '-q' flag!\n");
+                logger.error("\n\nUsage:\n\tGetAllPKLFiles -(a|n|i|q) [--where <where_clause_use_only_with_q_flag>] --user <username> --password <password> --driver <db_driver> --db <database> <destination_folder>\n\n");
                 System.exit(1);
             }
         }
@@ -88,7 +93,7 @@ public class GetAllPKLFiles {
         try {
             gap.putSpectraInFolder(user, password, driver, db, lFile.getCanonicalPath(), mode, where);
         } catch (IOException ioe) {
-            System.err.println("\n\nError locating destination folder: " + ioe.getMessage() + "!\n\n");
+            logger.error("\n\nError locating destination folder: " + ioe.getMessage() + "!\n\n");
             System.exit(1);
         }
     }
@@ -116,7 +121,7 @@ public class GetAllPKLFiles {
             userProps.put("password", aPassword);
             lConn = d.connect(aUrl, userProps);
             // Construct the query.
-            StringBuffer query = new StringBuffer("select spectrumfileid from spectrumfile");
+            StringBuffer query = new StringBuffer("select spectrumid from spectrum");
             if (aMode != ALL && aMode != WHERE_QUERY) {
                 query.append(" where identified");
                 query.append(((aMode == IDENTIFIED) ? ">" : "=") + "0");
@@ -126,7 +131,7 @@ public class GetAllPKLFiles {
 
             // Retrieve the data form the db.
             Statement stat = lConn.createStatement();
-            PreparedStatement ps = lConn.prepareStatement("select * from spectrumfile where spectrumfileid=?");
+            PreparedStatement ps = lConn.prepareStatement("select * from spectrumwhere spectrumid=?");
             ResultSet rs = stat.executeQuery(query.toString());
             File parentDir = new File(aFolder);
             int counter = 0;
@@ -135,12 +140,14 @@ public class GetAllPKLFiles {
                 ps.setLong(1, rs.getLong(1));
                 ResultSet rsSpectrum = ps.executeQuery();
                 rsSpectrum.next();
-                Spectrumfile sf = new Spectrumfile(rsSpectrum);
+                Spectrum lSpectrum = new Spectrum(rsSpectrum);
+                Spectrum_file lSpectrum_file = Spectrum_file.findFromID(lSpectrum.getSpectrumid(), lConn);
                 rsSpectrum.close();
                 ps.clearParameters();
 
                 // Write the files (slow step in the program).
-                MascotGenericFile tempFile = new MascotGenericFile(sf.getFilename(), new String(sf.getUnzippedFile()));
+
+                MascotGenericFile tempFile = new MascotGenericFile(lSpectrum.getFilename(), new String(lSpectrum_file.getUnzippedFile()));
                 tempFile.writeToFile(parentDir);
                 counter++;
             }
@@ -149,9 +156,9 @@ public class GetAllPKLFiles {
             ps.close();
             stat.close();
             // That'll be all, thank you.
-            System.out.println("\n\nWrote " + counter + " spectrumfiles to folder '" + parentDir.getAbsolutePath() + "'.\n\nAll done!");
+            logger.info("\n\nWrote " + counter + " spectrumfiles to folder '" + parentDir.getAbsolutePath() + "'.\n\nAll done!");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } finally {
             if (lConn != null) {
                 try {

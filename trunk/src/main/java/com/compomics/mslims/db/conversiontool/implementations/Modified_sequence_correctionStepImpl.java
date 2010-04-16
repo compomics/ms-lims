@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.conversiontool.implementations;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.conversiontool.interfaces.DBConverterStep;
 
 import java.sql.*;
@@ -26,6 +28,8 @@ import java.util.ArrayList;
  * @version $Id: Modified_sequence_correctionStepImpl.java,v 1.1 2007/10/12 19:33:03 lennart Exp $
  */
 public class Modified_sequence_correctionStepImpl implements DBConverterStep {
+    // Class specific log4j logger for Modified_sequence_correctionStepImpl instances.
+    private static Logger logger = Logger.getLogger(Modified_sequence_correctionStepImpl.class);
 
     /**
      * Default constructor.
@@ -56,42 +60,42 @@ public class Modified_sequence_correctionStepImpl implements DBConverterStep {
             Statement stat = aConn.createStatement();
             ResultSet rs = stat.executeQuery("select identificationid, modified_sequence from identification where modified_sequence like 'Pyr-%'");
             HashMap data = new HashMap();
-            while(rs.next()) {
+            while (rs.next()) {
                 data.put(new Long(rs.getLong(1)), rs.getString(2));
             }
             rs.close();
             stat.close();
             // User-friendly output.
-            if(data.size() > 0) {
-                System.out.println("\t Found " + data.size() + " 'Pyr-%' modified_sequence instances...");
-                System.out.println("\t Fixing them....");
+            if (data.size() > 0) {
+                logger.info("\t Found " + data.size() + " 'Pyr-%' modified_sequence instances...");
+                logger.info("\t Fixing them....");
                 // Okay, now find the server info for these, and convert the filename into
                 // filename and foldername.
                 PreparedStatement psModSeq = aConn.prepareStatement("update identification set modified_sequence=?, modificationdate=CURRENT_TIMESTAMP where identificationid=?");
                 Iterator iter = data.keySet().iterator();
                 int mod_seqs_done_count = 0;
                 while (iter.hasNext()) {
-                    Long id = (Long)iter.next();
-                    String updatedModSeq = convertModSeq((String)data.get(id));
+                    Long id = (Long) iter.next();
+                    String updatedModSeq = convertModSeq((String) data.get(id));
                     psModSeq.setString(1, updatedModSeq);
                     psModSeq.setLong(2, id.longValue());
                     int changed = psModSeq.executeUpdate();
-                    if(changed != 1) {
-                        System.err.println(" * Unable to find a match when trying to update identificationid " + id + "!");
+                    if (changed != 1) {
+                        logger.error(" * Unable to find a match when trying to update identificationid " + id + "!");
                     }
                     psModSeq.clearParameters();
                     mod_seqs_done_count++;
                 }
                 psModSeq.close();
-                System.out.println("\t Fixed " + mod_seqs_done_count + " modified sequences.");
+                logger.info("\t Fixed " + mod_seqs_done_count + " modified sequences.");
             } else {
-                System.out.println("\t All entries checked and found to be OK, no fix needed.");
+                logger.info("\t All entries checked and found to be OK, no fix needed.");
             }
             // All done.
-        } catch(SQLException sqle) {
-            System.err.println("\n\nError converting modified sequences: ");
-            System.err.println(sqle.getMessage());
-            sqle.printStackTrace();
+        } catch (SQLException sqle) {
+            logger.error("\n\nError converting modified sequences: ");
+            logger.error(sqle.getMessage());
+            logger.error(sqle.getMessage(), sqle);
             error = true;
         }
         return error;
@@ -103,7 +107,7 @@ public class Modified_sequence_correctionStepImpl implements DBConverterStep {
         temp = temp.substring(1);
         // If there is a 'Q<Dam>' at the start, we need to extend the
         // 'start' bit a bit.
-        if(temp.charAt(0) == '<') {
+        if (temp.charAt(0) == '<') {
             temp = "," + temp.substring(1);
         } else {
             temp = ">" + temp;

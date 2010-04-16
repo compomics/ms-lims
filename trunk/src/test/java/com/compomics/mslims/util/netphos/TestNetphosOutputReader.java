@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.netphos;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.netphos.NetphosOutputReader;
 import junit.TestCaseLM;
 import junit.framework.Assert;
@@ -20,13 +22,15 @@ import java.io.*;
  */
 
 /**
- * This class implements the test scenario for the NetphosOutputReader.
- * (in extension, it indirectly also test the other netphos package classes).
+ * This class implements the test scenario for the NetphosOutputReader. (in extension, it indirectly also test the other
+ * netphos package classes).
  *
  * @author Lennart Martens
  * @see com.compomics.mslims.util.netphos.NetphosOutputReader
  */
 public class TestNetphosOutputReader extends TestCaseLM {
+    // Class specific log4j logger for TestNetphosOutputReader instances.
+    private static Logger logger = Logger.getLogger(TestNetphosOutputReader.class);
 
     public TestNetphosOutputReader() {
         this("Test scenario for the NetphosOutputReader.");
@@ -48,21 +52,21 @@ public class TestNetphosOutputReader extends TestCaseLM {
             BufferedReader control = new BufferedReader(new FileReader(super.getFullFilePath("testNetphosReader_control.txt")));
             String line = null;
             int lineCounter = 0;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 lineCounter++;
                 Assert.assertEquals("Assertion failed while reading line number " + lineCounter + ".", line, outputReader.readLine());
             }
             Assert.assertTrue(outputReader.readLine() == null);
             outputReader.close();
             control.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException occurred while testing the NetphosOutputReader: " + ioe.getMessage());
         }
         // now test exception handling when attempting to load a non-existant file.
         try {
             NetphosOutputReader nor = new NetphosOutputReader(new File("nonexistantfileinfilesystem_withstarngeName.ggg"));
             fail("No IOException thrown when attempting to load a non-existant file in NetphosOutputReader!");
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             // Perfect. Do nothing.
         }
     }
@@ -80,14 +84,14 @@ public class TestNetphosOutputReader extends TestCaseLM {
             BufferedReader control = new BufferedReader(new FileReader(super.getFullFilePath("testNetphosThresholdReader_control.txt")));
             String line = null;
             int lineCounter = 0;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 lineCounter++;
                 Assert.assertEquals("Assertion failed while reading line number " + lineCounter + ".", line, outputReader.readLine());
             }
             Assert.assertTrue(outputReader.readLine() == null);
             outputReader.close();
             control.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException occurred while testing the NetphosOutputReader with a threshold of '0.8': " + ioe.getMessage());
         }
 
@@ -100,14 +104,14 @@ public class TestNetphosOutputReader extends TestCaseLM {
             BufferedReader control = new BufferedReader(new FileReader(super.getFullFilePath("testNetphosNoThresholdReader_control.txt")));
             String line = null;
             int lineCounter = 0;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 lineCounter++;
                 Assert.assertEquals("Assertion failed while reading line number " + lineCounter + ".", line, outputReader.readLine());
             }
             Assert.assertTrue(outputReader.readLine() == null);
             outputReader.close();
             control.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException occurred while testing the NetphosOutputReader without a threshold: " + ioe.getMessage());
         }
 
@@ -120,14 +124,14 @@ public class TestNetphosOutputReader extends TestCaseLM {
             BufferedReader control = new BufferedReader(new FileReader(super.getFullFilePath("testNetphosNoThresholdReader_control.txt")));
             String line = null;
             int lineCounter = 0;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 lineCounter++;
                 Assert.assertEquals("Assertion failed while reading line number " + lineCounter + ".", line, outputReader.readLine());
             }
             Assert.assertTrue(outputReader.readLine() == null);
             outputReader.close();
             control.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException occurred while testing the NetphosOutputReader with a '0.0' threshold: " + ioe.getMessage());
         }
     }

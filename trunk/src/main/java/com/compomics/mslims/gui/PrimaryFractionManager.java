@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
@@ -40,6 +42,8 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class PrimaryFractionManager extends JFrame implements Connectable, Flamable {
+    // Class specific log4j logger for PrimaryFractionManager instances.
+    private static Logger logger = Logger.getLogger(PrimaryFractionManager.class);
 
     /**
      * This variable holds the connection to the DB.
@@ -161,7 +165,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         } else {
             messages = new String[]{"Fatal error encountered in application!", aThrowable.getMessage(), "\n"};
         }
-        aThrowable.printStackTrace();
+        logger.error(aThrowable.getMessage(), aThrowable);
         JFrame tempFrame = new JFrame();
         JOptionPane.showMessageDialog(tempFrame, messages, "Application unexpectedly terminated!", JOptionPane.ERROR_MESSAGE);
         tempFrame.dispose();
@@ -392,6 +396,7 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
             txtSummary.setText("");
             iAssignments = new HashMap();
         } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, new String[]{"Unable to store the assignments in the DB:", sqle.getMessage()}, "Unable to store primary fraction information!", JOptionPane.ERROR_MESSAGE);
         } catch (Throwable t) {
             this.passHotPotato(t, "Unable to store primary fraction information!");
@@ -458,9 +463,9 @@ public class PrimaryFractionManager extends JFrame implements Connectable, Flama
         if (this.iConn != null) {
             try {
                 this.iConn.close();
-                System.out.println("DB connection closed.");
+                logger.info("DB connection closed.");
             } catch (SQLException sqle) {
-                sqle.printStackTrace();
+                logger.error(sqle.getMessage(), sqle);
             }
         }
         this.dispose();

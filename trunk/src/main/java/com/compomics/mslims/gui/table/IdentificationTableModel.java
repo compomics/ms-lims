@@ -1,5 +1,7 @@
 package com.compomics.mslims.gui.table;
 
+import org.apache.log4j.Logger;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Lennart
@@ -28,6 +30,8 @@ import java.util.List;
  * @version $Id: IdentificationTableModel.java,v 1.2 2005/12/31 10:22:52 lennart Exp $
  */
 public class IdentificationTableModel extends AbstractTableModel {
+    // Class specific log4j logger for IdentificationTableModel instances.
+    private static Logger logger = Logger.getLogger(IdentificationTableModel.class);
 
     /**
      * The List with the identifications.
@@ -37,31 +41,30 @@ public class IdentificationTableModel extends AbstractTableModel {
     /**
      * The constructor simply accepts the List of Identifications to display.
      *
-     * @param aIdentifications  List with the Identification instances to display.
+     * @param aIdentifications List with the Identification instances to display.
      */
     public IdentificationTableModel(List aIdentifications) {
         this.iIdentifications = aIdentifications;
         // Sorted array of cluster names.
         Collections.sort(iIdentifications, new Comparator() {
             public int compare(Object o1, Object o2) {
-                long l1 = ((Identification)o1).getL_spectrumfileid();
-                long l2 = ((Identification)o2).getL_spectrumfileid();
-                return (int)(l1 - l2);
+                long l1 = ((Identification) o1).getL_spectrumid();
+                long l2 = ((Identification) o2).getL_spectrumid();
+                return (int) (l1 - l2);
             }
         });
     }
 
     /**
-     * Returns a default name for the column using spreadsheet conventions:
-     * A, B, C, ... Z, AA, AB, etc.  If <code>column</code> cannot be found,
-     * returns an empty string.
+     * Returns a default name for the column using spreadsheet conventions: A, B, C, ... Z, AA, AB, etc.  If
+     * <code>column</code> cannot be found, returns an empty string.
      *
      * @param column the column being queried
      * @return a string containing the default name of <code>column</code>
      */
     public String getColumnName(int column) {
         String result = null;
-        switch(column) {
+        switch (column) {
             case 0:
                 result = "IdentificationID";
                 break;
@@ -145,9 +148,8 @@ public class IdentificationTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of columns in the model. A
-     * <code>JTable</code> uses this method to determine how many columns it
-     * should create and display by default.
+     * Returns the number of columns in the model. A <code>JTable</code> uses this method to determine how many columns
+     * it should create and display by default.
      *
      * @return the number of columns in the model
      * @see #getRowCount
@@ -157,10 +159,8 @@ public class IdentificationTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of rows in the model. A
-     * <code>JTable</code> uses this method to determine how many rows it
-     * should display.  This method should be quick, as it
-     * is called frequently during rendering.
+     * Returns the number of rows in the model. A <code>JTable</code> uses this method to determine how many rows it
+     * should display.  This method should be quick, as it is called frequently during rendering.
      *
      * @return the number of rows in the model
      * @see #getColumnCount
@@ -170,22 +170,21 @@ public class IdentificationTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the value for the cell at <code>columnIndex</code> and
-     * <code>rowIndex</code>.
+     * Returns the value for the cell at <code>columnIndex</code> and <code>rowIndex</code>.
      *
-     * @param	rowIndex	the row whose value is to be queried
-     * @param	columnIndex the column whose value is to be queried
-     * @return	the value Object at the specified cell
+     * @param    rowIndex    the row whose value is to be queried
+     * @param    columnIndex the column whose value is to be queried
+     * @return the value Object at the specified cell
      */
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Identification id = (Identification)iIdentifications.get(rowIndex);
+        Identification id = (Identification) iIdentifications.get(rowIndex);
         Object result = null;
-        switch(columnIndex) {
+        switch (columnIndex) {
             case 0:
                 result = new Long(id.getIdentificationid());
                 break;
             case 1:
-                result = new Long(id.getL_spectrumfileid());
+                result = new Long(id.getL_spectrumid());
                 break;
             case 2:
                 result = new Long(id.getL_datfileid());

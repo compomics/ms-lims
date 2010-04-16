@@ -1,5 +1,8 @@
 package com.compomics.mslims.gui;
 
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import org.apache.log4j.Logger;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Lennart
@@ -15,7 +18,7 @@ package com.compomics.mslims.gui;
  */
 
 import com.compomics.mslims.db.accessors.Identification;
-import com.compomics.mslims.db.accessors.Spectrumfile;
+import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
@@ -50,6 +53,8 @@ import java.util.*;
  * @version $Id: ClusterTreeGUI.java,v 1.10 2009/07/28 14:48:33 lennart Exp $
  */
 public class ClusterTreeGUI extends FlamableJFrame implements Connectable, SpectrumPanelListener {
+    // Class specific log4j logger for ClusterTreeGUI instances.
+    private static Logger logger = Logger.getLogger(ClusterTreeGUI.class);
 
     /**
      * The DB connection, if any. 'null' when not connected.
@@ -136,7 +141,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
             ctg.setBounds(250, 250, 550, 450);
             ctg.setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             System.exit(1);
         }
     }
@@ -171,7 +176,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
         }
         // Now see if we can create a DB connection.
 
-        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
         ConnectionDialog cd = new ConnectionDialog(this, this, "Database connection for BackupManager", lConnectionProperties);
 
         cd.setLocation(100, 100);
@@ -600,12 +605,13 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                 if (ctmClusters.isLeaf(selectObject)) {
                     String filename = (String) selectObject;
                     try {
-                        Spectrumfile sf = Spectrumfile.findFromName(filename, iConn);
+                        Spectrum lSpectrum = Spectrum.findFromName(filename, iConn);
+                        Spectrum_file lSpectrum_file = Spectrum_file.findFromID(lSpectrum.getSpectrumid(), iConn);
                         Color filenameColor = null;
                         if (iSpectrumIDMappings.get(filename) == null) {
                             filenameColor = Color.red;
                         }
-                        final SpectrumPanel temp = new SpectrumPanel(new MascotGenericFile(filename, new String(sf.getUnzippedFile())));
+                        final SpectrumPanel temp = new SpectrumPanel(new MascotGenericFile(filename, new String(lSpectrum_file.getUnzippedFile())));
                         temp.setSpectrumFilenameColor(filenameColor);
                         temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
                         temp.addSpectrumPanelListener(this);
@@ -641,7 +647,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                         jpanSpectra.validate();
                         jpanSpectra.repaint();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        logger.error(ex.getMessage(), ex);
                     }
                 }
             }
@@ -665,7 +671,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
      * @param aMsg String with the message to print.
      */
     private static void printError(String aMsg) {
-        System.err.println("\n\n" + aMsg + "\n\n");
+        logger.error("\n\n" + aMsg + "\n\n");
         System.exit(1);
     }
 
@@ -676,9 +682,9 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
         if (iConn != null) {
             try {
                 iConn.close();
-                System.out.println("Database connection closed.");
+                logger.info("Database connection closed.");
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         this.setVisible(false);

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.tree;
 
+import org.apache.log4j.Logger;
+
 import java.util.Vector;
 
 /*
@@ -22,23 +24,37 @@ import java.util.Vector;
  * @version $Id: MascotTask.java,v 1.3 2008/11/28 16:07:18 kenny Exp $
  */
 public class MascotTask {
+    // Class specific log4j logger for MascotTask instances.
+    private static Logger logger = Logger.getLogger(MascotTask.class);
 
-    /** This field holds the title for the task. */
+    /**
+     * This field holds the title for the task.
+     */
     private String iTitle = null;
 
-    /** This field holds the parameters for the task. */
+    /**
+     * This field holds the parameters for the task.
+     */
     private String iParams = null;
 
-    /** This field holds the schedule type for the task. */
+    /**
+     * This field holds the schedule type for the task.
+     */
     private String iSchedule = null;
 
-    /** This field holds the status for the task. */
+    /**
+     * This field holds the status for the task.
+     */
     private String iStatus = null;
 
-    /** This Vector holds all the associated MascotSearches. */
+    /**
+     * This Vector holds all the associated MascotSearches.
+     */
     private Vector iSearches = null;
 
-    /** The number of this task. */
+    /**
+     * The number of this task.
+     */
     private int iNumber = 0;
 
     /**
@@ -128,7 +144,6 @@ public class MascotTask {
      * This method returns the datfile associated with this index.
      *
      * @param aIndex int with the index for the datfile.
-     *
      * @return String with the name of the datfile for this search
      */
     public String getSearchDatfile(int aIndex) {
@@ -139,7 +154,6 @@ public class MascotTask {
      * This method returns the mergefile associated with this index.
      *
      * @param aIndex int with the index for the mergefile.
-     *
      * @return String with the name of the mergefile for this search
      */
     public String getSearchMergefile(int aIndex) {
@@ -150,7 +164,6 @@ public class MascotTask {
      * This method returns the MascotSearch at the specified index.
      *
      * @param aIndex int with the index to retrieve the Mascot Search for.
-     *
      * @return MascotSearch    with the relevant information.
      */
     public MascotSearch getSearch(int aIndex) {

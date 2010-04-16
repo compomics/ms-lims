@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio.mergefiles;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.MascotGenericFile;
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import com.compomics.mslims.util.fileio.mergefiles.MascotDistillerMergeFileReader;
@@ -32,6 +34,8 @@ import java.io.IOException;
  * @version $Id: TestMascotDistillerMergeFileReader.java,v 1.2 2009/05/18 08:01:10 niklaas Exp $
  */
 public class TestMascotDistillerMergeFileReader extends TestCaseLM {
+    // Class specific log4j logger for TestMascotDistillerMergeFileReader instances.
+    private static Logger logger = Logger.getLogger(TestMascotDistillerMergeFileReader.class);
 
     public TestMascotDistillerMergeFileReader() {
         this("Test scenario for the MascotDistillerMergeFileReader class.");
@@ -52,13 +56,13 @@ public class TestMascotDistillerMergeFileReader extends TestCaseLM {
             BufferedReader br = new BufferedReader(new FileReader(super.getFullFilePath("testMascotDistillerMergeFileReader_Control.txt")));
             StringBuffer lsb = new StringBuffer();
             String line = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 lsb.append(line + "\n");
             }
             br.close();
             controll = lsb.toString();
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("Unable to read control file for test of MascotGenericsMergeFileReader: " + ioe.getMessage() + "!");
         }
 
@@ -76,7 +80,7 @@ public class TestMascotDistillerMergeFileReader extends TestCaseLM {
             Assert.assertEquals("L59_Bart_Metox_080530A_forward_p2A01", mrf.getRunName());
             Assert.assertEquals(f.getName(), mrf.getFilename());
             Assert.assertEquals(controll, mrf.toString());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the first Mascot Generic mergefilereader test: " + ioe.getMessage() + "!");
         }
 
@@ -91,7 +95,7 @@ public class TestMascotDistillerMergeFileReader extends TestCaseLM {
             MascotIdentifiedSpectrum mis = new MascotIdentifiedSpectrum();
             // Title 84!
             mis.setSearchTitle("84: Scan 618 (rt=12.3077) [C:\\XCalibur\\data\\data_linda\\L59_Bart_Metox_080530A_forward_p2A01.RAW]");
-            MascotGenericFile result = (MascotGenericFile)mrf.findMatchingSpectrumFile(mis);
+            MascotGenericFile result = (MascotGenericFile) mrf.findMatchingSpectrumFile(mis);
             Assert.assertTrue(result != null);
             String filename = mrf.getCorrespondingSpectrumFilename(mis);
             Assert.assertEquals("L59_Bart_Metox_080530A_forward_p2A01_84_618_1_3.mgf", filename);
@@ -99,14 +103,14 @@ public class TestMascotDistillerMergeFileReader extends TestCaseLM {
 
             // Second pass, using filename instead of title this time.
             mis.setSearchTitle("L59_Bart_Metox_080530A_forward_p2A01_84_618_1_3.mgf");
-            result = (MascotGenericFile)mrf.findMatchingSpectrumFile(mis);
+            result = (MascotGenericFile) mrf.findMatchingSpectrumFile(mis);
             Assert.assertTrue(result != null);
             Assert.assertEquals("84: Scan 618 (rt=12.3077) [C:\\XCalibur\\data\\data_linda\\L59_Bart_Metox_080530A_forward_p2A01.RAW]", result.getTitle());
             filename = mrf.getCorrespondingSpectrumFilename(mis);
             Assert.assertEquals("L59_Bart_Metox_080530A_forward_p2A01_84_618_1_3.mgf", filename);
             Assert.assertEquals(filename, result.getFilename());
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the matching of a PKL file in a MascotGenericMergeFileReader vs. a MIS: " + ioe.getMessage() + "!");
         }
     }
@@ -122,14 +126,14 @@ public class TestMascotDistillerMergeFileReader extends TestCaseLM {
             Assert.assertEquals(100, names.length);
 
             // In-deep check, using the control file.
-              BufferedReader control = new BufferedReader(new FileReader(super.getFullFilePath("testMascotDistillerMergeFileReader_Control_filenames.txt")));
-              for(int i = 0; i < names.length; i++) {
-                  Assert.assertEquals(control.readLine(), names[i]);
-              }
-              Assert.assertTrue(control.readLine() == null);
-              control.close();
+            BufferedReader control = new BufferedReader(new FileReader(super.getFullFilePath("testMascotDistillerMergeFileReader_Control_filenames.txt")));
+            for (int i = 0; i < names.length; i++) {
+                Assert.assertEquals(control.readLine(), names[i]);
+            }
+            Assert.assertTrue(control.readLine() == null);
+            control.close();
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the reporting of the PKL filenames by a MascotGenericMergeFileReader: " + ioe.getMessage() + "!");
         }
     }
@@ -147,12 +151,12 @@ public class TestMascotDistillerMergeFileReader extends TestCaseLM {
 
             // In-deep check, using the control file.
             BufferedReader control = new BufferedReader(new FileReader(super.getFullFilePath("testMascotDistillerMergeFileReader_Control_titles.txt")));
-            for(int i = 0; i < titles.length; i++) {
+            for (int i = 0; i < titles.length; i++) {
                 Assert.assertEquals(control.readLine(), titles[i]);
             }
             Assert.assertTrue(control.readLine() == null);
             control.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the reporting of the PKL filenames by a MascotGenericMergeFileReader: " + ioe.getMessage() + "!");
         }
     }

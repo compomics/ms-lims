@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.workers.MALDIDiffAnalysisWorker;
 import com.compomics.mslims.util.interfaces.BrukerCompound;
 import com.compomics.mslims.util.fileio.BrukerCompoundCouple;
@@ -31,13 +33,14 @@ import java.io.FileWriter;
  */
 
 /**
- * This class implements a dialog that can display the results
- * of a MALDI differential analysis.
+ * This class implements a dialog that can display the results of a MALDI differential analysis.
  *
  * @author Lennart Martens
  * @version $Id: MALDIStatisticsResultsDialog.java,v 1.3 2005/10/27 12:33:20 lennart Exp $
  */
 public class MALDIStatisticsResultsDialog extends JDialog {
+    // Class specific log4j logger for MALDIStatisticsResultsDialog instances.
+    private static Logger logger = Logger.getLogger(MALDIStatisticsResultsDialog.class);
 
     /**
      * The name of this analysis.
@@ -80,14 +83,12 @@ public class MALDIStatisticsResultsDialog extends JDialog {
     private int iTotalFilesWritten = -1;
 
     /**
-     * The total number of regulated, non-single
-     * compound couples, written to the inclusion lists.
+     * The total number of regulated, non-single compound couples, written to the inclusion lists.
      */
     private int iTotalRegulatedCompounds = -1;
 
     /**
-     * Boolean that indicates whether to use area ('true') or intensity ('false') for
-     * the ratio calculation.
+     * Boolean that indicates whether to use area ('true') or intensity ('false') for the ratio calculation.
      */
     private boolean iUseArea = true;
 
@@ -102,14 +103,12 @@ public class MALDIStatisticsResultsDialog extends JDialog {
     private double[] i98Confidence = new double[2];
 
     /**
-     * Number of significantly up- or downregulated compound pairs
-     * at the 95% confidence interval.
+     * Number of significantly up- or downregulated compound pairs at the 95% confidence interval.
      */
     private int iRegulatedCount95 = 0;
 
     /**
-     * Number of significantly up- or downregulated compound pairs
-     * at the 98% confidence interval.
+     * Number of significantly up- or downregulated compound pairs at the 98% confidence interval.
      */
     private int iRegulatedCount98 = 0;
 
@@ -124,24 +123,22 @@ public class MALDIStatisticsResultsDialog extends JDialog {
     private JButton btnOK = null;
 
     /**
-     * Creates a modal dialog with the specified title
-     * and the specified owner. All data members are initialized as well.
+     * Creates a modal dialog with the specified title and the specified owner. All data members are initialized as
+     * well.
      *
-     * @param owner the Frame from which the dialog is displayed.
-     * @param title the String to display in the dialog's
-     *              title bar.
-     * @param aName String with the name of the analysis.
-     * @param aCompoundsRead    int with the total number of compounds read from file.
-     * @param aPairs  int with the number of pairs formed from the read compounds.
-     * @param aCompoundsSingle  int with the number of compounds that were single.
-     * @param aCompoundsSkipped int with the number of compounds that were skipped.
-     * @param aStats    double[] with the statistical analysis of the data.
-     * @param aCouples  HashMap with all the couples found.
-     * @param aTotalFilesWritten    int with the total number of files written.
-     * @param aTotalRegulatedCompounds int with the number of regulated couples,
-     *                                 written to the inclusion lists.
-     * @param aUseArea  boolean that indicates use of compound area ('true') or intensity ('false')
-     *                  for ratio calculation.
+     * @param owner                    the Frame from which the dialog is displayed.
+     * @param title                    the String to display in the dialog's title bar.
+     * @param aName                    String with the name of the analysis.
+     * @param aCompoundsRead           int with the total number of compounds read from file.
+     * @param aPairs                   int with the number of pairs formed from the read compounds.
+     * @param aCompoundsSingle         int with the number of compounds that were single.
+     * @param aCompoundsSkipped        int with the number of compounds that were skipped.
+     * @param aStats                   double[] with the statistical analysis of the data.
+     * @param aCouples                 HashMap with all the couples found.
+     * @param aTotalFilesWritten       int with the total number of files written.
+     * @param aTotalRegulatedCompounds int with the number of regulated couples, written to the inclusion lists.
+     * @param aUseArea                 boolean that indicates use of compound area ('true') or intensity ('false') for
+     *                                 ratio calculation.
      */
     public MALDIStatisticsResultsDialog(Frame owner, String title, String aName, int aCompoundsRead, int aPairs, int aCompoundsSingle, int aCompoundsSkipped, double[] aStats, HashMap aCouples, boolean aUseArea, int aTotalFilesWritten, int aTotalRegulatedCompounds) {
         super(owner, title, true);
@@ -152,8 +149,8 @@ public class MALDIStatisticsResultsDialog extends JDialog {
         iCompoundsSkipped = aCompoundsSkipped;
         iMedian = aStats[MALDIDiffAnalysisWorker.MEDIAN];
         iScale = aStats[MALDIDiffAnalysisWorker.SCALE];
-        iRegulatedCount95 = (int)aStats[MALDIDiffAnalysisWorker.OUTLIER_COUNT_95];
-        iRegulatedCount98 = (int)aStats[MALDIDiffAnalysisWorker.OUTLIER_COUNT_98];
+        iRegulatedCount95 = (int) aStats[MALDIDiffAnalysisWorker.OUTLIER_COUNT_95];
+        iRegulatedCount98 = (int) aStats[MALDIDiffAnalysisWorker.OUTLIER_COUNT_98];
         iTotalFilesWritten = aTotalFilesWritten;
         iTotalRegulatedCompounds = aTotalRegulatedCompounds;
         i95Confidence[0] = aStats[MALDIDiffAnalysisWorker.CONFIDENCE_95_LOWER_LOG2];
@@ -168,24 +165,21 @@ public class MALDIStatisticsResultsDialog extends JDialog {
     }
 
     /**
-     * Creates a modal dialog with the specified title
-     * and the specified owner. All data members apart from
-     * the number of files written and differentially regulated
-     * couple count are initialized as well. Use this constructor
-     * for statistical analysis only.
+     * Creates a modal dialog with the specified title and the specified owner. All data members apart from the number
+     * of files written and differentially regulated couple count are initialized as well. Use this constructor for
+     * statistical analysis only.
      *
-     * @param owner the Frame from which the dialog is displayed
-     * @param title the String to display in the dialog's
-     *              title bar
-     * @param aName String with the name of the analysis.
+     * @param owner             the Frame from which the dialog is displayed
+     * @param title             the String to display in the dialog's title bar
+     * @param aName             String with the name of the analysis.
      * @param aCompoundsRead    int with the total number of compounds read from file.
-     * @param aPairs  int with the number of pairs formed from the read compounds.
+     * @param aPairs            int with the number of pairs formed from the read compounds.
      * @param aCompoundsSingle  int with the number of compounds that were single.
      * @param aCompoundsSkipped int with the number of compounds that were skipped.
-     * @param aStats    double[] with the statistical analysis of the data.
-     * @param aCouples  HashMap with all the couples found.
-     * @param aUseArea  boolean that indicates use of compound area ('true') or intensity ('false')
-     *                  for ratio calculation.
+     * @param aStats            double[] with the statistical analysis of the data.
+     * @param aCouples          HashMap with all the couples found.
+     * @param aUseArea          boolean that indicates use of compound area ('true') or intensity ('false') for ratio
+     *                          calculation.
      */
     public MALDIStatisticsResultsDialog(Frame owner, String title, String aName, int aCompoundsRead, int aPairs, int aCompoundsSingle, int aCompoundsSkipped, double[] aStats, HashMap aCouples, boolean aUseArea) {
         this(owner, title, aName, aCompoundsRead, aPairs, aCompoundsSingle, aCompoundsSkipped, aStats, aCouples, aUseArea, -1, -1);
@@ -245,7 +239,7 @@ public class MALDIStatisticsResultsDialog extends JDialog {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     saveCouples();
                 }
             }
@@ -264,7 +258,7 @@ public class MALDIStatisticsResultsDialog extends JDialog {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     close();
                 }
             }
@@ -304,18 +298,18 @@ public class MALDIStatisticsResultsDialog extends JDialog {
         boolean lbContinue = true;
         String folder = "/";
         File output = null;
-        while(lbContinue) {
+        while (lbContinue) {
             JFileChooser jfc = new JFileChooser(folder);
             jfc.setDialogType(JFileChooser.SAVE_DIALOG);
             // In case of 'Cancel' or 'Error', just return.
-            if(jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+            if (jfc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
                 return;
             }
             // Check whether file exists and if overwrite is desired.
             output = jfc.getSelectedFile();
-            if(output.exists()) {
+            if (output.exists()) {
                 int result = JOptionPane.showConfirmDialog(this, "File '" + output.getName() + "' exists, do you wish to overwrite?", "File exists. Overwrite?", JOptionPane.YES_NO_OPTION);
-                if(result == JOptionPane.NO_OPTION) {
+                if (result == JOptionPane.NO_OPTION) {
                     // Set the starting folder to the current one and continue the loop.
                     folder = output.getParentFile().getAbsolutePath();
                 } else {
@@ -337,7 +331,7 @@ public class MALDIStatisticsResultsDialog extends JDialog {
             while (iter.hasNext()) {
                 StringBuffer csvLine = new StringBuffer();
                 Object key = iter.next();
-                BrukerCompoundCouple lCompound = (BrukerCompoundCouple)iCouples.get(key);
+                BrukerCompoundCouple lCompound = (BrukerCompoundCouple) iCouples.get(key);
                 csvLine.append(lCompound.getRegulation(iUseArea) + ";");
                 csvLine.append(lCompound.getLightMass() + ";");
                 csvLine.append(lCompound.getHeavyMass() + ";");
@@ -348,15 +342,16 @@ public class MALDIStatisticsResultsDialog extends JDialog {
             bw.flush();
             bw.close();
             JOptionPane.showMessageDialog(this, "Written " + iCouples.size() + " couples to CSV output file '.", "CSV output file written.", JOptionPane.INFORMATION_MESSAGE);
-        } catch(IOException ioe) {
-            JOptionPane.showMessageDialog(this, new String[] {"Writing output file '" + output.getName() + "' failed.", ioe.getMessage()}, "Unable to write output file!", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
+            JOptionPane.showMessageDialog(this, new String[]{"Writing output file '" + output.getName() + "' failed.", ioe.getMessage()}, "Unable to write output file!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     /**
      * This method will create the human readable report.
      *
-     * @return  String with the human readable report.
+     * @return String with the human readable report.
      */
     private String getReadableText() {
         StringBuffer sb = new StringBuffer();
@@ -364,7 +359,7 @@ public class MALDIStatisticsResultsDialog extends JDialog {
         sb.append("Report for " + iName + ":\n");
         sb.append("\nRead " + iCompoundsRead + " compounds from file, of which");
         sb.append("\n\t- " + iCompoundsSingle + " were single,");
-        sb.append("\n\t- " + (iPairs*2) + " were paired into " + iPairs + " pairs, and");
+        sb.append("\n\t- " + (iPairs * 2) + " were paired into " + iPairs + " pairs, and");
         sb.append("\n\t- " + iCompoundsSkipped + " were skipped due to the ambiguity of the couples.");
         sb.append("\n\n");
         sb.append("Statistics for the couples:");
@@ -375,7 +370,7 @@ public class MALDIStatisticsResultsDialog extends JDialog {
         sb.append("Confidence intervals:");
         sb.append("\n\t- 95%: [" + new BigDecimal(i95Confidence[0]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ", " + new BigDecimal(i95Confidence[1]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + "] (log2), or [" + new BigDecimal(Math.pow(2, i95Confidence[0])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ", " + new BigDecimal(Math.pow(2, i95Confidence[1])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + "] (ratio) - yielding " + iRegulatedCount95 + " significantly up-or downregulated compound pairs.");
         sb.append("\n\t- 98%: [" + new BigDecimal(i98Confidence[0]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ", " + new BigDecimal(i98Confidence[1]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + "] (log2), or [" + new BigDecimal(Math.pow(2, i98Confidence[0])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ", " + new BigDecimal(Math.pow(2, i98Confidence[1])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + "] (ratio) - yielding " + iRegulatedCount98 + " significantly up-or downregulated compound pairs.");
-        if(iTotalFilesWritten > 0) {
+        if (iTotalFilesWritten > 0) {
             sb.append("\n\nWrote " + iTotalFilesWritten + " inclusion lists, ");
             sb.append("containing " + iTotalRegulatedCompounds + " significantly up- or down regulated couples");
             sb.append(" and " + iCompoundsSingle + " single compounds.");
@@ -387,7 +382,7 @@ public class MALDIStatisticsResultsDialog extends JDialog {
     /**
      * This method will create the report in CSV.
      *
-     * @return  String with the report in CSV.
+     * @return String with the report in CSV.
      */
     private String getCSVText() {
         StringBuffer sb = new StringBuffer();
@@ -399,8 +394,8 @@ public class MALDIStatisticsResultsDialog extends JDialog {
         sb.append("\nSkipped compounds;" + iCompoundsSkipped);
         sb.append("\n\nNumber;data points;median;corrected Huber scale;lower limit (95%);upper limit (95%);significantly regulated count (95%);lower limit (98%);upper limit (98%);significantly regulated count (98%)");
         sb.append("\nlog2;" + iPairs + ";" + new BigDecimal(iMedian).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(iScale).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(i95Confidence[0]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(i95Confidence[1]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + iRegulatedCount95 + ";" + new BigDecimal(i98Confidence[0]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(i98Confidence[1]).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + iRegulatedCount98);
-        sb.append("\nratio;" + iPairs + ";" + new BigDecimal(Math.pow(2, iMedian)).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";"  + "N/A" + ";" + new BigDecimal(Math.pow(2, i95Confidence[0])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(Math.pow(2, i95Confidence[1])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + iRegulatedCount95 + ";" + new BigDecimal(Math.pow(2, i98Confidence[0])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(Math.pow(2, i98Confidence[1])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + iRegulatedCount98);
-        if(iTotalFilesWritten > 0) {
+        sb.append("\nratio;" + iPairs + ";" + new BigDecimal(Math.pow(2, iMedian)).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + "N/A" + ";" + new BigDecimal(Math.pow(2, i95Confidence[0])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(Math.pow(2, i95Confidence[1])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + iRegulatedCount95 + ";" + new BigDecimal(Math.pow(2, i98Confidence[0])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + new BigDecimal(Math.pow(2, i98Confidence[1])).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ";" + iRegulatedCount98);
+        if (iTotalFilesWritten > 0) {
             sb.append("\n\ninclusion list files written;" + iTotalFilesWritten);
             sb.append("\nregulated couples in list;" + iTotalRegulatedCompounds);
             sb.append("\nsingles in list;" + iCompoundsSingle);

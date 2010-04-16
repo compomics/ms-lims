@@ -8,6 +8,8 @@
  */
 package com.compomics.mslims.util.mascot;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -20,10 +22,11 @@ import java.util.*;
  */
 
 /**
- * This class is a wrapper for the full amount of information Mascot delivers
- * on an identification for a spectrum.
+ * This class is a wrapper for the full amount of information Mascot delivers on an identification for a spectrum.
  */
 public class MascotIdentifiedSpectrum {
+    // Class specific log4j logger for MascotIdentifiedSpectrum instances.
+    private static Logger logger = Logger.getLogger(MascotIdentifiedSpectrum.class);
 
     /**
      * The original file name. No tampering for post-processing here.
@@ -48,7 +51,7 @@ public class MascotIdentifiedSpectrum {
      * The sequence for the identified peptide.
      */
     private String sequence;
-    
+
     /**
      * The modified sequence for the spectrum.
      */
@@ -58,7 +61,7 @@ public class MascotIdentifiedSpectrum {
      * The ion coverage for the spectrum.
      */
     private String ion_coverage = null;
-    
+
     /**
      * The fixed modifications that are present on the identification.
      */
@@ -173,14 +176,13 @@ public class MascotIdentifiedSpectrum {
     }
 
 
-
     /**
      * This method reports the outcome of the following operation:
      * <pre>experimentalMass - theoreticalMass</pre> and as such allows
      * for negative numbers in the result.
      *
-     * @return  double with the outcome of the operation:
-     *                  <pre>experimentalMass - theoreticalMass</pre>
+     * @return double with the outcome of the operation:
+     *         <pre>experimentalMass - theoreticalMass</pre>
      */
     public double getDelta() {
         return (measuredMass - theoreticalMass);
@@ -191,8 +193,8 @@ public class MascotIdentifiedSpectrum {
      * <pre>|experimentalMass - theoreticalMass|</pre> and as such allows
      * for only positive numbers in the result.
      *
-     * @return  double with the outcome of the operation:
-     *                  <pre>|experimentalMass - theoreticalMass|</pre>
+     * @return double with the outcome of the operation:
+     *         <pre>|experimentalMass - theoreticalMass|</pre>
      */
     public double getAbsoluteDelta() {
         return Math.abs(measuredMass - theoreticalMass);
@@ -265,7 +267,7 @@ public class MascotIdentifiedSpectrum {
 
     public void setDescription(String aDescription, String aAccession) {
         MascotHeader mh = this.iHeaders.getHeader(aAccession);
-        if(mh != null) {
+        if (mh != null) {
             mh.setDescription(aDescription);
         }
     }
@@ -273,7 +275,7 @@ public class MascotIdentifiedSpectrum {
     public String getIsoformAccessions(String accession) {
         String result = null;
         MascotHeader mh = this.iHeaders.getHeader(accession);
-        if(mh != null) {
+        if (mh != null) {
             result = mh.getIsoformAccessions();
         }
         return result;
@@ -344,11 +346,11 @@ public class MascotIdentifiedSpectrum {
     }
 
     /**
-     * This method returns the sequence, 'tagged' with all variable modifications. <br />
-     * The formatting of this String is the brainchild of Dr. Grégoire Thomas.
+     * This method returns the sequence, 'tagged' with all variable modifications. <br /> The formatting of this String
+     * is the brainchild of Dr. Grégoire Thomas.
      *
-     * @return  String  with the sequence for this identification, annotated with
-     *                  modification tags, as concocted by Dr. Grégoire Thomas.
+     * @return String  with the sequence for this identification, annotated with modification tags, as concocted by Dr.
+     *         Grégoire Thomas.
      */
     public String getModifiedSequence() {
         return modified_sequence;
@@ -375,7 +377,7 @@ public class MascotIdentifiedSpectrum {
     }
 
     public int getScore() {
-        return (int)(this.score+0.5);
+        return (int) (this.score + 0.5);
     }
 
     public double getRealScore() {
@@ -395,7 +397,7 @@ public class MascotIdentifiedSpectrum {
     }
 
     public int getIdentityTreshold() {
-            return identityTreshold;
+        return identityTreshold;
     }
 
     public void setIdentityTreshold(int aiIT) {
@@ -445,7 +447,7 @@ public class MascotIdentifiedSpectrum {
     /**
      * This method generates a String representation of this identification.
      *
-     * @return  String  with the String representation of this object.
+     * @return String  with the String representation of this object.
      */
     public String toString() {
         StringBuffer temp = new StringBuffer("\n");
@@ -453,7 +455,7 @@ public class MascotIdentifiedSpectrum {
 
         temp.append("Spectrum with: \n");
         temp.append("\t- sequence: " + this.sequence + "\tModified sequence: " + this.getModifiedSequence() + "\n");
-        temp.append("\t- matching: " + accession + ((this.getStart(accession) >= 0)?"(" + this.getStart(accession) + "-" + this.getEnd(accession) + ")\n":"\n"));
+        temp.append("\t- matching: " + accession + ((this.getStart(accession) >= 0) ? "(" + this.getStart(accession) + "-" + this.getEnd(accession) + ")\n" : "\n"));
         temp.append("\t\t\t" + this.getDescription(accession) + "\n");
         temp.append("\t- score: " + this.getScore() + "\n");
         temp.append("\t- Mr(cal): " + this.theoreticalMass + "\n");
@@ -473,16 +475,11 @@ public class MascotIdentifiedSpectrum {
     }
 
     /**
-     * The hashcode generated here results from combining the following
-     * (key, value) pairs in a HashMap and then exracting that HashMap's
-     * hashcode:
-     * <ul>
-     *   <li>"1" : query (Integer)</li>
-     *   <li>"2" : rank (Integer)</li>
-     *   <li>"3" : original filename (String)</li>
-     * </ul>
+     * The hashcode generated here results from combining the following (key, value) pairs in a HashMap and then
+     * exracting that HashMap's hashcode: <ul> <li>"1" : query (Integer)</li> <li>"2" : rank (Integer)</li> <li>"3" :
+     * original filename (String)</li> </ul>
      *
-     * @return  int with the hashcode for this instance.
+     * @return int with the hashcode for this instance.
      */
     public int hashCode() {
         HashMap temp = new HashMap(3);

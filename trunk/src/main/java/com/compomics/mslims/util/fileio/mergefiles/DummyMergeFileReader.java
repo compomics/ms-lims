@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio.mergefiles;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
 import com.compomics.util.interfaces.SpectrumFile;
@@ -21,31 +23,34 @@ import java.util.Vector;
  */
 
 /**
- * This class 
+ * This class
  *
  * @author Lennart
  */
 public class DummyMergeFileReader implements MergeFileReader {
+    // Class specific log4j logger for DummyMergeFileReader instances.
+    private static Logger logger = Logger.getLogger(DummyMergeFileReader.class);
 
     /**
      * Useless constructor.
      *
      * @param aFile File that is not in any way used.
      */
-    public DummyMergeFileReader(File aFile) {}
+    public DummyMergeFileReader(File aFile) {
+    }
 
     /**
      * Default constructor.
      */
-    public DummyMergeFileReader(){}
+    public DummyMergeFileReader() {
+    }
 
     /**
-     * This method will return a matching PKL file for the given
-     * MascotIdentifiedSpectrum (if any), or 'null' if none found.
-     * It is based on the 'corresponds' method of the PKLFile class.
+     * This method will return a matching PKL file for the given MascotIdentifiedSpectrum (if any), or 'null' if none
+     * found. It is based on the 'corresponds' method of the PKLFile class.
      *
-     * @param   aMis    MascotIdentifiedSpectrum to compare to.
-     * @return  PKLFile with the corresponding PKLFile or 'null' if none found.
+     * @param aMis MascotIdentifiedSpectrum to compare to.
+     * @return PKLFile with the corresponding PKLFile or 'null' if none found.
      */
     public SpectrumFile findMatchingSpectrumFile(MascotIdentifiedSpectrum aMis) {
         return null;
@@ -54,20 +59,18 @@ public class DummyMergeFileReader implements MergeFileReader {
     /**
      * Shortcut method that reports all teh PKL filenames in a String array.
      *
-     * @return  String[]    with the filenames of all the PKL files in this mergefile.
+     * @return String[]    with the filenames of all the PKL files in this mergefile.
      */
     public String[] getAllSpectrumFilenames() {
         return new String[0];
     }
 
     /**
-     * THis method returns the filename of the pklfile that was found
-     * matching the specified MascotIdentifiedSpectrum, or 'null' if no match
-     * was found.
+     * THis method returns the filename of the pklfile that was found matching the specified MascotIdentifiedSpectrum,
+     * or 'null' if no match was found.
      *
-     * @param   aMis    MascotIdentifiedSpectrum to compare to.
-     * @return  String  with the filename of the corresponding PKL file, or
-     *                  'null' if none was found.
+     * @param aMis MascotIdentifiedSpectrum to compare to.
+     * @return String  with the filename of the corresponding PKL file, or 'null' if none was found.
      */
     public String getCorrespondingSpectrumFilename(MascotIdentifiedSpectrum aMis) {
         return "*";
@@ -76,17 +79,16 @@ public class DummyMergeFileReader implements MergeFileReader {
     /**
      * Simple getter for the filename for this Mergefile.
      *
-     * @return  String  with the filename.
+     * @return String  with the filename.
      */
     public String getFilename() {
         return "*";
     }
 
     /**
-     * This method reports on the PKL files currently held in this
-     * merge file.
+     * This method reports on the PKL files currently held in this merge file.
      *
-     * @return  Vector  with the currently held PKLFiles.
+     * @return Vector  with the currently held PKLFiles.
      */
     public Vector getSpectrumFiles() {
         return new Vector();
@@ -95,8 +97,8 @@ public class DummyMergeFileReader implements MergeFileReader {
     /**
      * This method reports whether this MergeFileReader can read the specified file.
      *
-     * @param   aFile   File with the file to check readability for.
-     * @return  boolean that indicates whether this MergeFileReader can read the specified file.
+     * @param aFile File with the file to check readability for.
+     * @return boolean that indicates whether this MergeFileReader can read the specified file.
      */
     public boolean canRead(File aFile) {
         // Always return false!
@@ -106,10 +108,10 @@ public class DummyMergeFileReader implements MergeFileReader {
     }
 
     /**
-     * This method does nothing with the provided file as this implementation is
-     * just a dummy.
+     * This method does nothing with the provided file as this implementation is just a dummy.
      *
-     * @param   aFile with a file that is completely ignored by this implementation.
+     * @param aFile with a file that is completely ignored by this implementation.
      */
-    public void load(File aFile){}
+    public void load(File aFile) {
+    }
 }

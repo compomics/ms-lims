@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.db.interfaces.Deleteable;
 import com.compomics.util.db.interfaces.Persistable;
 import com.compomics.util.db.interfaces.Retrievable;
@@ -27,6 +29,8 @@ import java.util.HashMap;
  * @author DBAccessor generator class (Lennart Martens).
  */
 public class ValidationTableAccessor implements Deleteable, Retrievable, Updateable, Persistable {
+    // Class specific log4j logger for ValidationTableAccessor instances.
+    private static Logger logger = Logger.getLogger(ValidationTableAccessor.class);
 
     /**
      * This variable tracks changes to the object.
@@ -126,8 +130,8 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
      * This constructor allows the creation of the 'ValidationTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     *                this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public ValidationTableAccessor(HashMap aParams) {
         if (aParams.containsKey(VALIDATIONID)) {
@@ -415,7 +419,8 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
     }
 
     /**
-     * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
+     * This method will return the automatically generated key for the insert if one was triggered, or 'null'
+     * otherwise.
      *
      * @return Object[]    with the generated keys.
      */

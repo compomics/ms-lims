@@ -6,7 +6,10 @@
  */
 package com.compomics.mslims.util.fileio.mergers;
 
-import com.compomics.mslims.db.accessors.Spectrumfile;
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import org.apache.log4j.Logger;
+
+import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.util.fileio.MascotGenericFile;
 import com.compomics.util.interfaces.Flamable;
@@ -26,13 +29,15 @@ import java.util.Vector;
  */
 
 /**
- * This class merges Mascot Generic Format files from the database.
- * Note that information loss occurs due to replacing the title with the filename.
+ * This class merges Mascot Generic Format files from the database. Note that information loss occurs due to replacing
+ * the title with the filename.
  *
  * @author Lennart Martens
  * @version $Id: MGFMerger.java,v 1.5 2005/02/23 08:58:41 lennart Exp $
  */
 public class MGFMerger extends MergerAncestor {
+    // Class specific log4j logger for MGFMerger instances.
+    private static Logger logger = Logger.getLogger(MGFMerger.class);
 
     /**
      * The flamable parent.
@@ -72,15 +77,15 @@ public class MGFMerger extends MergerAncestor {
     /**
      * This constructor will set up a graphical MGFMerger that will display progress..
      *
-     * @param aParent   Flamable with the parent.
-     * @param aProgress DefaultProgressBar with the progress bar to display. Can be 'null' for no progressbar.
-     * @param aConn Connection with the database connection.
-     * @param aDestinationFolder    File with the location for the mergefile.
-     * @param   aSize   int with the maximum number of PKL files per merged file.
-     * @param   aWhereClause    String with the 'where' part for the query that will be launched. Can be 'null'
-     *                          in which case no 'where' part will be added to the query.
-     * @param   aResults    HashMap that will contain the results after completion (some number data on operation
-     *                      performed). <b>Please note</b> that this is a reference parameter.
+     * @param aParent            Flamable with the parent.
+     * @param aProgress          DefaultProgressBar with the progress bar to display. Can be 'null' for no progressbar.
+     * @param aConn              Connection with the database connection.
+     * @param aDestinationFolder File with the location for the mergefile.
+     * @param aSize              int with the maximum number of PKL files per merged file.
+     * @param aWhereClause       String with the 'where' part for the query that will be launched. Can be 'null' in
+     *                           which case no 'where' part will be added to the query.
+     * @param aResults           HashMap that will contain the results after completion (some number data on operation
+     *                           performed). <b>Please note</b> that this is a reference parameter.
      */
     public MGFMerger(Flamable aParent, DefaultProgressBar aProgress, Connection aConn, File aDestinationFolder, int aSize, String aWhereClause, HashMap aResults) throws Exception {
         iParent = aParent;
@@ -101,8 +106,8 @@ public class MGFMerger extends MergerAncestor {
     }
 
     /**
-     * This method will read the inputfiles from the DB connection and write the
-     * merged files to the specified destination folder.
+     * This method will read the inputfiles from the DB connection and write the merged files to the specified
+     * destination folder.
      */
     private Object mergeFilesFromDBConnectionToFile() {
         // The stats and container thereof.
@@ -110,38 +115,39 @@ public class MGFMerger extends MergerAncestor {
         int needed = 0;
         try {
             // Construct the query.
-            StringBuffer query = new StringBuffer(Spectrumfile.getBasicSelect());
-            if(iWhereClause != null) {
+            StringBuffer query = new StringBuffer(Spectrum.getBasicSelect());
+            if (iWhereClause != null) {
                 query.append(" " + iWhereClause.trim());
             }
             query.append(" order by creationdate");
             PreparedStatement ps = iConn.prepareStatement(query.toString());
             ResultSet rs = ps.executeQuery();
             Vector tempVec = new Vector(iSize);
-            while(rs.next()) {
-                Spectrumfile mgf = new Spectrumfile(rs);
-                if(iProgress != null) {
+            while (rs.next()) {
+                Spectrum mgf = new Spectrum(rs);
+                Spectrum_file lSpectrum_file = Spectrum_file.findFromID(mgf.getSpectrumid(), iConn);
+                if (iProgress != null) {
                     iProgress.setMessage("Merging spectrum '" + mgf.getFilename() + "'.");
                 }
-                MascotGenericFile file = new MascotGenericFile(mgf.getFilename(), new String(mgf.getUnzippedFile()));
+                MascotGenericFile file = new MascotGenericFile(mgf.getFilename(), new String(lSpectrum_file.getUnzippedFile()));
                 // Note the use of the 'true' flag, which takes care of substituting the original title with the
                 // filename!
                 tempVec.add(file.toString(true) + "\n\n");
                 total++;
-                if(total % iSize == 0) {
+                if (total % iSize == 0) {
                     needed++;
                     String suffix = iSDF.format(new java.util.Date());
-                    if(iProgress != null) {
+                    if (iProgress != null) {
                         iProgress.setMessage("Writing 'mergefile_" + suffix + ".txt'.");
                     }
                     mergeFilesFromString(tempVec, iDestinationFolder, suffix);
                     tempVec = new Vector(iSize);
                 }
-                if(iProgress != null) {
-                    iProgress.setValue(iProgress.getValue()+1);
+                if (iProgress != null) {
+                    iProgress.setValue(iProgress.getValue() + 1);
                 }
             }
-            if(tempVec.size() > 0) {
+            if (tempVec.size() > 0) {
                 needed++;
                 String suffix = iSDF.format(new java.util.Date());
                 mergeFilesFromString(tempVec, iDestinationFolder, suffix);
@@ -152,10 +158,10 @@ public class MGFMerger extends MergerAncestor {
             // Set the stats and return them.
             iResults.put(TOTAL_NUMBER_OF_FILES, new Integer(total));
             iResults.put(TOTAL_NUMBER_OF_MERGEFILES, new Integer(needed));
-            if(iProgress != null) {
+            if (iProgress != null) {
                 iProgress.setValue(iProgress.getMaximum());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             iParent.passHotPotato(e, "Unable to merge files: " + e.getMessage());
         }
         return "";

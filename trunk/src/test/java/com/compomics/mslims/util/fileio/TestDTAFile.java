@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.DTAFile;
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import junit.TestCaseLM;
@@ -29,6 +31,8 @@ import java.util.Vector;
  * @see com.compomics.mslims.util.fileio.DTAFile
  */
 public class TestDTAFile extends TestCaseLM {
+    // Class specific log4j logger for TestDTAFile instances.
+    private static Logger logger = Logger.getLogger(TestDTAFile.class);
 
     public TestDTAFile() {
         this("Test for the PKLFile class");
@@ -59,12 +63,12 @@ public class TestDTAFile extends TestCaseLM {
             BufferedReader control = new BufferedReader(new FileReader(input));
             BufferedReader test = new BufferedReader(new FileReader(output));
             String line = null;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing DTAFile to outputstream: " + ioe.getMessage() + "!");
         }
 
@@ -84,12 +88,12 @@ public class TestDTAFile extends TestCaseLM {
             // First line has 'temp' appended to the filename.
             line = test.readLine();
             int spaceLocation = line.lastIndexOf(" ");
-            Assert.assertEquals(control.readLine(), line.substring(0, spaceLocation+1) + line.substring(spaceLocation+5));
-            while((line = control.readLine()) != null) {
+            Assert.assertEquals(control.readLine(), line.substring(0, spaceLocation + 1) + line.substring(spaceLocation + 5));
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing DTAFile to file: " + ioe.getMessage() + "!");
         }
 
@@ -111,12 +115,12 @@ public class TestDTAFile extends TestCaseLM {
             String line = control.readLine();
             int spaceLocation = line.lastIndexOf(" ");
             Assert.assertEquals(line.substring(0, spaceLocation), test.readLine());
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing DTAFile to outputstream: " + ioe.getMessage() + "!");
         }
 
@@ -136,11 +140,11 @@ public class TestDTAFile extends TestCaseLM {
             String line = control.readLine();
             int spaceLocation = line.lastIndexOf(" ");
             Assert.assertEquals(line.substring(0, spaceLocation), test.readLine());
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing DTAFile to file: " + ioe.getMessage() + "!");
         }
     }
@@ -149,7 +153,7 @@ public class TestDTAFile extends TestCaseLM {
      * This method test the exporting of a PKL file into Mascot Generic Format.
      */
     public void testMGFExport() {
-         File input = new File(super.getFullFilePath("testDTA.txt"));
+        File input = new File(super.getFullFilePath("testDTA.txt"));
         // First test write with the filename.
         try {
             // Reading original.
@@ -161,14 +165,14 @@ public class TestDTAFile extends TestCaseLM {
             BufferedReader toTest = new BufferedReader(new StringReader(mgfContents));
             String line = null;
             int lineCounter = 0;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 lineCounter++;
-                Assert.assertEquals("Error comparing control line " + lineCounter +"!", line, toTest.readLine());
+                Assert.assertEquals("Error comparing control line " + lineCounter + "!", line, toTest.readLine());
             }
             Assert.assertTrue(toTest.readLine() == null);
             control.close();
             toTest.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing DTAFile to outputstream: " + ioe.getMessage() + "!");
         }
     }

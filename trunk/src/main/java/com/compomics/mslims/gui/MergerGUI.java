@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Instrument;
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
@@ -39,10 +41,11 @@ import java.util.*;
  * @author Thilo Muth
  */
 public class MergerGUI extends FlamableJFrame implements Connectable {
+    // Class specific log4j logger for MergerGUI instances.
+    private static Logger logger = Logger.getLogger(MergerGUI.class);
 
     /**
-     * Boolean that indicates whether the tool is ran in
-     * stand-alone mode ('true') or not ('false').
+     * Boolean that indicates whether the tool is ran in stand-alone mode ('true') or not ('false').
      */
     private static boolean iStandAlone = true;
 
@@ -107,74 +110,66 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
     private JCheckBox chkOrdering = null;
 
     /**
-     * Radio Button to indicate that we want to retrieve already searched spectra. <br />
-     * (Only in FROM_DB mode!)
+     * Radio Button to indicate that we want to retrieve already searched spectra. <br /> (Only in FROM_DB mode!)
      */
     private JRadioButton rdbSearchedInc = null;
 
     /**
-     * Radio Button to indicate that we do not want to retrieve already searched spectra. <br />
-     * (Only in FROM_DB mode!)
+     * Radio Button to indicate that we do not want to retrieve already searched spectra. <br /> (Only in FROM_DB
+     * mode!)
      */
     private JRadioButton rdbSearchedExc = null;
 
     /**
-     * Radio Button to indicate that we do not want to use the 'searched' flag as a query param
-     * (thus retrieve all, regardless of searched or not). <br />
-     * 'Only in FROM_DB mode!)
+     * Radio Button to indicate that we do not want to use the 'searched' flag as a query param (thus retrieve all,
+     * regardless of searched or not). <br /> 'Only in FROM_DB mode!)
      */
     private JRadioButton rdbSearchedOff = null;
 
     /**
-     * Radio Button to indicate that we want to retrieve already identified spectra. <br />
-     * (Only in FROM_DB mode!)
+     * Radio Button to indicate that we want to retrieve already identified spectra. <br /> (Only in FROM_DB mode!)
      */
     private JRadioButton rdbIdentifiedInc = null;
 
     /**
-     * Radio Button to indicate that we do not want to retrieve already identified spectra. <br />
-     * (Only in FROM_DB mode!)
+     * Radio Button to indicate that we do not want to retrieve already identified spectra. <br /> (Only in FROM_DB
+     * mode!)
      */
     private JRadioButton rdbIdentifiedExc = null;
 
     /**
-     * Radio Button to indicate that we do not want to use the 'identified' flag as a query param.
-     * (thus retrieve all, regardless of identified or not). <br />
-     * (Only in FROM_DB mode!)
+     * Radio Button to indicate that we do not want to use the 'identified' flag as a query param. (thus retrieve all,
+     * regardless of identified or not). <br /> (Only in FROM_DB mode!)
      */
     private JRadioButton rdbIdentifiedOff = null;
 
     /**
-     * This combobox allows the user to select only those spectrum files that originate
-     * form the specified instrument.
+     * This combobox allows the user to select only those spectrum files that originate form the specified instrument.
      * (Only in FROM_DB mode!)
      */
     private JComboBox cmbInstruments = null;
 
     /**
-     * This textbox allows the user to select only those spectrum files that match the presented filename.
-     * (Only in FROM_DB mode!)
+     * This textbox allows the user to select only those spectrum files that match the presented filename. (Only in
+     * FROM_DB mode!)
      */
     private JTextField txtFilename = null;
 
     /**
-     * This constructor will initialize the component and
-     * construct the GUI.
+     * This constructor will initialize the component and construct the GUI.
      */
     public MergerGUI() {
         this("Spectrum Merger GUI", null, null);
     }
 
     /**
-     * This constructor allows the choice of the display as well as the
-     * specification of the connection to use (and its name).
+     * This constructor allows the choice of the display as well as the specification of the connection to use (and its
+     * name).
      *
      * @param aTitle  String with the title for the JFrame.
-     * @param aConn   Connection with the database connection
-     *                to use. 'null' means no connection specified
-     *                so create your own (pops up ConnectionDialog).
-     * @param aDBName String with the name for the database connection.
-     *                Only read if aConn != null.
+     * @param aConn   Connection with the database connection to use. 'null' means no connection specified so create
+     *                your own (pops up ConnectionDialog).
+     * @param aDBName String with the name for the database connection. Only read if aConn != null.
      */
 
     public MergerGUI(String aTitle, Connection aConn, String aDBName) {
@@ -204,7 +199,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
         this.pack();
         loadProjectsTriggered();
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((int)(d.getWidth() / 4), (int)(d.getHeight() / 3));
+        this.setLocation((int) (d.getWidth() / 4), (int) (d.getHeight() / 3));
     }
 
     /**
@@ -257,14 +252,14 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
                         txtDestination.setText(jfc.getSelectedFile()
                                 .getCanonicalPath());
                     } catch (IOException ioe) {
-                        JOptionPane
-                                .showMessageDialog(
-                                        MergerGUI.this,
-                                        new String[]{
-                                                "Unable to find the folder you've selected!",
-                                                "\n", ioe.getMessage(), "\n"},
-                                        "Folder was not found!",
-                                        JOptionPane.ERROR_MESSAGE);
+                        logger.error(ioe.getMessage(), ioe);
+                        JOptionPane.showMessageDialog(
+                                MergerGUI.this,
+                                new String[]{
+                                        "Unable to find the folder you've selected!",
+                                        "\n", ioe.getMessage(), "\n"},
+                                "Folder was not found!",
+                                JOptionPane.ERROR_MESSAGE);
                         txtDestination.setText("");
                     }
                 }
@@ -282,7 +277,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
         jpanFolderLabel.setLayout(new BoxLayout(jpanFolderLabel, BoxLayout.Y_AXIS));
 
         jpanFolderLabel.add(new JLabel("Select destination folder: "));
-        jpanFolderLabel.add(Box.createRigidArea(new Dimension(txtDestination.getWidth(), (int)(btnBrowseDestination.getPreferredSize().getHeight() / 2))));
+        jpanFolderLabel.add(Box.createRigidArea(new Dimension(txtDestination.getWidth(), (int) (btnBrowseDestination.getPreferredSize().getHeight() / 2))));
         jpanFolderLabel.add(new JLabel("Number of spectrum files per mergefile: "));
 
         JPanel jpanProjectsCombo = new JPanel();
@@ -302,7 +297,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
         jpanProjects.add(jpanProjectsOrdering);
 
         JPanel jpanDestination = new JPanel();
-        jpanDestination.setLayout(new BoxLayout(jpanDestination,BoxLayout.X_AXIS));
+        jpanDestination.setLayout(new BoxLayout(jpanDestination, BoxLayout.X_AXIS));
         jpanDestination.add(txtDestination);
         jpanDestination.add(Box.createRigidArea(new Dimension(10, txtDestination.getHeight())));
         jpanDestination.add(btnBrowseDestination);
@@ -517,6 +512,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
                     throw new Exception("Zero or less.");
                 }
             } catch (Exception e) {
+                logger.error(e.getMessage(), e);
                 JOptionPane.showMessageDialog(this,
                         "The number of spectrum files per merge file you specified ("
                                 + lSize + ") is not a positive whole number!",
@@ -532,9 +528,12 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
 
         File fDestination = new File(destination);
         if (!fDestination.exists()) {
+
+            String lMessage = "The destination folder you specified (" + destination
+                    + ") does not exist!";
+            logger.error(lMessage);
             JOptionPane.showMessageDialog(this,
-                    "The destination folder you specified (" + destination
-                            + ") does not exist!", "Folder does not exist!",
+                    lMessage, "Folder does not exist!",
                     JOptionPane.ERROR_MESSAGE);
             txtDestination.requestFocus();
             return;
@@ -557,7 +556,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
         int result = 0;
         try {
             String whereClause = "where l_projectid="
-                    + ((Project)cmbProjects.getSelectedItem()).getProjectid();
+                    + ((Project) cmbProjects.getSelectedItem()).getProjectid();
             // Now to generate a 'where' clause...
             if (!rdbSearchedOff.isSelected()) {
                 whereClause += " and searched";
@@ -566,8 +565,10 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
                 } else if (rdbSearchedExc.isSelected()) {
                     whereClause += "=0";
                 } else {
+                    String lMessage = "No 'Searched' radio button selected!";
+                    logger.error(lMessage);
                     JOptionPane.showMessageDialog(this,
-                            "No 'Searched' radio button selected!",
+                            lMessage,
                             "No 'searched' radio button selected!",
                             JOptionPane.ERROR_MESSAGE);
                     return;
@@ -580,8 +581,10 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
                 } else if (rdbIdentifiedExc.isSelected()) {
                     whereClause += "=0";
                 } else {
+                    String lMessage = "No 'Identified' radio button selected!";
+                    logger.error(lMessage);
                     JOptionPane.showMessageDialog(this,
-                            "No 'Identified' radio button selected!",
+                            lMessage,
                             "No 'identified' radio button selected!",
                             JOptionPane.ERROR_MESSAGE);
                     return;
@@ -590,7 +593,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
             if (cmbInstruments.getSelectedItem() instanceof Instrument) {
                 // Okay, selection should include an instrument.
                 whereClause += " and l_instrumentid = "
-                        + ((Instrument)cmbInstruments.getSelectedItem())
+                        + ((Instrument) cmbInstruments.getSelectedItem())
                         .getInstrumentid();
             }
             String filename = txtFilename.getText().trim();
@@ -611,10 +614,10 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
                 }
                 whereClause += filename + "'";
             }
-            System.out.println("Where clause: " + whereClause);
+            logger.info("Where clause: " + whereClause);
             Statement stat = iConn.createStatement();
             ResultSet rs = stat
-                    .executeQuery("select count(*) from spectrumfile "
+                    .executeQuery("select count(*) from spectrum"
                             + whereClause);
             rs.next();
             int count = rs.getInt(1);
@@ -639,9 +642,9 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
                         fDestination, size, whereClause, stats);
                 merger.start();
                 dpb.setVisible(true);
-                allFiles = ((Integer)stats
+                allFiles = ((Integer) stats
                         .get(MGFMerger.TOTAL_NUMBER_OF_FILES)).intValue();
-                mergeFiles = ((Integer)stats
+                mergeFiles = ((Integer) stats
                         .get(MGFMerger.TOTAL_NUMBER_OF_MERGEFILES)).intValue();
                 result = JOptionPane.showConfirmDialog(this, new String[]{
                         "Merged " + allFiles + " files into " + mergeFiles
@@ -652,10 +655,11 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
                         JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
+
             JOptionPane.showMessageDialog(this,
                     "Unable to merge spectrum files: " + e.getMessage() + "!",
                     "Unable to perform merging!", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         this.setCursor(curs);
         if (result == JOptionPane.NO_OPTION) {
@@ -710,24 +714,24 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * This method displays an error message about the necessity of filling out
-     * the specified component first.
+     * This method displays an error message about the necessity of filling out the specified component first.
      *
      * @param aComponent String with the description of the data for the component that needs to be filled out.
      */
     private void fillOutComponentWarning(String aComponent) {
-        JOptionPane.showMessageDialog(this, "You need to fill out the "
-                + aComponent + " first!", aComponent + " not filled out!",
+        String lMessage = "You need to fill out the "
+                + aComponent + " first!";
+        logger.error(lMessage);
+        JOptionPane.showMessageDialog(this, lMessage, aComponent + " not filled out!",
                 JOptionPane.ERROR_MESSAGE);
     }
 
     /**
-     * This method re-sorts the projects in the combobox.
-     * If the boolean is 'true', sorting is alphabetically on the project title,
-     * otherwise( boolean 'false') it is by project number (project id).
+     * This method re-sorts the projects in the combobox. If the boolean is 'true', sorting is alphabetically on the
+     * project title, otherwise( boolean 'false') it is by project number (project id).
      *
-     * @param aAlphabetically boolean to indicate whether sorting should be performed
-     *                        alphabetically ('true') or by project number ('false').
+     * @param aAlphabetically boolean to indicate whether sorting should be performed alphabetically ('true') or by
+     *                        project number ('false').
      */
     private void resortProjects(boolean aAlphabetically) {
         Comparator comp = null;
@@ -735,8 +739,8 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
             // Alphabetic ordering of the project title.
             comp = new Comparator() {
                 public int compare(Object o, Object o1) {
-                    Project p1 = (Project)o;
-                    Project p2 = (Project)o1;
+                    Project p1 = (Project) o;
+                    Project p2 = (Project) o1;
                     return p1.getTitle().compareToIgnoreCase(p2.getTitle());
                 }
             };
@@ -744,9 +748,9 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
             // Ordering on the projectid.
             comp = new Comparator() {
                 public int compare(Object o, Object o1) {
-                    Project p1 = (Project)o;
-                    Project p2 = (Project)o1;
-                    return (int)(p2.getProjectid() - p1.getProjectid());
+                    Project p1 = (Project) o;
+                    Project p2 = (Project) o1;
+                    return (int) (p2.getProjectid() - p1.getProjectid());
                 }
             };
         }
@@ -764,13 +768,11 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
      * @param aConn   Connection with the DB connection.
-     * @param aDBName String with an identifier for the connection, typically the
-     *                name of the DB connected to.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
         if (aConn == null) {
@@ -782,8 +784,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * This method should be called when the application is
-     * not launched in stand-alone mode.
+     * This method should be called when the application is not launched in stand-alone mode.
      */
     public static void setNotStandAlone() {
         iStandAlone = false;
@@ -804,9 +805,9 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
             if (iConn != null) {
                 try {
                     iConn.close();
-                    System.out.println("\nDB connection closed.\n");
+                    logger.info("\nDB connection closed.\n");
                 } catch (SQLException sqle) {
-                    System.err.println("\nUnable to close DB connection!\n");
+                    logger.error("\nUnable to close DB connection!\n");
                 }
             }
             System.exit(0);
@@ -814,13 +815,12 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * Main method is the entry point for the application.
-     * Start-up parameters are not used.
+     * Main method is the entry point for the application. Start-up parameters are not used.
      *
      * @param args String[] with the start-up paremeters.
      */
-	public static void main(String[] args) {
-		MergerGUI mg = new MergerGUI();
-		mg.setVisible(true);
-	}
+    public static void main(String[] args) {
+        MergerGUI mg = new MergerGUI();
+        mg.setVisible(true);
+    }
 }

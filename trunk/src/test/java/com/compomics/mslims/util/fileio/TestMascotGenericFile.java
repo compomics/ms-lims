@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.MascotGenericFile;
 import com.compomics.mslims.util.fileio.mergefiles.MascotGenericMergeFileReader;
 import junit.TestCaseLM;
@@ -31,6 +33,8 @@ import java.util.Vector;
  * @see com.compomics.mslims.util.fileio.MascotGenericFile
  */
 public class TestMascotGenericFile extends TestCaseLM {
+    // Class specific log4j logger for TestMascotGenericFile instances.
+    private static Logger logger = Logger.getLogger(TestMascotGenericFile.class);
 
     public TestMascotGenericFile() {
         this("test case for the MascotGenericFile class.");
@@ -47,28 +51,28 @@ public class TestMascotGenericFile extends TestCaseLM {
         try {
             MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_1.mgf")));
             Assert.assertEquals("TestMascotGenericFile_1.mgf", mgf.getFilename());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
 
         try {
             MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_2.mgf")));
             Assert.assertEquals("TestMascotGenericFile_2.mgf", mgf.getFilename());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
 
         try {
             MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_3.mgf")));
             Assert.assertEquals("TestMascotGenericFile_3.mgf", mgf.getFilename());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
 
         try {
             MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("testMascotDistiller~data~L59_Bart_Metox_080530A_forward_p2A01.RAW.-1.mgf")));
             Assert.assertEquals("testMascotDistiller~data~L59_Bart_Metox_080530A_forward_p2A01.RAW.-1.mgf", mgf.getFilename());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
 
@@ -76,7 +80,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         try {
             new MascotGenericFile(new File("TestMascotGenericFile_IDONOTEXIST.mgf"));
             fail("No IOException thrown when attempting to test the creation of a MascotGenericFile with a non-existant file!");
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             // This is OK.
         }
 
@@ -85,10 +89,10 @@ public class TestMascotGenericFile extends TestCaseLM {
         try {
             BufferedReader br = new BufferedReader(new FileReader(super.getFullFilePath("TestMascotGenericFile_1.mgf")));
             String line = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 contents.append(line + "\n");
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown when attempting to read the file 'TestMascotGenericFile_1.mgf' to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
         MascotGenericFile mgf = new MascotGenericFile("TestMascotGenericFile_1.mgf", contents.toString());
@@ -96,8 +100,8 @@ public class TestMascotGenericFile extends TestCaseLM {
     }
 
     /**
-     * This method test the reading of an MGF file into a MascotGenericFile object
-     * and the subsequent writing of the instance back to file.
+     * This method test the reading of an MGF file into a MascotGenericFile object and the subsequent writing of the
+     * instance back to file.
      */
     public void testReadingAndWritingBack() {
         try {
@@ -116,14 +120,14 @@ public class TestMascotGenericFile extends TestCaseLM {
             BufferedReader toTest = new BufferedReader(new FileReader(output));
 
             String line = null;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, toTest.readLine());
             }
             Assert.assertTrue(toTest.readLine() == null);
 
             control.close();
             toTest.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown while testing to read and write an MGF file: " + ioe.getMessage());
         }
 
@@ -143,14 +147,14 @@ public class TestMascotGenericFile extends TestCaseLM {
             BufferedReader toTest = new BufferedReader(new FileReader(output));
 
             String line = null;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, toTest.readLine());
             }
             Assert.assertTrue(toTest.readLine() == null);
 
             control.close();
             toTest.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown while testing to read and write an MGF file: " + ioe.getMessage());
         }
 
@@ -170,14 +174,14 @@ public class TestMascotGenericFile extends TestCaseLM {
             BufferedReader toTest = new BufferedReader(new FileReader(output));
 
             String line = null;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, toTest.readLine());
             }
             Assert.assertTrue(toTest.readLine() == null);
 
             control.close();
             toTest.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown while testing to read and write an MGF file: " + ioe.getMessage());
         }
 
@@ -197,14 +201,14 @@ public class TestMascotGenericFile extends TestCaseLM {
             BufferedReader toTest = new BufferedReader(new FileReader(output));
 
             String line = null;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, toTest.readLine());
             }
             Assert.assertTrue(toTest.readLine() == null);
 
             control.close();
             toTest.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown while testing to read and write an MGF file: " + ioe.getMessage());
         }
         // Test 5, this mgf file contains Extra additional paramaters (ex: SCANS, RTINSECONDS, ..)
@@ -225,7 +229,7 @@ public class TestMascotGenericFile extends TestCaseLM {
 
             String line = null;
             int lCount = 0;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 lCount++;
                 Assert.assertEquals(line, toTest.readLine());
             }
@@ -237,7 +241,7 @@ public class TestMascotGenericFile extends TestCaseLM {
 
             control.close();
             toTest.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException thrown while testing to read and write an MGF file: " + ioe.getMessage());
         }
     }
@@ -268,7 +272,7 @@ public class TestMascotGenericFile extends TestCaseLM {
             Assert.assertTrue(mgf2.compareTo(mgf1) > 0);
             Assert.assertTrue(mgf1.compareTo(mgf1) == 0);
             Assert.assertTrue(mgf2.compareTo(mgf2) == 0);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while attempting to test sorting behaviour of MascotGenericFile: " + ioe.getMessage());
         }
     }
@@ -301,7 +305,7 @@ public class TestMascotGenericFile extends TestCaseLM {
             mgf1.setPeaks(temp);
             Assert.assertTrue(!mgf1.equals(mgf3));
             Assert.assertTrue(!mgf1.equals(mgf2));
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while attempting to test equals method of MascotGenericFile: " + ioe.getMessage());
         }
     }

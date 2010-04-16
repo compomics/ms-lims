@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Binfile;
 import com.compomics.mslims.db.accessors.Filedescriptor;
 import com.compomics.mslims.db.accessors.Project;
@@ -35,19 +37,20 @@ import java.util.*;
  */
 
 /**
- * This class presents an interface that allows the user to store a binary file or folder
- * in the database in association with a specified folder.
+ * This class presents an interface that allows the user to store a binary file or folder in the database in association
+ * with a specified folder.
  *
  * @author Lennart Martens
  * @version $Id: StoreBinaryFileGUI.java,v 1.9 2009/07/28 14:48:33 lennart Exp $
  */
 public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
+    // Class specific log4j logger for StoreBinaryFileGUI instances.
+    private static Logger logger = Logger.getLogger(StoreBinaryFileGUI.class);
     /**
-     * Boolean that indicates whether the tool is ran in
-     * stand-alone mode ('true') or not ('false').
+     * Boolean that indicates whether the tool is ran in stand-alone mode ('true') or not ('false').
      */
     private static boolean iStandAlone = true;
-    
+
     /**
      * The database connection to use.
      */
@@ -96,27 +99,24 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     private JButton btnNewFiledescriptor = null;
 
 
-
     /**
-     * This constructor initializes the program, shows the connection dialog,
-     * builds the GUI and lays out the components.
+     * This constructor initializes the program, shows the connection dialog, builds the GUI and lays out the
+     * components.
      *
-     * @param aTitle    String with the title for the frame. Will be affixed with
-     *                         DB connection information.
+     * @param aTitle String with the title for the frame. Will be affixed with DB connection information.
      */
     public StoreBinaryFileGUI(String aTitle) {
         this(aTitle, null, null);
     }
+
     /**
-     * This constructor allows the choice of the display as well as the
-     * specification of the connection to use (and its name).
+     * This constructor allows the choice of the display as well as the specification of the connection to use (and its
+     * name).
      *
      * @param aTitle  String with the title for the JFrame.
-     * @param aConn   Connection with the database connection
-     *                to use. 'null' means no connection specified
-     *                so create your own (pops up ConnectionDialog).
-     * @param aDBName String with the name for the database connection.
-     *                Only read if aConn != null.
+     * @param aConn   Connection with the database connection to use. 'null' means no connection specified so create
+     *                your own (pops up ConnectionDialog).
+     * @param aDBName String with the name for the database connection. Only read if aConn != null.
      */
 
     public StoreBinaryFileGUI(String aTitle, Connection aConn, String aDBName) {
@@ -157,19 +157,18 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     /**
      * Default empty constructor made private.
      */
-    private StoreBinaryFileGUI() {}
+    private StoreBinaryFileGUI() {
+    }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
      * @param aConn   Connection with the DB connection.
-     * @param aDBName String with an identifier for the connection, typically the
-     *                name of the DB connected to.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
-        if(aConn != null) {
+        if (aConn != null) {
             this.iConnection = aConn;
             this.iDBName = aDBName;
         } else {
@@ -178,14 +177,13 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * This method should be called whenever an external application or frame/dialog
-     * changes somehting in the filedescriptors table. Calling this method will prompt a
-     * reloading of this data here.
+     * This method should be called whenever an external application or frame/dialog changes somehting in the
+     * filedescriptors table. Calling this method will prompt a reloading of this data here.
      */
     public void fileDescriptorsChanged() {
         this.getFileDescriptors();
         cmbFileDescriptors.setModel(new DefaultComboBoxModel(iFileDescriptors));
-        if(iAssociations != null && iAssociations.size() > 0) {
+        if (iAssociations != null && iAssociations.size() > 0) {
             clearTriggered();
         }
         stateChangedFiledescriptor();
@@ -194,14 +192,14 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     /**
      * The main method is the entry point for the application.
      *
-     * @param args  String[] with the start-up arguments.
+     * @param args String[] with the start-up arguments.
      */
     public static void main(String[] args) {
         StoreBinaryFileGUI sbf = null;
         try {
             sbf = new StoreBinaryFileGUI("Binary file storage application");
             sbf.setVisible(true);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             new StoreBinaryFileGUI().passHotPotato(t);
         }
     }
@@ -225,7 +223,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
         chkSorting.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 boolean alphabetically = false;
-                if(chkSorting.isSelected()) {
+                if (chkSorting.isSelected()) {
                     alphabetically = true;
                 }
                 resortProjects(alphabetically);
@@ -261,7 +259,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
         cmbFileDescriptors = new JComboBox(iFileDescriptors);
         cmbFileDescriptors.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
                     stateChangedFiledescriptor();
                 }
             }
@@ -336,13 +334,13 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
             public void actionPerformed(ActionEvent e) {
                 String selectionName = "file";
                 boolean file = true;
-                if(rbtFolder.isSelected()) {
+                if (rbtFolder.isSelected()) {
                     selectionName = "folder";
                     file = false;
                 }
 
                 String currentDir = txtFile.getText().trim();
-                if(currentDir == null || currentDir.equals("")) {
+                if (currentDir == null || currentDir.equals("")) {
                     currentDir = "/";
                 }
                 JFileChooser jfc = new JFileChooser(currentDir);
@@ -351,16 +349,17 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
                 jfc.setApproveButtonMnemonic(KeyEvent.VK_S);
                 jfc.setApproveButtonToolTipText("Select the " + selectionName + " to upload.");
                 jfc.setDialogTitle("Select source " + selectionName);
-                if(file) {
+                if (file) {
                     jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 } else {
                     jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 }
                 int value = jfc.showDialog(StoreBinaryFileGUI.this, "Select " + selectionName);
-                if(value == JFileChooser.APPROVE_OPTION) {
+                if (value == JFileChooser.APPROVE_OPTION) {
                     try {
                         txtFile.setText(jfc.getSelectedFile().getCanonicalPath());
-                    } catch(IOException ioe) {
+                    } catch (IOException ioe) {
+                        logger.error(ioe.getMessage(), ioe);
                         JOptionPane.showMessageDialog(StoreBinaryFileGUI.this, new String[]{"Unable to find the " + selectionName + " you've selected!", "\n", ioe.getMessage(), "\n"}, selectionName + " was not found!", JOptionPane.ERROR_MESSAGE);
                         txtFile.setText("");
                     }
@@ -410,7 +409,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     /**
      * This method creates and returns a JPanel with the buttons.
      *
-     * @return  JPanel  with the buttons.
+     * @return JPanel  with the buttons.
      */
     private JPanel createButtonPanel() {
         // Assign button.
@@ -426,7 +425,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     assignTriggered();
                 }
             }
@@ -445,7 +444,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     storeTriggered();
                 }
             }
@@ -464,7 +463,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     clearTriggered();
                 }
             }
@@ -483,7 +482,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     close();
                 }
             }
@@ -509,14 +508,13 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * This method should be called whenever the selection on the 'cmbFileDescriptors'
-     * changes. This method will update the detailed description field (txtFileDescriptorDetails)
-     * accordingly.
+     * This method should be called whenever the selection on the 'cmbFileDescriptors' changes. This method will update
+     * the detailed description field (txtFileDescriptorDetails) accordingly.
      */
     private void stateChangedFiledescriptor() {
         Object temp = cmbFileDescriptors.getSelectedItem();
-        if(temp != null) {
-            txtFileDescriptorDetails.setText(((Filedescriptor)temp).getDescription());
+        if (temp != null) {
+            txtFileDescriptorDetails.setText(((Filedescriptor) temp).getDescription());
         }
     }
 
@@ -524,18 +522,18 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
      * This method is called when the 'create new filedescriptor' button is pressed.
      */
     private void newFiledescriptorTriggered() {
-        if(iAssociations != null && iAssociations.size() > 0) {
-            int result = JOptionPane.showConfirmDialog(this, new String[] {"This operation will clear all associations!", "Do you wish to continue?"}, "Associations will be cleared!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if(result == JOptionPane.NO_OPTION) {
+        if (iAssociations != null && iAssociations.size() > 0) {
+            int result = JOptionPane.showConfirmDialog(this, new String[]{"This operation will clear all associations!", "Do you wish to continue?"}, "Associations will be cleared!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.NO_OPTION) {
                 return;
             }
         }
         try {
             FiledescriptorDialog fdd = new FiledescriptorDialog(this, "Create a new file descriptor", FiledescriptorDialog.NEW, null, iConnection);
             Point p = this.getLocation();
-            fdd.setLocation((int)(p.getX()) + 50, (int)(p.getY()) + 50);
+            fdd.setLocation((int) (p.getX()) + 50, (int) (p.getY()) + 50);
             fdd.setVisible(true);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             this.passHotPotato(t);
         }
 
@@ -545,19 +543,19 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
      * This method is called when the user clicks the modify project button.
      */
     private void modifyFiledescriptorTriggered() {
-        if(iAssociations != null && iAssociations.size() > 0) {
-            int result = JOptionPane.showConfirmDialog(this, new String[] {"This operation will clear all associations!", "Do you wish to continue?"}, "Associations will be cleared!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if(result == JOptionPane.NO_OPTION) {
+        if (iAssociations != null && iAssociations.size() > 0) {
+            int result = JOptionPane.showConfirmDialog(this, new String[]{"This operation will clear all associations!", "Do you wish to continue?"}, "Associations will be cleared!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.NO_OPTION) {
                 return;
             }
         }
-        if(cmbFileDescriptors.getSelectedItem() != null) {
+        if (cmbFileDescriptors.getSelectedItem() != null) {
             try {
-                FiledescriptorDialog fdd = new FiledescriptorDialog(this, "Modify existing file descriptor", FiledescriptorDialog.CHANGE, (Filedescriptor)cmbFileDescriptors.getSelectedItem(), iConnection);
+                FiledescriptorDialog fdd = new FiledescriptorDialog(this, "Modify existing file descriptor", FiledescriptorDialog.CHANGE, (Filedescriptor) cmbFileDescriptors.getSelectedItem(), iConnection);
                 Point p = this.getLocation();
-                fdd.setLocation((int)(p.getX()) + 50, (int)(p.getY()) + 50);
+                fdd.setLocation((int) (p.getX()) + 50, (int) (p.getY()) + 50);
                 fdd.setVisible(true);
-            } catch(Throwable t) {
+            } catch (Throwable t) {
                 this.passHotPotato(t);
             }
         } else {
@@ -572,26 +570,26 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     private void assignTriggered() {
         // Check whether there is a file and that it exists.
         String filepath = txtFile.getText();
-        if(filepath == null || filepath.trim().equals("")) {
+        if (filepath == null || filepath.trim().equals("")) {
             JOptionPane.showMessageDialog(this, "You did not enter a file or folder to assign!", "Nothing to assign!", JOptionPane.WARNING_MESSAGE);
             txtFile.requestFocus();
             return;
         }
         File file = new File(filepath);
-        if(!file.exists()) {
+        if (!file.exists()) {
             JOptionPane.showMessageDialog(this, "The path you specified ('" + filepath + "') could not be found!!", "Path not found!", JOptionPane.WARNING_MESSAGE);
             txtFile.requestFocus();
             return;
         }
         // See if any comments need to be recorded.
-        String comments = DescriptionDialog.getDescriptionDialog(this, "Comments for '" + filepath + "'", null, this.getX()+(this.getWidth()/3), this.getY()+(this.getHeight()/3));
+        String comments = DescriptionDialog.getDescriptionDialog(this, "Comments for '" + filepath + "'", null, this.getX() + (this.getWidth() / 3), this.getY() + (this.getHeight() / 3));
         // OK, we seem to have something decent to assign.
         // See if there is anything associated to the project already,
         // if not, add a new element in the association HashMap.
         Object project = cmbProjects.getSelectedItem();
         Vector tempVec = null;
-        if(iAssociations.containsKey(project)) {
-            tempVec = (Vector)iAssociations.get(project);
+        if (iAssociations.containsKey(project)) {
+            tempVec = (Vector) iAssociations.get(project);
         } else {
             tempVec = new Vector();
         }
@@ -608,21 +606,21 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
         // First determine the number of files/folders to store.
         int total = 0;
         Iterator itCount = iAssociations.keySet().iterator();
-        while(itCount.hasNext()) {
-            Project lProject = (Project)itCount.next();
-            Vector temp = (Vector)iAssociations.get(lProject);
+        while (itCount.hasNext()) {
+            Project lProject = (Project) itCount.next();
+            Vector temp = (Vector) iAssociations.get(lProject);
             total += temp.size();
         }
         final DefaultProgressBar progress = new DefaultProgressBar(this, "Storing zipped binary files in the database", 0, total);
-        progress.setSize(this.getWidth()/2, progress.getPreferredSize().height);
-        progress.setLocation(this.getLocation().x+((this.getWidth()-progress.getWidth())/2), this.getLocation().y+((this.getHeight()-progress.getHeight())/2));
+        progress.setSize(this.getWidth() / 2, progress.getPreferredSize().height);
+        progress.setLocation(this.getLocation().x + ((this.getWidth() - progress.getWidth()) / 2), this.getLocation().y + ((this.getHeight() - progress.getHeight()) / 2));
 
         SwingWorker sw = new SwingWorker() {
             /**
              * Compute the value to be returned by the <code>get</code> method.
              */
             public Object construct() {
-                if(iAssociations.size() == 0) {
+                if (iAssociations.size() == 0) {
                     JOptionPane.showMessageDialog(StoreBinaryFileGUI.this, "First assign some file(s) to (a) project(s)!", "No assignments made!", JOptionPane.WARNING_MESSAGE);
                     return "";
                 }
@@ -632,20 +630,20 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
                     // Counters.
                     int fileCounter = 0;
                     int folderCounter = 0;
-                    while(it.hasNext()) {
-                        Project lProject = (Project)it.next();
+                    while (it.hasNext()) {
+                        Project lProject = (Project) it.next();
                         // Get the project ID.
                         long projectid = lProject.getProjectid();
                         // Now cycle all associated LC runs.
-                        Vector fileVec = (Vector)iAssociations.get(lProject);
+                        Vector fileVec = (Vector) iAssociations.get(lProject);
                         int liSize = fileVec.size();
-                        for(int i = 0; i < liSize; i++) {
-                            Object[] objects = (Object[])fileVec.elementAt(i);
-                            File file = (File)objects[FILE_INDEX];
-                            Filedescriptor fd = (Filedescriptor)objects[FILEDESCRIPTOR_INDEX];
-                            String comments = (String)objects[FILECOMMENTS_INDEX];
+                        for (int i = 0; i < liSize; i++) {
+                            Object[] objects = (Object[]) fileVec.elementAt(i);
+                            File file = (File) objects[FILE_INDEX];
+                            Filedescriptor fd = (Filedescriptor) objects[FILEDESCRIPTOR_INDEX];
+                            String comments = (String) objects[FILECOMMENTS_INDEX];
                             String designation = null;
-                            if(file.isDirectory()) {
+                            if (file.isDirectory()) {
                                 designation = "folder";
                                 folderCounter++;
                             } else {
@@ -662,29 +660,29 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
                             params.put(Binfile.COMMENTS, comments);
                             String parent = file.getParent();
                             String separator = null;
-                            if(parent.indexOf("\\") >= 0) {
+                            if (parent.indexOf("\\") >= 0) {
                                 separator = "\\";
                             } else {
                                 separator = "/";
                             }
-                            if(!parent.endsWith(separator)) {
+                            if (!parent.endsWith(separator)) {
                                 parent += separator;
                             }
-                            params.put(Binfile.ORIGINALPATH,  parent);
+                            params.put(Binfile.ORIGINALPATH, parent);
                             params.put(Binfile.ORIGINALHOST, InetAddress.getLocalHost().getHostName());
                             params.put(Binfile.ORIGINALUSER, System.getProperty("user.name"));
                             Binfile bf = new Binfile(params);
                             bf.persist(iConnection);
                             // Finding the auto-generated ID for the LCRun.
-                            Long l = (Long)bf.getGeneratedKeys()[0];
+                            Long l = (Long) bf.getGeneratedKeys()[0];
                             bf.setBinfileid(l.longValue());
-                            progress.setValue(progress.getValue()+1);
+                            progress.setValue(progress.getValue() + 1);
                         }
                     }
                     StoreBinaryFileGUI.this.iAssociations = new HashMap();
                     txtSummary.setText("");
                     JOptionPane.showMessageDialog(StoreBinaryFileGUI.this, "All files (" + fileCounter + ") and folders (" + folderCounter + ") have been stored!", "Store complete!", JOptionPane.INFORMATION_MESSAGE);
-                } catch(Throwable t) {
+                } catch (Throwable t) {
                     StoreBinaryFileGUI.this.passHotPotato(t, "Unable to store assignments!");
                 }
                 return "";
@@ -703,35 +701,35 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * This method reads the iAssociations HashMap and updates the
-     * txtSummary field according to the data in that HashMap.
+     * This method reads the iAssociations HashMap and updates the txtSummary field according to the data in that
+     * HashMap.
      */
     private void updateSummary() {
         StringBuffer sb = new StringBuffer();
         Iterator it = iAssociations.keySet().iterator();
         int count = 0;
         // Cycle each project.
-        while(it.hasNext()) {
-            Project lProject = (Project)it.next();
+        while (it.hasNext()) {
+            Project lProject = (Project) it.next();
             // Endline for all but first element.
-            if(count != 0) {
+            if (count != 0) {
                 sb.append("\n");
             }
             sb.append(" " + lProject.toString() + "\n ");
-            for(int i=0;i<lProject.toString().length();i++) {
+            for (int i = 0; i < lProject.toString().length(); i++) {
                 sb.append("-");
             }
             sb.append("\n");
             // Cycle each LCRun for this project.
-            Vector tempVec = (Vector)iAssociations.get(lProject);
+            Vector tempVec = (Vector) iAssociations.get(lProject);
             int liSize = tempVec.size();
-            for(int i = 0; i < liSize; i++) {
-                Object[] objects = (Object[])tempVec.elementAt(i);
-                File file = (File)objects[FILE_INDEX];
-                Filedescriptor fd = (Filedescriptor)objects[FILEDESCRIPTOR_INDEX];
-                sb.append("   + " + file.getAbsolutePath() + " " + (file.isDirectory()?"<dir>":"<file>") +  ": " + fd.getShort_label());
-                String comments = (String)objects[FILECOMMENTS_INDEX];
-                sb.append((comments==null?"":" @") + "\n");
+            for (int i = 0; i < liSize; i++) {
+                Object[] objects = (Object[]) tempVec.elementAt(i);
+                File file = (File) objects[FILE_INDEX];
+                Filedescriptor fd = (Filedescriptor) objects[FILEDESCRIPTOR_INDEX];
+                sb.append("   + " + file.getAbsolutePath() + " " + (file.isDirectory() ? "<dir>" : "<file>") + ": " + fd.getShort_label());
+                String comments = (String) objects[FILECOMMENTS_INDEX];
+                sb.append((comments == null ? "" : " @") + "\n");
             }
             count++;
         }
@@ -747,48 +745,45 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * This method reads all known file descriptors from the DB and stores them in the
-     * 'iFileDescriptors' HashMap.
+     * This method reads all known file descriptors from the DB and stores them in the 'iFileDescriptors' HashMap.
      */
     private void getFileDescriptors() {
         try {
             iFileDescriptors = Filedescriptor.getAllFiledescriptors(iConnection, true);
-            if(iFileDescriptors == null) {
+            if (iFileDescriptors == null) {
                 iFileDescriptors = new Filedescriptor[0];
             }
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             passHotPotato(sqle, "Unable to read file descriptors from the database: " + sqle.getMessage());
         }
     }
 
     /**
-     * This method reads all known projects from the DB and stores them in the
-     * 'iProjects' HashMap.
+     * This method reads all known projects from the DB and stores them in the 'iProjects' HashMap.
      */
     private void getProjects() {
         try {
             iProjects = Project.getAllProjects(iConnection);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             passHotPotato(sqle, "Unable to read file descriptors from the database: " + sqle.getMessage());
         }
     }
 
     /**
-     * This method re-sorts the projects in the combobox.
-     * If the boolean is 'true', sorting is alphabetically on the project title,
-     * otherwise( boolean 'false') it is by project number (project id).
+     * This method re-sorts the projects in the combobox. If the boolean is 'true', sorting is alphabetically on the
+     * project title, otherwise( boolean 'false') it is by project number (project id).
      *
-     * @param aAlphabetically boolean to indicate whether sorting should be performed
-     *                        alphabetically ('true') or by project number ('false').
+     * @param aAlphabetically boolean to indicate whether sorting should be performed alphabetically ('true') or by
+     *                        project number ('false').
      */
     private void resortProjects(boolean aAlphabetically) {
         Comparator comp = null;
-        if(aAlphabetically) {
+        if (aAlphabetically) {
             // Alphabetic ordering of the project title.
             comp = new Comparator() {
                 public int compare(Object o, Object o1) {
-                    Project p1 = (Project)o;
-                    Project p2 = (Project)o1;
+                    Project p1 = (Project) o;
+                    Project p2 = (Project) o1;
                     return p1.getTitle().compareToIgnoreCase(p2.getTitle());
                 }
             };
@@ -796,9 +791,9 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
             // Ordering on the projectid.
             comp = new Comparator() {
                 public int compare(Object o, Object o1) {
-                    Project p1 = (Project)o;
-                    Project p2 = (Project)o1;
-                    return (int)(p2.getProjectid()-p1.getProjectid());
+                    Project p1 = (Project) o;
+                    Project p2 = (Project) o1;
+                    return (int) (p2.getProjectid() - p1.getProjectid());
                 }
             };
         }
@@ -808,8 +803,7 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
 
 
     /**
-     * This method should be called when the application is
-     * not launched in stand-alone mode.
+     * This method should be called when the application is not launched in stand-alone mode.
      */
     public static void setNotStandAlone() {
         iStandAlone = false;
@@ -830,9 +824,9 @@ public class StoreBinaryFileGUI extends FlamableJFrame implements Connectable {
             if (iConnection != null) {
                 try {
                     iConnection.close();
-                    System.out.println("\nDB connection closed.\n");
+                    logger.info("\nDB connection closed.\n");
                 } catch (SQLException sqle) {
-                    System.err.println("\nUnable to close DB connection!\n");
+                    logger.error("\nUnable to close DB connection!\n");
                 }
             }
             System.exit(0);

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.workers;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.IdentificationTableAccessor;
 import com.compomics.mslims.db.accessors.Identification;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
@@ -26,11 +28,13 @@ import java.util.Vector;
 
 /**
  * This class
- * 
+ *
  * @author Lennart
  * @version $Id: MascotResultsProcessorWorker.java,v 1.5 2007/02/05 15:05:35 kenny Exp $
  */
 public class MascotResultsProcessorWorker extends SwingWorker {
+    // Class specific log4j logger for MascotResultsProcessorWorker instances.
+    private static Logger logger = Logger.getLogger(MascotResultsProcessorWorker.class);
 
     /**
      * MascotResultsProcessor that will handling all the effective processing.
@@ -58,15 +62,15 @@ public class MascotResultsProcessorWorker extends SwingWorker {
     private DefaultProgressBar iProgress = null;
 
     /**
-     * This constructor allows the creation and initialization of this Runner.
-     * It takes the necessary arguments to create a workable runner.
+     * This constructor allows the creation and initialization of this Runner. It takes the necessary arguments to
+     * create a workable runner.
      *
      * @param aProcessor   MascotResultsProcessor that will handling all the effective processing.
      * @param aAllSearches MascotSearch[] that holds the searches to process.
-     * @param aAllResults Vector to hold the results of the processed searches. Note that this is a reference
-     *                    parameter!
-     * @param aParent   Flamable instance that called this worker.
-     * @param aProgress DefaultProgressBar to show the progress on.
+     * @param aAllResults  Vector to hold the results of the processed searches. Note that this is a reference
+     *                     parameter!
+     * @param aParent      Flamable instance that called this worker.
+     * @param aProgress    DefaultProgressBar to show the progress on.
      */
     public MascotResultsProcessorWorker(MascotResultsProcessor aProcessor, MascotSearch[] aAllSearches, Vector aAllResults, Flamable aParent, DefaultProgressBar aProgress) {
         iProcessor = aProcessor;
@@ -88,8 +92,8 @@ public class MascotResultsProcessorWorker extends SwingWorker {
         }
         // Now cycle to check for uniqueness.
         int resultSize = tempAll.size();
-        if(iProgress != null) {
-            iProgress.setValue(iProgress.getValue()+1);
+        if (iProgress != null) {
+            iProgress.setValue(iProgress.getValue() + 1);
             iProgress.setMessage("Checking for unique spectra...");
         }
         // This HashMap will hold filename - IdentificationTableAccessor combinations.
@@ -101,22 +105,22 @@ public class MascotResultsProcessorWorker extends SwingWorker {
         // with 'n' the number of possible charge states. If more than one charge state scores above
         // threshold, we would be inserting a duplicate identification for the spectrum.
         // Therefore, only retain the identification with the highest score here.
-        for(int i=0;i<resultSize;i++) {
+        for (int i = 0; i < resultSize; i++) {
             Object tempObj = tempAll.get(i);
-            if(tempObj instanceof Identification) {
-                Identification ita = (Identification)tempObj;
+            if (tempObj instanceof Identification) {
+                Identification ita = (Identification) tempObj;
                 String name = ita.getTemporarySpectrumfilename();
-                if(uniquenessChecker.containsKey(name)) {
-                    Identification oldID = (Identification)uniquenessChecker.get(name);
+                if (uniquenessChecker.containsKey(name)) {
+                    Identification oldID = (Identification) uniquenessChecker.get(name);
                     long oldScore = oldID.getScore();
-                    if(oldScore < ita.getScore()) {
+                    if (oldScore < ita.getScore()) {
                         uniquenessChecker.put(name, ita);
-                    }else if(oldScore == ita.getScore()){
+                    } else if (oldScore == ita.getScore()) {
                         // If one spectrum scores likewise in two identifications, store the most confident identification.
                         // ex: When a spectrum is searched twice against a normal swissprot and a truncated swissprot database)
                         long oldDeltaThreshold = oldScore - oldID.getIdentitythreshold();
                         long itaDeltaThreshold = ita.getScore() - ita.getIdentitythreshold();
-                        if(oldDeltaThreshold < itaDeltaThreshold){
+                        if (oldDeltaThreshold < itaDeltaThreshold) {
                             uniquenessChecker.put(name, ita);
                         }
                     }
@@ -128,14 +132,14 @@ public class MascotResultsProcessorWorker extends SwingWorker {
                 iAllResults.add(tempObj);
             }
         }
-        if(iProgress != null) {
-            iProgress.setValue(iProgress.getValue()+1);
+        if (iProgress != null) {
+            iProgress.setValue(iProgress.getValue() + 1);
             iProgress.setMessage("Combining unique results...");
         }
         // Now to add all the uniques.
         iAllResults.addAll(uniquenessChecker.values());
 
-        iProgress.setValue(iProgress.getValue()+1);
+        iProgress.setValue(iProgress.getValue() + 1);
         return "";
     }
 }

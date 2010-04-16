@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,6 +28,8 @@ import java.awt.event.KeyEvent;
  * @author Lennart Martens
  */
 public class DescriptionDialog extends JDialog {
+    // Class specific log4j logger for DescriptionDialog instances.
+    private static Logger logger = Logger.getLogger(DescriptionDialog.class);
 
     /**
      * The description text.
@@ -46,9 +50,9 @@ public class DescriptionDialog extends JDialog {
     /**
      * Private constructor.
      *
-     * @param aParent   Frame with the parent for this dialog.
-     * @param aTitle    String with a title for this dialog.
-     * @param aText String with the text to edit. Can be 'null'.
+     * @param aParent Frame with the parent for this dialog.
+     * @param aTitle  String with a title for this dialog.
+     * @param aText   String with the text to edit. Can be 'null'.
      */
     private DescriptionDialog(Frame aParent, String aTitle, String aText) {
         super(aParent, aTitle, true);
@@ -58,15 +62,15 @@ public class DescriptionDialog extends JDialog {
     }
 
     /**
-     * This method will pop-up a model dialog that allows the user to edit the description value.
-     * It will return the edited value.
+     * This method will pop-up a model dialog that allows the user to edit the description value. It will return the
+     * edited value.
      *
-     * @param aParent   Frame with the parent for this dialog.
-     * @param aTitle    String with a title for this dialog.
-     * @param aText String with the text to edit. Can be 'null'.
-     * @param   x   int with the x-coordinate for the location of the dialog.
-     * @param   y   int with the y-coordinate for the location of the dialog.
-     * @return  String  with the edited text, note that this String can be 'null'!
+     * @param aParent Frame with the parent for this dialog.
+     * @param aTitle  String with a title for this dialog.
+     * @param aText   String with the text to edit. Can be 'null'.
+     * @param x       int with the x-coordinate for the location of the dialog.
+     * @param y       int with the y-coordinate for the location of the dialog.
+     * @return String  with the edited text, note that this String can be 'null'!
      */
     public static String getDescriptionDialog(Frame aParent, String aTitle, String aText, int x, int y) {
         String result = null;
@@ -80,10 +84,10 @@ public class DescriptionDialog extends JDialog {
     }
 
     /**
-     * This method will return the String after the editing process.
-     * If the String was not edited, the original is returned.
+     * This method will return the String after the editing process. If the String was not edited, the original is
+     * returned.
      *
-     * @return  String with the edited String.
+     * @return String with the edited String.
      */
     private String getText() {
         return iNewText;
@@ -95,7 +99,7 @@ public class DescriptionDialog extends JDialog {
     private void constructScreen() {
         // The textarea.
         txtText = new JTextArea(15, 45);
-        if(iText != null) {
+        if (iText != null) {
             txtText.setText(iText);
         } else {
             txtText.setText("");
@@ -114,7 +118,7 @@ public class DescriptionDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     savePressed();
                 }
             }
@@ -132,7 +136,7 @@ public class DescriptionDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     cancelPressed();
                 }
             }
@@ -150,7 +154,7 @@ public class DescriptionDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     noDescriptionPressed();
                 }
             }
@@ -177,7 +181,7 @@ public class DescriptionDialog extends JDialog {
      */
     private void savePressed() {
         String text = txtText.getText();
-        if(iText == null && text.equals("")) {
+        if (iText == null && text.equals("")) {
             this.iNewText = this.iText;
         } else {
             this.iNewText = text;

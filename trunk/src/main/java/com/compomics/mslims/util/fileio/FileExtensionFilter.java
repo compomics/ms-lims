@@ -1,5 +1,7 @@
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
@@ -8,7 +10,11 @@ import java.io.File;
  * for file extensions.
  */
 public class FileExtensionFilter extends FileFilter {
-    /** The extendsion to filter. */
+    // Class specific log4j logger for FileExtensionFilter instances.
+    private static Logger logger = Logger.getLogger(FileExtensionFilter.class);
+    /**
+     * The extendsion to filter.
+     */
     private String iExtension;
 
     /**
@@ -21,12 +27,16 @@ public class FileExtensionFilter extends FileFilter {
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean accept(final File f) {
         return (f.getName().toLowerCase().endsWith(iExtension));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getDescription() {
         return "." + iExtension + " file filter";
     }

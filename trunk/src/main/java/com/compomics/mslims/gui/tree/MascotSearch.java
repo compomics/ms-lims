@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.tree;
 
+import org.apache.log4j.Logger;
+
 import java.util.Date;
 
 /*
@@ -22,12 +24,16 @@ import java.util.Date;
  * @version $Id: MascotSearch.java,v 1.4 2009/01/30 10:31:05 niklaas Exp $
  */
 public class MascotSearch {
+    // Class specific log4j logger for MascotSearch instances.
+    private static Logger logger = Logger.getLogger(MascotSearch.class);
 
     private String iTitle = null;
     private String iDatfile = null;
     private String iMergefile = null;
     private String iDB = null;
-    /** The String description of the Mascot Distiller project file from this search. */
+    /**
+     * The String description of the Mascot Distiller project file from this search.
+     */
     private String iDistiller_project = null;
 
     private Date iStartDate = null;
@@ -177,7 +183,6 @@ public class MascotSearch {
      * Search.
      *
      * @param another Object to which this instance should be compared.
-     *
      * @return boolean that indicates whether this instance is equal to the one presented.
      */
     public boolean equals(Object another) {
@@ -189,13 +194,13 @@ public class MascotSearch {
             // a decent one.
             if (this.isError() || ms.isError()) {
                 if (this.iStatus == ms.iStatus && this.iTitle.equals(ms.iTitle) && this.iMergefile.equals(ms.iMergefile)
-                    && this.iStartDate.equals(ms.iStartDate) && this.iEndDate.equals(ms.iEndDate) && this.iParentTaskId == ms.iParentTaskId) {
+                        && this.iStartDate.equals(ms.iStartDate) && this.iEndDate.equals(ms.iEndDate) && this.iParentTaskId == ms.iParentTaskId) {
                     result = true;
                 }
             } else {
                 if (this.iStatus == ms.iStatus && this.iTitle.equals(ms.iTitle) && this.iMergefile.equals(ms.iMergefile)
-                    && this.iDatfile.equals(ms.iDatfile) && this.iDB.equals(ms.iDB) && this.iStartDate.equals(ms.iStartDate)
-                    && this.iEndDate.equals(ms.iEndDate) && this.iParentTaskId == ms.iParentTaskId) {
+                        && this.iDatfile.equals(ms.iDatfile) && this.iDB.equals(ms.iDB) && this.iStartDate.equals(ms.iStartDate)
+                        && this.iEndDate.equals(ms.iEndDate) && this.iParentTaskId == ms.iParentTaskId) {
                     result = true;
                 }
             }

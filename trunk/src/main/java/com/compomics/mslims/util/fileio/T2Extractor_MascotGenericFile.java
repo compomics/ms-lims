@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
 
 import java.util.*;
@@ -19,13 +21,15 @@ import java.math.BigDecimal;
  */
 
 /**
- * This class maps a Mascot Generic File to memory.
- * It allows for search ad retrieval as well as comparing functionality.
+ * This class maps a Mascot Generic File to memory. It allows for search ad retrieval as well as comparing
+ * functionality.
  *
  * @author Lennart
  * @version $Id: T2Extractor_MascotGenericFile.java,v 1.1 2007/05/04 15:02:18 lennart Exp $
  */
 public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
+    // Class specific log4j logger for T2Extractor_MascotGenericFile instances.
+    private static Logger logger = Logger.getLogger(T2Extractor_MascotGenericFile.class);
 
     /**
      * This variable holds the comments for this MascotGenericFile.
@@ -53,8 +57,8 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     private static final String PEPMASS = "PEPMASS";
 
     /**
-     * This constant defines the key in the spectrum header for the precursor charge.
-     * Note that this field can be omitted from a MascotGenericFile.
+     * This constant defines the key in the spectrum header for the precursor charge. Note that this field can be
+     * omitted from a MascotGenericFile.
      */
     private static final String CHARGE = "CHARGE";
 
@@ -80,11 +84,11 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
 
 
     /**
-     * This constructor takes the MGF File as a String as read from file or DB.
-     * The filename is specified separately here.
+     * This constructor takes the MGF File as a String as read from file or DB. The filename is specified separately
+     * here.
      *
-     * @param   aFilename   String with the filename for the MGF File.
-     * @param   aContents   String with the contents of the MGF File.
+     * @param aFilename String with the filename for the MGF File.
+     * @param aContents String with the contents of the MGF File.
      */
     public T2Extractor_MascotGenericFile(String aFilename, String aContents) {
         this.parseFromString(aContents);
@@ -92,20 +96,19 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     }
 
     /**
-     * This constructor takes the filename of the MGF File as argument and
-     * loads it form the hard drive.
+     * This constructor takes the filename of the MGF File as argument and loads it form the hard drive.
      *
-     * @param   aFilename   File with the pointer to the MGF File.
-     * @exception java.io.IOException when the file could not be read.
+     * @param aFilename File with the pointer to the MGF File.
+     * @throws java.io.IOException when the file could not be read.
      */
     public T2Extractor_MascotGenericFile(File aFilename) throws IOException {
-        if(!aFilename.exists()) {
+        if (!aFilename.exists()) {
             throw new IOException("MGF File '" + aFilename.getCanonicalPath() + "' was not found!");
         } else {
             StringBuffer lsb = new StringBuffer();
             BufferedReader br = new BufferedReader(new FileReader(aFilename));
             String line = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 lsb.append(line + "\n");
             }
             br.close();
@@ -115,12 +118,11 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     }
 
     /**
-     * This method checks whether the MascotIdentifiedSpectrum corresponds to
-     * this spectrum. The precise method for comparison is up to the individual
-     * implementations.
+     * This method checks whether the MascotIdentifiedSpectrum corresponds to this spectrum. The precise method for
+     * comparison is up to the individual implementations.
      *
-     * @param   aMIS   MascotIdentifiedSpectrum to compare to.
-     * @return  boolean which indicates whether these objects correspond.
+     * @param aMIS MascotIdentifiedSpectrum to compare to.
+     * @return boolean which indicates whether these objects correspond.
      */
     public boolean corresponds(MascotIdentifiedSpectrum aMIS) {
         boolean corresponds = false;
@@ -129,7 +131,7 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
         // check against the filename (in the latter case, we have substituted the
         // title with the filename ourselves).
         String searchTitle = aMIS.getSearchTitle();
-        if(this.iTitle.equals(searchTitle) || this.iFilename.equals(searchTitle)) {
+        if (this.iTitle.equals(searchTitle) || this.iFilename.equals(searchTitle)) {
             corresponds = true;
         }
 
@@ -140,9 +142,8 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This method allows to write the spectrum file to the specified OutputStream.
      *
-     * @param   aOut    OutputStream to write the file to. This Stream
-     *                  will <b>NOT</b> be closed by this method.
-     * @exception   java.io.IOException when the write operation fails.
+     * @param aOut OutputStream to write the file to. This Stream will <b>NOT</b> be closed by this method.
+     * @throws java.io.IOException when the write operation fails.
      */
     public void writeToStream(OutputStream aOut) throws IOException {
         this.writeToStream(aOut, false);
@@ -151,26 +152,24 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This method allows to write the MascotGenericFile to the specified OutputStream.
      *
-     * @param   aOut    OutputStream to write the file to. This Stream
-     *                  will <b>NOT</b> be closed by this method.
-     * @param   aSubstituteFilename  if this boolean is true, the filename is set to be the title
-     *                               in the output header. If it is false, the title is set as
-     *                               the title.
-     * @exception   java.io.IOException when the write operation fails.
+     * @param aOut                OutputStream to write the file to. This Stream will <b>NOT</b> be closed by this
+     *                            method.
+     * @param aSubstituteFilename if this boolean is true, the filename is set to be the title in the output header. If
+     *                            it is false, the title is set as the title.
+     * @throws java.io.IOException when the write operation fails.
      */
     public void writeToStream(OutputStream aOut, boolean aSubstituteFilename) throws IOException {
         this.writeToWriter(new OutputStreamWriter(aOut), aSubstituteFilename);
     }
 
     /**
-     * This method allows the caller to write the spectrum file to the specified folder
-     * using its current filename.
+     * This method allows the caller to write the spectrum file to the specified folder using its current filename.
      *
-     * @param   aParentDir  File with the parent directory to put the file in.
-     * @exception   java.io.IOException whenever the write process failed.
+     * @param aParentDir File with the parent directory to put the file in.
+     * @throws java.io.IOException whenever the write process failed.
      */
     public void writeToFile(File aParentDir) throws IOException {
-        if(!aParentDir.exists() && !aParentDir.isDirectory()) {
+        if (!aParentDir.exists() && !aParentDir.isDirectory()) {
             throw new IOException("Parent '" + aParentDir.getCanonicalPath() + "' does not exist or is not a directory!");
         }
         File output = new File(aParentDir, this.iFilename);
@@ -183,7 +182,7 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This methods returns the comments for this MascotGenericFile.
      *
-     * @return  String with the comments for this MascotGenericFile.
+     * @return String with the comments for this MascotGenericFile.
      */
     public String getComments() {
         return iComments;
@@ -201,7 +200,7 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This method reports on the title of the MascotGenericFile.
      *
-     * @return  String with the title for the MascotGenericFile.
+     * @return String with the title for the MascotGenericFile.
      */
     public String getTitle() {
         return iTitle;
@@ -210,7 +209,7 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This method allows the setting of the title for the MascotGenericFile.
      *
-     * @param aTitle    String with the title for the MascotGenericFile.
+     * @param aTitle String with the title for the MascotGenericFile.
      */
     public void setTitle(String aTitle) {
         iTitle = aTitle;
@@ -219,13 +218,14 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
 
     /**
      * This method returns the Value of the corresponding embedded parameter Key.
-     * @param aKey  String with the Key of the embedded parameter.
+     *
+     * @param aKey String with the Key of the embedded parameter.
      * @return String   Value of the embedded parameter Key.
      */
-    public String getExtraEmbeddedProperty(String aKey){
+    public String getExtraEmbeddedProperty(String aKey) {
         String lReturn = "NoSuchKey";
-        if(iExtraEmbeddedParameters != null){
-            if(iExtraEmbeddedParameters.containsKey(aKey)){
+        if (iExtraEmbeddedParameters != null) {
+            if (iExtraEmbeddedParameters.containsKey(aKey)) {
                 lReturn = (String) iExtraEmbeddedParameters.get(aKey);
             }
         }
@@ -233,37 +233,39 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     }
 
     /**
-     * This private method can be called during the parsing of the aFileContents String to save embedded parameters in the Properties instance.
-     * @param aKey Embedded Property Key.
+     * This private method can be called during the parsing of the aFileContents String to save embedded parameters in
+     * the Properties instance.
+     *
+     * @param aKey   Embedded Property Key.
      * @param aValue Embedded Property Value.
      */
-    private void addExtraEmbeddedParameter(String aKey, String aValue){
-        if(iExtraEmbeddedParameters == null){
+    private void addExtraEmbeddedParameter(String aKey, String aValue) {
+        if (iExtraEmbeddedParameters == null) {
             iExtraEmbeddedParameters = new Properties();
         }
         iExtraEmbeddedParameters.put(aKey, aValue);
     }
 
     /**
-     * This method compares two MascotGenericFiles and allows them to be sorted
-     * relative to each other. Sorting is done on the basis of precursor M/Z
-     * (we cannot always calculate mass due to the possible absence of charge information).
+     * This method compares two MascotGenericFiles and allows them to be sorted relative to each other. Sorting is done
+     * on the basis of precursor M/Z (we cannot always calculate mass due to the possible absence of charge
+     * information).
      *
-     * @param anObject  MascotGenericFile to compare this instance to.
-     * @return  int with the code for sorting (negative, positive or 0).
+     * @param anObject MascotGenericFile to compare this instance to.
+     * @return int with the code for sorting (negative, positive or 0).
      */
     public int compareTo(Object anObject) {
         int result = 0;
 
         // Comparison is done based on precursor M/Z. We cannot reliably calculate
         // the mass, since (many) MGF spectra do not include charge information.
-        T2Extractor_MascotGenericFile other = (T2Extractor_MascotGenericFile)anObject;
+        T2Extractor_MascotGenericFile other = (T2Extractor_MascotGenericFile) anObject;
 
         double intermediate_result = (this.getPrecursorMZ() - other.getPrecursorMZ());
 
-        if(intermediate_result > 0) {
+        if (intermediate_result > 0) {
             result = 1;
-        } else if(intermediate_result < 0) {
+        } else if (intermediate_result < 0) {
             result = -1;
         } else {
             result = 0;
@@ -273,19 +275,17 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     }
 
     /**
-     * This method checks for equality between this object and the
-     * specified object.
+     * This method checks for equality between this object and the specified object.
      *
-     * @param anObject  Object to test equality with.
-     * @return  boolean indicating whether the presented objects are equal
-     *                  ('true') or not ('false').
+     * @param anObject Object to test equality with.
+     * @return boolean indicating whether the presented objects are equal ('true') or not ('false').
      */
     public boolean equals(Object anObject) {
         boolean result = false;
 
-        if(anObject != null && anObject instanceof T2Extractor_MascotGenericFile) {
-            T2Extractor_MascotGenericFile other = (T2Extractor_MascotGenericFile)anObject;
-            if(this.iFilename.equals(other.iFilename) && this.iCharge == other.iCharge &&
+        if (anObject != null && anObject instanceof T2Extractor_MascotGenericFile) {
+            T2Extractor_MascotGenericFile other = (T2Extractor_MascotGenericFile) anObject;
+            if (this.iFilename.equals(other.iFilename) && this.iCharge == other.iCharge &&
                     this.iTitle.equals(other.iTitle) && this.iPeaks.equals(other.iPeaks) &&
                     this.iCharges.equals(other.iCharges)) {
                 result = true;
@@ -298,7 +298,7 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This method returns a String representation of this MGF file.
      *
-     * @return  String with the String representation of this object.
+     * @return String with the String representation of this object.
      */
     public String toString() {
         String result = null;
@@ -307,9 +307,9 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
             this.writeToWriter(sw, false);
             result = sw.toString();
             sw.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             // No exceptions are expected here.
-            ioe.printStackTrace();
+            logger.error(ioe.getMessage(), ioe);
         }
         return result;
     }
@@ -317,10 +317,9 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This method returns a String representation of this MGF file.
      *
-     * @param   aSubstituteFilename  if this boolean is true, the filename is set to be the title
-     *                               in the output header. If it is false, the title is set as
-     *                               the title.
-     * @return  String with the String representation of this object.
+     * @param aSubstituteFilename if this boolean is true, the filename is set to be the title in the output header. If
+     *                            it is false, the title is set as the title.
+     * @return String with the String representation of this object.
      */
     public String toString(boolean aSubstituteFilename) {
         String result = null;
@@ -329,38 +328,36 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
             this.writeToWriter(sw, aSubstituteFilename);
             result = sw.toString();
             sw.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             // No exceptions are expected here.
-            ioe.printStackTrace();
+            logger.error(ioe.getMessage(), ioe);
         }
         return result;
     }
 
 
     /**
-     * This method formats an integer to a charge String as used in a MascotGenericFile
-     * (eg., 1 to 1+).
+     * This method formats an integer to a charge String as used in a MascotGenericFile (eg., 1 to 1+).
      *
-     * @param aCharge   int with the charge to format.
-     * @return  String with the formatted charge (eg., 1+).
+     * @param aCharge int with the charge to format.
+     * @return String with the formatted charge (eg., 1+).
      */
     private String processCharge(int aCharge) {
         // The charge notation is '1+', or conversely, '1-'.
         // Therefore we do some extra processing.
         String affix = "+";
-        if(aCharge < 0) {
+        if (aCharge < 0) {
             affix = "-";
         }
         return Math.abs(aCharge) + affix;
     }
 
     /**
-     * This method extracts an integer from Mascot Generic File charge notation, eg.,
-     * 1+.
-     * Remark that the charge can also be annotated as "+2,+3", in those rather cases the charge is also "not known." So we save a zero value.
+     * This method extracts an integer from Mascot Generic File charge notation, eg., 1+. Remark that the charge can
+     * also be annotated as "+2,+3", in those rather cases the charge is also "not known." So we save a zero value.
      *
-     * @param aCharge   String with the Mascot Generic File charge notation (eg., 1+).
-     * @return  int with the corresponding integer.
+     * @param aCharge String with the Mascot Generic File charge notation (eg., 1+).
+     * @return int with the corresponding integer.
      */
     private int extractCharge(String aCharge) {
         int charge = 0;
@@ -372,21 +369,21 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
         boolean multiCharge = false;
 
         // See if there is a '-' in the charge String.
-        if(trimmedCharge.indexOf("-") >= 0) {
+        if (trimmedCharge.indexOf("-") >= 0) {
             negate = true;
         }
 
         // See if there are multiple charges assigned to this spectrum.
-        if(trimmedCharge.indexOf(",") >= 0){
+        if (trimmedCharge.indexOf(",") >= 0) {
             multiCharge = true;
         }
 
-        if(!multiCharge){
+        if (!multiCharge) {
             // Charge is now: trimmedCharge without the sign character,
             // negated if necessary.
 
-            charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length()-1));
-            if(negate) {
+            charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length() - 1));
+            if (negate) {
                 charge = -charge;
             }
         }
@@ -395,10 +392,9 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
     }
 
     /**
-     * This method will parse the input String and read all the information present into
-     * a MascotGenericFile object.
+     * This method will parse the input String and read all the information present into a MascotGenericFile object.
      *
-     * @param aFileContent  String with the contents of the file.
+     * @param aFileContent String with the contents of the file.
      */
     private void parseFromString(String aFileContent) {
         try {
@@ -408,71 +404,71 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
             int lineCount = 0;
             boolean inSpectrum = false;
             StringBuffer comments = new StringBuffer();
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 // Advance line count.
                 lineCount++;
                 // Delete leading/trailing spaces.
                 line = line.trim();
                 // Skip empty lines.
-                if(line.equals("")) {
+                if (line.equals("")) {
                     continue;
                 }
                 // First line can be 'CHARGE'.
-                if(lineCount == 1 && line.startsWith(CHARGE)) {
+                if (lineCount == 1 && line.startsWith(CHARGE)) {
                     continue;
                 }
                 // Read all starting comments.
-                if(line.startsWith("#")) {
+                if (line.startsWith("#")) {
                     comments.append(line + "\n");
                 }
                 // BEGIN IONS marks the start of the real file.
-                else if(line.equals(IONS_START)) {
+                else if (line.equals(IONS_START)) {
                     inSpectrum = true;
                 }
                 // END IONS marks the end.
-                else if(line.equals(IONS_END)) {
+                else if (line.equals(IONS_END)) {
                     inSpectrum = false;
                 }
                 // Read embedded parameters. The most important parameters (such as TITLE, PEPMASS and optional CHARGE fields )
                 // will be saved as instance variables as well as in the iEmbeddedParameter Properties instance.
-                else if(inSpectrum && (line.indexOf("=") >= 0)) {
+                else if (inSpectrum && (line.indexOf("=") >= 0)) {
                     // Find the starting location of the value (which is one beyond the location
                     // of the '=').
                     int equalSignIndex = line.indexOf("=");
 
                     // See which header line is encountered.
-                    if(line.startsWith(TITLE)) {
+                    if (line.startsWith(TITLE)) {
                         // TITLE line found.
                         this.setTitle(line.substring(equalSignIndex + 1));
-                    } else if(line.startsWith(PEPMASS)) {
+                    } else if (line.startsWith(PEPMASS)) {
                         // PEPMASS line found.
                         String value = line.substring(equalSignIndex + 1).trim();
                         StringTokenizer st = new StringTokenizer(value, " \t");
                         String precursorMZ = st.nextToken().trim();
-                        if(precursorMZ.indexOf(",") > 0) {
+                        if (precursorMZ.indexOf(",") > 0) {
                             precursorMZ = precursorMZ.replace(',', '.');
                         }
                         this.setPrecursorMZ(Double.parseDouble(precursorMZ));
                         // It is possible that parent intensity is not mentioned. We then set it to '0'.
-                        if(st.hasMoreTokens()) {
+                        if (st.hasMoreTokens()) {
                             this.setIntensity(Double.parseDouble(st.nextToken().trim()));
                         } else {
                             this.setIntensity(0.0);
                         }
-                    } else if(line.startsWith(CHARGE)) {
+                    } else if (line.startsWith(CHARGE)) {
                         // CHARGE line found.
                         // Note the extra parsing to read a Mascot Generic File charge (eg., 1+).
                         this.setCharge(this.extractCharge(line.substring(equalSignIndex + 1)));
-                    } else{
+                    } else {
                         // This is an extra embedded parameter!
-                        String aKey = line.substring(0,equalSignIndex);
+                        String aKey = line.substring(0, equalSignIndex);
                         String aValue = line.substring(equalSignIndex + 1);
                         // Save the extra embedded parameter in iEmbeddedParameter
                         addExtraEmbeddedParameter(aKey, aValue);
                     }
                 }
                 // Read peaks, minding the possibility of charge present!
-                else if(inSpectrum) {
+                else if (inSpectrum) {
                     // We're inside the spectrum, with no '=' in the line, so it should be
                     // a peak line.
                     // A peak line should be either of the following two:
@@ -480,24 +476,24 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
                     // 234.56 789   1+
                     StringTokenizer st = new StringTokenizer(line, " \t");
                     int count = st.countTokens();
-                    if(count >= 2) {
+                    if (count >= 2) {
                         String temp = st.nextToken().trim();
-                        if(temp.indexOf(",")>0) {
-                            temp = temp.replace(',','.');
+                        if (temp.indexOf(",") > 0) {
+                            temp = temp.replace(',', '.');
                         }
                         Double mass = new Double(temp);
                         temp = st.nextToken().trim();
-                        if(temp.indexOf(",")>0) {
-                            temp = temp.replace(',','.');
+                        if (temp.indexOf(",") > 0) {
+                            temp = temp.replace(',', '.');
                         }
                         Double intensity = new Double(temp);
                         this.iPeaks.put(mass, intensity);
-                        if(st.hasMoreTokens()) {
+                        if (st.hasMoreTokens()) {
                             int charge = 1;
                             iCharges.put(mass, new Integer(charge));
                         }
                     } else {
-                        System.err.println("\n\nUnrecognized line at line number " + lineCount + ": '" + line + "'!\n");
+                        logger.error("\n\nUnrecognized line at line number " + lineCount + ": '" + line + "'!\n");
                     }
                 }
             }
@@ -505,20 +501,19 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
             this.iComments = comments.toString();
             // That's it.
             br.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             // We do not expect IOException when using a StringReader.
-            ioe.printStackTrace();
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
     /**
      * This method writes the MGF object to the specified Writer.
      *
-     * @param aWriter   Writer to write a String representation of this class to.
-     * @param   aSubstituteFilename  if this boolean is true, the filename is set to be the title
-     *                               in the output header. If it is false, the title is set as
-     *                               the title.
-     * @throws java.io.IOException  when the writing failed.
+     * @param aWriter             Writer to write a String representation of this class to.
+     * @param aSubstituteFilename if this boolean is true, the filename is set to be the title in the output header. If
+     *                            it is false, the title is set as the title.
+     * @throws java.io.IOException when the writing failed.
      */
     private void writeToWriter(Writer aWriter, boolean aSubstituteFilename) throws IOException {
         BufferedWriter bw = new BufferedWriter(aWriter);
@@ -528,7 +523,7 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
         // Next the ion start tag.
         bw.write(IONS_START + "\n");
         // Now the title, or the filename if the substition flag is 'true'.
-        if(aSubstituteFilename) {
+        if (aSubstituteFilename) {
             // Substituting the title with the filename.
             bw.write(TITLE + "=" + this.getFilename() + "\n");
         } else {
@@ -539,13 +534,13 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
         bw.write(PEPMASS + "=" + this.getPrecursorMZ() + " " + this.getIntensity() + "\n");
         // For charge: see if it is present first (charge != 0).
         // If it is not present, omit this line altogether.
-        if(this.getCharge() != 0) {
+        if (this.getCharge() != 0) {
             bw.write(CHARGE + "=" + this.processCharge(this.getCharge()) + "\n");
         }
         // If there are any extra embedded parameters in the mascot generic file,
         // also write them in this header section.
-        if(this.iExtraEmbeddedParameters != null){
-            if(!iExtraEmbeddedParameters.isEmpty()){
+        if (this.iExtraEmbeddedParameters != null) {
+            if (!iExtraEmbeddedParameters.isEmpty()) {
                 Iterator iter = iExtraEmbeddedParameters.keySet().iterator();
                 while (iter.hasNext()) {
                     String aKey = (String) iter.next();
@@ -559,16 +554,16 @@ public class T2Extractor_MascotGenericFile extends SpectrumFileAncestor {
         // Next up the ions themselves.
         SortedSet ss = new TreeSet(this.getPeaks().keySet());
         Iterator it = ss.iterator();
-        while(it.hasNext()) {
-            Double tempKey = (Double)it.next();
+        while (it.hasNext()) {
+            Double tempKey = (Double) it.next();
             BigDecimal lDouble = new BigDecimal(tempKey.doubleValue()).setScale(4, BigDecimal.ROUND_HALF_UP);
             // We need to check whether a charge is known for this peak.
             String charge = "";
-            if(iCharges.containsKey(tempKey)) {
-                int chargeState = ((Integer)iCharges.get(tempKey)).intValue();
+            if (iCharges.containsKey(tempKey)) {
+                int chargeState = ((Integer) iCharges.get(tempKey)).intValue();
                 charge = "\t" + this.processCharge(chargeState);
             }
-            bw.write(lDouble.toString() + " " + new BigDecimal(((Double)this.iPeaks.get(tempKey)).doubleValue()).setScale(4, BigDecimal.ROUND_HALF_UP).toString() + charge + "\n");
+            bw.write(lDouble.toString() + " " + new BigDecimal(((Double) this.iPeaks.get(tempKey)).doubleValue()).setScale(4, BigDecimal.ROUND_HALF_UP).toString() + charge + "\n");
         }
 
         bw.write(IONS_END);

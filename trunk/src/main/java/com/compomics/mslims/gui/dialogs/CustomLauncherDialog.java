@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import javax.swing.*;
 import java.sql.Connection;
 import java.awt.*;
@@ -23,15 +25,16 @@ import java.lang.reflect.InvocationTargetException;
  */
 
 /**
- * This class represents a modal dialog that takes a fully qualified classname,
- * attempts to load the class, and subsequently calls its constructor with exactly
- * two arguments, in the following order: a Connection, and a String with the
- * name of the connection.
+ * This class represents a modal dialog that takes a fully qualified classname, attempts to load the class, and
+ * subsequently calls its constructor with exactly two arguments, in the following order: a Connection, and a String
+ * with the name of the connection.
  *
  * @author Lennart Martens
  * @version $Id: CustomLauncherDialog.java,v 1.1 2008/06/27 10:45:55 lennart Exp $
  */
 public class CustomLauncherDialog extends JDialog {
+    // Class specific log4j logger for CustomLauncherDialog instances.
+    private static Logger logger = Logger.getLogger(CustomLauncherDialog.class);
 
     /**
      * The database connection to forward.
@@ -47,11 +50,10 @@ public class CustomLauncherDialog extends JDialog {
 
 
     /**
-     * This constructor takes the database connection, as well as
-     * the database name to pass on.
+     * This constructor takes the database connection, as well as the database name to pass on.
      *
-     * @param aConn Connection to pass on
-     * @param aDBName   String with the name of the database connection.
+     * @param aConn   Connection to pass on
+     * @param aDBName String with the name of the database connection.
      */
     public CustomLauncherDialog(Connection aConn, String aDBName) {
         this.iConn = aConn;
@@ -103,7 +105,7 @@ public class CustomLauncherDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     btnExecutePressed();
                 }
             }
@@ -120,7 +122,7 @@ public class CustomLauncherDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     close();
                 }
             }
@@ -138,7 +140,7 @@ public class CustomLauncherDialog extends JDialog {
     }
 
     private void btnExecutePressed() {
-        if(txtClassname.getText() == null || txtClassname.getText().trim().equals("")) {
+        if (txtClassname.getText() == null || txtClassname.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(this, "Please provide a fully qualified classname to execute.", "No classname provided!", JOptionPane.WARNING_MESSAGE);
             txtClassname.requestFocus();
             return;
@@ -149,32 +151,34 @@ public class CustomLauncherDialog extends JDialog {
         Class classToExecute = null;
         try {
             classToExecute = Class.forName(classname);
-        } catch(ClassNotFoundException cnfe) {
-            JOptionPane.showMessageDialog(this, new String[]{"Unable to find the class you specified.","Please verify that the classname is correctly specified,", " that the full package is correctly included,", " and that it can be found on the classpath!"}, "Class not found!", JOptionPane.WARNING_MESSAGE);
+        } catch (ClassNotFoundException cnfe) {
+            JOptionPane.showMessageDialog(this, new String[]{"Unable to find the class you specified.", "Please verify that the classname is correctly specified,", " that the full package is correctly included,", " and that it can be found on the classpath!"}, "Class not found!", JOptionPane.WARNING_MESSAGE);
             txtClassname.requestFocus();
             return;
         }
         // OK, we've got a class. Now try to invoke the right constructor.
         try {
-            Constructor toCall = classToExecute.getConstructor(new Class[] {java.sql.Connection.class, java.lang.String.class});
+            Constructor toCall = classToExecute.getConstructor(new Class[]{java.sql.Connection.class, java.lang.String.class});
             // Right, we have a constructor, call it!
-            Object[] arguments = new Object[] {iConn, iDBName};
+            Object[] arguments = new Object[]{iConn, iDBName};
             toCall.newInstance(arguments);
             // We're done. Close this dialog.
             close();
-        } catch(NoSuchMethodException nsme) {
+        } catch (NoSuchMethodException nsme) {
             this.invocationFailed();
-        } catch(InstantiationException ie) {
+        } catch (InstantiationException ie) {
             this.invocationFailed();
-        } catch(InvocationTargetException ite) {
+        } catch (InvocationTargetException ite) {
             this.invocationFailed();
-        } catch(IllegalAccessException iae) {
+        } catch (IllegalAccessException iae) {
             this.invocationFailed();
         }
     }
 
     private void invocationFailed() {
-        JOptionPane.showMessageDialog(this, new String[]{"Unable to find or call the correct constructor on the class you specified.","Please verify that a public constructor accepting a:", "   - java.sql.Collection", " and a ", "   - java.lang.String", "as arguments (in that order) is available!"}, "Class not found!", JOptionPane.ERROR_MESSAGE);
+        String lMessage = "Unable to find or call the correct constructor on the class you specified.";
+        logger.error(lMessage);
+        JOptionPane.showMessageDialog(this, new String[]{lMessage, "Please verify that a public constructor accepting a:", "   - java.sql.Collection", " and a ", "   - java.lang.String", "as arguments (in that order) is available!"}, "Class not found!", JOptionPane.ERROR_MESSAGE);
         txtClassname.requestFocus();
         return;
     }

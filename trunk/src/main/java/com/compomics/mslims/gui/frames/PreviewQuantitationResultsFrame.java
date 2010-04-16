@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.frames;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.gui.table.DistillerQuantitationTableModel;
 import com.compomics.mslims.gui.table.ITraqQuantitationTableModel;
@@ -46,6 +48,8 @@ import java.util.*;
  * @author Niklaas Colaert
  */
 public class PreviewQuantitationResultsFrame extends JFrame implements Flamable {
+    // Class specific log4j logger for PreviewQuantitationResultsFrame instances.
+    private static Logger logger = Logger.getLogger(PreviewQuantitationResultsFrame.class);
 
     /**
      * The Objects to be previewed.
@@ -119,8 +123,8 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
      * @param aMessage   String with an extra message to display.
      */
     public void passHotPotato(Throwable aThrowable, String aMessage) {
+        logger.error(aThrowable.getMessage(), aThrowable);
         JOptionPane.showMessageDialog(this, new String[]{"An error occurred while attempting to process your data:", aMessage}, "Error occurred!", JOptionPane.ERROR_MESSAGE);
-        aThrowable.printStackTrace();
     }
 
     /**

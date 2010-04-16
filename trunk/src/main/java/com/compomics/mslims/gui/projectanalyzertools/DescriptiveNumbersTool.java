@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.projectanalyzertools;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Protocol;
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslims.db.utils.ProjectReporter;
@@ -36,6 +38,8 @@ import java.util.HashMap;
  * @version $Id: DescriptiveNumbersTool.java,v 1.4 2009/03/11 13:57:45 niklaas Exp $
  */
 public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAnalyzerTool {
+    // Class specific log4j logger for DescriptiveNumbersTool instances.
+    private static Logger logger = Logger.getLogger(DescriptiveNumbersTool.class);
 
     /**
      * The parent that started this application.
@@ -94,11 +98,11 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
 
 
     /**
-     * This method represents the 'command-pattern' design of the ProjectAnalyzerTool.
-     * It will actually allow the tool to run.
+     * This method represents the 'command-pattern' design of the ProjectAnalyzerTool. It will actually allow the tool
+     * to run.
      *
      * @param aParent     ProjectAnalyzer with the parent that launched this tool.
-     * @param aToolName String with the name for the tool.
+     * @param aToolName   String with the name for the tool.
      * @param aParameters String with the parameters as stored in the database for this tool.
      * @param aConn       Connection with the DB connection to use.
      * @param aDBName     String with the name of the database we're connected to via 'aConn'.
@@ -139,7 +143,7 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
      * This method will be called when the tool should show itself on the foreground and request the focus.
      */
     public void setActive() {
-        if(this.getState() == Frame.ICONIFIED){
+        if (this.getState() == Frame.ICONIFIED) {
             this.setState(Frame.NORMAL);
         }
         this.requestFocus();
@@ -154,8 +158,9 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
             keys.put(Protocol.PROTOCOLID, new Long(iProject.getL_protocolid()));
             iProtocol = new Protocol();
             iProtocol.retrieve(iConnection, keys);
-        } catch(SQLException sqle) {
-            JOptionPane.showMessageDialog(this, new String[] {"Unable to load instruments from the database: " + sqle.getMessage(), "Exiting tool."}, "Unable to load instruments.", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
+            JOptionPane.showMessageDialog(this, new String[]{"Unable to load instruments from the database: " + sqle.getMessage(), "Exiting tool."}, "Unable to load instruments.", JOptionPane.ERROR_MESSAGE);
             this.close();
         }
     }
@@ -163,7 +168,7 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
     /**
      * This method returns the button panel.
      *
-     * @return  JPanel with the buttons.
+     * @return JPanel with the buttons.
      */
     private JPanel getButtonPanel() {
         JButton btnStartReport = new JButton("Generate report");
@@ -179,7 +184,7 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
              * This event occurs when a key press is followed by a key release.
              */
             public void keyTyped(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     executeReportTriggered();
                 }
             }
@@ -197,7 +202,7 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
              * This event occurs when a key press is followed by a key release.
              */
             public void keyTyped(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     close();
                 }
             }
@@ -220,7 +225,7 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
     private void executeReportTriggered() {
         final ProjectReporter reporter = new ProjectReporter(iProject, iProtocol, iConnection);
         progress.setMinimum(0);
-        progress.setMaximum(reporter.getNumberOfQueries()+1);
+        progress.setMaximum(reporter.getNumberOfQueries() + 1);
         progress.setString("Starting up report generation...");
         progress.setIndeterminate(true);
         final long startMillis = System.currentTimeMillis();
@@ -229,11 +234,12 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
                 Object result = null;
                 try {
                     result = reporter.getReport(progress);
-                } catch(SQLException e) {
+                } catch (SQLException e) {
                     result = e;
                 }
                 return result;
             }
+
             public void finished() {
                 queryCompleted(this, startMillis);
             }
@@ -244,39 +250,40 @@ public class DescriptiveNumbersTool extends FlamableJFrame implements ProjectAna
     /**
      * This method will be called by the SwingWorker whenever the query completes.
      *
-     * @param aQuery    SwingWorker that's handled the query. Since it is calling us, the query is now complete.
-     * @param aStartMillis  long with the original starting time of the query in milliseconds.
+     * @param aQuery       SwingWorker that's handled the query. Since it is calling us, the query is now complete.
+     * @param aStartMillis long with the original starting time of the query in milliseconds.
      */
     private void queryCompleted(SwingWorker aQuery, long aStartMillis) {
-        if(progress.isIndeterminate()) {
+        if (progress.isIndeterminate()) {
             progress.setIndeterminate(false);
         }
         progress.setValue(progress.getMinimum());
         try {
             Object temp = aQuery.get();
-            if(temp instanceof String) {
+            if (temp instanceof String) {
                 long endMillis = System.currentTimeMillis();
                 double totalTime = 0.0;
                 boolean inSeconds = false;
-                totalTime = endMillis-aStartMillis;
-                if(totalTime > 1000) {
+                totalTime = endMillis - aStartMillis;
+                if (totalTime > 1000) {
                     totalTime /= 1000.0;
                     inSeconds = true;
                 }
                 progress.setValue(progress.getMaximum());
-                String duration = new BigDecimal(totalTime).setScale(2, BigDecimal.ROUND_HALF_UP).toString()+ (inSeconds?" seconds":" milliseconds");
+                String duration = new BigDecimal(totalTime).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + (inSeconds ? " seconds" : " milliseconds");
                 lblStatus.setForeground(this.getForeground());
                 lblStatus.setText("Report generated (generation took " + duration + ").");
-                txtReport.setText((String)temp);
-                if(txtReport.getText().length() > 1) {
+                txtReport.setText((String) temp);
+                if (txtReport.getText().length() > 1) {
                     txtReport.setCaretPosition(1);
                 }
                 progress.setString("Report generated (" + duration + ")!");
-            } else if(temp instanceof SQLException) {
-                throw (SQLException)temp;
+            } else if (temp instanceof SQLException) {
+                throw (SQLException) temp;
             }
-        } catch(SQLException sqle) {
-            JOptionPane.showMessageDialog(this, new String[] {"Unfortunately, your report failed, (see below for the error): ", sqle.getMessage()}, "Report failed!", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
+            JOptionPane.showMessageDialog(this, new String[]{"Unfortunately, your report failed, (see below for the error): ", sqle.getMessage()}, "Report failed!", JOptionPane.ERROR_MESSAGE);
             lblStatus.setForeground(Color.red);
             lblStatus.setText("Report failed.");
             progress.setString("Report failed");

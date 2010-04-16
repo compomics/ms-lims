@@ -16,7 +16,7 @@
         </constraints>
         <properties>
           <tabLayoutPolicy value="1"/>
-          <tabPlacement value="2"/>
+          <tabPlacement value="1"/>
         </properties>
         <border type="none"/>
         <children>

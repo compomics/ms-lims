@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -29,13 +31,14 @@ import java.util.Properties;
  */
 
 /**
- * This class represents a GUI application which can be used to apply various XSL sheets
- * to XML files.
+ * This class represents a GUI application which can be used to apply various XSL sheets to XML files.
  *
  * @author Lennart Martens
  * @version $Id: XSLTransformer.java,v 1.2 2004/06/30 08:46:22 lennart Exp $
  */
 public class XSLTransformer extends JFrame {
+    // Class specific log4j logger for XSLTransformer instances.
+    private static Logger logger = Logger.getLogger(XSLTransformer.class);
 
     private static final String XML_FOLDER = "XML_FOLDER";
     private static final String XSL_FiLE = "XSL_FILE";
@@ -59,10 +62,9 @@ public class XSLTransformer extends JFrame {
     private JButton btnWrite = null;
 
     /**
-     * This constructor takes a title for the JFrame as its only
-     * argument.
+     * This constructor takes a title for the JFrame as its only argument.
      *
-     * @param aTitle    String with a title for the JFrame.
+     * @param aTitle String with a title for the JFrame.
      */
     public XSLTransformer(String aTitle) {
         super(aTitle);
@@ -102,8 +104,8 @@ public class XSLTransformer extends JFrame {
         lblXSLFile = new JLabel("XSL file : ");
         lblOutputFile = new JLabel("Output file : ");
         // the longest of the labels.
-        int length = Math.max(lblOutputFile.getPreferredSize().width,lblXMLFile.getPreferredSize().width);
-        if(lblXSLFile.getPreferredSize().width > length) {
+        int length = Math.max(lblOutputFile.getPreferredSize().width, lblXMLFile.getPreferredSize().width);
+        if (lblXSLFile.getPreferredSize().width > length) {
             length = lblXSLFile.getPreferredSize().width;
         }
         // Delta's.
@@ -121,7 +123,7 @@ public class XSLTransformer extends JFrame {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     browseXMLTriggered();
                 }
             }
@@ -152,7 +154,7 @@ public class XSLTransformer extends JFrame {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     browseXSLTriggered();
                 }
             }
@@ -183,7 +185,7 @@ public class XSLTransformer extends JFrame {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     browseOutputTriggered();
                 }
             }
@@ -226,7 +228,7 @@ public class XSLTransformer extends JFrame {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     viewTriggered();
                 }
             }
@@ -245,7 +247,7 @@ public class XSLTransformer extends JFrame {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     writeTriggered();
                 }
             }
@@ -306,29 +308,28 @@ public class XSLTransformer extends JFrame {
     }
 
     /**
-     * This method presents a generic way to load a file location using a JFileChooser component
-     * and feed the filename into the specified JTextComponent. Note that if a path has been entered
-     * in the textfield and it exists, it is automatically set as the starting location on the
-     * JFileChooser.
+     * This method presents a generic way to load a file location using a JFileChooser component and feed the filename
+     * into the specified JTextComponent. Note that if a path has been entered in the textfield and it exists, it is
+     * automatically set as the starting location on the JFileChooser.
      *
-     * @param aTextField    JTextField with the recipient of the retrieved information.
-     * @param aContent  String with a description for the type of file that needs to be localized.
-     * @param aFilter   String with an (optional) extension to filter for (can be 'null' for no filter).
+     * @param aTextField JTextField with the recipient of the retrieved information.
+     * @param aContent   String with a description for the type of file that needs to be localized.
+     * @param aFilter    String with an (optional) extension to filter for (can be 'null' for no filter).
      */
     private void getFile(JTextField aTextField, String aContent, String aFilter) {
         File toOpen = null;
-        while(toOpen == null) {
+        while (toOpen == null) {
             // Default directory location is the root of this drive.
             String root = "/";
             // See if there is something stipulated in the recipient textfield already.
             String tempRoot = aTextField.getText();
-            if(tempRoot != null && !tempRoot.trim().equals("")) {
+            if (tempRoot != null && !tempRoot.trim().equals("")) {
                 // It seems that something is already specified.
                 File test = new File(tempRoot.trim());
                 // See if it exists.
-                if(test.exists()) {
+                if (test.exists()) {
                     // It exists! If it is a file, get the parent directory.
-                    if(!test.isDirectory()) {
+                    if (!test.isDirectory()) {
                         test = test.getParentFile();
                     }
                     // try to get the path, and if this succeeds, set it as the
@@ -337,27 +338,30 @@ public class XSLTransformer extends JFrame {
                     // here.
                     try {
                         root = test.getCanonicalPath();
-                    } catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         // If this fails, we default to the root of this drive anyway.
                     }
                 }
             }
             JFileChooser jfc = new JFileChooser(root);
             // Set a file filter if required.
-            if(aFilter != null) {
+            if (aFilter != null) {
                 jfc.setFileFilter(new FilenameFilter(aFilter));
             }
             int returnVal = jfc.showOpenDialog(XSLTransformer.this);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
                 toOpen = jfc.getSelectedFile();
-                if(toOpen.exists()) {
+                if (toOpen.exists()) {
                     try {
                         aTextField.setText(toOpen.getCanonicalPath());
-                    } catch(IOException ioe) {
+                    } catch (IOException ioe) {
+                        logger.error(ioe.getMessage(), ioe);
                         JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to read '" + toOpen.getName() + "' as " + aContent + " file!", ioe.getMessage()}, "Unable to load " + aContent + " file!", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"The '" + toOpen.getName() + "' " + aContent + " file was not found!"}, aContent + " file was not found!", JOptionPane.ERROR_MESSAGE);
+                    String lMessage = "The '" + toOpen.getName() + "' " + aContent + " file was not found!";
+                    logger.error(lMessage);
+                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{lMessage}, aContent + " file was not found!", JOptionPane.ERROR_MESSAGE);
                 }
             } else {
                 break;
@@ -374,21 +378,29 @@ public class XSLTransformer extends JFrame {
         String lXSLFile = txtXSLFile.getText();
 
         // First validate the presence of both input files (XML and XSL).
-        if(lXMLFile == null || lXMLFile.trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "You need to select an XML input file first!", "No XML file selected!", JOptionPane.ERROR_MESSAGE);
+        if (lXMLFile == null || lXMLFile.trim().equals("")) {
+            String lMessage = "No XML file selected!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, "You need to select an XML input file first!", lMessage, JOptionPane.ERROR_MESSAGE);
             txtXMLFile.requestFocus();
-        } else if(lXSLFile == null || lXSLFile.trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "You need to select an XSL input file first!", "No XSL file selected!", JOptionPane.ERROR_MESSAGE);
+        } else if (lXSLFile == null || lXSLFile.trim().equals("")) {
+            String lMessage = "No XSL file selected!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, "You need to select an XSL input file first!", lMessage, JOptionPane.ERROR_MESSAGE);
             txtXSLFile.requestFocus();
         } else {
             // Now see if we can actually locate the files.
             File xml = new File(lXMLFile);
             File xsl = new File(lXSLFile);
-            if(!xml.exists()) {
-                JOptionPane.showMessageDialog(this, "The XML input file you specified does not exist!", "XML file not found!", JOptionPane.ERROR_MESSAGE);
+            if (!xml.exists()) {
+                String lMessage = "The XML input file you specified does not exist!";
+                logger.error(lMessage);
+                JOptionPane.showMessageDialog(this, lMessage, "XML file not found!", JOptionPane.ERROR_MESSAGE);
                 txtXMLFile.requestFocus();
-            } else if(!xsl.exists()) {
-                JOptionPane.showMessageDialog(this, "The XSL input file you specified does not exist!", "XSL file not found!", JOptionPane.ERROR_MESSAGE);
+            } else if (!xsl.exists()) {
+                String lMessage = "The XSL input file you specified does not exist!";
+                logger.error(lMessage);
+                JOptionPane.showMessageDialog(this, lMessage, "XSL file not found!", JOptionPane.ERROR_MESSAGE);
                 txtXSLFile.requestFocus();
             } else {
                 // All clear!
@@ -434,20 +446,23 @@ public class XSLTransformer extends JFrame {
                         writer.flush();
                         area.setText(writer.toString());
                         writer.close();
-                        display.setLocation((int)XSLTransformer.this.getLocation().getX() + 50, (int)XSLTransformer.this.getLocation().getY() + 50);
-                        if(area.getText().length() > 1) {
+                        display.setLocation((int) XSLTransformer.this.getLocation().getX() + 50, (int) XSLTransformer.this.getLocation().getY() + 50);
+                        if (area.getText().length() > 1) {
                             area.setCaretPosition(1);
                         }
                         display.setSize(400, 300);
                         display.setVisible(true);
-                    } catch(TransformerException tfe) {
-                        JOptionPane.showMessageDialog(XSLTransformer.this, new String[] {"Unable to execute your XML/XSL transformation!", tfe.getMessage()}, "Transformation failure!", JOptionPane.ERROR_MESSAGE);
+                    } catch (TransformerException tfe) {
+                        logger.error(tfe.getMessage(), tfe);
+                        JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to execute your XML/XSL transformation!", tfe.getMessage()}, "Transformation failure!", JOptionPane.ERROR_MESSAGE);
                     }
                     // Start the transformation.
-                } catch(TransformerConfigurationException tce) {
-                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[] {"Unable to transform XSL file: ", tce.getMessage()}, "XSL error", JOptionPane.ERROR_MESSAGE);
-                } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[] {"Unable to read file: ", ioe.getMessage()}, "I/O error", JOptionPane.ERROR_MESSAGE);
+                } catch (TransformerConfigurationException tce) {
+                    logger.error(tce.getMessage(), tce);
+                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to transform XSL file: ", tce.getMessage()}, "XSL error", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
+                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to read file: ", ioe.getMessage()}, "I/O error", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -464,32 +479,42 @@ public class XSLTransformer extends JFrame {
         String lOutputFile = txtOutputFile.getText();
 
         // First validate the presence of both input files (XML and XSL).
-        if(lXMLFile == null || lXMLFile.trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "You need to select an XML input file first!", "No XML file selected!", JOptionPane.ERROR_MESSAGE);
+        if (lXMLFile == null || lXMLFile.trim().equals("")) {
+            String lMessage = "No XML file selected!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, "You need to select an XML input file first!", lMessage, JOptionPane.ERROR_MESSAGE);
             txtXMLFile.requestFocus();
-        } else if(lXSLFile == null || lXSLFile.trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "You need to select an XSL input file first!", "No XSL file selected!", JOptionPane.ERROR_MESSAGE);
+        } else if (lXSLFile == null || lXSLFile.trim().equals("")) {
+            String lMessage = "You need to select an XSL input file first!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, lMessage, "No XSL file selected!", JOptionPane.ERROR_MESSAGE);
             txtXSLFile.requestFocus();
-        } else if(lOutputFile == null || lOutputFile.trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "You need to select an output file first!", "No output file selected!", JOptionPane.ERROR_MESSAGE);
+        } else if (lOutputFile == null || lOutputFile.trim().equals("")) {
+            String lMessage = "You need to select an output file first!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, lMessage, "No output file selected!", JOptionPane.ERROR_MESSAGE);
             txtOutputFile.requestFocus();
         } else {
             // Now see if we can actually locate the files.
             File xml = new File(lXMLFile);
             File xsl = new File(lXSLFile);
-            if(!xml.exists()) {
-                JOptionPane.showMessageDialog(this, "The XML input file you specified does not exist!", "XML file not found!", JOptionPane.ERROR_MESSAGE);
+            if (!xml.exists()) {
+                String lMessage = "The XML input file you specified does not exist!";
+                logger.error(lMessage);
+                JOptionPane.showMessageDialog(this, lMessage, "XML file not found!", JOptionPane.ERROR_MESSAGE);
                 txtXMLFile.requestFocus();
-            } else if(!xsl.exists()) {
-                JOptionPane.showMessageDialog(this, "The XSL input file you specified does not exist!", "XSL file not found!", JOptionPane.ERROR_MESSAGE);
+            } else if (!xsl.exists()) {
+                String lMessage = "The XSL input file you specified does not exist!";
+                logger.error(lMessage);
+                JOptionPane.showMessageDialog(this, lMessage, "XSL file not found!", JOptionPane.ERROR_MESSAGE);
                 txtXSLFile.requestFocus();
             } else {
                 // All clear so far!
                 // See if we are NOT in append mode, if so, ask for confirmation.
                 boolean append = chkAppend.isSelected();
-                if(!append) {
-                    int result = JOptionPane.showConfirmDialog(this, new String[] {"You choose to overwrite file '" + lOutputFile +"'!", "Do you want to continue?"}, "Overwrite selected!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if(result == JOptionPane.NO_OPTION || result == JOptionPane.CANCEL_OPTION) {
+                if (!append) {
+                    int result = JOptionPane.showConfirmDialog(this, new String[]{"You choose to overwrite file '" + lOutputFile + "'!", "Do you want to continue?"}, "Overwrite selected!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (result == JOptionPane.NO_OPTION || result == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                 }
@@ -505,14 +530,17 @@ public class XSLTransformer extends JFrame {
                         writer.flush();
                         result = writer.toString();
                         writer.close();
-                    } catch(TransformerException tfe) {
-                        JOptionPane.showMessageDialog(XSLTransformer.this, new String[] {"Unable to execute your XML/XSL transformation!", tfe.getMessage()}, "Transformation failure!", JOptionPane.ERROR_MESSAGE);
+                    } catch (TransformerException tfe) {
+                        logger.error(tfe.getMessage(), tfe);
+                        JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to execute your XML/XSL transformation!", tfe.getMessage()}, "Transformation failure!", JOptionPane.ERROR_MESSAGE);
                     }
                     // Start the transformation.
-                } catch(TransformerConfigurationException tce) {
-                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[] {"Unable to transform XSL file: ", tce.getMessage()}, "XSL error", JOptionPane.ERROR_MESSAGE);
-                } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[] {"Unable to read file: ", ioe.getMessage()}, "I/O error", JOptionPane.ERROR_MESSAGE);
+                } catch (TransformerConfigurationException tce) {
+                    logger.error(tce.getMessage(), tce);
+                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to transform XSL file: ", tce.getMessage()}, "XSL error", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
+                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to read file: ", ioe.getMessage()}, "I/O error", JOptionPane.ERROR_MESSAGE);
                 }
                 // Convert all ',' in the String to '_' for maximum compatibility with 'CSV' format.
                 result = result.replace(',', '_');
@@ -524,12 +552,14 @@ public class XSLTransformer extends JFrame {
                     bw.flush();
                     bw.close();
                     String start = "Appended";
-                    if(!append) {
+                    if (!append) {
                         start = "Wrote";
                     }
                     JOptionPane.showMessageDialog(this, start + " contents to file '" + lOutputFile + "'.", "Output complete!", JOptionPane.INFORMATION_MESSAGE);
-                } catch(IOException ioe) {
-                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[] {"Unable to write to file '" + lOutputFile + "': ", ioe.getMessage()}, "Write error", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
+
+                    JOptionPane.showMessageDialog(XSLTransformer.this, new String[]{"Unable to write to file '" + lOutputFile + "': ", ioe.getMessage()}, "Write error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -546,7 +576,8 @@ public class XSLTransformer extends JFrame {
     /**
      * This method creates and initializes an XML transformer based on the selected XSL.
      *
-     * @exception   javax.xml.transform.TransformerConfigurationException when the transformer could not be created.
+     * @throws javax.xml.transform.TransformerConfigurationException
+     *          when the transformer could not be created.
      */
     private Transformer getTransformer(File aXSLFile) throws TransformerConfigurationException, IOException {
         TransformerFactory tFactory = TransformerFactory.newInstance();
@@ -555,44 +586,38 @@ public class XSLTransformer extends JFrame {
     }
 
     /**
-     * This method will attempt to read the 'xml_xsl.properties' file from the classpath containing
-     * the following (self-evident) keys:
-     * <ul>
-     *   <li>XML_FOLDER</li>
-     *   <li>XSL_FILE</li>
-     *   <li>OUTPUT_FILE</li>
-     *   <li>APPEND</li>
-     * </ul>
+     * This method will attempt to read the 'xml_xsl.properties' file from the classpath containing the following
+     * (self-evident) keys: <ul> <li>XML_FOLDER</li> <li>XSL_FILE</li> <li>OUTPUT_FILE</li> <li>APPEND</li> </ul>
      */
     private void attemptToLocateProperties() {
         try {
             Properties p = new Properties();
             p.load(this.getClass().getClassLoader().getResourceAsStream("xml_xsl.properties"));
-            if(p.containsKey(XML_FOLDER)) {
+            if (p.containsKey(XML_FOLDER)) {
                 String temp = p.getProperty(XML_FOLDER);
-                if(temp != null && !temp.trim().equals("")) {
+                if (temp != null && !temp.trim().equals("")) {
                     txtXMLFile.setText(temp.trim());
                 }
             }
-            if(p.containsKey(XSL_FiLE)) {
+            if (p.containsKey(XSL_FiLE)) {
                 String temp = p.getProperty(XSL_FiLE);
-                if(temp != null && !temp.trim().equals("")) {
+                if (temp != null && !temp.trim().equals("")) {
                     txtXSLFile.setText(temp.trim());
                 }
             }
-            if(p.containsKey(OUTPUT_FILE)) {
+            if (p.containsKey(OUTPUT_FILE)) {
                 String temp = p.getProperty(OUTPUT_FILE);
-                if(temp != null && !temp.trim().equals("")) {
+                if (temp != null && !temp.trim().equals("")) {
                     txtOutputFile.setText(temp.trim());
                 }
             }
-            if(p.containsKey(APPEND)) {
+            if (p.containsKey(APPEND)) {
                 String temp = p.getProperty(APPEND);
-                if(temp != null && !temp.trim().equals("")) {
+                if (temp != null && !temp.trim().equals("")) {
                     chkAppend.setSelected(new Boolean(temp).booleanValue());
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Whatever.
         }
     }
@@ -600,24 +625,24 @@ public class XSLTransformer extends JFrame {
     /**
      * This method is called whenever the user tries to save a file from a display window.
      *
-     * @param   aSource component that called this method.
-     * @param   aContents   String with the contents to be saved to file.
+     * @param aSource   component that called this method.
+     * @param aContents String with the contents to be saved to file.
      */
     private void saveFileTriggered(Component aSource, String aContents) {
         // First get the filename and location.
         boolean lbContinue = true;
         File output = null;
-        while(lbContinue) {
+        while (lbContinue) {
             JFileChooser jfc = new JFileChooser("/");
             int returnVal = jfc.showSaveDialog(XSLTransformer.this);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
                 lbContinue = false;
                 output = jfc.getSelectedFile();
-                if(output.exists()) {
-                    int result = JOptionPane.showConfirmDialog(aSource, new String[] {"File '" + output.getName() +"' exists!", "Do you want to overwrite?"}, "File exists!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                    if(result == JOptionPane.NO_OPTION) {
+                if (output.exists()) {
+                    int result = JOptionPane.showConfirmDialog(aSource, new String[]{"File '" + output.getName() + "' exists!", "Do you want to overwrite?"}, "File exists!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (result == JOptionPane.NO_OPTION) {
                         lbContinue = true;
-                    } else if(result == JOptionPane.CANCEL_OPTION) {
+                    } else if (result == JOptionPane.CANCEL_OPTION) {
                         return;
                     }
                 }
@@ -630,8 +655,9 @@ public class XSLTransformer extends JFrame {
             bw.flush();
             bw.close();
             JOptionPane.showMessageDialog(aSource, "Written contents to file '" + output.getName() + "'.", "Output complete!", JOptionPane.INFORMATION_MESSAGE);
-        } catch(IOException ioe) {
-            JOptionPane.showMessageDialog(aSource, new String[] {"Unable to write contents to file '" + output.getName() + "':", ioe.getMessage()}, "Error writing file!", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
+            JOptionPane.showMessageDialog(aSource, new String[]{"Unable to write contents to file '" + output.getName() + "':", ioe.getMessage()}, "Error writing file!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -643,14 +669,13 @@ public class XSLTransformer extends JFrame {
         private String iString = null;
 
         /**
-         * This constructor takes the String to filter on.
-         * It ignores whether or not htis String starts with a '.'.
+         * This constructor takes the String to filter on. It ignores whether or not htis String starts with a '.'.
          *
-         * @param aString   String to filter on.
+         * @param aString String to filter on.
          */
         public FilenameFilter(String aString) {
             this.iString = aString;
-            if(iString.startsWith(".")) {
+            if (iString.startsWith(".")) {
                 iString = iString.substring(1);
             }
         }
@@ -661,7 +686,7 @@ public class XSLTransformer extends JFrame {
         public boolean accept(File f) {
             boolean result = f.isDirectory();
             String name = f.getName();
-            if(name.endsWith("." + iString)) {
+            if (name.endsWith("." + iString)) {
                 result = true;
             }
             return result;
@@ -669,6 +694,7 @@ public class XSLTransformer extends JFrame {
 
         /**
          * The description of this filter. For example: "JPG and GIF Images"
+         *
          * @see FileView#getName
          */
         public String getDescription() {

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.workers;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.gui.tree.MascotSearch;
 import com.compomics.mslims.util.mascot.MascotResultsProcessor;
@@ -23,11 +25,13 @@ import java.util.Vector;
 
 /**
  * This class
- * 
+ *
  * @author Lennart
  * @version $Id: MascotResultsStorageWorker.java,v 1.3 2007/10/12 15:38:36 lennart Exp $
  */
 public class MascotResultsStorageWorker extends SwingWorker {
+    // Class specific log4j logger for MascotResultsStorageWorker instances.
+    private static Logger logger = Logger.getLogger(MascotResultsStorageWorker.class);
 
     /**
      * MascotResultsProcessor that will handling all the effective processing.
@@ -55,14 +59,14 @@ public class MascotResultsStorageWorker extends SwingWorker {
     private DefaultProgressBar iProgress = null;
 
     /**
-     * This constructor allows the creation and initialization of this Runner.
-     * It takes the necessary arguments to create a workable runner.
+     * This constructor allows the creation and initialization of this Runner. It takes the necessary arguments to
+     * create a workable runner.
      *
      * @param aProcessor   MascotResultsProcessor that will handling all the effective processing.
-     * @param aAllResults Vector that holds all the results to store.
+     * @param aAllResults  Vector that holds all the results to store.
      * @param aAllSearches MascotSearch[] that holds all seraches.
-     * @param aParent   Flamable instance that called this worker.
-     * @param aProgress DefaultProgressBar to show the progress on.
+     * @param aParent      Flamable instance that called this worker.
+     * @param aProgress    DefaultProgressBar to show the progress on.
      */
     public MascotResultsStorageWorker(MascotResultsProcessor aProcessor, Vector aAllResults, MascotSearch[] aAllSearches, Flamable aParent, DefaultProgressBar aProgress) {
         iProcessor = aProcessor;
@@ -77,7 +81,7 @@ public class MascotResultsStorageWorker extends SwingWorker {
      */
     public Object construct() {
         iProcessor.storeData(iAllResults, iFlamable, iProgress);
-        iProgress.setValue(iProgress.getValue()+1);
+        iProgress.setValue(iProgress.getValue() + 1);
         return "";
     }
 }

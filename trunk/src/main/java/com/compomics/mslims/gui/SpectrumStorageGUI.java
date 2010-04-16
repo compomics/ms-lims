@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.*;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.dialogs.DescriptionDialog;
@@ -44,6 +46,8 @@ import java.util.*;
  * @author Lennart Martens
  */
 public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, ProjectManager, Informable {
+    // Class specific log4j logger for SpectrumStorageGUI instances.
+    private static Logger logger = Logger.getLogger(SpectrumStorageGUI.class);
 
     /**
      * Boolean that indicates whether the tool is ran in stand-alone mode ('true') or not ('false').
@@ -73,7 +77,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
     /**
      * Constant String with the database connection properties file.
      */
-    private static final String iConProps = "ms_lims.properties";
+    private static final String iConProps = "ms-lims.properties";
 
     /**
      * The LC run elements that were found in the folder.
@@ -696,10 +700,10 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
         try {
             if (iConn != null && iStandAlone) {
                 iConn.close();
-                System.out.println("\nClosed DB connection.\n");
+                logger.info("\nClosed DB connection.\n");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -1180,9 +1184,8 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            //JOptionPane.showMessageDialog(this, new String[]{"Unable to open folder!", e.getMessage()}, "Unable to open folder!", JOptionPane.ERROR_MESSAGE);
+            logger.error(e.getMessage(), e);
+            JOptionPane.showMessageDialog(this, new String[]{"Unable to open folder!", e.getMessage()}, "Unable to open folder!", JOptionPane.ERROR_MESSAGE);
         }
     }
 

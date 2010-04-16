@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.netphos;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.netphos.PredictedLocation;
 import junit.TestCaseLM;
 import junit.framework.Assert;
@@ -24,6 +26,8 @@ import junit.framework.Assert;
  * @see com.compomics.mslims.util.netphos.PredictedLocation
  */
 public class TestPredictedLocation extends TestCaseLM {
+    // Class specific log4j logger for TestPredictedLocation instances.
+    private static Logger logger = Logger.getLogger(TestPredictedLocation.class);
 
     public TestPredictedLocation() {
         this("Test scenario for the PredictedLocation class.");
@@ -68,7 +72,7 @@ public class TestPredictedLocation extends TestCaseLM {
      */
     public void testClone() {
         PredictedLocation pl1 = new PredictedLocation(1, "ABCD", "A", 0.87);
-        PredictedLocation pl2 = (PredictedLocation)pl1.clone();
+        PredictedLocation pl2 = (PredictedLocation) pl1.clone();
 
         Assert.assertEquals(pl1, pl2);
         Assert.assertEquals(pl2, pl1);
