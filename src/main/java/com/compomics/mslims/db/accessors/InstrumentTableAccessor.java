@@ -150,8 +150,8 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
      * This constructor allows the creation of the 'InstrumentTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public InstrumentTableAccessor(HashMap aParams) {
         if (aParams.containsKey(INSTRUMENTID)) {
@@ -269,7 +269,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Instrumentid' column
      *
-     * @param    aInstrumentid    long with the value for the Instrumentid column.
+     * @param aInstrumentid long with the value for the Instrumentid column.
      */
     public void setInstrumentid(long aInstrumentid) {
         this.iInstrumentid = aInstrumentid;
@@ -279,7 +279,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Name' column
      *
-     * @param    aName    String with the value for the Name column.
+     * @param aName String with the value for the Name column.
      */
     public void setName(String aName) {
         this.iName = aName;
@@ -289,7 +289,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -299,7 +299,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Storageclassname' column
      *
-     * @param    aStorageclassname    String with the value for the Storageclassname column.
+     * @param aStorageclassname String with the value for the Storageclassname column.
      */
     public void setStorageclassname(String aStorageclassname) {
         this.iStorageclassname = aStorageclassname;
@@ -309,7 +309,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Propertiesfilename' column
      *
-     * @param    aPropertiesfilename    String with the value for the Propertiesfilename column.
+     * @param aPropertiesfilename String with the value for the Propertiesfilename column.
      */
     public void setPropertiesfilename(String aPropertiesfilename) {
         this.iPropertiesfilename = aPropertiesfilename;
@@ -319,7 +319,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Differential_calibration' column
      *
-     * @param    aDifferential_calibration    Number with the value for the Differential_calibration column.
+     * @param aDifferential_calibration Number with the value for the Differential_calibration column.
      */
     public void setDifferential_calibration(Number aDifferential_calibration) {
         this.iDifferential_calibration = aDifferential_calibration;
@@ -329,7 +329,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -339,7 +339,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -349,7 +349,7 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -483,22 +483,22 @@ public class InstrumentTableAccessor implements Deleteable, Retrievable, Updatea
         iKeys = new Object[colCount];
         while (lrsKeys.next()) {
             for (int i = 0; i < iKeys.length; i++) {
-                iKeys[i] = lrsKeys.getObject(i+1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+                iKeys[i] = lrsKeys.getObject(i + 1);
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

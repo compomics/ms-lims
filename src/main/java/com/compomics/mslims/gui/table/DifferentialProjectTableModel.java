@@ -119,8 +119,8 @@ public class DifferentialProjectTableModel extends AbstractTableModel {
      * Returns the value for the cell at <code>columnIndex</code> and <code>rowIndex</code>. If the column index is -1,
      * the DifferentialProject instance in this row is returned instead.
      *
-     * @param    rowIndex    the row whose value is to be queried
-     * @param    columnIndex the column whose value is to be queried
+     * @param rowIndex    the row whose value is to be queried
+     * @param columnIndex the column whose value is to be queried
      * @return the value Object at the specified cell
      */
     public Object getValueAt(int rowIndex, int columnIndex) {

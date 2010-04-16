@@ -171,8 +171,8 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This constructor allows the creation of the 'LcrunTableAccessor' object based on a set of values in the HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public LcrunTableAccessor(HashMap aParams) {
         if (aParams.containsKey(LCRUNID)) {
@@ -314,7 +314,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Lcrunid' column
      *
-     * @param    aLcrunid    long with the value for the Lcrunid column.
+     * @param aLcrunid long with the value for the Lcrunid column.
      */
     public void setLcrunid(long aLcrunid) {
         this.iLcrunid = aLcrunid;
@@ -324,7 +324,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'L_projectid' column
      *
-     * @param    aL_projectid    long with the value for the L_projectid column.
+     * @param aL_projectid long with the value for the L_projectid column.
      */
     public void setL_projectid(long aL_projectid) {
         this.iL_projectid = aL_projectid;
@@ -334,7 +334,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -344,7 +344,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Filecount' column
      *
-     * @param    aFilecount    long with the value for the Filecount column.
+     * @param aFilecount long with the value for the Filecount column.
      */
     public void setFilecount(long aFilecount) {
         this.iFilecount = aFilecount;
@@ -354,7 +354,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Name' column
      *
-     * @param    aName    String with the value for the Name column.
+     * @param aName String with the value for the Name column.
      */
     public void setName(String aName) {
         this.iName = aName;
@@ -364,7 +364,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Dvd_master_number' column
      *
-     * @param    aDvd_master_number    long with the value for the Dvd_master_number column.
+     * @param aDvd_master_number long with the value for the Dvd_master_number column.
      */
     public void setDvd_master_number(long aDvd_master_number) {
         this.iDvd_master_number = aDvd_master_number;
@@ -374,7 +374,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Dvd_secondary_number' column
      *
-     * @param    aDvd_secondary_number    long with the value for the Dvd_secondary_number column.
+     * @param aDvd_secondary_number long with the value for the Dvd_secondary_number column.
      */
     public void setDvd_secondary_number(long aDvd_secondary_number) {
         this.iDvd_secondary_number = aDvd_secondary_number;
@@ -384,7 +384,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Primary_fraction' column
      *
-     * @param    aPrimary_fraction    long with the value for the Primary_fraction column.
+     * @param aPrimary_fraction long with the value for the Primary_fraction column.
      */
     public void setPrimary_fraction(long aPrimary_fraction) {
         this.iPrimary_fraction = aPrimary_fraction;
@@ -394,7 +394,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -404,7 +404,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -414,7 +414,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -560,24 +560,24 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
         ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
         int colCount = lrsmKeys.getColumnCount();
         iKeys = new Object[colCount];
-        while(lrsKeys.next()) {
-			for(int i=0;i<iKeys.length;i++) {
-				iKeys[i] = lrsKeys.getObject(i+1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+        while (lrsKeys.next()) {
+            for (int i = 0; i < iKeys.length; i++) {
+                iKeys[i] = lrsKeys.getObject(i + 1);
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

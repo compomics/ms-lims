@@ -105,8 +105,8 @@ public class UserTableAccessor implements Deleteable, Retrievable, Updateable, P
     /**
      * This constructor allows the creation of the 'UserTableAccessor' object based on a set of values in the HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public UserTableAccessor(HashMap aParams) {
         if (aParams.containsKey(USERID)) {
@@ -176,7 +176,7 @@ public class UserTableAccessor implements Deleteable, Retrievable, Updateable, P
     /**
      * This method sets the value for the 'Userid' column
      *
-     * @param    aUserid    long with the value for the Userid column.
+     * @param aUserid long with the value for the Userid column.
      */
     public void setUserid(long aUserid) {
         this.iUserid = aUserid;
@@ -186,7 +186,7 @@ public class UserTableAccessor implements Deleteable, Retrievable, Updateable, P
     /**
      * This method sets the value for the 'Name' column
      *
-     * @param    aName    String with the value for the Name column.
+     * @param aName String with the value for the Name column.
      */
     public void setName(String aName) {
         this.iName = aName;
@@ -196,7 +196,7 @@ public class UserTableAccessor implements Deleteable, Retrievable, Updateable, P
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -206,7 +206,7 @@ public class UserTableAccessor implements Deleteable, Retrievable, Updateable, P
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -216,7 +216,7 @@ public class UserTableAccessor implements Deleteable, Retrievable, Updateable, P
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -336,8 +336,8 @@ public class UserTableAccessor implements Deleteable, Retrievable, Updateable, P
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

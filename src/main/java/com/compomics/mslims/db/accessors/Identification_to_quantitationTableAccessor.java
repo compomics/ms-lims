@@ -125,11 +125,11 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     }
 
     /**
-     * This constructor allows the creation of the 'Identification_to_quantitationTableAccessor' object based on a set of
-     * values in the HashMap.
+     * This constructor allows the creation of the 'Identification_to_quantitationTableAccessor' object based on a set
+     * of values in the HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public Identification_to_quantitationTableAccessor(HashMap aParams) {
         if (aParams.containsKey(ITQID)) {
@@ -161,8 +161,8 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
      * This constructor allows the creation of the 'Identification_to_quantitationTableAccessor' object based on a
      * resultset obtained by a 'select * from Identification_to_quantitation' query.
      *
-     * @param    aResultSet    ResultSet with the required columns to initialize this object with.
-     * @exception SQLException    when the ResultSet could not be read.
+     * @param aResultSet ResultSet with the required columns to initialize this object with.
+     * @throws SQLException when the ResultSet could not be read.
      */
     public Identification_to_quantitationTableAccessor(ResultSet aResultSet) throws SQLException {
         this.iItqid = aResultSet.getLong("itqid");
@@ -243,7 +243,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     /**
      * This method sets the value for the 'Itqid' column
      *
-     * @param    aItqid    long with the value for the Itqid column.
+     * @param aItqid long with the value for the Itqid column.
      */
     public void setItqid(long aItqid) {
         this.iItqid = aItqid;
@@ -253,7 +253,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     /**
      * This method sets the value for the 'L_identificationid' column
      *
-     * @param    aL_identificationid    long with the value for the L_identificationid column.
+     * @param aL_identificationid long with the value for the L_identificationid column.
      */
     public void setL_identificationid(long aL_identificationid) {
         this.iL_identificationid = aL_identificationid;
@@ -263,7 +263,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     /**
      * This method sets the value for the 'L_quantitation_groupid' column
      *
-     * @param    aL_quantitation_groupid    long with the value for the L_quantitation_groupid column.
+     * @param aL_quantitation_groupid long with the value for the L_quantitation_groupid column.
      */
     public void setL_quantitation_groupid(long aL_quantitation_groupid) {
         this.iL_quantitation_groupid = aL_quantitation_groupid;
@@ -273,7 +273,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     /**
      * This method sets the value for the 'Type' column
      *
-     * @param    aType    String with the value for the Type column.
+     * @param aType String with the value for the Type column.
      */
     public void setType(String aType) {
         this.iType = aType;
@@ -283,7 +283,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -293,7 +293,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -303,7 +303,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -459,19 +459,19 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
             // Since we have exactly one key specified, and only
             // one Primary Key column, we can infer that this was the
             // generated column, and we can therefore initialize it here.
-			iItqid = ((Number) iKeys[0]).longValue();
-		}
-		this.iUpdated = false;
-		return result;
-	}
+            iItqid = ((Number) iKeys[0]).longValue();
+        }
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

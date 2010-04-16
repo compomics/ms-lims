@@ -194,8 +194,8 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
      * This constructor allows the creation of the 'FragmentionTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public FragmentionTableAccessor(HashMap aParams) {
         if (aParams.containsKey(FRAGMENTIONID)) {
@@ -361,7 +361,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Fragmentionid' column
      *
-     * @param    aFragmentionid    long with the value for the Fragmentionid column.
+     * @param aFragmentionid long with the value for the Fragmentionid column.
      */
     public void setFragmentionid(long aFragmentionid) {
         this.iFragmentionid = aFragmentionid;
@@ -371,7 +371,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'L_identificationid' column
      *
-     * @param    aL_identificationid    long with the value for the L_identificationid column.
+     * @param aL_identificationid long with the value for the L_identificationid column.
      */
     public void setL_identificationid(long aL_identificationid) {
         this.iL_identificationid = aL_identificationid;
@@ -381,7 +381,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Iontype' column
      *
-     * @param    aIontype    long with the value for the Iontype column.
+     * @param aIontype long with the value for the Iontype column.
      */
     public void setIontype(long aIontype) {
         this.iIontype = aIontype;
@@ -391,7 +391,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Ionname' column
      *
-     * @param    aIonname    String with the value for the Ionname column.
+     * @param aIonname String with the value for the Ionname column.
      */
     public void setIonname(String aIonname) {
         this.iIonname = aIonname;
@@ -401,7 +401,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'L_ionscoringid' column
      *
-     * @param    aL_ionscoringid    long with the value for the L_ionscoringid column.
+     * @param aL_ionscoringid long with the value for the L_ionscoringid column.
      */
     public void setL_ionscoringid(long aL_ionscoringid) {
         this.iL_ionscoringid = aL_ionscoringid;
@@ -411,7 +411,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Mz' column
      *
-     * @param    aMz    Number with the value for the Mz column.
+     * @param aMz Number with the value for the Mz column.
      */
     public void setMz(Number aMz) {
         this.iMz = aMz;
@@ -421,7 +421,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Intensity' column
      *
-     * @param    aIntensity    long with the value for the Intensity column.
+     * @param aIntensity long with the value for the Intensity column.
      */
     public void setIntensity(long aIntensity) {
         this.iIntensity = aIntensity;
@@ -431,7 +431,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Fragmentionnumber' column
      *
-     * @param    aFragmentionnumber    long with the value for the Fragmentionnumber column.
+     * @param aFragmentionnumber long with the value for the Fragmentionnumber column.
      */
     public void setFragmentionnumber(long aFragmentionnumber) {
         this.iFragmentionnumber = aFragmentionnumber;
@@ -441,7 +441,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Massdelta' column
      *
-     * @param    aMassdelta    Number with the value for the Massdelta column.
+     * @param aMassdelta Number with the value for the Massdelta column.
      */
     public void setMassdelta(Number aMassdelta) {
         this.iMassdelta = aMassdelta;
@@ -451,7 +451,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Masserrormargin' column
      *
-     * @param    aMasserrormargin    Number with the value for the Masserrormargin column.
+     * @param aMasserrormargin Number with the value for the Masserrormargin column.
      */
     public void setMasserrormargin(Number aMasserrormargin) {
         this.iMasserrormargin = aMasserrormargin;
@@ -461,7 +461,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -471,7 +471,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -481,7 +481,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -640,25 +640,25 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
         ResultSet lrsKeys = lStat.getGeneratedKeys();
         ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
         int colCount = lrsmKeys.getColumnCount();
-		iKeys = new Object[colCount];
-		while(lrsKeys.next()) {
-			for(int i=0;i<iKeys.length;i++) {
-				iKeys[i] = lrsKeys.getObject(i+1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+        iKeys = new Object[colCount];
+        while (lrsKeys.next()) {
+            for (int i = 0; i < iKeys.length; i++) {
+                iKeys[i] = lrsKeys.getObject(i + 1);
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

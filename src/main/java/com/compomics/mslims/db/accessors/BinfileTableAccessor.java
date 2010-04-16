@@ -180,10 +180,11 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     }
 
     /**
-     * This constructor allows the creation of the 'BinfileTableAccessor' object based on a set of values in the HashMap.
+     * This constructor allows the creation of the 'BinfileTableAccessor' object based on a set of values in the
+     * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public BinfileTableAccessor(HashMap aParams) {
         if (aParams.containsKey(BINFILEID)) {
@@ -337,7 +338,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Binfileid' column
      *
-     * @param    aBinfileid    long with the value for the Binfileid column.
+     * @param aBinfileid long with the value for the Binfileid column.
      */
     public void setBinfileid(long aBinfileid) {
         this.iBinfileid = aBinfileid;
@@ -347,7 +348,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'L_projectid' column
      *
-     * @param    aL_projectid    long with the value for the L_projectid column.
+     * @param aL_projectid long with the value for the L_projectid column.
      */
     public void setL_projectid(long aL_projectid) {
         this.iL_projectid = aL_projectid;
@@ -357,7 +358,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'L_filedescriptionid' column
      *
-     * @param    aL_filedescriptionid    long with the value for the L_filedescriptionid column.
+     * @param aL_filedescriptionid long with the value for the L_filedescriptionid column.
      */
     public void setL_filedescriptionid(long aL_filedescriptionid) {
         this.iL_filedescriptionid = aL_filedescriptionid;
@@ -367,7 +368,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'File' column
      *
-     * @param    aFile    byte[] with the value for the File column.
+     * @param aFile byte[] with the value for the File column.
      */
     public void setFile(byte[] aFile) {
         this.iFile = aFile;
@@ -377,7 +378,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Filename' column
      *
-     * @param    aFilename    String with the value for the Filename column.
+     * @param aFilename String with the value for the Filename column.
      */
     public void setFilename(String aFilename) {
         this.iFilename = aFilename;
@@ -387,7 +388,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Comments' column
      *
-     * @param    aComments    String with the value for the Comments column.
+     * @param aComments String with the value for the Comments column.
      */
     public void setComments(String aComments) {
         this.iComments = aComments;
@@ -397,7 +398,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Originalpath' column
      *
-     * @param    aOriginalpath    String with the value for the Originalpath column.
+     * @param aOriginalpath String with the value for the Originalpath column.
      */
     public void setOriginalpath(String aOriginalpath) {
         this.iOriginalpath = aOriginalpath;
@@ -407,7 +408,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Originalhost' column
      *
-     * @param    aOriginalhost    String with the value for the Originalhost column.
+     * @param aOriginalhost String with the value for the Originalhost column.
      */
     public void setOriginalhost(String aOriginalhost) {
         this.iOriginalhost = aOriginalhost;
@@ -417,7 +418,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Originaluser' column
      *
-     * @param    aOriginaluser    String with the value for the Originaluser column.
+     * @param aOriginaluser String with the value for the Originaluser column.
      */
     public void setOriginaluser(String aOriginaluser) {
         this.iOriginaluser = aOriginaluser;
@@ -427,7 +428,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -437,7 +438,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -447,7 +448,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -617,24 +618,24 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
         ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
         int colCount = lrsmKeys.getColumnCount();
         iKeys = new Object[colCount];
-		while(lrsKeys.next()) {
-			for(int i=0;i<iKeys.length;i++) {
-				iKeys[i] = lrsKeys.getObject(i+1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+        while (lrsKeys.next()) {
+            for (int i = 0; i < iKeys.length; i++) {
+                iKeys[i] = lrsKeys.getObject(i + 1);
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

@@ -161,8 +161,8 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
      * This constructor allows the creation of the 'QuantitationTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public QuantitationTableAccessor(HashMap aParams) {
         if (aParams.containsKey(QUANTITATIONID)) {
@@ -203,8 +203,8 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
      * This constructor allows the creation of the 'QuantitationTableAccessor' object based on a resultset obtained by a
      * 'select * from Quantitation' query.
      *
-     * @param    aResultSet    ResultSet with the required columns to initialize this object with.
-     * @exception SQLException    when the ResultSet could not be read.
+     * @param aResultSet ResultSet with the required columns to initialize this object with.
+     * @throws SQLException when the ResultSet could not be read.
      */
     public QuantitationTableAccessor(ResultSet aResultSet) throws SQLException {
         this.iQuantitationid = aResultSet.getLong("quantitationid");
@@ -315,7 +315,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Quantitationid' column
      *
-     * @param    aQuantitationid    long with the value for the Quantitationid column.
+     * @param aQuantitationid long with the value for the Quantitationid column.
      */
     public void setQuantitationid(long aQuantitationid) {
         this.iQuantitationid = aQuantitationid;
@@ -325,7 +325,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'L_quantitation_groupid' column
      *
-     * @param    aL_quantitation_groupid    long with the value for the L_quantitation_groupid column.
+     * @param aL_quantitation_groupid long with the value for the L_quantitation_groupid column.
      */
     public void setL_quantitation_groupid(long aL_quantitation_groupid) {
         this.iL_quantitation_groupid = aL_quantitation_groupid;
@@ -335,7 +335,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Ratio' column
      *
-     * @param    aRatio    double with the value for the Ratio column.
+     * @param aRatio double with the value for the Ratio column.
      */
     public void setRatio(double aRatio) {
         this.iRatio = aRatio;
@@ -345,7 +345,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Standard_error' column
      *
-     * @param    aStandard_error    double with the value for the Standard_error column.
+     * @param aStandard_error double with the value for the Standard_error column.
      */
     public void setStandard_error(double aStandard_error) {
         this.iStandard_error = aStandard_error;
@@ -355,7 +355,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Type' column
      *
-     * @param    aType    String with the value for the Type column.
+     * @param aType String with the value for the Type column.
      */
     public void setType(String aType) {
         this.iType = aType;
@@ -365,7 +365,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Valid' column
      *
-     * @param    aValid    boolean with the value for the Valid column.
+     * @param aValid boolean with the value for the Valid column.
      */
     public void setValid(boolean aValid) {
         this.iValid = aValid;
@@ -375,7 +375,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Comment' column
      *
-     * @param    aComment    String with the value for the Comment column.
+     * @param aComment String with the value for the Comment column.
      */
     public void setComment(String aComment) {
         this.iComment = aComment;
@@ -385,7 +385,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -395,7 +395,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -405,7 +405,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -577,20 +577,20 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
         if (iKeys != null && iKeys.length == 1) {
             // Since we have exactly one key specified, and only
             // one Primary Key column, we can infer that this was the
-			// generated column, and we can therefore initialize it here.
-			iQuantitationid = ((Number) iKeys[0]).longValue();
-		}
-		this.iUpdated = false;
-		return result;
-	}
+            // generated column, and we can therefore initialize it here.
+            iQuantitationid = ((Number) iKeys[0]).longValue();
+        }
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

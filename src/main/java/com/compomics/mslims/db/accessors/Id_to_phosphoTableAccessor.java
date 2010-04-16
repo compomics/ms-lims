@@ -86,8 +86,8 @@ public class Id_to_phosphoTableAccessor implements Deleteable, Retrievable, Upda
      * This constructor allows the creation of the 'Id_to_phosphoTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public Id_to_phosphoTableAccessor(HashMap aParams) {
         if (aParams.containsKey(L_ID)) {
@@ -133,7 +133,7 @@ public class Id_to_phosphoTableAccessor implements Deleteable, Retrievable, Upda
     /**
      * This method sets the value for the 'L_id' column
      *
-     * @param    aL_id    long with the value for the L_id column.
+     * @param aL_id long with the value for the L_id column.
      */
     public void setL_id(long aL_id) {
         this.iL_id = aL_id;
@@ -143,7 +143,7 @@ public class Id_to_phosphoTableAccessor implements Deleteable, Retrievable, Upda
     /**
      * This method sets the value for the 'L_phosphorylationid' column
      *
-     * @param    aL_phosphorylationid    long with the value for the L_phosphorylationid column.
+     * @param aL_phosphorylationid long with the value for the L_phosphorylationid column.
      */
     public void setL_phosphorylationid(long aL_phosphorylationid) {
         this.iL_phosphorylationid = aL_phosphorylationid;
@@ -153,7 +153,7 @@ public class Id_to_phosphoTableAccessor implements Deleteable, Retrievable, Upda
     /**
      * This method sets the value for the 'Conversionid' column
      *
-     * @param    aConversionid    long with the value for the Conversionid column.
+     * @param aConversionid long with the value for the Conversionid column.
      */
     public void setConversionid(long aConversionid) {
         this.iConversionid = aConversionid;
@@ -275,8 +275,8 @@ public class Id_to_phosphoTableAccessor implements Deleteable, Retrievable, Upda
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }
