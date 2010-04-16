@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,24 +27,25 @@ import java.util.HashMap;
  * @author Lennart Martens
  */
 public class Phosphorylation extends PhosphorylationTableAccessor {
+    // Class specific log4j logger for Phosphorylation instances.
+    private static Logger logger = Logger.getLogger(Phosphorylation.class);
 
     public Phosphorylation(HashMap aParams) {
         super(aParams);
     }
 
     /**
-     * This method retrieves the ID for this instance form the DB.
-     * (Particularly useful when the entry was just created with an automatically
-     * generated key).
+     * This method retrieves the ID for this instance form the DB. (Particularly useful when the entry was just created
+     * with an automatically generated key).
      *
-     * @param   aConn   Connection to retrieve the PK from.
-     * @return  long with the key; this key is also filled out in the class itself.
-     * @exception   SQLException when the retrieving failed.
+     * @param aConn Connection to retrieve the PK from.
+     * @return long with the key; this key is also filled out in the class itself.
+     * @throws SQLException when the retrieving failed.
      */
     public long retrieveID(Connection aConn) throws SQLException {
         long temp = 0l;
         PreparedStatement ps = null;
-        if(iScore != null) {
+        if (iScore != null) {
             ps = aConn.prepareStatement("select phosphorylationid from phosphorylation where l_status=? and residue=? and location=? and accession=? and context=? and score=? and threshold=?");
             ps.setLong(1, iL_status);
             ps.setString(2, iResidue);
@@ -62,13 +65,13 @@ public class Phosphorylation extends PhosphorylationTableAccessor {
         ResultSet rs = ps.executeQuery();
 
         int counter = 0;
-        while(rs.next()) {
+        while (rs.next()) {
             counter++;
             temp = rs.getLong(1);
         }
         rs.close();
         ps.close();
-        if(counter != 1) {
+        if (counter != 1) {
             throw new SQLException("Select based on full phosphorylation data (" + iL_status + ", " + iResidue + ", " + iLocation + ", " + iAccession + ", " + iContext + ", " + iScore + ", " + iThreshold + ") resulted in " + counter + " results!");
         }
 

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.workers;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.sun.SwingWorker;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
@@ -27,6 +29,8 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class Load4700MGFWorker extends SwingWorker {
+    // Class specific log4j logger for Load4700MGFWorker instances.
+    private static Logger logger = Logger.getLogger(Load4700MGFWorker.class);
 
     /**
      * The list of files to browse through.
@@ -41,7 +45,7 @@ public class Load4700MGFWorker extends SwingWorker {
     /**
      * This Vector will hold the names of the found LC runs.
      */
-    private Vector names=  null;
+    private Vector names = null;
 
     /**
      * This variable contains a reference to the caller.
@@ -54,13 +58,13 @@ public class Load4700MGFWorker extends SwingWorker {
     private DefaultProgressBar progress = null;
 
     /**
-     * This constructor allows the creation and initialization of this Runner.
-     * It takes the necessary arguments to create a workable runner.
+     * This constructor allows the creation and initialization of this Runner. It takes the necessary arguments to
+     * create a workable runner.
      *
-     * @param aList File[] with the list of files to cycle through while looking for LC runs.
+     * @param aList     File[] with the list of files to cycle through while looking for LC runs.
      * @param aStored   Vector with the names of the LC runs that are already stored in the DB.
-     * @param aNames    Vector that is treated like a <b>reference parameter</b> and that will contain the
-     *                  LCRun instances found in the specified list of files.
+     * @param aNames    Vector that is treated like a <b>reference parameter</b> and that will contain the LCRun
+     *                  instances found in the specified list of files.
      * @param aParent   EsquireSpectrumStorage instance that called this worker.
      * @param aProgress DefaultProgressBar to show the progress on.
      */
@@ -73,35 +77,35 @@ public class Load4700MGFWorker extends SwingWorker {
     }
 
     /**
-     * This method reads all the LC runs from the list of files and initializes the 'names' instance variable
-     * with the corresponding LCRun objects.
+     * This method reads all the LC runs from the list of files and initializes the 'names' instance variable with the
+     * corresponding LCRun objects.
      */
     public Object construct() {
         for (int i = 0; i < list.length; i++) {
             File file = list[i];
             // Create the LCRun name, based on this name and the name of the parent.
             String name = file.getName();
-            if(file.isDirectory() && !iStoredLCs.contains(name)) {
+            if (file.isDirectory() && !iStoredLCs.contains(name)) {
                 // Get all the MGF files for this subdirectory.
                 Vector msmsFiles = new Vector(10, 5);
                 try {
                     this.recurseForMsmsMGFFiles(file, msmsFiles);
-                } catch(IOException ioe) {
+                } catch (IOException ioe) {
                     outer.passHotPotato(ioe, "Unable to scan for MS/MS MGF files in '" + file.getName() + "'!");
                 }
                 // Only do this when ms/ms scans have been found.
-                if(msmsFiles.size() > 0){
+                if (msmsFiles.size() > 0) {
                     LCRun tempC = new LCRun(name, 1, msmsFiles.size());
                     try {
                         tempC.setPathname(file.getCanonicalPath());
-                    } catch(IOException ioe) {
+                    } catch (IOException ioe) {
                         outer.passHotPotato(ioe, "Unable to locate MGF-files for '" + file.getName() + "'!");
                     }
                     // Adding the scan to the list.
                     names.add(tempC);
                 }
             }
-            progress.setValue(i+1);
+            progress.setValue(i + 1);
         }
         return "";
     }
@@ -110,9 +114,9 @@ public class Load4700MGFWorker extends SwingWorker {
     /**
      * This method attempts to find all the ms/ms spectra in the specified folder.
      *
-     * @param aParent   File with the starting point for the recursive search.
-     * @param aMSMSFiles    Vector  that will contain the Files for all the MS/MS MGF files.
-     * @throws java.io.IOException  whenever the folder could not be read recursively.
+     * @param aParent    File with the starting point for the recursive search.
+     * @param aMSMSFiles Vector  that will contain the Files for all the MS/MS MGF files.
+     * @throws java.io.IOException whenever the folder could not be read recursively.
      */
     private void recurseForMsmsMGFFiles(File aParent, Vector aMSMSFiles) throws IOException {
         // Check out the dir.
@@ -121,10 +125,10 @@ public class Load4700MGFWorker extends SwingWorker {
         for (int i = 0; i < files.length; i++) {
             File lFile = files[i];
             // Directories are recursed, when MGF MS/MS files are found, these are added.
-            if(lFile.isDirectory()) {
+            if (lFile.isDirectory()) {
                 // Keep trying.
                 this.recurseForMsmsMGFFiles(lFile, aMSMSFiles);
-            } else if(lFile.getName().toUpperCase().indexOf("_MSMS_") > 0 && lFile.getName().toUpperCase().endsWith(".MGF")) {
+            } else if (lFile.getName().toUpperCase().indexOf("_MSMS_") > 0 && lFile.getName().toUpperCase().endsWith(".MGF")) {
                 // Found one. Add it.
                 aMSMSFiles.add(lFile);
             }

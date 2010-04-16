@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.workers;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.util.diff.DiffAnalysisCore;
 import com.compomics.mslims.util.diff.DifferentialProject;
@@ -24,13 +26,15 @@ import java.util.HashMap;
  */
 
 /**
- * This class represents a SwingWorker that invokes the component that handles
- * the differential analysis in a separate thread.
- * 
+ * This class represents a SwingWorker that invokes the component that handles the differential analysis in a separate
+ * thread.
+ *
  * @author Lennart Martens
  * @version $Id: DiffAnalysisWorker.java,v 1.6 2005/09/27 12:38:54 lennart Exp $
  */
 public class DiffAnalysisWorker extends SwingWorker {
+    // Class specific log4j logger for DiffAnalysisWorker instances.
+    private static Logger logger = Logger.getLogger(DiffAnalysisWorker.class);
 
     /**
      * This variable contains a reference to the caller.
@@ -63,16 +67,16 @@ public class DiffAnalysisWorker extends SwingWorker {
     private HashMap iResults = null;
 
     /**
-     * This constructor allows the creation and initialization of this Runner.
-     * It takes the necessary arguments to create a workable runner.
+     * This constructor allows the creation and initialization of this Runner. It takes the necessary arguments to
+     * create a workable runner.
      *
-     * @param aCore DiffAnalysisCore that will perform the actual work.
-     * @param aParent   Flamable instance that called this worker.
-     * @param aProgress DefaultProgressBar to show the progress on.
-     * @param aProjects DifferentialProject[] with the projects to analyze.
+     * @param aCore         DiffAnalysisCore that will perform the actual work.
+     * @param aParent       Flamable instance that called this worker.
+     * @param aProgress     DefaultProgressBar to show the progress on.
+     * @param aProjects     DifferentialProject[] with the projects to analyze.
      * @param aInstrumentID long with the ID for the instrument selected.
-     * @param aResults  HashMap to contain the results after completion
-     *                  (keys are constants on DiffAnalysisCore). This is a reference parameter!
+     * @param aResults      HashMap to contain the results after completion (keys are constants on DiffAnalysisCore).
+     *                      This is a reference parameter!
      */
     public DiffAnalysisWorker(DiffAnalysisCore aCore, Flamable aParent, DefaultProgressBar aProgress, DifferentialProject[] aProjects, long aInstrumentID, HashMap aResults) {
         this.iCore = aCore;
@@ -90,27 +94,28 @@ public class DiffAnalysisWorker extends SwingWorker {
         try {
             iCore.processProjects(iProjects, iInstrumentID, iResults, iProgress);
             iProgress.setValue(iProgress.getMaximum());
-        } catch(SQLException sqle) {
-            if(iFlamable instanceof JFrame) {
-                JFrame parent = (JFrame)iFlamable;
+        } catch (SQLException sqle) {
+            if (iFlamable instanceof JFrame) {
+                JFrame parent = (JFrame) iFlamable;
                 if (iProgress != null) {
                     iProgress.setVisible(false);
                     iProgress.dispose();
                 }
                 JOptionPane.showMessageDialog(parent, "Database error occurred: " + sqle.getMessage(), "Database error!", JOptionPane.ERROR_MESSAGE);
             }
-            sqle.printStackTrace();
-        } catch(NumberFormatException nfe) {
-            if(iFlamable instanceof JFrame) {
-                JFrame parent = (JFrame)iFlamable;
+            logger.error(sqle.getMessage(), sqle);
+        } catch (NumberFormatException nfe) {
+            logger.error(nfe.getMessage(), nfe);
+            if (iFlamable instanceof JFrame) {
+                JFrame parent = (JFrame) iFlamable;
                 if (iProgress != null) {
                     iProgress.setVisible(false);
                     iProgress.dispose();
                 }
-                JOptionPane.showMessageDialog(parent, new String[] {"Recentering error occurred: " + nfe.getMessage(), " ", "You should either reconsider the recentering point", "or", "do not recenter this data at all."}, "Recentering error!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(parent, new String[]{"Recentering error occurred: " + nfe.getMessage(), " ", "You should either reconsider the recentering point", "or", "do not recenter this data at all."}, "Recentering error!", JOptionPane.ERROR_MESSAGE);
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             if (iProgress != null) {
                 iProgress.setVisible(false);
                 iProgress.dispose();

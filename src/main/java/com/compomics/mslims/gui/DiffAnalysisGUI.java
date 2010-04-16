@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Instrument;
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.util.enumeration.CompomicsTools;
@@ -49,6 +51,8 @@ import java.util.Vector;
  * @version $Id: DiffAnalysisGUI.java,v 1.11 2009/07/28 14:48:33 lennart Exp $
  */
 public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
+    // Class specific log4j logger for DiffAnalysisGUI instances.
+    private static Logger logger = Logger.getLogger(DiffAnalysisGUI.class);
 
     private JComboBox cmbCalibratedStDev = null;
     private JTextField txtLightLabel = null;
@@ -106,7 +110,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
      */
     public DiffAnalysisGUI(boolean aExpert) {
         this.iExpert = aExpert;
-        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
 
         ConnectionDialog cd = new ConnectionDialog(this, this, "Connection for DiffAnalysisGUI" + (iExpert ? " (expert mode)" : ""), lConnectionProperties);
         cd.setVisible(true);
@@ -170,7 +174,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
      */
     public void passHotPotato(Throwable aThrowable, String aMessage) {
         JOptionPane.showMessageDialog(this, new String[]{"An error occurred while attempting to read the data:", aMessage}, "Error occurred!", JOptionPane.ERROR_MESSAGE);
-        aThrowable.printStackTrace();
+        logger.error(aThrowable.getMessage(), aThrowable);
         this.close(1);
     }
 
@@ -206,7 +210,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         } catch (Throwable t) {
             JFrame frame = new JFrame("You won't see me.");
             JOptionPane.showMessageDialog(frame, new String[]{"A start-up error occurred: ", t.getMessage()}, "Application encountered a fatal error!", JOptionPane.ERROR_MESSAGE);
-            t.printStackTrace();
+            logger.error(t.getMessage(), t);
             frame.dispose();
             System.exit(1);
         }
@@ -588,6 +592,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         try {
             iProjects = Project.getAllDifferentialProjects(iConnection);
         } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, "Unable to read projects: " + sqle.getMessage(), "Unable to read project data", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -599,6 +604,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         try {
             iInstruments = Instrument.getAllDifferentialCalibratedInstruments(iConnection);
         } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, "Unable to read instruments: " + sqle.getMessage(), "Unable to read instrument data", JOptionPane.ERROR_MESSAGE);
         }
     }

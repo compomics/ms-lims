@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.frames;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.gui.table.IdentificationTableAccessorsTableModel;
 import com.compomics.mslims.gui.tree.MascotSearch;
@@ -38,14 +40,22 @@ import java.util.Vector;
  * @version $Id: PreviewSearchResultsFrame.java,v 1.10 2008/11/28 16:07:18 kenny Exp $
  */
 public class PreviewSearchResultsFrame extends JFrame implements Flamable {
+    // Class specific log4j logger for PreviewSearchResultsFrame instances.
+    private static Logger logger = Logger.getLogger(PreviewSearchResultsFrame.class);
 
-    /** The searches to process. */
+    /**
+     * The searches to process.
+     */
     private MascotSearch[] iSearches = null;
 
-    /** This Vector will hold all the results from the parsing. */
+    /**
+     * This Vector will hold all the results from the parsing.
+     */
     private Vector iResults = null;
 
-    /** the working horse for this display. */
+    /**
+     * the working horse for this display.
+     */
     private MascotResultsProcessor iMRP = null;
 
 
@@ -87,8 +97,8 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
      * @param aMessage   String with an extra message to display.
      */
     public void passHotPotato(Throwable aThrowable, String aMessage) {
+        logger.error(aThrowable.getMessage(), aThrowable);
         JOptionPane.showMessageDialog(this, new String[]{"An error occurred while attempting to process your data:", aMessage}, "Error occurred!", JOptionPane.ERROR_MESSAGE);
-        aThrowable.printStackTrace();
     }
 
     private void constructScreen() {
@@ -201,7 +211,9 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
         return jpanButtons;
     }
 
-    /** This method is called when the user presses 'store'. */
+    /**
+     * This method is called when the user presses 'store'.
+     */
     private void storeTriggered() {
         DefaultProgressBar progress =
                 new DefaultProgressBar(this, "Processing search results...", 0, iResults.size() + 2);
@@ -215,12 +227,16 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
         this.dispose();
     }
 
-    /** This method is called when the user presses 'cancel'. */
+    /**
+     * This method is called when the user presses 'cancel'.
+     */
     private void cancelTriggered() {
         this.close();
     }
 
-    /** This method is called when the user presses 'copy'. */
+    /**
+     * This method is called when the user presses 'copy'.
+     */
     private void copyTriggered() {
         int nbrCols = this.tblResults.getColumnCount();
         int nbrRows = this.tblResults.getRowCount();
@@ -268,12 +284,16 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
         JOptionPane.showMessageDialog(this, message, "Copy complete.", type);
     }
 
-    /** This method disposes the dialog. It does not close the DB connection, though! */
+    /**
+     * This method disposes the dialog. It does not close the DB connection, though!
+     */
     private void close() {
         this.dispose();
     }
 
-    /** This method collects the information needed for the preview from the MascotResultsProcessor. */
+    /**
+     * This method collects the information needed for the preview from the MascotResultsProcessor.
+     */
     private void acquireData() {
         iResults = new Vector(3000, 750);
 

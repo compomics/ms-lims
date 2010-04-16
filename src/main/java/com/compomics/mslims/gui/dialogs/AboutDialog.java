@@ -12,6 +12,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,12 +33,14 @@ import java.net.URL;
  */
 
 /**
- * This class implements a rudimentary 'about' dialog that gets the text for the main
- * TextArea from a simple textfile ('<i>about.txt</i>' is default name) in the classpath somewhere.
+ * This class implements a rudimentary 'about' dialog that gets the text for the main TextArea from a simple textfile
+ * ('<i>about.txt</i>' is default name) in the classpath somewhere.
  *
  * @author Lennart Martens
  */
 public class AboutDialog extends JDialog {
+    // Class specific log4j logger for AboutDialog instances.
+    private static Logger logger = Logger.getLogger(AboutDialog.class);
 
     /**
      * The textarea that will display the help text.
@@ -66,19 +70,18 @@ public class AboutDialog extends JDialog {
 
     static {
         // See if we should load the display text.
-        if(iHelpText == null) {
+        if (iHelpText == null) {
             loadHelpText();
         }
     }
 
 
     /**
-     * This constructor mimics the constructor on the superclass and allows
-     * specification of the parent JFrame as well as the title for the dialog.
-     * Note that about dialog is always modal!
+     * This constructor mimics the constructor on the superclass and allows specification of the parent JFrame as well
+     * as the title for the dialog. Note that about dialog is always modal!
      *
-     * @param   aParent JFrame that is the parent of this dialog.
-     * @param   aTitle  String with the title for this dialog.
+     * @param aParent JFrame that is the parent of this dialog.
+     * @param aTitle  String with the title for this dialog.
      */
     public AboutDialog(JFrame aParent, String aTitle) {
         super(aParent, aTitle, true);
@@ -153,7 +156,7 @@ public class AboutDialog extends JDialog {
         jpanButton.add(Box.createRigidArea(new Dimension(15, btnOK.getHeight())));
 
         jpanMain.add(Box.createRigidArea(new Dimension(txtHelp.getWidth(), 15)));
-        for(int i = 0; i < lblLabels.length; i++) {
+        for (int i = 0; i < lblLabels.length; i++) {
             JLabel lLabel = lblLabels[i];
             lLabel.setForeground(Color.black);
             jpanTextLabels.add(lLabel);
@@ -190,39 +193,39 @@ public class AboutDialog extends JDialog {
         try {
             // First of all, try it via the classloader for this file.
             InputStream is = AboutDialog.class.getClassLoader().getResourceAsStream(TEXTFILE);
-            if(is == null) {
+            if (is == null) {
                 // Apparently not found, try again with the System (bootstrap) classloader.
                 is = ClassLoader.getSystemResourceAsStream(TEXTFILE);
-                if(is == null) {
+                if (is == null) {
                     iHelpText = "No help file (" + TEXTFILE + ") could be found in the classpath!";
                 }
             }
 
             // See if we have an input stream.
-            if(is != null) {
+            if (is != null) {
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 StringBuffer sb = new StringBuffer();
                 String line = null;
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     sb.append(line + "\n");
                 }
                 iHelpText = sb.toString();
             }
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
+        } catch (IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
     /**
      * This method extracts the last version from the 'about.txt' file.
      *
-     * @return  String with the String of the latest version, or '
+     * @return String with the String of the latest version, or '
      */
     public static String getLastVersion() {
         String result = null;
         int start = iHelpText.lastIndexOf("- Version ") + 10;
         int end = iHelpText.indexOf("\n", start);
-        if(start > 0 && end > 0) {
+        if (start > 0 && end > 0) {
             result = iHelpText.substring(start, end).trim();
         } else {
             result = "(unknown - missing original help text)!";

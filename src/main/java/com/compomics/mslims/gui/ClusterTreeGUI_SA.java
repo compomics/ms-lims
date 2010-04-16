@@ -1,5 +1,7 @@
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Lennart
@@ -39,6 +41,8 @@ import java.util.*;
  * @version $Id: ClusterTreeGUI_SA.java,v 1.3 2009/08/04 22:31:51 lennart Exp $
  */
 public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelListener {
+    // Class specific log4j logger for ClusterTreeGUI_SA instances.
+    private static Logger logger = Logger.getLogger(ClusterTreeGUI_SA.class);
 
     private JTree trClusters = null;
     private ClusterTreeModel ctmClusters = null;
@@ -67,7 +71,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         jfileChooser.setFileFilter(new FileFilter() {
             public boolean accept(File f) {
                 boolean result = false;
-                if(f.isDirectory() || f.getName().equalsIgnoreCase("clusters.txt")) {
+                if (f.isDirectory() || f.getName().equalsIgnoreCase("clusters.txt")) {
                     return true;
                 }
                 return result;
@@ -79,7 +83,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         });
         jfileChooser.showOpenDialog(testFrame);
         File clustersFile = jfileChooser.getSelectedFile();
-        if(clustersFile == null) {
+        if (clustersFile == null) {
             System.exit(0);
         }
         File mergeFolder = new File(clustersFile.getParentFile(), "merged_spectra");
@@ -91,7 +95,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         jfileChooser.setFileFilter(new FileFilter() {
             public boolean accept(File f) {
                 boolean result = false;
-                if(f.isDirectory()) {
+                if (f.isDirectory()) {
                     return true;
                 }
                 return result;
@@ -103,7 +107,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         });
         jfileChooser.showOpenDialog(testFrame);
         File inputFolder = jfileChooser.getSelectedFile();
-        if(inputFolder == null) {
+        if (inputFolder == null) {
             System.exit(0);
         }
 
@@ -116,27 +120,27 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
             BufferedReader br = new BufferedReader(new FileReader(clustersFile));
             String currentCluster = null;
             Vector currentSpectra = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
                 // Skip empty lines.
-                if(!line.equals("")) {
+                if (!line.equals("")) {
                     // See if it is a new cluster, or data for the current one.
-                    if(line.toLowerCase().indexOf("cluster number:") >= 0) {
+                    if (line.toLowerCase().indexOf("cluster number:") >= 0) {
                         // Start of a new cluster.
                         // See if we already have a cluster we're working with, in which
                         // case we store it.
-                        if(currentCluster != null && currentSpectra != null) {
+                        if (currentCluster != null && currentSpectra != null) {
                             Collections.sort(currentSpectra);
                             clusters.put(currentCluster, currentSpectra);
                         }
                         currentSpectra = new Vector();
-                        currentCluster = "Cluster " + line.substring(line.indexOf(":")+1).trim();
+                        currentCluster = "Cluster " + line.substring(line.indexOf(":") + 1).trim();
                     } else {
                         // We are in the currentCluster and should add the spectrum name to the
                         // currentSpectra list.
                         // Note that we transform legacy '.pkl' into '.mgf'.
                         int start = line.indexOf(".pkl");
-                        if(start >= 0) {
+                        if (start >= 0) {
                             line = line.substring(0, start) + ".mgf";
                         }
                         currentSpectra.add(line);
@@ -151,23 +155,22 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
             ClusterTreeGUI_SA ctg = new ClusterTreeGUI_SA(inputFolder, mergeFolder, clusters);
             ctg.setBounds(250, 250, 550, 450);
             ctg.setVisible(true);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             System.exit(1);
         }
     }
 
     /**
-     * This constructor initializes a ClusterTreeGUI and attempts to tie it in with a database.
-     * If this succeeds, it will not only show the tree itself, but also a panel on which spectra
-     * can be displayed as well as a table in which identifications can be visualized.
-     * In the case the connection fails (typically because the user cancels the connection),
-     * the panel with spectra and the table will not be displayed.
+     * This constructor initializes a ClusterTreeGUI and attempts to tie it in with a database. If this succeeds, it
+     * will not only show the tree itself, but also a panel on which spectra can be displayed as well as a table in
+     * which identifications can be visualized. In the case the connection fails (typically because the user cancels the
+     * connection), the panel with spectra and the table will not be displayed.
      *
      * @param aInputFolder File with the input folder where all the spectra can be found.
      * @param aMergeFolder File with the folder where all the merged spectra can be found.
-     * @param aClusters HashMap with the name of the cluster (as String) as key, and the
-     *                  Vector of associated spectra (each a String) as value.
+     * @param aClusters    HashMap with the name of the cluster (as String) as key, and the Vector of associated spectra
+     *                     (each a String) as value.
      */
     public ClusterTreeGUI_SA(File aInputFolder, File aMergeFolder, HashMap aClusters) {
         this.addWindowListener(new WindowAdapter() {
@@ -185,7 +188,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         Iterator iter = aClusters.values().iterator();
         int totalSpectrumCount = 0;
         while (iter.hasNext()) {
-            Vector v = (Vector)iter.next();
+            Vector v = (Vector) iter.next();
             totalSpectrumCount += v.size();
         }
 
@@ -199,7 +202,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
      * @param aSe ResizinEvent with the details of the rescaling.
      */
     public void rescaled(RescalingEvent aSe) {
-        if(chkRescaleAll.isSelected()) {
+        if (chkRescaleAll.isSelected()) {
             // Rescale all listed specpanels, except for the one who threw the event
             // as this one is already OK.
             JPanel source = aSe.getSource();
@@ -208,8 +211,8 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
             Component[] components = jpanSpectra.getComponents();
             for (int i = 0; i < components.length; i++) {
                 Component lComponent = components[i];
-                if(lComponent != source) {
-                    ((SpectrumPanel)lComponent).rescale(minMass, maxMass, false);
+                if (lComponent != source) {
+                    ((SpectrumPanel) lComponent).rescale(minMass, maxMass, false);
                 }
             }
             jpanSpectra.repaint();
@@ -219,10 +222,10 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
     /**
      * This method lays out and initializes the GUI.
      *
-     * @param aTitle    String with the start of the frame title (some info appended here).
-     * @param aClusters HashMap with the cluster to spectra mappings. Cluster name (String) is key,
-     *                  Vector of spectra names (Strings) is value.
-     * @param aSpecCount    int with the total number of spectra counted.
+     * @param aTitle     String with the start of the frame title (some info appended here).
+     * @param aClusters  HashMap with the cluster to spectra mappings. Cluster name (String) is key, Vector of spectra
+     *                   names (Strings) is value.
+     * @param aSpecCount int with the total number of spectra counted.
      */
     private void constructScreen(String aTitle, HashMap aClusters, int aSpecCount) {
         // Prepare the title.
@@ -231,7 +234,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         JPanel jpanMain = new JPanel(new BorderLayout());
 
         jpanSpectra = new JPanel();
-        jpanSpectra.setLayout(new BoxLayout(jpanSpectra, BoxLayout.Y_AXIS));      
+        jpanSpectra.setLayout(new BoxLayout(jpanSpectra, BoxLayout.Y_AXIS));
 
         // The text field for searches.
         txtSearchSpectrum = new JTextField(20);
@@ -241,9 +244,9 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
              * This event occurs when a key press is followed by a key release.
              */
             public void caretUpdate(CaretEvent e) {
-                if((!btnSearchSpectrum.isEnabled()) && txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
+                if ((!btnSearchSpectrum.isEnabled()) && txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
                     btnSearchSpectrum.setEnabled(true);
-                } else if(btnSearchSpectrum.isEnabled() && (txtSearchSpectrum.getText() == null || txtSearchSpectrum.getText().trim().equals(""))) {
+                } else if (btnSearchSpectrum.isEnabled() && (txtSearchSpectrum.getText() == null || txtSearchSpectrum.getText().trim().equals(""))) {
                     btnSearchSpectrum.setEnabled(false);
                 }
             }
@@ -253,8 +256,8 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if(txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (txtSearchSpectrum.getText() != null && (!txtSearchSpectrum.getText().trim().equals(""))) {
                         searchPressed();
                     }
                 }
@@ -273,7 +276,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     searchPressed();
                 }
             }
@@ -306,7 +309,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     displaySpectraPressed();
                 }
             }
@@ -324,7 +327,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     alignSpectraPressed();
                 }
             }
@@ -343,7 +346,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     removeSpectraPressed();
                 }
             }
@@ -354,7 +357,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         chkRescaleAll.setSelected(false);
         chkRescaleAll.setEnabled(false);
         chkRescaleAll.setMnemonic(KeyEvent.VK_L);
-        
+
 
         JPanel jpanTreeButtons = new JPanel();
         jpanTreeButtons.setLayout(new BoxLayout(jpanTreeButtons, BoxLayout.X_AXIS));
@@ -390,7 +393,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
 
         jpanMain.add(splPaneTreeSpectra, BorderLayout.CENTER);
 
-        this.setTitle(aTitle + affix+")");
+        this.setTitle(aTitle + affix + ")");
         this.getContentPane().add(jpanMain, BorderLayout.CENTER);
         this.setLocation(300, 300);
         this.pack();
@@ -407,9 +410,9 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         // Find the smalles and largest mass across all spectra.
         for (int i = 0; i < components.length; i++) {
             Component lComponent = components[i];
-            if(lComponent instanceof SpectrumPanel) {
-                double tempMax = ((SpectrumPanel)lComponent).getMaxMass();
-                if(tempMax > max) {
+            if (lComponent instanceof SpectrumPanel) {
+                double tempMax = ((SpectrumPanel) lComponent).getMaxMass();
+                if (tempMax > max) {
                     max = tempMax;
                 }
             }
@@ -417,8 +420,8 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         // Rescale all to the largest and smallest masses across all spetcra.
         for (int i = 0; i < components.length; i++) {
             Component lComponent = components[i];
-            if(lComponent instanceof SpectrumPanel) {
-                ((SpectrumPanel)lComponent).rescale(min, max, false);
+            if (lComponent instanceof SpectrumPanel) {
+                ((SpectrumPanel) lComponent).rescale(min, max, false);
             }
         }
         // Repaint 'em.
@@ -436,7 +439,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         Vector path = new Vector();
         path.add(root);
         recurseTree(searchString, root, path, foundOnes);
-        if(foundOnes.size() > 0) {
+        if (foundOnes.size() > 0) {
             // We now have all the matching clusters with the individual spectra.
             collapseTree();
             // Now expand all the matching ones.
@@ -448,7 +451,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
             }
             // Now select all matches.
             trClusters.setSelectionPaths(tpArray);
-            JOptionPane.showMessageDialog(this, new String[] {"Found " + foundOnes.size() + " hits in the tree for query '" + searchString + "'.", "They have been expanded and highlighted."}, foundOnes.size() + " hits found!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, new String[]{"Found " + foundOnes.size() + " hits in the tree for query '" + searchString + "'.", "They have been expanded and highlighted."}, foundOnes.size() + " hits found!", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "No hits found in the tree for query '" + searchString + "'.", "No hits found!", JOptionPane.WARNING_MESSAGE);
         }
@@ -466,21 +469,21 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
     }
 
     /**
-     * Recurse the tree, looking for the specified search String, constructing
-     * TreePaths along the way if they are in fact found (only in the leafs, mind you).
+     * Recurse the tree, looking for the specified search String, constructing TreePaths along the way if they are in
+     * fact found (only in the leafs, mind you).
      *
-     * @param aSearch   String to search for (match is case insensitive and is done
-     *                  on substring match, ie 'oba' matches 'FoObAr').
-     * @param aParent   Object with the parent node to explore. This parent should be
-     *                  the last element in the aPath Vector as well.
-     * @param aPath     Vector with the complete path so far.
-     * @param aFound    Vector in which to store the TreePath instances that were found.
-     *                  <b>Please note</b> that this is a reference parameter.
+     * @param aSearch String to search for (match is case insensitive and is done on substring match, ie 'oba' matches
+     *                'FoObAr').
+     * @param aParent Object with the parent node to explore. This parent should be the last element in the aPath Vector
+     *                as well.
+     * @param aPath   Vector with the complete path so far.
+     * @param aFound  Vector in which to store the TreePath instances that were found. <b>Please note</b> that this is a
+     *                reference parameter.
      */
     private void recurseTree(String aSearch, Object aParent, Vector aPath, Vector aFound) {
-        if(trClusters.getModel().isLeaf(aParent)) {
+        if (trClusters.getModel().isLeaf(aParent)) {
             // See if it contains the search String.
-            if(aParent.toString().toLowerCase().indexOf(aSearch) >= 0) {
+            if (aParent.toString().toLowerCase().indexOf(aSearch) >= 0) {
                 // Okay, reconstruct the TreePath.
                 Object[] path = new Object[aPath.size()];
                 aPath.toArray(path);
@@ -489,7 +492,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
             aPath.remove(aParent);
         } else {
             int childCount = trClusters.getModel().getChildCount(aParent);
-            for(int i=0;i<childCount;i++) {
+            for (int i = 0; i < childCount; i++) {
                 Object child = trClusters.getModel().getChild(aParent, i);
                 aPath.add(child);
                 recurseTree(aSearch, child, aPath, aFound);
@@ -515,17 +518,17 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
      */
     private void displaySpectraPressed() {
         TreePath[] nodes = trClusters.getSelectionPaths();
-        if(nodes != null && nodes.length <= 10) {
+        if (nodes != null && nodes.length <= 10) {
             for (int i = 0; i < nodes.length; i++) {
                 TreePath lNode = nodes[i];
                 Object selectObject = lNode.getLastPathComponent();
                 // Add the selected spectra.
-                if(ctmClusters.isLeaf(selectObject)) {
-                    String filename = (String)selectObject;
+                if (ctmClusters.isLeaf(selectObject)) {
+                    String filename = (String) selectObject;
                     try {
                         addSpectrum(new File(iSpectraInputFolder, filename), false);
-                    } catch(Exception ex) {
-                        ex.printStackTrace();
+                    } catch (Exception ex) {
+                        logger.error(ex.getMessage(), ex);
                         this.passHotPotato(ex, "Unable to open spectrum file '" + filename + "' from folder '" + iSpectraInputFolder.getAbsolutePath() + "'!");
                     }
                 } else if (!selectObject.equals(ctmClusters.getRoot())) {
@@ -536,40 +539,45 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
                         public boolean accept(File dir, String name) {
                             File actualFile = new File(dir, name);
                             boolean pass = false;
-                            if(!actualFile.isDirectory() && name.indexOf("merged_") > 0 && name.indexOf(".mgf") > 0) {
-                                String corename = name.substring(name.indexOf("merged_")+7, name.lastIndexOf(".mgf"));
-                                if(specNames.contains(corename)) {
+                            if (!actualFile.isDirectory() && name.indexOf("merged_") > 0 && name.indexOf(".mgf") > 0) {
+                                String corename = name.substring(name.indexOf("merged_") + 7, name.lastIndexOf(".mgf"));
+                                if (specNames.contains(corename)) {
                                     pass = true;
                                 }
                             }
                             return pass;
                         }
                     });
-                    if(temp.length == 0) {
-                        JOptionPane.showMessageDialog(this, "No merged file was found for " + selectObject + "!", "No merged file found!", JOptionPane.ERROR_MESSAGE);
-                    } else if(temp.length > 1) {
-                        JOptionPane.showMessageDialog(this, "More than one merged file (total count: " + temp.length + ") was found for " + selectObject + "!", "Too many merged files found!", JOptionPane.ERROR_MESSAGE);
+                    if (temp.length == 0) {
+                        String lMessage = "No merged file was found for " + selectObject + "!";
+                        JOptionPane.showMessageDialog(this, lMessage, "No merged file found!", JOptionPane.ERROR_MESSAGE);
+                        logger.error(lMessage);
+
+                    } else if (temp.length > 1) {
+                        String lMessage = "More than one merged file (total count: " + temp.length + ") was found for " + selectObject + "!";
+                        JOptionPane.showMessageDialog(this, lMessage, "Too many merged files found!", JOptionPane.ERROR_MESSAGE);
+                        logger.error(lMessage);
                     } else {
                         try {
                             addSpectrum(temp[0], true);
-                        } catch(Exception ex) {
-                            ex.printStackTrace();
+                        } catch (Exception ex) {
+                            logger.error(ex.getMessage(), ex);
                             this.passHotPotato(ex, "Unable to open spectrum file '" + temp[0].getAbsolutePath() + "'!");
                         }
                     }
                 }
 
             }
-        } else if(nodes.length != 1) {
-            JOptionPane.showMessageDialog(jpanSpectra, new String[] {"Only a ten spectra can be visualized at a time!", "You selected " + nodes.length + "."}, "Too many spectra selected!", JOptionPane.WARNING_MESSAGE);
+        } else if (nodes.length != 1) {
+            JOptionPane.showMessageDialog(jpanSpectra, new String[]{"Only a ten spectra can be visualized at a time!", "You selected " + nodes.length + "."}, "Too many spectra selected!", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     private TreeSet getSpectrumNamesForCluster(Object aSelectedObject) {
         TreeSet result = new TreeSet();
         int childCount = ctmClusters.getChildCount(aSelectedObject);
-        for(int i=0;i<childCount;i++) {
-            String specFilename = (String)ctmClusters.getChild(aSelectedObject, i);
+        for (int i = 0; i < childCount; i++) {
+            String specFilename = (String) ctmClusters.getChild(aSelectedObject, i);
             specFilename = specFilename.substring(0, specFilename.lastIndexOf(".mgf"));
             result.add(specFilename);
         }
@@ -592,7 +600,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
                 Container parent = temp.getParent();
                 temp.remove(jpanButton);
                 parent.remove(temp);
-                if(parent.getComponentCount() == 0) {
+                if (parent.getComponentCount() == 0) {
                     btnAlignSpectra.setEnabled(false);
                     btnRemoveSpectra.setEnabled(false);
                     chkRescaleAll.setEnabled(false);
@@ -603,11 +611,11 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         });
         temp.add(Box.createVerticalGlue());
         temp.add(jpanButton);
-        if(aMergedFile) {
+        if (aMergedFile) {
             temp.setBackground(Color.GRAY);
         }
         jpanSpectra.add(temp);
-        if(jpanSpectra.getComponentCount() > 0) {
+        if (jpanSpectra.getComponentCount() > 0) {
             btnAlignSpectra.setEnabled(true);
             btnRemoveSpectra.setEnabled(true);
             chkRescaleAll.setEnabled(true);
@@ -617,13 +625,13 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
     }
 
     /**
-     * This method prints two blank lines followed by the the specified error message and another two empty lines
-     * to the standard error stream and exits with the error flag raised to '1'.
+     * This method prints two blank lines followed by the the specified error message and another two empty lines to the
+     * standard error stream and exits with the error flag raised to '1'.
      *
      * @param aMsg String with the message to print.
      */
     private static void printError(String aMsg) {
-        System.err.println("\n\n" + aMsg + "\n\n");
+        logger.error("\n\n" + aMsg + "\n\n");
         System.exit(1);
     }
 

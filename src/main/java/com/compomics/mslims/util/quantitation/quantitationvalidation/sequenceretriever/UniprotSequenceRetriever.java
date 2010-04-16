@@ -1,5 +1,7 @@
 package com.compomics.mslims.util.quantitation.quantitationvalidation.sequenceretriever;
 
+import org.apache.log4j.Logger;
+
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.BufferedInputStream;
@@ -17,14 +19,17 @@ import java.io.InputStreamReader;
  * This class can get the protein sequence for a uniprot protein
  */
 public class UniprotSequenceRetriever {
+    // Class specific log4j logger for UniprotSequenceRetriever instances.
+    private static Logger logger = Logger.getLogger(UniprotSequenceRetriever.class);
 
     /**
      * The protein sequence
      */
-    private String iSequence = null ;
+    private String iSequence = null;
 
     /**
      * Constructor
+     *
      * @param aUniprotAccession Protein accession
      * @throws Exception
      */
@@ -34,6 +39,7 @@ public class UniprotSequenceRetriever {
 
     /**
      * This method reads a url a tries to extrect the protein sequence
+     *
      * @param aUrl String with the url
      * @return String with the protein sequence
      * @throws Exception
@@ -41,9 +47,9 @@ public class UniprotSequenceRetriever {
     public String readSequenceUrl(String aUrl) throws Exception {
         String sequence = "";
 
-        URL myURL=new URL(aUrl);
+        URL myURL = new URL(aUrl);
         StringBuilder input = new StringBuilder();
-        HttpURLConnection c = (HttpURLConnection)myURL.openConnection();
+        HttpURLConnection c = (HttpURLConnection) myURL.openConnection();
         BufferedInputStream in = new BufferedInputStream(c.getInputStream());
         Reader r = new InputStreamReader(in);
 
@@ -55,11 +61,11 @@ public class UniprotSequenceRetriever {
         String inputString = input.toString();
 
         String[] lLines = inputString.split("\n");
-        for(int j = 1; j<lLines.length; j ++){
+        for (int j = 1; j < lLines.length; j++) {
             sequence = sequence + lLines[j];
         }
 
-        if(sequence.length() == 0){
+        if (sequence.length() == 0) {
             sequence = null;
         }
         return sequence;
@@ -67,6 +73,7 @@ public class UniprotSequenceRetriever {
 
     /**
      * Getter for the protein sequence
+     *
      * @return String with protein sequence
      */
     public String getSequence() {

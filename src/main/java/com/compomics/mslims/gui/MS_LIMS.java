@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.dialogs.AboutDialog;
 import com.compomics.mslims.gui.dialogs.CustomLauncherDialog;
 import com.compomics.mslims.gui.quantitation.QuantitationTypeChooser;
@@ -50,6 +52,8 @@ import java.util.Properties;
  * @version $Id: MS_LIMS.java,v 1.20 2009/12/17 14:08:39 kenny Exp $
  */
 public class MS_LIMS extends JFrame implements Connectable {
+    // Class specific log4j logger for MS_LIMS instances.
+    private static Logger logger = Logger.getLogger(MS_LIMS.class);
 
     /**
      * The Database connection to forward to launched components.
@@ -116,6 +120,10 @@ public class MS_LIMS extends JFrame implements Connectable {
                 close();
             }
         });
+
+        //PropertiesManager.getInstance().updateLog4jConfiguration(CompomicsTools.MSLIMS);
+        logger.info("Starting mslims");
+
         int frameWidth = 600;
         int frameHeight = 670;
         setSize(frameWidth, frameHeight);
@@ -131,7 +139,7 @@ public class MS_LIMS extends JFrame implements Connectable {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -154,7 +162,7 @@ public class MS_LIMS extends JFrame implements Connectable {
             PlasticLookAndFeel.setPlasticTheme(new Silver());
             UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
         } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
         }
 
         // GUI components.
@@ -564,7 +572,7 @@ public class MS_LIMS extends JFrame implements Connectable {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
             }
         }
 
@@ -580,7 +588,7 @@ public class MS_LIMS extends JFrame implements Connectable {
      * This method creates a dialog which handles the DB connection.
      */
     private void getConnection() {
-        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
         ConnectionDialog cd = new ConnectionDialog(this, this, "Establish DB connection for ms_lims", lConnectionProperties);
         cd.setVisible(true);
     }
@@ -615,6 +623,7 @@ public class MS_LIMS extends JFrame implements Connectable {
             ProcessBuilder builder = new ProcessBuilder(sourceName);
             builder.start();
         } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
             JOptionPane.showMessageDialog(this, new String[]{"Unable to load the file 'Daemon.exe'", ex.getMessage()}, "Daemon.exe", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -683,9 +692,9 @@ public class MS_LIMS extends JFrame implements Connectable {
         if (iConn != null) {
             try {
                 iConn.close();
-                System.out.println("\n\nDB connection closed.\n\n");
+                logger.info("\n\nDB connection closed.\n\n");
             } catch (SQLException sqle) {
-                System.err.println("\n\nUnable to close DB connection!\n\n");
+                logger.error("\n\nUnable to close DB connection!\n\n");
             }
         }
         System.exit(0);
@@ -752,7 +761,7 @@ public class MS_LIMS extends JFrame implements Connectable {
      * @return
      */
     public static String getVersion() {
-        Properties lProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        Properties lProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
         String version = lProperties.get("version").toString();
         return version;
     }

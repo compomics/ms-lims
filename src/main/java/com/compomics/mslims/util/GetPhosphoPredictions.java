@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.general.CommandLineParser;
 
 /*
@@ -16,14 +18,15 @@ import com.compomics.util.general.CommandLineParser;
  */
 
 /**
- * This class will read all unique accession numbers from a database
- * and retrieve all Netphos predictions for the whole protein sequences.
- * It will then read the Netphos output and attempt to correlate the Netphos
- * predictions with the found peptides.
+ * This class will read all unique accession numbers from a database and retrieve all Netphos predictions for the whole
+ * protein sequences. It will then read the Netphos output and attempt to correlate the Netphos predictions with the
+ * found peptides.
  *
  * @author Lennart Martens
  */
 public class GetPhosphoPredictions {
+    // Class specific log4j logger for GetPhosphoPredictions instances.
+    private static Logger logger = Logger.getLogger(GetPhosphoPredictions.class);
 
     public GetPhosphoPredictions() {
 
@@ -32,10 +35,10 @@ public class GetPhosphoPredictions {
     /**
      * This method is the entry point for the application.
      *
-     * @param args  String[] with the start-up arguments.
+     * @param args String[] with the start-up arguments.
      */
     public static void main(String[] args) {
-        if(args == null || args.length == 0) {
+        if (args == null || args.length == 0) {
             printUsage();
         }
 
@@ -61,7 +64,7 @@ public class GetPhosphoPredictions {
      * This method prints the usage for this class.
      */
     private static void printUsage() {
-        System.err.println("");
+        logger.error("");
         System.exit(1);
     }
 }

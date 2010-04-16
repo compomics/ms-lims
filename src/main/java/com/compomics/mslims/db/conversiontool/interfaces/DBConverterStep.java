@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.conversiontool.interfaces;
 
+import org.apache.log4j.Logger;
+
 import java.sql.Connection;
 /*
  * CVS information:
@@ -15,8 +17,8 @@ import java.sql.Connection;
  */
 
 /**
- * This interface describes the behaviour for a class that will take care of a
- * specific database conversion step. It is a command pattern.
+ * This interface describes the behaviour for a class that will take care of a specific database conversion step. It is
+ * a command pattern.
  *
  * @author Lennart Martens
  * @version $Id: DBConverterStep.java,v 1.1 2006/01/02 16:47:15 lennart Exp $
@@ -27,7 +29,7 @@ public interface DBConverterStep {
      * This method will be called whenever this step should be executed.
      *
      * @param aConn Connection on which to perform the step.
-     * @return  boolean that indicates success ('false') or failure ('true').
+     * @return boolean that indicates success ('false') or failure ('true').
      */
     public abstract boolean performConversionStep(Connection aConn);
 }

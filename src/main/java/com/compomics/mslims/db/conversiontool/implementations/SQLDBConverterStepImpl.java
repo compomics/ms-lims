@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.conversiontool.implementations;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.conversiontool.interfaces.DBConverterStep;
 
 import java.sql.Connection;
@@ -25,6 +27,8 @@ import java.sql.Statement;
  * @version $Id: SQLDBConverterStepImpl.java,v 1.1 2006/01/02 16:47:15 lennart Exp $
  */
 public class SQLDBConverterStepImpl implements DBConverterStep {
+    // Class specific log4j logger for SQLDBConverterStepImpl instances.
+    private static Logger logger = Logger.getLogger(SQLDBConverterStepImpl.class);
 
     /**
      * The SQL statement to execute.
@@ -34,7 +38,7 @@ public class SQLDBConverterStepImpl implements DBConverterStep {
     /**
      * This constructor takes the SQL statement for this step.
      *
-     * @param aStatement    String with the SQL statement for this step.
+     * @param aStatement String with the SQL statement for this step.
      */
     public SQLDBConverterStepImpl(String aStatement) {
         this.iStatement = aStatement;
@@ -53,10 +57,10 @@ public class SQLDBConverterStepImpl implements DBConverterStep {
             Statement stat = aConn.createStatement();
             stat.execute(iStatement);
             stat.close();
-        } catch(SQLException sqle) {
-            System.err.println("\n\nError executing statement '" + iStatement + "':");
-            System.err.println(sqle.getMessage());
-            sqle.printStackTrace();
+        } catch (SQLException sqle) {
+            logger.error("\n\nError executing statement '" + iStatement + "':");
+            logger.error(sqle.getMessage());
+            logger.error(sqle.getMessage(), sqle);
             errors = true;
         }
 

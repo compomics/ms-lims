@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 
 import com.compomics.rover.general.db.accessors.IdentificationExtension;
 
@@ -35,6 +37,8 @@ import java.util.zip.GZIPOutputStream;
  * @author Lennart Martens
  */
 public class Datfile extends DatfileTableAccessor {
+    // Class specific log4j logger for Datfile instances.
+    private static Logger logger = Logger.getLogger(Datfile.class);
 
     /**
      * This key in the HashMap allows the setting of file and filename to be replaced by the fully qualified filename
@@ -66,7 +70,6 @@ public class Datfile extends DatfileTableAccessor {
      * modificationdate.
      *
      * @param aRS ResultSet to read the data from.
-     *
      * @throws SQLException when reading the ResultSet failed.
      */
     public Datfile(ResultSet aRS) throws SQLException {
@@ -96,7 +99,9 @@ public class Datfile extends DatfileTableAccessor {
         iModificationdate = (java.sql.Timestamp) aRS.getObject(8);
     }
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public Datfile() {
         super();
     }
@@ -105,7 +110,6 @@ public class Datfile extends DatfileTableAccessor {
      * This method returns the DAT file as unzipped bytes.
      *
      * @return byte[]  with the unzipped bytes for the DAT file.
-     *
      * @throws IOException when the unzipping process goes wrong.
      */
     public byte[] getUnzippedFile() throws IOException {
@@ -135,7 +139,6 @@ public class Datfile extends DatfileTableAccessor {
      * This method returns a BufferedReader into the unzipped DAT file. It is up to the caller to close the reader.
      *
      * @return BufferedReader  connected to the unzipped DAT file.
-     *
      * @throws IOException when the unzipping process goes wrong.
      */
     public BufferedReader getBufferedReader() throws IOException {
@@ -151,7 +154,6 @@ public class Datfile extends DatfileTableAccessor {
      *
      * @param aBytes byte[] with the data for the DAT file. This data will be zipped and subsequently sent to the
      *               superclass.
-     *
      * @throws IOException when the zipping process fails.
      */
     public void setUnzippedFile(byte[] aBytes) throws IOException {
@@ -179,7 +181,6 @@ public class Datfile extends DatfileTableAccessor {
      * This method allows the setting of a file (it sets filename and the zipped bytes for the file).
      *
      * @param aFilename String with the FULL filename!
-     *
      * @throws IOException whenever the file could not be found, could not be read or could not be zipped.
      */
     public void setFileFromName(String aFilename) throws IOException {
@@ -203,9 +204,7 @@ public class Datfile extends DatfileTableAccessor {
      * This method loads and zips the file data.
      *
      * @param aFile File with the data.
-     *
      * @return byte[]  with the GZIPped data.
-     *
      * @throws IOException whenever the GZIPping process fails.
      */
     private byte[] zipFile(File aFile) throws IOException {
@@ -237,9 +236,7 @@ public class Datfile extends DatfileTableAccessor {
      * @param aServer   String with the datfile server.
      * @param aFolder   String with the datfile folder.
      * @param aConn     Connection to read the data from.
-     *
      * @return Array with the identifications for the requested datfile
-     *
      * @throws SQLException when the retrieve failed.
      */
     public static Identification[] getIdentificationsForDatfile(String aFilename, String aServer, String aFolder, Connection aConn) throws SQLException {
@@ -260,19 +257,17 @@ public class Datfile extends DatfileTableAccessor {
         Identification[] lIdentifications = new Identification[temp.size()];
         temp.toArray(lIdentifications);
         return lIdentifications;
-   }
+    }
 
     /**
-     * This method returns an array with IdentificationExtension, containing all IdentificationExtension entries that could be retrieved
-     * for the specified datfile.
+     * This method returns an array with IdentificationExtension, containing all IdentificationExtension entries that
+     * could be retrieved for the specified datfile.
      *
      * @param aFilename String with the datfile filename.
      * @param aServer   String with the datfile server.
      * @param aFolder   String with the datfile folder.
      * @param aConn     Connection to read the data from.
-     *
      * @return Array with the IdentificationExtension for the requested datfile
-     *
      * @throws SQLException when the retrieve failed.
      */
 
@@ -280,7 +275,7 @@ public class Datfile extends DatfileTableAccessor {
         Vector temp = new Vector();
 
         PreparedStatement ps =
-                aConn.prepareStatement("select i.*, s.filename from identification as i, datfile as d, spectrumfile as s where d.filename = ? and d.server = ? and d.folder = ? and i.l_datfileid = d.datfileid and i.l_spectrumfileid = s.spectrumfileid");
+                aConn.prepareStatement("select i.*, s.filename from identification as i, datfile as d, spectrum as s where d.filename = ? and d.server = ? and d.folder = ? and i.l_datfileid = d.datfileid and i.l_spectrumid = s.spectrumid");
         ps.setString(1, aFilename);
         ps.setString(2, aServer);
         ps.setString(3, aFolder);
@@ -295,6 +290,6 @@ public class Datfile extends DatfileTableAccessor {
         temp.toArray(lIdentifications);
         return lIdentifications;
 
-   }
+    }
 
 }

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.diff;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Identification;
 
 import java.io.BufferedReader;
@@ -34,6 +36,8 @@ import java.util.Vector;
  * @version $Id: StoreDifferentialData.java,v 1.12 2009/03/11 13:57:45 niklaas Exp $
  */
 public class StoreDifferentialData {
+    // Class specific log4j logger for StoreDifferentialData instances.
+    private static Logger logger = Logger.getLogger(StoreDifferentialData.class);
 
     /**
      * The Vector with the DiffCouples.
@@ -88,7 +92,7 @@ public class StoreDifferentialData {
             String filename = dc.getFilename();
             Identification id = Identification.getIdentification(conn, filename);
             if (id == null) {
-                System.err.println("No identification found for filename='" + filename + "'!");
+                logger.error("No identification found for filename='" + filename + "'!");
             } else {
                 id.setLight_isotope(new Double(dc.getLightIntensity()));
                 id.setHeavy_isotope(new Double(dc.getHeavyIntensity()));
@@ -140,7 +144,7 @@ public class StoreDifferentialData {
                             DiffCouple old = (DiffCouple) removed;
                             dc.setLightIntensity((dc.getLightIntensity() + old.getLightIntensity()) / 2);
                             dc.setHeavyIntensity((dc.getHeavyIntensity() + old.getHeavyIntensity()) / 2);
-                            System.err.println("Averaged for spectrum " + old.getFilename());
+                            logger.error("Averaged for spectrum " + old.getFilename());
                         }
                     } catch (Exception e) {
                         throw new IOException("Unable to parse line nbr. " + lineCount + ": " + e.getMessage());
@@ -151,12 +155,12 @@ public class StoreDifferentialData {
             // At this point, we've gathered all data. Start processing it.
             StoreDifferentialData lDa = new StoreDifferentialData(new Vector(allCouples.values()));
             lDa.storeDifferentialData();
-            System.out.println("\n\nStored differential data for " + allCouples.size() + " spectra in the projects database.");
+            logger.info("\n\nStored differential data for " + allCouples.size() + " spectra in the projects database.");
         } catch (IOException ioe) {
-            System.err.println("\n\nUnable to parse input file '" + args[3] + "'!" + ioe.getMessage() + "\n");
+            logger.error("\n\nUnable to parse input file '" + args[3] + "'!" + ioe.getMessage() + "\n");
             System.exit(1);
         } catch (SQLException sqle) {
-            System.err.println("\n\nUnable to store differential data: " + sqle.getMessage() + "\n");
+            logger.error("\n\nUnable to store differential data: " + sqle.getMessage() + "\n");
             System.exit(1);
         }
     }
@@ -165,8 +169,8 @@ public class StoreDifferentialData {
      * This method prints class usage information to stderr and exits with error flag raised.
      */
     private static void printUsage() {
-        System.err.println("\n\nUsage\n\tStoreDifferentialData <db_username> <db_password> <db_URL (e.g.: //muppet03/projects)> <input_csv_file>\n");
-        System.err.println("\tRemarks:\n\n\t - CSV file format:\n\n\t   <first_line=header>\n\t   Filename;light isotope;heavy isotope");
+        logger.error("\n\nUsage\n\tStoreDifferentialData <db_username> <db_password> <db_URL (e.g.: //muppet03/projects)> <input_csv_file>\n");
+        logger.error("\tRemarks:\n\n\t - CSV file format:\n\n\t   <first_line=header>\n\t   Filename;light isotope;heavy isotope");
         System.exit(1);
     }
 

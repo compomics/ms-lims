@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.mascot;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.mascot.MascotHeader;
 import com.compomics.mslims.util.mascot.MascotIsoforms;
 import junit.TestCaseLM;
@@ -25,6 +27,8 @@ import junit.framework.Assert;
  * @see com.compomics.mslims.util.mascot.MascotIsoforms
  */
 public class TestMascotIsoforms extends TestCaseLM {
+    // Class specific log4j logger for TestMascotIsoforms instances.
+    private static Logger logger = Logger.getLogger(TestMascotIsoforms.class);
 
     public TestMascotIsoforms() {
         this("Test scenario for the MascotIsoforms class.");
@@ -35,8 +39,7 @@ public class TestMascotIsoforms extends TestCaseLM {
     }
 
     /**
-     * This method will test the addition and subsequent processing
-     * of headers of isoforms.
+     * This method will test the addition and subsequent processing of headers of isoforms.
      */
     public void testAdditionOfIsoforms() {
         MascotIsoforms mi = new MascotIsoforms();
@@ -53,12 +56,12 @@ public class TestMascotIsoforms extends TestCaseLM {
         mi.addIsoform("P065453 (66-73)", "Isoform 1.");
         mi.addIsoform("108475654 (1345-1355)", "Isoform 4.");
         Assert.assertEquals(4, mi.getIsoforms().size());
-        MascotHeader mh = (MascotHeader)mi.getIsoforms().get("P065453");
+        MascotHeader mh = (MascotHeader) mi.getIsoforms().get("P065453");
         Assert.assertEquals("P065453", mh.getAccession());
         Assert.assertEquals(66, mh.getStart());
         Assert.assertEquals(73, mh.getEnd());
         Assert.assertEquals("Isoform 1.", mh.getDescription());
-        mh = (MascotHeader)mi.getIsoforms().get("108475654");
+        mh = (MascotHeader) mi.getIsoforms().get("108475654");
         Assert.assertEquals("108475654", mh.getAccession());
         Assert.assertEquals(1345, mh.getStart());
         Assert.assertEquals(1355, mh.getEnd());
@@ -67,26 +70,26 @@ public class TestMascotIsoforms extends TestCaseLM {
         mi.addIsoform("P065453 (68-70)", "Isoform 1.");
         mi.addIsoform("108475654 (1342-1356)", "Isoform 4.");
         Assert.assertEquals(4, mi.getIsoforms().size());
-        mh = (MascotHeader)mi.getIsoforms().get("P065453");
+        mh = (MascotHeader) mi.getIsoforms().get("P065453");
         Assert.assertEquals("P065453", mh.getAccession());
         Assert.assertEquals(68, mh.getStart());
         Assert.assertEquals(70, mh.getEnd());
         Assert.assertEquals("Isoform 1.", mh.getDescription());
-        mh = (MascotHeader)mi.getIsoforms().get("108475654");
+        mh = (MascotHeader) mi.getIsoforms().get("108475654");
         Assert.assertEquals("108475654", mh.getAccession());
         Assert.assertEquals(1345, mh.getStart());
         Assert.assertEquals(1355, mh.getEnd());
         Assert.assertEquals("Isoform 4.", mh.getDescription());
 
         mi.addIsoform("108475654 (1348-1355)", "Isoform 4.");
-        mh = (MascotHeader)mi.getIsoforms().get("108475654");
+        mh = (MascotHeader) mi.getIsoforms().get("108475654");
         Assert.assertEquals("108475654", mh.getAccession());
         Assert.assertEquals(1348, mh.getStart());
         Assert.assertEquals(1355, mh.getEnd());
         Assert.assertEquals("Isoform 4.", mh.getDescription());
 
         mi.addIsoform("108475654 (1345-1354)", "Isoform 4.");
-        mh = (MascotHeader)mi.getIsoforms().get("108475654");
+        mh = (MascotHeader) mi.getIsoforms().get("108475654");
         Assert.assertEquals("108475654", mh.getAccession());
         Assert.assertEquals(1345, mh.getStart());
         Assert.assertEquals(1354, mh.getEnd());
@@ -94,8 +97,7 @@ public class TestMascotIsoforms extends TestCaseLM {
     }
 
     /**
-     * This method test retrieving an isoform, based on an input list or
-     * by natural ordering.
+     * This method test retrieving an isoform, based on an input list or by natural ordering.
      */
     public void testRetrieving() {
         MascotIsoforms mi = new MascotIsoforms();

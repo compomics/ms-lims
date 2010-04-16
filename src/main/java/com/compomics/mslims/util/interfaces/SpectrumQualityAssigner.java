@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.interfaces;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.interfaces.SpectrumFile;/*
  * CVS information:
  *
@@ -22,12 +24,12 @@ import com.compomics.util.interfaces.SpectrumFile;/*
 public interface SpectrumQualityAssigner {
 
     /**
-     * This method returns a double with a score for the spectrum quality.
-     * How this double has to be interpreted should be documented by the implementation.
+     * This method returns a double with a score for the spectrum quality. How this double has to be interpreted should
+     * be documented by the implementation.
      *
      * @param aSpectrum SpectrumFile with the spectrum to evaluate
-     * @return  double with a value representing the quality judgement for the spectrum.
-     *                 The implementation should document how this value needs to be evaluated.
+     * @return double with a value representing the quality judgement for the spectrum. The implementation should
+     *         document how this value needs to be evaluated.
      */
     public abstract double getSpectrumQualityScore(SpectrumFile aSpectrum);
 }

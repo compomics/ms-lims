@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -21,16 +23,20 @@ import java.util.Vector;
  */
 
 /**
- * This class provides the following enhancements over the ProjectTableAccessor:
- * <ul> <li><i>constructor</i>: to read a single Project from a ResultSet.</li> <li><b>toString()</b>: returns the title
- * of the project.</li> <li><b>hashCode()</b>: returns a hashcode for the project (which is just the Project's ID).</li>
- * <li><b>clone()</b>: returns an identical copy of the project.</li> </ul>
+ * This class provides the following enhancements over the ProjectTableAccessor: <ul> <li><i>constructor</i>: to read a
+ * single Project from a ResultSet.</li> <li><b>toString()</b>: returns the title of the project.</li>
+ * <li><b>hashCode()</b>: returns a hashcode for the project (which is just the Project's ID).</li> <li><b>clone()</b>:
+ * returns an identical copy of the project.</li> </ul>
  *
  * @author Lennart Martens
  */
 public class Identification_to_quantitation extends Identification_to_quantitationTableAccessor {
+    // Class specific log4j logger for Identification_to_quantitation instances.
+    private static Logger logger = Logger.getLogger(Identification_to_quantitation.class);
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public Identification_to_quantitation() {
         super();
     }
@@ -46,18 +52,12 @@ public class Identification_to_quantitation extends Identification_to_quantitati
 
     /**
      * This constructor reads the project from a resultset. The ResultSet should be positioned such that a single row
-     * can be read directly (i.e., without calling the 'next()' method on the ResultSet). <br />
-     * The columns should be in this order: <br />
-     * Column 1: identification_to_quantitationid ID <br />
-     * Column 2: l_identificationid <br />
-     * Column 3: l_quantitation_groupid <br />
-     * Column 4: type <br />
-     * Column 5: username <br />
-     * Column 6: creationdate <br />
-     * Column 8: modificationdate.
+     * can be read directly (i.e., without calling the 'next()' method on the ResultSet). <br /> The columns should be
+     * in this order: <br /> Column 1: identification_to_quantitationid ID <br /> Column 2: l_identificationid <br />
+     * Column 3: l_quantitation_groupid <br /> Column 4: type <br /> Column 5: username <br /> Column 6: creationdate
+     * <br /> Column 8: modificationdate.
      *
      * @param aRS ResultSet to read the data from.
-     *
      * @throws java.sql.SQLException when reading the ResultSet failed.
      */
     public Identification_to_quantitation(ResultSet aRS) throws SQLException {
@@ -83,11 +83,9 @@ public class Identification_to_quantitation extends Identification_to_quantitati
     /**
      * This method get all the identification_to_quantitations for a list of identificationids from the database.
      *
-     * @param aConn     Connection to load the identification from.
+     * @param aConn              Connection to load the identification from.
      * @param aIdentificationIds String with the identificationids seperatated by ','
-     *
      * @return Identification_to_quantitation array with the linkers.
-     *
      * @throws SQLException when the select failed.
      */
     public static Identification_to_quantitation[] getIdentification_to_quantitationForIdentificationIds(Connection aConn, String aIdentificationIds) throws SQLException {

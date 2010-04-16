@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.interfaces.BrukerCompound;
 /*
  * CVS information:
@@ -21,6 +23,8 @@ import com.compomics.mslims.util.interfaces.BrukerCompound;
  * @version $Id: BrukerCompoundCouple.java,v 1.3 2005/10/27 12:33:20 lennart Exp $
  */
 public class BrukerCompoundCouple implements BrukerCompound {
+    // Class specific log4j logger for BrukerCompoundCouple instances.
+    private static Logger logger = Logger.getLogger(BrukerCompoundCouple.class);
 
     /**
      * The mass of the light ion.
@@ -88,19 +92,19 @@ public class BrukerCompoundCouple implements BrukerCompound {
     /**
      * This constructor takes all details for a couple.
      *
-     * @param aLightMass    double with the mass of the light ion.
-     * @param aHeavyMass    double with the mass of the heavy ion.
-     * @param aLightTotalScore  double with the total score for the light ion.
-     * @param aHeavyTotalScore  double with the total score for the heavy ion.
-     * @param aLightArea  double with the area for the light ion.
-     * @param aHeavyArea  double with the area for the heavy ion.
+     * @param aLightMass       double with the mass of the light ion.
+     * @param aHeavyMass       double with the mass of the heavy ion.
+     * @param aLightTotalScore double with the total score for the light ion.
+     * @param aHeavyTotalScore double with the total score for the heavy ion.
+     * @param aLightArea       double with the area for the light ion.
+     * @param aHeavyArea       double with the area for the heavy ion.
      * @param aLightIntensity  double with the intensity for the light ion.
      * @param aHeavyIntensity  double with the intensity for the heavy ion.
-     * @param aLightS2n double with the signal-to-noise ratio for the light ion.
-     * @param aHeavyS2n double with the signal-to-noise ratio for the heavy ion.
-     * @param aRegulation   double with the ratio (light over heavy) of the ions.
-     * @param aLightPosition    String with the position of the light ion.
-     * @param aHeavyPosition    String with the position of the heavy ion.
+     * @param aLightS2n        double with the signal-to-noise ratio for the light ion.
+     * @param aHeavyS2n        double with the signal-to-noise ratio for the heavy ion.
+     * @param aRegulation      double with the ratio (light over heavy) of the ions.
+     * @param aLightPosition   String with the position of the light ion.
+     * @param aHeavyPosition   String with the position of the heavy ion.
      */
     public BrukerCompoundCouple(double aLightMass, double aHeavyMass, double aLightTotalScore, double aHeavyTotalScore, double aLightArea, double aHeavyArea, double aLightIntensity, double aHeavyIntensity, double aLightS2n, double aHeavyS2n, double aRegulation, String aLightPosition, String aHeavyPosition) {
         this.iLightMass = aLightMass;
@@ -117,19 +121,19 @@ public class BrukerCompoundCouple implements BrukerCompound {
         this.iLightPosition = aLightPosition;
         this.iHeavyPosition = aHeavyPosition;
         // Cache.
-        if(iLightTotalScore > iHeavyTotalScore) {
+        if (iLightTotalScore > iHeavyTotalScore) {
             iHighestScoringMass = iLightMass;
             iHighestScoringPosition = iLightPosition;
-        } else if(iLightTotalScore < iHeavyTotalScore) {
+        } else if (iLightTotalScore < iHeavyTotalScore) {
             iHighestScoringMass = iHeavyMass;
             iHighestScoringPosition = iHeavyPosition;
         } else {
             // Both have equal total score.
             // Then use signal-to-noise ratio.
-            if(iLightS2n > iHeavyS2n) {
+            if (iLightS2n > iHeavyS2n) {
                 iHighestScoringMass = iLightMass;
                 iHighestScoringPosition = iLightPosition;
-            } else if(iLightS2n < iHeavyS2n) {
+            } else if (iLightS2n < iHeavyS2n) {
                 iHighestScoringMass = iHeavyMass;
                 iHighestScoringPosition = iHeavyPosition;
             }
@@ -138,30 +142,30 @@ public class BrukerCompoundCouple implements BrukerCompound {
 
     public BrukerCompoundCouple(BrukerCompoundSingle aLight, BrukerCompoundSingle aHeavy) {
         this(aLight.getMass(), aHeavy.getMass(), aLight.getTotalScore(), aHeavy.getTotalScore(), aLight.getArea(), aHeavy.getArea(), aLight.getIntensity(), aHeavy.getIntensity(), aLight.getS2n(), aHeavy.getS2n(), aLight.getRegulation(true), aLight.getPosition(), aHeavy.getPosition());
-        if(!(aLight.isSingle() && aHeavy.isSingle())) {
+        if (!(aLight.isSingle() && aHeavy.isSingle())) {
             throw new IllegalArgumentException("Only two singles can be joined into a couple. You attempted the coupling with at least one pre-existing couple!");
         }
-        if(aLight.getRegulation(true) != aHeavy.getRegulation(true)) {
+        if (aLight.getRegulation(true) != aHeavy.getRegulation(true)) {
             throw new IllegalArgumentException("This does not appear to be a couple as their ratios differ!");
         }
     }
 
     public double getMZForCharge(int aCharge) {
-        double temp = iHighestScoringMass+(1.007825*aCharge);
+        double temp = iHighestScoringMass + (1.007825 * aCharge);
         temp /= aCharge;
         return temp;
     }
 
     /**
-     * This method returns 'true' if at least one ion (be it light or heavy)
-     * has a signal-to-noise ratio equal to or above the specified threshold.
+     * This method returns 'true' if at least one ion (be it light or heavy) has a signal-to-noise ratio equal to or
+     * above the specified threshold.
      *
-     * @param aS2n  double with the signal-to-noise threshold.
-     * @return  boolean that indicates whether the couple passes the filter.
+     * @param aS2n double with the signal-to-noise threshold.
+     * @return boolean that indicates whether the couple passes the filter.
      */
     public boolean passesS2nFilter(double aS2n) {
         boolean result = false;
-        if(iLightS2n >= aS2n || iHeavyS2n >= aS2n) {
+        if (iLightS2n >= aS2n || iHeavyS2n >= aS2n) {
             result = true;
         }
         return result;
@@ -209,10 +213,10 @@ public class BrukerCompoundCouple implements BrukerCompound {
 
     public double getRegulation(boolean aUseArea) {
         double result = 0.0;
-        if(aUseArea) {
-            result = iLightArea/iHeavyArea;
+        if (aUseArea) {
+            result = iLightArea / iHeavyArea;
         } else {
-            result = iLightIntensity/iHeavyIntensity;
+            result = iLightIntensity / iHeavyIntensity;
         }
         return result;
     }

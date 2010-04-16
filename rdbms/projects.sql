@@ -154,6 +154,8 @@ KEY `l_datfileid` (`l_datfileid`),
 KEY `valid` (`valid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+
+
 --
 -- Table structure for table `identification_to_quantitation`
 --

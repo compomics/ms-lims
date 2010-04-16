@@ -1,5 +1,7 @@
 package com.compomics.mslims.util.quantitation.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Datfile;
 import com.compomics.mslims.gui.tree.MascotSearch;
 import com.compomics.mslims.util.interfaces.QuantitationProcessor;
@@ -25,13 +27,14 @@ import java.util.zip.ZipInputStream;
  */
 
 /**
- * The MascotQuantitationProcessor class is a QuantitationProcessor.
- * It can iterate over a series of MascotSearch intances, each having a reference to a Mascot Distiller rov file
- * as well as a Mascot results file.
+ * The MascotQuantitationProcessor class is a QuantitationProcessor. It can iterate over a series of MascotSearch
+ * intances, each having a reference to a Mascot Distiller rov file as well as a Mascot results file.
  * <p/>
  * As a QuantitationProcessor RatioGroupCollection is constructed for each MascotSearch.
  */
 public class MascotQuantitationProcessor implements QuantitationProcessor {
+    // Class specific log4j logger for MascotQuantitationProcessor instances.
+    private static Logger logger = Logger.getLogger(MascotQuantitationProcessor.class);
 // ------------------------------ FIELDS ------------------------------
 
     /**
@@ -52,9 +55,8 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
     private IdentificationExtension[] iIdentificationsForDatfile;
 
     /**
-     * This boolean is used to avoid the database connection during unit testing.
-     * If set to false, the Identifications are not matched anymore!
-     * They are then set in a hard coded way - so keep this boolean FALSE except FOR TESTING.
+     * This boolean is used to avoid the database connection during unit testing. If set to false, the Identifications
+     * are not matched anymore! They are then set in a hard coded way - so keep this boolean FALSE except FOR TESTING.
      */
     private boolean iJUnitStatus = false;
 
@@ -119,8 +121,8 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Failing!");
-            e.printStackTrace();
+            logger.error("Failing!");
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -207,8 +209,8 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
             iFlamable.passHotPotato(new Throwable("Distiller quantitation file was not found in the Distiller project file '" + aRovFile.getName() + "' (task: " + aMascotSearch.getParentTaskId() + ")!!"));
             return null;
         } catch (IOException e) {
-            System.err.println("Failing!");
-            e.printStackTrace();
+            logger.error("Failing!");
+            logger.error(e.getMessage(), e);
         }
 
         return null;
@@ -235,8 +237,7 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
 
 
     /**
-     * Returns the File handle to the Mascot Distiller rov file.
-     * Error handling is taken care of as well.
+     * Returns the File handle to the Mascot Distiller rov file. Error handling is taken care of as well.
      *
      * @return File The Filehandle to the (zipped!) rov file
      */
@@ -250,14 +251,14 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
 
         //get the .rov file (there's a possibility that the filename is a little bit different near the end)
         int fileCounter = 0;
-        for(int i = 0; i<lFolder.listFiles().length ; i ++){
-            if(lFolder.listFiles()[i].getName().startsWith(aDistillerProject.substring(aDistillerProject.lastIndexOf(System.getProperty("file.separator")) + 1, aDistillerProject.lastIndexOf("."))) &&  lFolder.listFiles()[i].getName().endsWith(".rov")){
+        for (int i = 0; i < lFolder.listFiles().length; i++) {
+            if (lFolder.listFiles()[i].getName().startsWith(aDistillerProject.substring(aDistillerProject.lastIndexOf(System.getProperty("file.separator")) + 1, aDistillerProject.lastIndexOf("."))) && lFolder.listFiles()[i].getName().endsWith(".rov")) {
                 lFile = lFolder.listFiles()[i];
                 fileCounter = fileCounter + 1;
             }
         }
 
-        if(fileCounter >= 2){
+        if (fileCounter >= 2) {
             iFlamable.passHotPotato(new Throwable("The .rov file ' " + aDistillerProject + "' could be located more than once!\nMaybe you have 2 rov files with the same name."));
             return null;
         }
@@ -267,17 +268,19 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
             return null;
         }
 
-         if(!lFile.exists()) {
+        if (!lFile.exists()) {
             iFlamable.passHotPotato(new Throwable("The .rov file ' " + aDistillerProject + "' could not be located!!"));
             return null;
         }
-        
+
         return lFile;
     }
 
     // TODO throw error when there is no data in the file
+
     /**
-     * This method will extracted all the information from the distiller xml file. The hits will be stored in the hits Vector.
+     * This method will extracted all the information from the distiller xml file. The hits will be stored in the hits
+     * Vector.
      *
      * @param aDistillerXmlFile The xml file.
      */
@@ -297,8 +300,8 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
     }
 
     /**
-     * THIS METHOD CAN ONLY BE USED FOR TESTING.
-     * TO AVOID THE DATABASE CONNECTION, THE IDENTIFICATIONS ARE SET HARD CODED IN THE TESTS.
+     * THIS METHOD CAN ONLY BE USED FOR TESTING. TO AVOID THE DATABASE CONNECTION, THE IDENTIFICATIONS ARE SET HARD
+     * CODED IN THE TESTS.
      */
     public void setJUnitStatus(boolean aStatus) {
         iJUnitStatus = aStatus;

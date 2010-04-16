@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.db.DBResultSet;
 
 import javax.swing.*;
@@ -24,12 +26,13 @@ import java.io.PrintWriter;
  */
 
 /**
- * This class implements a Dialog that allows the user to specify some options
- * for exporting tabular data to a file.
+ * This class implements a Dialog that allows the user to specify some options for exporting tabular data to a file.
  *
  * @author Lennart Martens
  */
 public class ExportDialog extends JDialog {
+    // Class specific log4j logger for ExportDialog instances.
+    private static Logger logger = Logger.getLogger(ExportDialog.class);
 
     private JTextField txtFile = null;
     private JButton btnBrowse = null;
@@ -54,14 +57,12 @@ public class ExportDialog extends JDialog {
     private DBResultSet iModel = null;
 
     /**
-     * This constructor allows the specification of a parent,
-     * a title for the dialog and a DBResultSet as a data source.
-     * It will also lay-out components, but
-     * will not make the dialog visible! This is up to the caller.
+     * This constructor allows the specification of a parent, a title for the dialog and a DBResultSet as a data source.
+     * It will also lay-out components, but will not make the dialog visible! This is up to the caller.
      *
-     * @param   aParent JFrame that is the parent of this dialog.
-     * @param   aTitle  String with the title for this dialog.
-     * @param   aModel  DBResultSet with the table model to read the data from.
+     * @param aParent JFrame that is the parent of this dialog.
+     * @param aTitle  String with the title for this dialog.
+     * @param aModel  DBResultSet with the table model to read the data from.
      */
     public ExportDialog(JFrame aParent, String aTitle, DBResultSet aModel) {
         super(aParent, aTitle, true);
@@ -78,7 +79,7 @@ public class ExportDialog extends JDialog {
         this.constructScreen();
         this.pack();
         Point p = aParent.getLocation();
-        this.setLocation(p.x+(aParent.getWidth()/3), p.y+(aParent.getHeight()/3));
+        this.setLocation(p.x + (aParent.getWidth() / 3), p.y + (aParent.getHeight() / 3));
         this.setResizable(false);
     }
 
@@ -91,7 +92,7 @@ public class ExportDialog extends JDialog {
         txtFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String file = txtFile.getText();
-                if(file != null && !file.trim().equals("")) {
+                if (file != null && !file.trim().equals("")) {
                     okPressed();
                 }
             }
@@ -102,9 +103,9 @@ public class ExportDialog extends JDialog {
                 File startHere = new File("/");
                 // Open the filechooser on the root or the folder the user
                 // already specified (if it exists).
-                if(!txtFile.getText().trim().equals("")) {
-                    File f= new File(txtFile.getText().trim());
-                    if(f.exists()) {
+                if (!txtFile.getText().trim().equals("")) {
+                    File f = new File(txtFile.getText().trim());
+                    if (f.exists()) {
                         startHere = f;
                     }
                 }
@@ -112,16 +113,16 @@ public class ExportDialog extends JDialog {
                 JFileChooser jfc = new JFileChooser(startHere);
                 boolean unSure = true;
                 String file = null;
-                while(unSure) {
+                while (unSure) {
                     unSure = false;
                     int returnVal = 0;
                     returnVal = jfc.showSaveDialog(txtFile);
-                    if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
                         file = jfc.getSelectedFile().getAbsoluteFile().toString();
                         File f = new File(file);
-                        if(f.exists()) {
+                        if (f.exists()) {
                             int answer = JOptionPane.showConfirmDialog(ExportDialog.this, new String[]{"File '" + file + "' exists!", "Overwrite?"}, "File exists!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                            if(answer == JOptionPane.YES_OPTION) {
+                            if (answer == JOptionPane.YES_OPTION) {
                                 txtFile.setText(file);
                             } else {
                                 file = null;
@@ -151,9 +152,9 @@ public class ExportDialog extends JDialog {
         rbtHTML = new JRadioButton("Output in HTML table format", false);
         rbtHTML.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.DESELECTED) {
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
                     cmbBorder.setEnabled(false);
-                } else if(e.getStateChange() == ItemEvent.SELECTED) {
+                } else if (e.getStateChange() == ItemEvent.SELECTED) {
                     cmbBorder.setEnabled(true);
                 }
             }
@@ -185,18 +186,18 @@ public class ExportDialog extends JDialog {
         rbtCSV = new JRadioButton("Output in CSV format", true);
         rbtCSV.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.DESELECTED) {
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
                     rbtComma.setEnabled(false);
                     rbtSemiColon.setEnabled(false);
                     rbtTab.setEnabled(false);
                     rbtOther.setEnabled(false);
                     txtOther.setEnabled(false);
-                } else if(e.getStateChange() == ItemEvent.SELECTED) {
+                } else if (e.getStateChange() == ItemEvent.SELECTED) {
                     rbtComma.setEnabled(true);
                     rbtSemiColon.setEnabled(true);
                     rbtTab.setEnabled(true);
                     rbtOther.setEnabled(true);
-                    if(rbtOther.isSelected()) {
+                    if (rbtOther.isSelected()) {
                         txtOther.setEnabled(true);
                     }
                 }
@@ -208,9 +209,9 @@ public class ExportDialog extends JDialog {
         rbtOther = new JRadioButton("Other", false);
         rbtOther.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.DESELECTED) {
+                if (e.getStateChange() == ItemEvent.DESELECTED) {
                     txtOther.setEnabled(false);
-                } else if(e.getStateChange() == ItemEvent.SELECTED) {
+                } else if (e.getStateChange() == ItemEvent.SELECTED) {
                     txtOther.setEnabled(true);
                 }
             }
@@ -303,27 +304,29 @@ public class ExportDialog extends JDialog {
     private void okPressed() {
         // See if we have a file.
         String file = txtFile.getText().trim();
-        if(!file.equals("")) {
+        if (!file.equals("")) {
             try {
                 PrintWriter out = new PrintWriter(new FileWriter(file));
                 // A File was selected for output.
                 // Inform the data that it should write to file.
-                if(rbtHTML.isSelected()) {
+                if (rbtHTML.isSelected()) {
                     out.print("<html><body>");
-                    iModel.writeToHTMLTable(out, Integer.parseInt((String)cmbBorder.getSelectedItem()));
+                    iModel.writeToHTMLTable(out, Integer.parseInt((String) cmbBorder.getSelectedItem()));
                     out.print("</body></html>");
-                } else if(rbtCSV.isSelected()) {
+                } else if (rbtCSV.isSelected()) {
                     String separator = null;
-                    if(rbtComma.isSelected()) {
+                    if (rbtComma.isSelected()) {
                         separator = ",";
-                    } else if(rbtSemiColon.isSelected()) {
+                    } else if (rbtSemiColon.isSelected()) {
                         separator = ";";
                     } else if (rbtTab.isSelected()) {
                         separator = "\t";
-                    } else if(rbtOther.isSelected()) {
+                    } else if (rbtOther.isSelected()) {
                         separator = txtOther.getText();
-                        if(separator.equals("")) {
-                            JOptionPane.showMessageDialog(this, "No custom separator character specified!", "No separator specified", JOptionPane.ERROR_MESSAGE);
+                        if (separator.equals("")) {
+                            String lMessage = "No custom separator character specified!";
+                            logger.error(lMessage);
+                            JOptionPane.showMessageDialog(this, lMessage, "No separator specified", JOptionPane.ERROR_MESSAGE);
                             txtOther.requestFocus();
                             return;
                         }
@@ -335,11 +338,14 @@ public class ExportDialog extends JDialog {
                 out.close();
                 JOptionPane.showMessageDialog(this, "Data successfully written to '" + file + "'!", "Output completed!", JOptionPane.INFORMATION_MESSAGE);
                 this.cancelled();
-            } catch(IOException ioe) {
+            } catch (IOException ioe) {
+                logger.error(ioe.getMessage(), ioe);
                 JOptionPane.showMessageDialog(this, new String[]{"Unable to write file '" + file + "'!", ioe.getMessage()}, "Error writing output file!", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "You need to specify an output file first!", "No output file specified!", JOptionPane.ERROR_MESSAGE);
+            String lMessage = "You need to specify an output file first!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, lMessage, "No output file specified!", JOptionPane.ERROR_MESSAGE);
         }
     }
 

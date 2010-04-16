@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio.mergefiles;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.io.PropertiesManager;
@@ -31,6 +33,8 @@ import java.util.Properties;
  * @author Lennart Martens.
  */
 public class MergeFileReaderFactory {
+    // Class specific log4j logger for MergeFileReaderFactory instances.
+    private static Logger logger = Logger.getLogger(MergeFileReaderFactory.class);
 
     /**
      * The constant holding the filename for the properties file from the available MergeFileReaders will be read.
@@ -73,18 +77,18 @@ public class MergeFileReaderFactory {
                     Object o = cl.newInstance();
                     // Now check to see if it is a MergeFileReader.
                     if (!(o instanceof MergeFileReader)) {
-                        System.err.println("\n\nThe '" + classname + "' class is not an implementation of MergeFileReader and will therefore be ignored!\n\n");
+                        logger.error("\n\nThe '" + classname + "' class is not an implementation of MergeFileReader and will therefore be ignored!\n\n");
                     } else {
                         // Add it to the HashMap.
                         iAvailableMergeFileReaders.put(key + SEPARATOR + classname, o);
                     }
                 } catch (InstantiationException e) {
-                    System.err.println("\n\nCould not create instance of class '" + classname + "' using the default constructor. Is it abstract or an interface?\n\n");
+                    logger.error("\n\nCould not create instance of class '" + classname + "' using the default constructor. Is it abstract or an interface?\n\n");
                 } catch (IllegalAccessException e) {
-                    System.err.println("\n\nCould not create instance of class '" + classname + "' using the default constructor. Does it have public default (no-argument) constructor?\n\n");
+                    logger.error("\n\nCould not create instance of class '" + classname + "' using the default constructor. Does it have public default (no-argument) constructor?\n\n");
                 }
             } catch (ClassNotFoundException cnfe) {
-                System.err.println("\n\nUnable to load class '" + classname + "'. This MergeFileReader will not be available!\n\n");
+                logger.error("\n\nUnable to load class '" + classname + "'. This MergeFileReader will not be available!\n\n");
             }
         }
     }

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.workers;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.gui.tree.MascotSearch;
 import com.compomics.mslims.gui.tree.MascotTask;
@@ -28,17 +30,27 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class ReadMascotTaskDBWorker extends SwingWorker {
+    // Class specific log4j logger for ReadMascotTaskDBWorker instances.
+    private static Logger logger = Logger.getLogger(ReadMascotTaskDBWorker.class);
 
-    /** This is the Connection to the Mascot Task DB. */
+    /**
+     * This is the Connection to the Mascot Task DB.
+     */
     private Connection iConn = null;
 
-    /** This is the reference to the Vector that will hold all tasks. */
+    /**
+     * This is the reference to the Vector that will hold all tasks.
+     */
     private Vector iAllTasks = null;
 
-    /** This variable contains a reference to the caller. */
+    /**
+     * This variable contains a reference to the caller.
+     */
     private Flamable iFlamable = null;
 
-    /** Th progress bar. */
+    /**
+     * Th progress bar.
+     */
     private DefaultProgressBar iProgress = null;
 
     /**
@@ -57,7 +69,9 @@ public class ReadMascotTaskDBWorker extends SwingWorker {
         iProgress = aProgress;
     }
 
-    /** This method reads all the data from the Mascot Task DB via ODBC (using the Sun JDBC-ODBC bridge driver). */
+    /**
+     * This method reads all the data from the Mascot Task DB via ODBC (using the Sun JDBC-ODBC bridge driver).
+     */
     public Object construct() {
         try {
             Statement stat = iConn.createStatement();
@@ -118,7 +132,7 @@ public class ReadMascotTaskDBWorker extends SwingWorker {
             rs.close();
             stat.close();
         } catch (SQLException sqle) {
-            sqle.printStackTrace();
+            logger.error(sqle.getMessage(), sqle);
             iProgress.dispose();
             iFlamable.passHotPotato(sqle);
         }

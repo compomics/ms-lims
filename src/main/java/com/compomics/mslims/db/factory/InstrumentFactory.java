@@ -1,5 +1,7 @@
 package com.compomics.mslims.db.factory;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Instrument;
 
 import java.util.HashMap;
@@ -9,6 +11,8 @@ import java.util.HashMap;
  * for
  */
 public class InstrumentFactory {
+    // Class specific log4j logger for InstrumentFactory instances.
+    private static Logger logger = Logger.getLogger(InstrumentFactory.class);
 
     public static final int WATERS_QTOF_PREMIER = 0;
     public static final int BRUKER_ESQUIRE = 1;

@@ -593,7 +593,7 @@ Change log
         The 6.0.2 version of ms_lims adds the ms_lims database as a start-up argument to StoreDifferentialData. It should take the form: '//server/databaseName' (e.g.: '//muppet03/projects').
 
  - Version 6.0.3
-        The 6.0.3 version of ms_lims adds the possibility to select only spectrumfileids, filenames and identified status from Spectrumfile.
+        The 6.0.3 version of ms_lims adds the possibility to select only spectrumids, filenames and identified status from Spectrumfile.
 
  - Version 6.0.4
         The 6.0.4 version of ms_lims fixes a bug that can corrupt large datfiles upon their storage as GZIPped BLOBs in the database.

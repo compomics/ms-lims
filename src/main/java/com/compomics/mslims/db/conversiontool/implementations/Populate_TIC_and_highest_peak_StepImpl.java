@@ -6,7 +6,10 @@
  */
 package com.compomics.mslims.db.conversiontool.implementations;
 
-import com.compomics.mslims.db.accessors.Spectrumfile;
+import com.compomics.mslims.db.accessors.Spectrum;
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.conversiontool.interfaces.DBConverterStep;
 import com.compomics.mslims.util.fileio.MascotGenericFile;
 
@@ -27,6 +30,8 @@ import java.util.Iterator;
  * @version $Id: Populate_TIC_and_highest_peak_StepImpl.java,v 1.3 2009/11/06 11:47:15 kenny Exp $
  */
 public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
+    // Class specific log4j logger for Populate_TIC_and_highest_peak_StepImpl instances.
+    private static Logger logger = Logger.getLogger(Populate_TIC_and_highest_peak_StepImpl.class);
 
     public Populate_TIC_and_highest_peak_StepImpl() {
     }
@@ -39,17 +44,17 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
         try {
             // First locate all relevant spectrumfile rows.
             Statement stat = aConn.createStatement();
-            ResultSet rs = stat.executeQuery("select spectrumfileid from spectrumfile where (highest_peak_in_spectrum is null or total_spectrum_intensity is null) or (highest_peak_in_spectrum = 0.0 or total_spectrum_intensity = 0.0)");
+            ResultSet rs = stat.executeQuery("select spectrumid from spectrumwhere (highest_peak_in_spectrum is null or total_spectrum_intensity is null) or (highest_peak_in_spectrum = 0.0 or total_spectrum_intensity = 0.0)");
             ArrayList<Integer> spectra = new ArrayList<Integer>();
             while (rs.next()) {
                 spectra.add(rs.getInt(1));
             }
             rs.close();
             stat.close();
-            System.out.println("\tFound " + spectra.size() + " spectrumfile records to update.");
+            logger.info("\tFound " + spectra.size() + " spectrumfile records to update.");
 
             // Now update each of these.
-            PreparedStatement ps = aConn.prepareStatement("update spectrumfile set highest_peak_in_spectrum=?, total_spectrum_intensity=? where spectrumfileid=?");
+            PreparedStatement ps = aConn.prepareStatement("update spectrumfile set highest_peak_in_spectrum=?, total_spectrum_intensity=? where spectrumid=?");
             int count = 0;
             int triedCount = 0;
             double rollingThreshold = 5.0;
@@ -62,8 +67,9 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
                 double tic;
 
                 try {
-                    Spectrumfile sf = Spectrumfile.findFromID(specID, aConn);
-                    mgf = new MascotGenericFile(sf.getFilename(), new String(sf.getUnzippedFile()));
+                    Spectrum lSpectrum = Spectrum.findFromID(specID, aConn);
+                    Spectrum_file lSpectrum_file = Spectrum_file.findFromID(specID, aConn);
+                    mgf = new MascotGenericFile(lSpectrum.getFilename(), new String(lSpectrum_file.getUnzippedFile()));
                     maxInt = mgf.getHighestIntensity();
                     tic = mgf.getTotalIntensity();
                     ps.setString(1, "" + maxInt);
@@ -71,35 +77,35 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
                     ps.setLong(3, specID);
                     int updated = ps.executeUpdate();
                     if (updated != 1) {
-                        System.err.println(" *** Error updating spectrumfile with id '" + specID + "': updated " + updated + " rows instead of the expected 1!");
+                        logger.error(" *** Error updating spectrumfile with id '" + specID + "': updated " + updated + " rows instead of the expected 1!");
                     } else {
                         count++;
                     }
                 }
                 catch (Exception e) {
-                    System.err.println(" *** Error catched while updating spectrumfile with id '" + specID + "' Setting intensity fields to '-1'. " +
+                    logger.error(" *** Error catched while updating spectrumfile with id '" + specID + "' Setting intensity fields to '-1'. " +
                             "\n*** Message:" + e.getMessage());
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
                     // If an error was thrown, set the intensity fields to -1 in the catch block.
                     setToFailure(specID, ps);
                 }
                 ps.clearParameters();
                 if (((((double) triedCount) / spectra.size()) * 100) > rollingThreshold) {
-                    System.out.println("\t  " + rollingThreshold + "% complete");
+                    logger.info("\t  " + rollingThreshold + "% complete");
                     rollingThreshold += 5.0;
                 }
             }
 
-            System.out.println("\tSuccessfully updated " + count + " out of " + spectra.size() + " spectrumfile records.");
+            logger.info("\tSuccessfully updated " + count + " out of " + spectra.size() + " spectrumfile records.");
             if ((count - spectra.size()) < 0) {
-                System.err.println("\n *** Note that there were " + (spectra.size() - count) + " spectrumfile rows that were NOT updated!\n *** Please see error messages above (indicated by 'leading ***') for details!");
+                logger.error("\n *** Note that there were " + (spectra.size() - count) + " spectrumfile rows that were NOT updated!\n *** Please see error messages above (indicated by 'leading ***') for details!");
             }
             // Flag successful completion.
             error = false;
         } catch (Exception e) {
-            System.err.println("\n\nError updating SpectrumFile with total intensity and highest peak: ");
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            logger.error("\n\nError updating SpectrumFile with total intensity and highest peak: ");
+            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             error = true;
         }
         return error;
@@ -120,7 +126,7 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
 
         int updated = aPs.executeUpdate();
         if (updated != 1) {
-            System.err.println(" *** Error updating spectrumfile with id '" + aSpecID + "': updated " + updated + " rows instead of the expected 1!");
+            logger.error(" *** Error updating spectrumfile with id '" + aSpecID + "': updated " + updated + " rows instead of the expected 1!");
         }
     }
 }

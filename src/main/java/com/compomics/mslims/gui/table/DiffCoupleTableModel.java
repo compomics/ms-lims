@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.table;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.table.renderers.ErrorObject;
 import com.compomics.mslims.util.diff.DiffAnalysisCore;
 import com.compomics.mslims.util.diff.DiffCouple;
@@ -30,6 +32,8 @@ import java.util.Vector;
  * @version $Id: DiffCoupleTableModel.java,v 1.6 2005/02/23 08:58:41 lennart Exp $
  */
 public class DiffCoupleTableModel extends AbstractTableModel {
+    // Class specific log4j logger for DiffCoupleTableModel instances.
+    private static Logger logger = Logger.getLogger(DiffCoupleTableModel.class);
     /**
      * The Vector with all the Differential couples to display on the GUI.
      */
@@ -78,16 +82,15 @@ public class DiffCoupleTableModel extends AbstractTableModel {
 
 
     /**
-     * Returns a default name for the column using spreadsheet conventions:
-     * A, B, C, ... Z, AA, AB, etc.  If <code>column</code> cannot be found,
-     * returns an empty string.
+     * Returns a default name for the column using spreadsheet conventions: A, B, C, ... Z, AA, AB, etc.  If
+     * <code>column</code> cannot be found, returns an empty string.
      *
      * @param column the column being queried
      * @return a string containing the default name of <code>column</code>
      */
     public String getColumnName(int column) {
         String result = null;
-        switch(column) {
+        switch (column) {
             case PROJECTID:
                 result = "Project ID";
                 break;
@@ -172,13 +175,11 @@ public class DiffCoupleTableModel extends AbstractTableModel {
 
 
     /**
-     * This contructor builds a TableModel based on the DifferentialProject instances
-     * provided in the Vector. If a DiffCouple represents a cluster, the ratios is
-     * calculated from the weighted ratios.
+     * This contructor builds a TableModel based on the DifferentialProject instances provided in the Vector. If a
+     * DiffCouple represents a cluster, the ratios is calculated from the weighted ratios.
      *
-     * @param aCouples  Vector with the DiffCouples to display.
-     * @param aProjects HashMap with the DifferentialProject instances keyed by a
-     *                          Long representing their Project ID.
+     * @param aCouples    Vector with the DiffCouples to display.
+     * @param aProjects   HashMap with the DifferentialProject instances keyed by a Long representing their Project ID.
      * @param aLightLabel String with the light label description
      * @param aHeavyLabel String with the heavy label description
      */
@@ -187,16 +188,15 @@ public class DiffCoupleTableModel extends AbstractTableModel {
     }
 
     /**
-     * This contructor builds a TableModel based on the DifferentialProject instances
-     * provided in the Vector.
+     * This contructor builds a TableModel based on the DifferentialProject instances provided in the Vector.
      *
-     * @param aCouples  Vector with the DiffCouples to display.
-     * @param aProjects HashMap with the DifferentialProject instances keyed by a
-     *                          Long representing their Project ID.
-     * @param aLightLabel String with the light label description
-     * @param aHeavyLabel String with the heavy label description
-     * @param aAverageMethod int with the method for calculating the averages. Please use the constants
-     *                       defined on the DiffAnalysisCore class.
+     * @param aCouples       Vector with the DiffCouples to display.
+     * @param aProjects      HashMap with the DifferentialProject instances keyed by a Long representing their Project
+     *                       ID.
+     * @param aLightLabel    String with the light label description
+     * @param aHeavyLabel    String with the heavy label description
+     * @param aAverageMethod int with the method for calculating the averages. Please use the constants defined on the
+     *                       DiffAnalysisCore class.
      */
     public DiffCoupleTableModel(Vector aCouples, HashMap aProjects, String aLightLabel, String aHeavyLabel, int aAverageMethod) {
         this.iCouples = aCouples;
@@ -209,17 +209,17 @@ public class DiffCoupleTableModel extends AbstractTableModel {
     /**
      * This method takes a DiffCouple and adds it to the model.
      *
-     * @param aCouple  DiffCouple to add to the model.
+     * @param aCouple DiffCouple to add to the model.
      */
     public void addCouple(DiffCouple aCouple) {
         this.iCouples.add(aCouple);
         this.fireTableDataChanged();
     }
 
-        /**
+    /**
      * This method takes a DifferentialProjectand adds it to the model.
      *
-     * @param aProject  DifferentialProject to add to the model.
+     * @param aProject DifferentialProject to add to the model.
      */
     public void addProject(DifferentialProject aProject) {
         this.iProjects.put(new Long(aProject.getProjectID()), aProject);
@@ -227,9 +227,8 @@ public class DiffCoupleTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of columns in the model. A
-     * <code>JTable</code> uses this method to determine how many columns it
-     * should create and display by default.
+     * Returns the number of columns in the model. A <code>JTable</code> uses this method to determine how many columns
+     * it should create and display by default.
      *
      * @return the number of columns in the model
      * @see #getRowCount
@@ -239,10 +238,8 @@ public class DiffCoupleTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of rows in the model. A
-     * <code>JTable</code> uses this method to determine how many rows it
-     * should display.  This method should be quick, as it
-     * is called frequently during rendering.
+     * Returns the number of rows in the model. A <code>JTable</code> uses this method to determine how many rows it
+     * should display.  This method should be quick, as it is called frequently during rendering.
      *
      * @return the number of rows in the model
      * @see #getColumnCount
@@ -252,25 +249,24 @@ public class DiffCoupleTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the value for the cell at <code>columnIndex</code> and
-     * <code>rowIndex</code>. If the column index is -1, the DifferentialProject instance in this
-     * row is returned instead.
+     * Returns the value for the cell at <code>columnIndex</code> and <code>rowIndex</code>. If the column index is -1,
+     * the DifferentialProject instance in this row is returned instead.
      *
-     * @param	rowIndex	the row whose value is to be queried
-     * @param	columnIndex the column whose value is to be queried
-     * @return	the value Object at the specified cell
+     * @param    rowIndex    the row whose value is to be queried
+     * @param    columnIndex the column whose value is to be queried
+     * @return the value Object at the specified cell
      */
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object result = null;
-        if(this.iCouples != null) {
-            DiffCouple dc = (DiffCouple)iCouples.get(rowIndex);
+        if (this.iCouples != null) {
+            DiffCouple dc = (DiffCouple) iCouples.get(rowIndex);
             Long id = new Long(dc.getProjectID());
             // Check the DiffCouple; if it is composite, we will calculate
             // whether it has outliers. If it has, we'll highlight it.
             int outliers = 0;
             outliers = dc.checkOutliers();
 
-            switch(columnIndex) {
+            switch (columnIndex) {
                 case REPORT_INSTANCE:
                     result = iCouples.get(rowIndex);
                     break;
@@ -278,25 +274,25 @@ public class DiffCoupleTableModel extends AbstractTableModel {
                     result = id;
                     break;
                 case PROJECTTITLE:
-                    result = ((DifferentialProject)iProjects.get(id)).getProjectTitle();
+                    result = ((DifferentialProject) iProjects.get(id)).getProjectTitle();
                     break;
                 case PROJECTALIAS:
-                    StringBuffer alias = new StringBuffer(((DifferentialProject)iProjects.get(id)).getProjectAlias());
+                    StringBuffer alias = new StringBuffer(((DifferentialProject) iProjects.get(id)).getProjectAlias());
                     // See if there are more projects from which this
                     // couple was merged.
-                    if(dc.getCount() > 1) {
+                    if (dc.getCount() > 1) {
                         Vector v = dc.getMergedEntries();
                         int liSize = v.size();
-                        for(int i=0;i<liSize;i++) {
-                            DiffCouple child = (DiffCouple)v.get(i);
-                            alias.append(" " + ((DifferentialProject)iProjects.get(new Long(child.getProjectID()))).getProjectAlias());
+                        for (int i = 0; i < liSize; i++) {
+                            DiffCouple child = (DiffCouple) v.get(i);
+                            alias.append(" " + ((DifferentialProject) iProjects.get(new Long(child.getProjectID()))).getProjectAlias());
                         }
                     }
                     result = alias.toString();
                     break;
                 case PROJECTINVERTED:
                     result = "normal";
-                    if(((DifferentialProject)iProjects.get(id)).isInverse()) {
+                    if (((DifferentialProject) iProjects.get(id)).isInverse()) {
                         result = "inverse";
                     }
                     break;
@@ -307,7 +303,7 @@ public class DiffCoupleTableModel extends AbstractTableModel {
                     result = new Double(dc.getHeavyIntensity());
                     break;
                 case RATIO:
-                    switch(iAverageMethod) {
+                    switch (iAverageMethod) {
                         case DiffAnalysisCore.WEIGHTED_RATIOS:
                             result = new Double(dc.getRatioAsWeightedRatio());
                             break;
@@ -320,7 +316,7 @@ public class DiffCoupleTableModel extends AbstractTableModel {
                     }
                     break;
                 case LOG2RATIO:
-                    switch(iAverageMethod) {
+                    switch (iAverageMethod) {
                         case DiffAnalysisCore.WEIGHTED_RATIOS:
                             result = new Double(dc.getLog2RatioAsWeightedRatio());
                             break;
@@ -336,9 +332,9 @@ public class DiffCoupleTableModel extends AbstractTableModel {
                     result = new Double(dc.getSignificance());
                     break;
                 case SIGNIFICANCE_TYPE:
-                    if(dc.getRatio() > 1) {
+                    if (dc.getRatio() > 1) {
                         result = iLightLabel;
-                    } else if(dc.getRatio() < 1) {
+                    } else if (dc.getRatio() < 1) {
                         result = iHeavyLabel;
                     } else {
                         result = "1/1";
@@ -375,9 +371,9 @@ public class DiffCoupleTableModel extends AbstractTableModel {
                     result = new Integer(outliers);
                     break;
             }
-            if(outliers == 95) {
+            if (outliers == 95) {
                 result = new ErrorObject(result, "Clustered couple with outliers at the 95% confidence interval!", Color.black, Color.yellow);
-            } else if(outliers == 98) {
+            } else if (outliers == 98) {
                 result = new ErrorObject(result, "Clustered couple with outliers at the 98% confidence interval!", Color.black, Color.red);
             }
         }

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.interfaces;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.interfaces.Flamable;
 
 /*
@@ -16,8 +18,7 @@ import com.compomics.util.interfaces.Flamable;
  */
 
 /**
- * This interface describes the behaviour for a GUI that allows the management of projects
- * via the ProjectDialog class.
+ * This interface describes the behaviour for a GUI that allows the management of projects via the ProjectDialog class.
  * Note that a ProjectManager is flamable as well!
  *
  * @author Lennart Martens
@@ -26,8 +27,7 @@ import com.compomics.util.interfaces.Flamable;
 public interface ProjectManager extends Flamable {
 
     /**
-     * This method will be called by the ProjectDialog whenever an
-     * operation changed the projects.
+     * This method will be called by the ProjectDialog whenever an operation changed the projects.
      */
     public void projectsChanged();
 }

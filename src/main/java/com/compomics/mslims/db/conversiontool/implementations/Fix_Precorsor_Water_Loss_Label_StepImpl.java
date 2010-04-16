@@ -1,5 +1,7 @@
 package com.compomics.mslims.db.conversiontool.implementations;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.conversiontool.interfaces.DBConverterStep;
 
 import java.sql.Connection;
@@ -8,20 +10,19 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
- * Created by IntelliJ IDEA.
- * User: kenny
- * Date: Aug 18, 2009
- * Time: 2:45:11 PM
+ * Created by IntelliJ IDEA. User: kenny Date: Aug 18, 2009 Time: 2:45:11 PM
  * <p/>
  * This class
  */
 public class Fix_Precorsor_Water_Loss_Label_StepImpl implements DBConverterStep {
+    // Class specific log4j logger for Fix_Precorsor_Water_Loss_Label_StepImpl instances.
+    private static Logger logger = Logger.getLogger(Fix_Precorsor_Water_Loss_Label_StepImpl.class);
 
     public Fix_Precorsor_Water_Loss_Label_StepImpl() {
     }
 
     public boolean performConversionStep(Connection aConn) {
-        System.out.println("\tStarting to update fragmention ionnames from H20(0=numeric) into H2O(O=character)..");
+        logger.info("\tStarting to update fragmention ionnames from H20(0=numeric) into H2O(O=character)..");
 
         boolean error = false;
 
@@ -66,7 +67,7 @@ public class Fix_Precorsor_Water_Loss_Label_StepImpl implements DBConverterStep 
                     lSuccess += ps.executeUpdate();
 
                     if ((((double) lTriedCount) % lThreshold) == 0) {
-                        System.out.println("\t  " + lTriedCount + " ionnames updated..");
+                        logger.info("\t  " + lTriedCount + " ionnames updated..");
                     }
                 }
 
@@ -81,12 +82,12 @@ public class Fix_Precorsor_Water_Loss_Label_StepImpl implements DBConverterStep 
             } while (lCountToLimit == lLimit);
 
 
-            System.out.println("\tSuccessfully updated " + lSuccess + " out of " + lTriedCount + " spectrumfile records.");
+            logger.info("\tSuccessfully updated " + lSuccess + " out of " + lTriedCount + " spectrumfile records.");
 
         } catch (Exception e) {
-            System.err.println("\n\nError updating Fragmention ionnames from H20(numeric) to H2O(character): ");
-            System.err.println(e.getMessage());
-            e.printStackTrace();
+            logger.error("\n\nError updating Fragmention ionnames from H20(numeric) to H2O(character): ");
+            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             error = true;
         }
         return error;

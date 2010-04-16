@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Instrument;
 import com.compomics.mslims.gui.interfaces.Informable;
 
@@ -27,11 +29,17 @@ import java.awt.event.*;
  * @version $Id: InstrumentSelectionDialog.java,v 1.2 2008/11/28 16:07:18 kenny Exp $
  */
 public class InstrumentSelectionDialog extends JDialog {
+    // Class specific log4j logger for InstrumentSelectionDialog instances.
+    private static Logger logger = Logger.getLogger(InstrumentSelectionDialog.class);
 
-    /** The instruments from which the user can choose. */
+    /**
+     * The instruments from which the user can choose.
+     */
     private Instrument[] iInstruments = null;
 
-    /** The parent. */
+    /**
+     * The parent.
+     */
     private JFrame iParent = null;
 
     private JComboBox cmbInstruments = null;
@@ -58,7 +66,9 @@ public class InstrumentSelectionDialog extends JDialog {
         this.pack();
     }
 
-    /** This method constructs and lays out the GUI. */
+    /**
+     * This method constructs and lays out the GUI.
+     */
     private void constructScreen() {
         // Init the components.
         lblDescription = new JLabel();
@@ -183,7 +193,9 @@ public class InstrumentSelectionDialog extends JDialog {
         lblDescription.setText(description);
     }
 
-    /** This method is called whenever the user clicks 'select'. */
+    /**
+     * This method is called whenever the user clicks 'select'.
+     */
     private void selectTriggered() {
         if (iParent instanceof Informable) {
             // Inform the parent on the selected instrument.
@@ -194,7 +206,9 @@ public class InstrumentSelectionDialog extends JDialog {
         this.close();
     }
 
-    /** This method is called whenever the user clicks 'cancel'. */
+    /**
+     * This method is called whenever the user clicks 'cancel'.
+     */
     private void cancelTriggered() {
         if (iParent instanceof Informable) {
             ((Informable) iParent).inform(null);
@@ -202,7 +216,9 @@ public class InstrumentSelectionDialog extends JDialog {
         this.close();
     }
 
-    /** This method takes care of closing down the dialog. */
+    /**
+     * This method takes care of closing down the dialog.
+     */
     private void close() {
         this.setVisible(false);
         this.dispose();

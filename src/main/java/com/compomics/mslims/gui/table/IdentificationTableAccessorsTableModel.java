@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.table;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.IdentificationTableAccessor;
 import com.compomics.mslims.db.accessors.Identification;
 
@@ -26,6 +28,8 @@ import java.util.Vector;
  * @version $Id: IdentificationTableAccessorsTableModel.java,v 1.4 2007/10/05 10:12:10 lennart Exp $
  */
 public class IdentificationTableAccessorsTableModel extends AbstractTableModel {
+    // Class specific log4j logger for IdentificationTableAccessorsTableModel instances.
+    private static Logger logger = Logger.getLogger(IdentificationTableAccessorsTableModel.class);
 
     /**
      * The data to display.
@@ -56,37 +60,36 @@ public class IdentificationTableAccessorsTableModel extends AbstractTableModel {
     private static final int MASCOT_VERSION = 21;
 
     /**
-     * This constructor will automatically read only the IdentificationTableAccessor instances
-     * from the Vector with candidates.
+     * This constructor will automatically read only the IdentificationTableAccessor instances from the Vector with
+     * candidates.
      *
-     * @param aCandidiates  Collection with candidates for retention.
+     * @param aCandidiates Collection with candidates for retention.
      */
     public IdentificationTableAccessorsTableModel(Vector aCandidiates) {
         // First cycle and count.
         int count = 0;
         int liSize = aCandidiates.size();
-        for(int i=0;i<liSize;i++) {
+        for (int i = 0; i < liSize; i++) {
             Object o = aCandidiates.get(i);
-            if(o instanceof IdentificationTableAccessor) {
+            if (o instanceof IdentificationTableAccessor) {
                 count++;
             }
         }
         // Okay, init the array.
         iData = new Identification[count];
         count = 0;
-        for(int i=0;i<liSize;i++) {
+        for (int i = 0; i < liSize; i++) {
             Object o = aCandidiates.get(i);
-            if(o instanceof IdentificationTableAccessor) {
-                iData[count] = (Identification)o;
+            if (o instanceof IdentificationTableAccessor) {
+                iData[count] = (Identification) o;
                 count++;
             }
         }
     }
 
     /**
-     * Returns a default name for the column using spreadsheet conventions:
-     * A, B, C, ... Z, AA, AB, etc.  If <code>column</code> cannot be found,
-     * returns an empty string.
+     * Returns a default name for the column using spreadsheet conventions: A, B, C, ... Z, AA, AB, etc.  If
+     * <code>column</code> cannot be found, returns an empty string.
      *
      * @param column the column being queried
      * @return a string containing the default name of <code>column</code>
@@ -94,7 +97,7 @@ public class IdentificationTableAccessorsTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         String result = null;
 
-        switch(column) {
+        switch (column) {
             case FILENAME:
                 result = "Filename";
                 break;
@@ -175,7 +178,7 @@ public class IdentificationTableAccessorsTableModel extends AbstractTableModel {
     public Class getColumnClass(int columnIndex) {
         Class result = null;
 
-        switch(columnIndex) {
+        switch (columnIndex) {
             case FILENAME:
                 result = String.class;
                 break;
@@ -247,9 +250,8 @@ public class IdentificationTableAccessorsTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of columns in the model. A
-     * <code>JTable</code> uses this method to determine how many columns it
-     * should create and display by default.
+     * Returns the number of columns in the model. A <code>JTable</code> uses this method to determine how many columns
+     * it should create and display by default.
      *
      * @return the number of columns in the model
      * @see #getRowCount
@@ -259,34 +261,31 @@ public class IdentificationTableAccessorsTableModel extends AbstractTableModel {
     }
 
     /**
-     * Returns the number of rows in the model. A
-     * <code>JTable</code> uses this method to determine how many rows it
-     * should display.  This method should be quick, as it
-     * is called frequently during rendering.
+     * Returns the number of rows in the model. A <code>JTable</code> uses this method to determine how many rows it
+     * should display.  This method should be quick, as it is called frequently during rendering.
      *
      * @return the number of rows in the model
      * @see #getColumnCount
      */
     public int getRowCount() {
         int result = 0;
-        if(iData != null) {
+        if (iData != null) {
             result = iData.length;
         }
         return result;
     }
 
     /**
-     * Returns the value for the cell at <code>columnIndex</code> and
-     * <code>rowIndex</code>.
+     * Returns the value for the cell at <code>columnIndex</code> and <code>rowIndex</code>.
      *
-     * @param	rowIndex	the row whose value is to be queried
-     * @param	columnIndex the column whose value is to be queried
-     * @return	the value Object at the specified cell
+     * @param    rowIndex    the row whose value is to be queried
+     * @param    columnIndex the column whose value is to be queried
+     * @return the value Object at the specified cell
      */
     public Object getValueAt(int rowIndex, int columnIndex) {
         Object result = null;
-        if(iData != null) {
-            switch(columnIndex) {
+        if (iData != null) {
+            switch (columnIndex) {
                 case FILENAME:
                     result = iData[rowIndex].getTemporarySpectrumfilename();
                     break;

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.interfaces.BrukerCompound;
 /*
  * CVS information:
@@ -21,6 +23,8 @@ import com.compomics.mslims.util.interfaces.BrukerCompound;
  * @version $Id: BrukerCompoundSingle.java,v 1.3 2005/10/27 12:33:20 lennart Exp $
  */
 public class BrukerCompoundSingle implements BrukerCompound {
+    // Class specific log4j logger for BrukerCompoundSingle instances.
+    private static Logger logger = Logger.getLogger(BrukerCompoundSingle.class);
     /**
      * The mass of the compound.
      */
@@ -59,13 +63,13 @@ public class BrukerCompoundSingle implements BrukerCompound {
     /**
      * This constructor takes all the data for a BrukerCompoundSingle.
      *
-     * @param aMass double with the mass of the compound.
-     * @param aPosition String with the position of the compound.
-     * @param aRegulation   double with the regulation for the compound.
-     * @param aArea double with the area for the compound.
-     * @param aIntensity double with the intensity for the compound.
-     * @param aTotalScore   double with the total score for the compound.
-     * @param aS2n  double with the signal to noise ratio for the compound.
+     * @param aMass       double with the mass of the compound.
+     * @param aPosition   String with the position of the compound.
+     * @param aRegulation double with the regulation for the compound.
+     * @param aArea       double with the area for the compound.
+     * @param aIntensity  double with the intensity for the compound.
+     * @param aTotalScore double with the total score for the compound.
+     * @param aS2n        double with the signal to noise ratio for the compound.
      */
     public BrukerCompoundSingle(double aMass, String aPosition, double aRegulation, double aArea, double aIntensity, double aTotalScore, double aS2n) {
         iMass = aMass;
@@ -78,21 +82,21 @@ public class BrukerCompoundSingle implements BrukerCompound {
     }
 
     public double getMZForCharge(int aCharge) {
-        double temp = iMass+(1.007825*aCharge);
+        double temp = iMass + (1.007825 * aCharge);
         temp /= aCharge;
         return temp;
     }
 
     /**
-     * This method returns 'true' if this compound has a signal-to-noise ratio
-     * equal to or above the specified threshold.
+     * This method returns 'true' if this compound has a signal-to-noise ratio equal to or above the specified
+     * threshold.
      *
-     * @param aS2n  double with the signal-to-noise threshold.
-     * @return  boolean that indicates whether this compound passes the filter.
+     * @param aS2n double with the signal-to-noise threshold.
+     * @return boolean that indicates whether this compound passes the filter.
      */
     public boolean passesS2nFilter(double aS2n) {
         boolean result = false;
-        if(iS2n >= aS2n) {
+        if (iS2n >= aS2n) {
             result = true;
         }
         return result;

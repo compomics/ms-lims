@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.PklfilesTableAccessor;
 
 import java.io.*;
@@ -24,17 +26,19 @@ import java.util.zip.GZIPOutputStream;
  */
 
 /**
- * This class can be called by Mascot Daemon to retrieve the filename of the file
- * being processed and storing this file GZIPped in a database.
+ * This class can be called by Mascot Daemon to retrieve the filename of the file being processed and storing this file
+ * GZIPped in a database.
  *
  * @author Lennart Martens
  */
 public class SavePKLFile {
+    // Class specific log4j logger for SavePKLFile instances.
+    private static Logger logger = Logger.getLogger(SavePKLFile.class);
 
     private static void tryRead() {
         try {
             // Getting a DB connection.
-            Driver d = (Driver)Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Driver d = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
             Properties p = new Properties();
             p.put("user", "martlenn");
             p.put("password", "");
@@ -45,29 +49,28 @@ public class SavePKLFile {
             hm.put(PklfilesTableAccessor.FILENAME, "caplc1834.341.2.2.pkl");
             PklfilesTableAccessor pta = new PklfilesTableAccessor();
             pta.retrieve(c, hm);
-            System.out.println("Filename: " + pta.getFilename());
-            System.out.println("Identified: " + pta.getIdentified());
-            System.out.println("File: ");
+            logger.info("Filename: " + pta.getFilename());
+            logger.info("Identified: " + pta.getIdentified());
+            logger.info("File: ");
             ByteArrayInputStream bais = new ByteArrayInputStream(pta.getFile());
             BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(bais)));
             String line = null;
-            while((line = br.readLine()) != null) {
-                System.out.println(line);
+            while ((line = br.readLine()) != null) {
+                logger.info(line);
             }
             br.close();
             bais.close();
             c.close();
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
         System.exit(0);
     }
 
     /**
-     * The main method expects 1 and just 1 argument: the fully qualified
-     * name of the file to store.
+     * The main method expects 1 and just 1 argument: the fully qualified name of the file to store.
      *
-     * @param   args    String[] with 1 element: the fully qualified file name.
+     * @param args String[] with 1 element: the fully qualified file name.
      */
     public static void main(String[] args) {
         //tryRead();
@@ -85,7 +88,7 @@ public class SavePKLFile {
             GZIPOutputStream gos = new GZIPOutputStream(baos);
             BufferedOutputStream bos = new BufferedOutputStream(gos);
             int reading = -1;
-            while((reading = bis.read()) > -1) {
+            while ((reading = bis.read()) > -1) {
                 bos.write(reading);
             }
             gos.finish();
@@ -96,7 +99,7 @@ public class SavePKLFile {
 
 
             // Getting a DB connection.
-            Driver d = (Driver)Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Driver d = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
             Properties p = new Properties();
             p.put("user", "martlenn");
             p.put("password", "");
@@ -113,8 +116,8 @@ public class SavePKLFile {
             // C'est fini.
             c.close();
             System.exit(0);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             System.exit(1);
         }
     }

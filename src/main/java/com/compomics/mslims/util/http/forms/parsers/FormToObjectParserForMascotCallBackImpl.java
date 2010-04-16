@@ -8,6 +8,8 @@
  */
 package com.compomics.mslims.util.http.forms.parsers;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.http.forms.inputs.*;
 
 import javax.swing.text.MutableAttributeSet;
@@ -28,13 +30,14 @@ import java.util.Vector;
  */
 
 /**
- * This Class is the implementation for a FormToObjectParser specifically for Mascot
- * search forms. It uses the ParserCallBack and the ParserDelegator from Swing for
- * these purposes.
+ * This Class is the implementation for a FormToObjectParser specifically for Mascot search forms. It uses the
+ * ParserCallBack and the ParserDelegator from Swing for these purposes.
  *
- * @author  Lennart Martens
+ * @author Lennart Martens
  */
 public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.ParserCallback implements FormToObjectParser {
+    // Class specific log4j logger for FormToObjectParserForMascotCallBackImpl instances.
+    private static Logger logger = Logger.getLogger(FormToObjectParserForMascotCallBackImpl.class);
 
     /**
      * If we're parsing data for a select, it will be this one.
@@ -90,12 +93,11 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
 
 
     /**
-     * This constructor will automatically parse the form from the Reader
-     * passed as a parameter. <br />
-     * It uses the parsers from the Swing library.
+     * This constructor will automatically parse the form from the Reader passed as a parameter. <br /> It uses the
+     * parsers from the Swing library.
      *
-     * @param   aBuf    BufferedReader from which the form HTML may be read and parsed.
-     * @exception   IOException when the Reader fails.
+     * @param aBuf BufferedReader from which the form HTML may be read and parsed.
+     * @throws IOException when the Reader fails.
      */
     public FormToObjectParserForMascotCallBackImpl(BufferedReader aBuf) throws IOException {
         new ParserDelegator().parse(aBuf, this, true);
@@ -103,21 +105,21 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
 
     public void handleSimpleTag(HTML.Tag t, MutableAttributeSet a, int pos) {
         // Hidden textfields need no comments. So they're easy.
-        if((HTML.Tag.INPUT.equals(t)) && (((String)a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("hidden"))) {
+        if ((HTML.Tag.INPUT.equals(t)) && (((String) a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("hidden"))) {
             this.handleHidden(t, a);
             this.prevComment = null;
-        } else if((HTML.Tag.INPUT.equals(t)) && (((String)a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("text"))) {
+        } else if ((HTML.Tag.INPUT.equals(t)) && (((String) a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("text"))) {
             this.handleTextField(t, a);
             this.prevComment = null;
-        } else if(HTML.Tag.INPUT.equals(t) && ((String)a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("radio")) {
+        } else if (HTML.Tag.INPUT.equals(t) && ((String) a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("radio")) {
             this.handleRadio(t, a);
             this.prevComment = null;
-        } else if(HTML.Tag.INPUT.equals(t) && ((String)a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("checkbox")) {
+        } else if (HTML.Tag.INPUT.equals(t) && ((String) a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("checkbox")) {
             this.handleCheckbox(t, a);
             this.prevComment = null;
-        } else if(HTML.Tag.INPUT.equals(t) && ((String)a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("file")) {
+        } else if (HTML.Tag.INPUT.equals(t) && ((String) a.getAttribute(HTML.Attribute.TYPE)).equalsIgnoreCase("file")) {
             this.handleFile(t, a);
-        } else if(HTML.Tag.BR.equals(t) && inTD && inAnchor) {
+        } else if (HTML.Tag.BR.equals(t) && inTD && inAnchor) {
             ibCat = true;
         }
     }
@@ -131,16 +133,16 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
     }
 
     public void handleEndTag(HTML.Tag t, int pos) {
-        if(t.equals(HTML.Tag.SELECT) && this.currentSelect != null) {
+        if (t.equals(HTML.Tag.SELECT) && this.currentSelect != null) {
             inputs.addElement(currentSelect);
             this.currentSelect = null;
             this.prevComment = null;
-        } else if(t.equals(HTML.Tag.OPTION)) {
+        } else if (t.equals(HTML.Tag.OPTION)) {
             state = NO_STATE;
             selectDefault = false;
-        } else if(t.equals(HTML.Tag.TD)) {
+        } else if (t.equals(HTML.Tag.TD)) {
             inTD = false;
-        } else if(t.equals(HTML.Tag.A)) {
+        } else if (t.equals(HTML.Tag.A)) {
             inAnchor = false;
             ibCat = false;
         }
@@ -151,23 +153,23 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
     }
 
     public void handleText(char[] data, int pos) {
-        switch(state) {
+        switch (state) {
             case IN_OPTION:
-                if(this.currentSelect == null) {
-                    System.err.println("Option found outside of SELECT!");
+                if (this.currentSelect == null) {
+                    logger.error("Option found outside of SELECT!");
                     break;
                 } else {
                     currentSelect.addElement(new String(data).trim());
                     // Check for selected.
-                    if(selectDefault) {
+                    if (selectDefault) {
                         currentSelect.setDefault(new String(data).trim());
                     }
                 }
                 break;
             case NO_STATE:
             default:
-                if(inTD && inAnchor) {
-                    if(ibCat) {
+                if (inTD && inAnchor) {
+                    if (ibCat) {
                         this.prevComment += " " + new String(data).trim();
                     } else {
                         this.prevComment = new String(data).trim();
@@ -177,30 +179,30 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
     }
 
     public void handleStartTag(HTML.Tag t, MutableAttributeSet a, int pos) {
-        if(t.equals(HTML.Tag.SELECT)) {
-            this.currentSelect = new SelectInput((String)a.getAttribute(HTML.Attribute.NAME));
+        if (t.equals(HTML.Tag.SELECT)) {
+            this.currentSelect = new SelectInput((String) a.getAttribute(HTML.Attribute.NAME));
 
             // Check fo available comment.
-            if(prevComment != null) {
+            if (prevComment != null) {
                 this.currentSelect.setComment(prevComment);
             }
 
             // Check for multiple select
-            if(a.getAttribute(HTML.Attribute.MULTIPLE) != null) {
+            if (a.getAttribute(HTML.Attribute.MULTIPLE) != null) {
                 this.currentSelect.setMultiple(true);
             }
-        } else if(t.equals(HTML.Tag.OPTION)) {
+        } else if (t.equals(HTML.Tag.OPTION)) {
             state = this.IN_OPTION;
-            if(a.getAttribute(HTML.Attribute.SELECTED) != null) {
+            if (a.getAttribute(HTML.Attribute.SELECTED) != null) {
                 selectDefault = true;
             } else {
                 selectDefault = false;
             }
-        } else if(t.equals(HTML.Tag.TD)) {
+        } else if (t.equals(HTML.Tag.TD)) {
             inTD = true;
-        } else if(t.equals(HTML.Tag.A)) {
+        } else if (t.equals(HTML.Tag.A)) {
             inAnchor = true;
-        } else if(t.equals(HTML.Tag.FORM)) {
+        } else if (t.equals(HTML.Tag.FORM)) {
             this.formParams.put(HTML.Attribute.NAME, a.getAttribute(HTML.Attribute.NAME));
             this.formParams.put(HTML.Attribute.ACTION, a.getAttribute(HTML.Attribute.ACTION));
             this.formParams.put(HTML.Attribute.ENCTYPE, a.getAttribute(HTML.Attribute.ENCTYPE));
@@ -217,14 +219,13 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
     }
 
     /**
-     * Since this specific implementation stores all inputs in a Vector,
-     * you can access them by index as well.
+     * Since this specific implementation stores all inputs in a Vector, you can access them by index as well.
      *
-     * @param   aIndex   the int with the index in the Vector for the desired input.
-     * @return  InputInterface  the implementation requested.
+     * @param aIndex the int with the index in the Vector for the desired input.
+     * @return InputInterface  the implementation requested.
      */
     public InputInterface getInputAt(int aIndex) {
-        return (InputInterface)inputs.elementAt(aIndex);
+        return (InputInterface) inputs.elementAt(aIndex);
     }
 
     public HashMap getFormParams() {
@@ -235,18 +236,18 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
      * This method handles radiobuttons.
      */
     private void handleRadio(HTML.Tag t, MutableAttributeSet a) {
-        String name = (String)a.getAttribute(HTML.Attribute.NAME);
+        String name = (String) a.getAttribute(HTML.Attribute.NAME);
         Object loTemp = null;
-        if((loTemp = mapRadioNameToIndex.get(name)) != null) {
+        if ((loTemp = mapRadioNameToIndex.get(name)) != null) {
             // Radio already exists. Just add the item as a selection
             // in the corresponding RadioInput object (set it as default if
             // necessary).
-            RadioInput ri = (RadioInput)inputs.elementAt(((Integer)loTemp).intValue());
+            RadioInput ri = (RadioInput) inputs.elementAt(((Integer) loTemp).intValue());
             // Check for default.
-            if(a.getAttribute(HTML.Attribute.CHECKED) != null) {
-                ri.addDefaultChoice((String)a.getAttribute(HTML.Attribute.VALUE));
+            if (a.getAttribute(HTML.Attribute.CHECKED) != null) {
+                ri.addDefaultChoice((String) a.getAttribute(HTML.Attribute.VALUE));
             } else {
-                ri.addChoice((String)a.getAttribute(HTML.Attribute.VALUE));
+                ri.addChoice((String) a.getAttribute(HTML.Attribute.VALUE));
             }
         } else {
             // Radio is a new one. Initialize it, add it to the inputs Vector and
@@ -255,10 +256,10 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
             // 1. Initialize radioInput object.
             RadioInput ri = new RadioInput(name);
             // 1.b. Check for the value, see if it's default...
-            if(a.getAttribute(HTML.Attribute.CHECKED) != null) {
-                ri.addDefaultChoice((String)a.getAttribute(HTML.Attribute.VALUE));
+            if (a.getAttribute(HTML.Attribute.CHECKED) != null) {
+                ri.addDefaultChoice((String) a.getAttribute(HTML.Attribute.VALUE));
             } else {
-                ri.addChoice((String)a.getAttribute(HTML.Attribute.VALUE));
+                ri.addChoice((String) a.getAttribute(HTML.Attribute.VALUE));
             }
 
             // 2. Add it to the inputs Vector.
@@ -274,18 +275,18 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
      * This method handles TextFields.
      */
     private void handleTextField(HTML.Tag t, MutableAttributeSet a) {
-        String name = (String)a.getAttribute(HTML.Attribute.NAME);
+        String name = (String) a.getAttribute(HTML.Attribute.NAME);
         Object loTemp = a.getAttribute(HTML.Attribute.VALUE);
         TextFieldInput tfi = new TextFieldInput(name);
 
         // Check for a default.
-        if( (loTemp != null) && (!((String)loTemp).trim().equals("")) ) {
-            String value = ((String)loTemp).trim();
+        if ((loTemp != null) && (!((String) loTemp).trim().equals(""))) {
+            String value = ((String) loTemp).trim();
             tfi.setDefaultValue(value);
         }
 
         // Check for a comment.
-        if(prevComment != null) {
+        if (prevComment != null) {
             tfi.setComment(prevComment);
         }
 
@@ -296,8 +297,8 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
      * This method handles hidden fields.
      */
     private void handleHidden(HTML.Tag t, MutableAttributeSet a) {
-        String name = (String)a.getAttribute(HTML.Attribute.NAME);
-        String value = ((String)a.getAttribute(HTML.Attribute.VALUE)).trim();
+        String name = (String) a.getAttribute(HTML.Attribute.NAME);
+        String value = ((String) a.getAttribute(HTML.Attribute.VALUE)).trim();
         inputs.addElement(new TextFieldInput(name, value, true));
     }
 
@@ -305,17 +306,17 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
      * This method handles Checkboxes.
      */
     private void handleCheckbox(HTML.Tag t, MutableAttributeSet a) {
-        String name = (String)a.getAttribute(HTML.Attribute.NAME);
-        String value = ((String)a.getAttribute(HTML.Attribute.VALUE)).trim();
+        String name = (String) a.getAttribute(HTML.Attribute.NAME);
+        String value = ((String) a.getAttribute(HTML.Attribute.VALUE)).trim();
         CheckboxInput ci = new CheckboxInput(name, value);
 
         // See if it is checked.
-        if(a.getAttribute(HTML.Attribute.CHECKED) != null) {
+        if (a.getAttribute(HTML.Attribute.CHECKED) != null) {
             ci.setChecked(true);
         }
 
         // See if we have a comment available.
-        if(this.prevComment != null) {
+        if (this.prevComment != null) {
             ci.setComment(prevComment);
         }
         inputs.addElement(ci);
@@ -325,10 +326,10 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
      * This method handles file-inputs.
      */
     private void handleFile(HTML.Tag t, MutableAttributeSet a) {
-        TextFieldInput tfi = new TextFieldInput((String)a.getAttribute(HTML.Attribute.NAME));
+        TextFieldInput tfi = new TextFieldInput((String) a.getAttribute(HTML.Attribute.NAME));
         tfi.setFile(true);
         // See if we have a comment available.
-        if(prevComment != null) {
+        if (prevComment != null) {
             tfi.setComment(prevComment);
         }
         inputs.addElement(tfi);

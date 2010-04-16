@@ -6,8 +6,11 @@
  */
 package com.compomics.mslims.gui;
 
+import com.compomics.mslims.db.accessors.Spectrum;
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Fragmention;
-import com.compomics.mslims.db.accessors.Spectrumfile;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.dialogs.ExportDialog;
@@ -61,6 +64,8 @@ import java.util.zip.GZIPOutputStream;
  * @author Lennart Martens
  */
 public class GenericQuery extends JFrame implements Connectable, Informable {
+    // Class specific log4j logger for GenericQuery instances.
+    private static Logger logger = Logger.getLogger(GenericQuery.class);
 
     private static final String QUERY_SEPARATOR = "--*-- QUERY SEPARATOR --*--";
     private static final SimpleDateFormat SDF = new SimpleDateFormat("HH:mm:ss");
@@ -375,23 +380,24 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
 
 
                     } catch (SQLException sqle) {
-                        sqle.printStackTrace();
+                        logger.error(sqle.getMessage(), sqle);
                         JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected datfile (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
                     } catch (Exception exc) {
-                        exc.printStackTrace();
+                        logger.error(exc.getMessage(), exc);
                         JOptionPane.showMessageDialog((Component) comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
                     }
-                } else if ((e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON2) && (comp instanceof ByteArrayRenderer || tblResult.getColumnName(col).trim().equalsIgnoreCase("l_spectrumfileid"))) {
+                } else if ((e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON2) && (comp instanceof ByteArrayRenderer || tblResult.getColumnName(col).trim().equalsIgnoreCase("l_spectrumid"))) {
                     byte[] result = null;
                     String filename = "Spectrum";
                     try {
-                        if (tblResult.getColumnName(col).trim().equalsIgnoreCase("l_spectrumfileid")) {
+                        if (tblResult.getColumnName(col).trim().equalsIgnoreCase("l_spectrumid")) {
                             try {
-                                Spectrumfile specFile = Spectrumfile.findFromID(((Number) tblResult.getValueAt(row, col)).longValue(), iConn);
-                                result = specFile.getUnzippedFile();
-                                filename = specFile.getFilename();
+                                Spectrum lSpectrum = Spectrum.findFromID(((Number) tblResult.getValueAt(row, col)).longValue(), iConn);
+                                Spectrum_file lSpectrum_file = Spectrum_file.findFromID(lSpectrum.getSpectrumid(), iConn);
+                                result = lSpectrum_file.getUnzippedFile();
+                                filename = lSpectrum.getFilename();
                             } catch (SQLException sqle) {
-                                sqle.printStackTrace();
+                                logger.error(sqle.getMessage(), sqle);
                                 JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected spectrumfile (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load spectrumfile data!", JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
@@ -399,7 +405,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                             // Creating the frame with the data from the model.
                             int modelCol = tblResult.convertColumnIndexToModel(col);
                             byte[] spectrumZipped = (byte[]) tblResult.getModel().getValueAt(row, modelCol);
-                            result = Spectrumfile.getUnzippedFile(spectrumZipped);
+                            result = Spectrum_file.getUnzippedFile(spectrumZipped);
                         }
                         MascotGenericFile mgf = new MascotGenericFile(filename, new String(result));
                         if (mgf.getPeaks() == null || mgf.getPeaks().size() == 0) {
@@ -442,7 +448,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                                 JOptionPane.showMessageDialog(GenericQuery.this, new String[]{"Unable to locate identification id in the current result set.", "Could not locate fragment ions."}, "Identification id not found!", JOptionPane.WARNING_MESSAGE);
                             }
                         } catch (SQLException sqle) {
-                            sqle.printStackTrace();
+                            logger.error(sqle.getMessage(), sqle);
                             JOptionPane.showMessageDialog((Component) comp, "Unable to load fragment ions for selected identification (ID=" + idid + "): " + sqle.getMessage() + ".", "Unable to load fragment ions!", JOptionPane.ERROR_MESSAGE);
                         }
 
@@ -462,7 +468,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         frame.setBounds(100, 100, 450, 300);
                         frame.setVisible(true);
                     } catch (IOException ioe) {
-                        ioe.printStackTrace();
+                        logger.error(ioe.getMessage(), ioe);
                     }
                 } else if (e.getModifiersEx() == MouseEvent.CTRL_DOWN_MASK && comp instanceof ByteArrayRenderer) {
                     // Creating the frame with the data from the model.
@@ -488,6 +494,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                             JOptionPane.showMessageDialog(GenericQuery.this, "Output written to " + select + ".", "Output written!", JOptionPane.INFORMATION_MESSAGE);
                         }
                     } catch (IOException ioe) {
+                        logger.error(ioe.getMessage(), ioe);
                         JOptionPane.showMessageDialog(GenericQuery.this, "Unable to save data to file: " + ioe.getMessage(), "Unable to write data to file!", JOptionPane.ERROR_MESSAGE);
                     }
                 } else if (e.getClickCount() >= 2 && (tblResult.getColumnName(col) != null) && tblResult.getColumnName(col).trim().equalsIgnoreCase("l_datfileid")) {
@@ -508,10 +515,10 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         StartBrowser.start(url);
 
                     } catch (SQLException sqle) {
-                        sqle.printStackTrace();
+                        logger.error(sqle.getMessage(), sqle);
                         JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected datfile (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
                     } catch (Exception exc) {
-                        exc.printStackTrace();
+                        logger.error(exc.getMessage(), exc);
                         JOptionPane.showMessageDialog((Component) comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
                     }
                 } else if (e.getClickCount() >= 2 && (tblResult.getColumnName(col) != null) && tblResult.getColumnName(col).trim().equalsIgnoreCase("ion_coverage")) {
@@ -564,7 +571,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                             JOptionPane.showMessageDialog(GenericQuery.this, new String[]{"Unable to locate identification id or modified sequence in the current result set.", "Could not locate fragment ions or modified sequence."}, "Identification id or modified sequence not found!", JOptionPane.WARNING_MESSAGE);
                         }
                     } catch (SQLException sqle) {
-                        sqle.printStackTrace();
+                        logger.error(sqle.getMessage(), sqle);
                         JOptionPane.showMessageDialog((Component) comp, "Unable to load fragment ions for selected identification (ID=" + idid + "): " + sqle.getMessage() + ".", "Unable to load fragment ions!", JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -832,6 +839,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                 btnExport.setEnabled(false);
             }
         } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, new String[]{"Unfortunately, your query failed, (see below for query): " + sqle.getMessage(), aSQL}, "Query failed!", JOptionPane.ERROR_MESSAGE);
             lblStatus.setForeground(Color.red);
             lblStatus.setText("Query failed: " + sqle.getMessage());
@@ -844,7 +852,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                 try {
                     aResultSet.close();
                 } catch (SQLException sqle) {
-                    System.err.println("Failed to close resultset!");
+                    logger.error("Failed to close resultset!");
                 }
             }
             // Try to close the statement (if any).
@@ -852,7 +860,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                 try {
                     aStatement.close();
                 } catch (SQLException sqle) {
-                    System.err.println("Failed to close statement!");
+                    logger.error("Failed to close statement!");
                 }
             }
         }
@@ -934,7 +942,9 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
             }
             data = allCols.toString();
         } else {
-            JOptionPane.showMessageDialog(this, "No rows or columns selected!", "No data selected!", JOptionPane.ERROR_MESSAGE);
+            String lMessage = "No rows or columns selected!";
+            logger.error(lMessage);
+            JOptionPane.showMessageDialog(this, lMessage, "No data selected!", JOptionPane.ERROR_MESSAGE);
         }
 
         if (data != null) {
@@ -947,7 +957,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
      * This method creates a dialog which handles the DB connection.
      */
     private void getConnection() {
-        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
         ConnectionDialog cd = new ConnectionDialog(this, this, "Establish DB connection for GenericQuery application", lConnectionProperties);
         cd.setVisible(true);
     }
@@ -960,9 +970,10 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
         if (iConn != null && iStandAlone) {
             try {
                 iConn.close();
-                System.out.println("DB Connection closed.");
+                logger.info("DB Connection closed.");
+
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         saveQueries();

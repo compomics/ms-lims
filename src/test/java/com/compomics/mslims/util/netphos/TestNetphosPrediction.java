@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.netphos;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.netphos.NetphosPrediction;
 import com.compomics.mslims.util.netphos.PredictedLocation;
 import junit.TestCaseLM;
@@ -27,6 +29,8 @@ import java.util.Vector;
  * @see com.compomics.mslims.util.netphos.NetphosPrediction
  */
 public class TestNetphosPrediction extends TestCaseLM {
+    // Class specific log4j logger for TestNetphosPrediction instances.
+    private static Logger logger = Logger.getLogger(TestNetphosPrediction.class);
 
     public TestNetphosPrediction() {
         this("Test scenario for the NetphosPrediction class.");
@@ -37,8 +41,7 @@ public class TestNetphosPrediction extends TestCaseLM {
     }
 
     /**
-     * This method test the filtering behaviour of the
-     * 'getLocations' methods.
+     * This method test the filtering behaviour of the 'getLocations' methods.
      */
     public void testFiltering() {
         // Set-up.
@@ -77,7 +80,7 @@ public class TestNetphosPrediction extends TestCaseLM {
         Vector temp = np.getLocations();
         int liSize = controlAll.size();
         Assert.assertEquals(liSize, temp.size());
-        for(int i = 0; i < liSize; i++) {
+        for (int i = 0; i < liSize; i++) {
             Assert.assertEquals(controlAll.elementAt(i), temp.elementAt(i));
         }
 
@@ -85,7 +88,7 @@ public class TestNetphosPrediction extends TestCaseLM {
         temp = np.getLocations(0.0);
         liSize = controlAll.size();
         Assert.assertEquals(liSize, temp.size());
-        for(int i = 0; i < liSize; i++) {
+        for (int i = 0; i < liSize; i++) {
             Assert.assertEquals(controlAll.elementAt(i), temp.elementAt(i));
         }
 
@@ -93,7 +96,7 @@ public class TestNetphosPrediction extends TestCaseLM {
         temp = np.getLocations(0.8);
         liSize = controlSubset.size();
         Assert.assertEquals(liSize, temp.size());
-        for(int i = 0; i < liSize; i++) {
+        for (int i = 0; i < liSize; i++) {
             Assert.assertEquals(controlSubset.elementAt(i), temp.elementAt(i));
         }
     }

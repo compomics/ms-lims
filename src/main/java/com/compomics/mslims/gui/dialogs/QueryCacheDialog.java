@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.gui.interfaces.Informable;
 
 import javax.swing.*;
@@ -28,6 +30,8 @@ import java.awt.event.*;
  * @version $Id: QueryCacheDialog.java,v 1.1 2005/08/24 08:25:24 lennart Exp $
  */
 public class QueryCacheDialog extends JDialog {
+    // Class specific log4j logger for QueryCacheDialog instances.
+    private static Logger logger = Logger.getLogger(QueryCacheDialog.class);
 
     /**
      * The String[] with the queries.
@@ -47,11 +51,10 @@ public class QueryCacheDialog extends JDialog {
     private JButton btnCancel = null;
 
     /**
-     * This constructor creates a QueryCacheDialog and lays out its components.
-     * Note that this dialog is always modal!
+     * This constructor creates a QueryCacheDialog and lays out its components. Note that this dialog is always modal!
      *
-     * @param aOwner    JFrame with the owner of this dialog
-     * @param aTitle    String with the title for this dialog.
+     * @param aOwner JFrame with the owner of this dialog
+     * @param aTitle String with the title for this dialog.
      */
     public QueryCacheDialog(JFrame aOwner, String aTitle, Vector aQueries) {
         super(aOwner, aTitle + " (" + aQueries.size() + " queries)", true);
@@ -59,7 +62,7 @@ public class QueryCacheDialog extends JDialog {
         aQueries.toArray(iQueries);
         iQueryNames = new String[aQueries.size()];
         for (int i = 0; i < iQueryNames.length; i++) {
-            iQueryNames[i] = "Query " + (i+1);
+            iQueryNames[i] = "Query " + (i + 1);
         }
 
         this.addWindowListener(new WindowAdapter() {
@@ -75,7 +78,7 @@ public class QueryCacheDialog extends JDialog {
         Point parentLoc = aOwner.getLocation();
         int parentWidth = aOwner.getWidth();
         int parentHeight = aOwner.getHeight();
-        this.setBounds(parentLoc.x + (int)(parentWidth/12.5), parentLoc.y + (parentHeight/4), (int)(parentWidth/1.25), parentHeight/2);
+        this.setBounds(parentLoc.x + (int) (parentWidth / 12.5), parentLoc.y + (parentHeight / 4), (int) (parentWidth / 1.25), parentHeight / 2);
     }
 
     /**
@@ -87,7 +90,7 @@ public class QueryCacheDialog extends JDialog {
             public void valueChanged(ListSelectionEvent e) {
                 int selected = lstQueries.getSelectedIndex();
                 txtQuery.setText(iQueries[selected]);
-                if(!txtQuery.getText().equals("")) {
+                if (!txtQuery.getText().equals("")) {
                     txtQuery.setCaretPosition(1);
                 }
             }
@@ -133,7 +136,7 @@ public class QueryCacheDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     usePressed();
                 }
             }
@@ -150,7 +153,7 @@ public class QueryCacheDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     cancelPressed();
                 }
             }
@@ -171,9 +174,9 @@ public class QueryCacheDialog extends JDialog {
      * This method is called when the user clicks 'use query'.
      */
     private void usePressed() {
-        if(lstQueries.getSelectedIndex() != -1) {
-            if(this.getParent() instanceof Informable) {
-                Informable parent = (Informable)this.getParent();
+        if (lstQueries.getSelectedIndex() != -1) {
+            if (this.getParent() instanceof Informable) {
+                Informable parent = (Informable) this.getParent();
                 parent.inform(new Integer(lstQueries.getSelectedIndex()));
                 this.close();
             }

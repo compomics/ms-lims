@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.PKLFile;
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import com.compomics.mslims.util.fileio.mergefiles.MicromassMergeFileReader;
@@ -30,6 +32,8 @@ import java.util.Vector;
  * @see com.compomics.mslims.util.fileio.PKLFile
  */
 public class TestPKLFile extends TestCaseLM {
+    // Class specific log4j logger for TestPKLFile instances.
+    private static Logger logger = Logger.getLogger(TestPKLFile.class);
 
     public TestPKLFile() {
         this("Test for the PKLFile class");
@@ -48,14 +52,13 @@ public class TestPKLFile extends TestCaseLM {
             Assert.assertEquals("caplc3333.666.2.2.pkl", pkl.getFilename());
             Assert.assertEquals(3333l, pkl.getRunNumber());
             Assert.assertEquals(666, pkl.getScanNumber());
-        } catch(Exception e) {
+        } catch (Exception e) {
             fail("Unable to create PKLFile instance based on '1 1 1 caplc3333.666.2.2.pkl'.");
         }
     }
 
     /**
-     * This method test the retrieval of the run number and scan number from
-     * the pklfile.
+     * This method test the retrieval of the run number and scan number from the pklfile.
      */
     public void testRunAndScanNumbers() {
         Vector scans = new Vector(300, 2);
@@ -65,12 +68,12 @@ public class TestPKLFile extends TestCaseLM {
         try {
             BufferedReader br = new BufferedReader(new FileReader(super.getFullFilePath("testRunAndScanNumbers.txt")));
             String line = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 runs.add(new Long(line.trim()));
                 scans.add(new Long(br.readLine().trim()));
             }
             br.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("Unable to read control data for testRunANdScanNumbers in TestPKL: " + ioe.getMessage() + "!");
         }
 
@@ -81,33 +84,32 @@ public class TestPKLFile extends TestCaseLM {
 
             // Cycle and check them.
             int liSize = pkls.size();
-            for(int i=0;i<liSize;i++) {
-                PKLFile pkl = (PKLFile)pkls.get(i);
+            for (int i = 0; i < liSize; i++) {
+                PKLFile pkl = (PKLFile) pkls.get(i);
                 Assert.assertTrue(runs.remove(new Long(pkl.getRunNumber())));
                 Assert.assertTrue(scans.remove(new Long(pkl.getScanNumber())));
             }
             Assert.assertTrue(runs.size() == 0);
             Assert.assertTrue(scans.size() == 0);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("Unable to read mergefile with pkl data in testRunAndScanNumbers: " + ioe.getMessage() + "!");
         }
     }
 
 
     /**
-     * This method test the implementation of comparable by
-     * the PKLFile class.
+     * This method test the implementation of comparable by the PKLFile class.
      */
     public void testOrdering() {
         Vector control = new Vector(300, 2);
         try {
             BufferedReader br = new BufferedReader(new FileReader(super.getFullFilePath("testOrdering.txt")));
             String line = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 control.add(line);
             }
             br.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("Unable to read control set for testOrdering: " + ioe.getMessage() + "!");
         }
 
@@ -119,11 +121,11 @@ public class TestPKLFile extends TestCaseLM {
 
             // Cycle and check them.
             int liSize = pkls.size();
-            for(int i=0;i<liSize;i++) {
-                PKLFile file = (PKLFile)pkls.get(i);
+            for (int i = 0; i < liSize; i++) {
+                PKLFile file = (PKLFile) pkls.get(i);
                 Assert.assertEquals(control.elementAt(i), file.getFilename());
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("Unable to read mergefile with pkl data in testOrdering: " + ioe.getMessage() + "!");
         }
     }
@@ -149,12 +151,12 @@ public class TestPKLFile extends TestCaseLM {
             BufferedReader control = new BufferedReader(new FileReader(input));
             BufferedReader test = new BufferedReader(new FileReader(output));
             String line = null;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing PKLFile to outputstream: " + ioe.getMessage() + "!");
         }
 
@@ -174,12 +176,12 @@ public class TestPKLFile extends TestCaseLM {
             // First line has 'temp' appended to the filename.
             line = test.readLine();
             int spaceLocation = line.lastIndexOf(" ");
-            Assert.assertEquals(control.readLine(), line.substring(0, spaceLocation+1) + line.substring(spaceLocation+5));
-            while((line = control.readLine()) != null) {
+            Assert.assertEquals(control.readLine(), line.substring(0, spaceLocation + 1) + line.substring(spaceLocation + 5));
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing PKLFile to file: " + ioe.getMessage() + "!");
         }
 
@@ -201,12 +203,12 @@ public class TestPKLFile extends TestCaseLM {
             String line = control.readLine();
             int spaceLocation = line.lastIndexOf(" ");
             Assert.assertEquals(line.substring(0, spaceLocation), test.readLine());
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing PKLFile to outputstream: " + ioe.getMessage() + "!");
         }
 
@@ -226,11 +228,11 @@ public class TestPKLFile extends TestCaseLM {
             String line = control.readLine();
             int spaceLocation = line.lastIndexOf(" ");
             Assert.assertEquals(line.substring(0, spaceLocation), test.readLine());
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 Assert.assertEquals(line, test.readLine());
             }
             Assert.assertTrue(test.readLine() == null);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing PKLFile to file: " + ioe.getMessage() + "!");
         }
     }
@@ -239,7 +241,7 @@ public class TestPKLFile extends TestCaseLM {
      * This method test the exporting of a PKL file into Mascot Generic Format.
      */
     public void testMGFExport() {
-         File input = new File(super.getFullFilePath("testPKL.txt"));
+        File input = new File(super.getFullFilePath("testPKL.txt"));
         // First test write with the filename.
         try {
             // Reading original.
@@ -251,14 +253,14 @@ public class TestPKLFile extends TestCaseLM {
             BufferedReader toTest = new BufferedReader(new StringReader(mgfContents));
             String line = null;
             int lineCounter = 0;
-            while((line = control.readLine()) != null) {
+            while ((line = control.readLine()) != null) {
                 lineCounter++;
-                Assert.assertEquals("Error comparing control line " + lineCounter +"!", line, toTest.readLine());
+                Assert.assertEquals("Error comparing control line " + lineCounter + "!", line, toTest.readLine());
             }
             Assert.assertTrue(toTest.readLine() == null);
             control.close();
             toTest.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException during test of writing PKLFile to outputstream: " + ioe.getMessage() + "!");
         }
     }

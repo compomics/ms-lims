@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio.mergefiles;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import com.compomics.util.interfaces.SpectrumFile;
 
@@ -19,8 +21,7 @@ import java.util.Vector;
  */
 
 /**
- * This class conveniently wraps the core functionality of a MergeFileReader implementation in an
- * abstract superclass.
+ * This class conveniently wraps the core functionality of a MergeFileReader implementation in an abstract superclass.
  *
  * @author Lennart Martens
  * @version $Id: MergeFileReaderAncestor.java,v 1.2 2007/10/22 10:31:17 lennart Exp $
@@ -38,10 +39,9 @@ public abstract class MergeFileReaderAncestor implements MergeFileReader {
     protected String iFilename = null;
 
     /**
-     * This method reports on the spectrum files currently held in this
-     * merge file.
+     * This method reports on the spectrum files currently held in this merge file.
      *
-     * @return  Vector  with the currently held SpectrumFiles.
+     * @return Vector  with the currently held SpectrumFiles.
      */
     public Vector getSpectrumFiles() {
         return this.iSpectrumFiles;
@@ -50,7 +50,7 @@ public abstract class MergeFileReaderAncestor implements MergeFileReader {
     /**
      * Simple getter for the filename for this Mergefile.
      *
-     * @return  String  with the filename.
+     * @return String  with the filename.
      */
     public String getFilename() {
         return this.iFilename;
@@ -59,7 +59,7 @@ public abstract class MergeFileReaderAncestor implements MergeFileReader {
     /**
      * Shortcut method that reports all the spectrum filenames in a String array.
      *
-     * @return  String[]    with the filenames of all the spectrum files in this mergefile.
+     * @return String[]    with the filenames of all the spectrum files in this mergefile.
      */
     public String[] getAllSpectrumFilenames() {
         String[] result = null;
@@ -68,8 +68,8 @@ public abstract class MergeFileReaderAncestor implements MergeFileReader {
         // Dim the array accordingly.
         result = new String[liSize];
         // Cycle all and add the names to the array.
-        for(int i = 0; i < liSize; i++) {
-            SpectrumFile lFile = (SpectrumFile)iSpectrumFiles.elementAt(i);
+        for (int i = 0; i < liSize; i++) {
+            SpectrumFile lFile = (SpectrumFile) iSpectrumFiles.elementAt(i);
             result[i] = lFile.getFilename();
         }
         // Voila.

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Filedescriptor;
 import com.compomics.mslims.gui.StoreBinaryFileGUI;
 
@@ -28,12 +30,13 @@ import java.util.HashMap;
  */
 
 /**
- * This class implements a generic interface to a Filedescriptor (can be used to add or
- * change a file descriptor).
+ * This class implements a generic interface to a Filedescriptor (can be used to add or change a file descriptor).
  *
  * @author Lennart Martens
  */
 public class FiledescriptorDialog extends JDialog {
+    // Class specific log4j logger for FiledescriptorDialog instances.
+    private static Logger logger = Logger.getLogger(FiledescriptorDialog.class);
 
     /**
      * The mode of alteration for which this dialog was opened.
@@ -86,35 +89,29 @@ public class FiledescriptorDialog extends JDialog {
 
 
     /**
-     * Wrapper for the superclass constructor that creates a modal JDialog
-     * with given parent and title. This Dialog should always be modal, so
-     * that's why the boolean is ommitted here. <br />
-     * It also takes an int that tells of the mode of editing that is required, along
-     * with the project that needs be altered (if any). <br />
-     * Valid settings are:
-     * <ul>
-     *   <li><b>FiledescriptorDialog.NEW</b>: creation of a new file descriptor</li>
-     *   <li><b>FiledescriptorDialog.CHANGE</b>: perform some changes to an existing filedescriptor</li>
-     * </ul>
+     * Wrapper for the superclass constructor that creates a modal JDialog with given parent and title. This Dialog
+     * should always be modal, so that's why the boolean is ommitted here. <br /> It also takes an int that tells of the
+     * mode of editing that is required, along with the project that needs be altered (if any). <br /> Valid settings
+     * are: <ul> <li><b>FiledescriptorDialog.NEW</b>: creation of a new file descriptor</li>
+     * <li><b>FiledescriptorDialog.CHANGE</b>: perform some changes to an existing filedescriptor</li> </ul>
      *
-     * @param aParent   Frame that is the owner of this JDialog
-     * @param aTitle    String with the title for the Dialog
-     * @param aMode int with the mode of editing required.
-     * @param aFiledescriptor  Filedescriptor to be altered.
-     *                  This need NOT be specified for the creation of a new project
-     *                  and therefore can be 'null'.
-     * @param aConn Connection to store all alterations on.
+     * @param aParent         Frame that is the owner of this JDialog
+     * @param aTitle          String with the title for the Dialog
+     * @param aMode           int with the mode of editing required.
+     * @param aFiledescriptor Filedescriptor to be altered. This need NOT be specified for the creation of a new project
+     *                        and therefore can be 'null'.
+     * @param aConn           Connection to store all alterations on.
      */
     public FiledescriptorDialog(Frame aParent, String aTitle, int aMode, Filedescriptor aFiledescriptor, Connection aConn) {
         super(aParent, aTitle, true);
 
         // Check the parameters.
-        if(aMode == FiledescriptorDialog.CHANGE && aFiledescriptor == null) {
+        if (aMode == FiledescriptorDialog.CHANGE && aFiledescriptor == null) {
             throw new IllegalArgumentException("Attempting to change a file descriptor that is 'null'!");
         }
 
-        if(aParent instanceof StoreBinaryFileGUI) {
-            this.iSBF = (StoreBinaryFileGUI)aParent;
+        if (aParent instanceof StoreBinaryFileGUI) {
+            this.iSBF = (StoreBinaryFileGUI) aParent;
         }
         this.iConn = aConn;
         this.iMode = aMode;
@@ -226,7 +223,7 @@ public class FiledescriptorDialog extends JDialog {
         main.add(jpanProjects, BorderLayout.CENTER);
         main.add(jpanButtons, BorderLayout.SOUTH);
 
-        if(iMode == FiledescriptorDialog.CHANGE) {
+        if (iMode == FiledescriptorDialog.CHANGE) {
             this.fillComponents();
         }
 
@@ -237,7 +234,7 @@ public class FiledescriptorDialog extends JDialog {
     /**
      * This method creates the buttonpanel for this dialog.
      *
-     * @return  JPanel  with the buttons.
+     * @return JPanel  with the buttons.
      */
     private JPanel createButtonPanel() {
         btnCancel = new JButton("Cancel");
@@ -252,7 +249,7 @@ public class FiledescriptorDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     cancelPressed();
                 }
             }
@@ -262,7 +259,7 @@ public class FiledescriptorDialog extends JDialog {
         jpanButtons.setLayout(new BoxLayout(jpanButtons, BoxLayout.X_AXIS));
         jpanButtons.add(Box.createHorizontalGlue());
 
-        if(iMode == FiledescriptorDialog.NEW) {
+        if (iMode == FiledescriptorDialog.NEW) {
             btnCreate = new JButton("Create");
             btnCreate.setMnemonic(KeyEvent.VK_R);
             btnCreate.addActionListener(new ActionListener() {
@@ -275,7 +272,7 @@ public class FiledescriptorDialog extends JDialog {
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         createPressed();
                     }
                 }
@@ -294,7 +291,7 @@ public class FiledescriptorDialog extends JDialog {
                  * Invoked when a key has been pressed.
                  */
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         savePressed();
                     }
                 }
@@ -324,7 +321,7 @@ public class FiledescriptorDialog extends JDialog {
             // Get all the data + do validations.
             HashMap hm = this.getDataFromScreen();
             // See if the validations passed.
-            if(hm == null) {
+            if (hm == null) {
                 // Apparently not.
                 return;
             }
@@ -332,20 +329,21 @@ public class FiledescriptorDialog extends JDialog {
             Filedescriptor fd = new Filedescriptor(hm);
             // Persist it.
             fd.persist(iConn);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, new String[]{"Unable to create file descriptor:  ", sqle.getMessage()}, "Unable to create file descriptor!", JOptionPane.ERROR_MESSAGE);
             return;
-        } catch(Throwable t) {
-            if(iSBF != null) {
+        } catch (Throwable t) {
+            if (iSBF != null) {
                 iSBF.passHotPotato(t, "Unable to create new file descriptor: " + t.getMessage());
             } else {
-                t.printStackTrace();
+                logger.error(t.getMessage(), t);
             }
         }
         // Confirm creation of new project to user.
         JOptionPane.showMessageDialog(this, "Created file descriptor '" + txtShortLabel.getText().trim() + "'.", "Create successufl!", JOptionPane.INFORMATION_MESSAGE);
         // Notify StoreBinaryFileGUI (if any).
-        if(iSBF != null) {
+        if (iSBF != null) {
             iSBF.fileDescriptorsChanged();
         }
         // Begone!
@@ -361,30 +359,31 @@ public class FiledescriptorDialog extends JDialog {
             // Get all the data + do validations.
             HashMap hm = this.getDataFromScreen();
             // See if the validations passed.
-            if(hm == null) {
+            if (hm == null) {
                 // Apparently not.
                 return;
             }
             // Change the existing project.
-            iFiledescriptor.setShort_label((String)hm.get(Filedescriptor.SHORT_LABEL));
-            iFiledescriptor.setDescription((String)hm.get(Filedescriptor.DESCRIPTION));
+            iFiledescriptor.setShort_label((String) hm.get(Filedescriptor.SHORT_LABEL));
+            iFiledescriptor.setDescription((String) hm.get(Filedescriptor.DESCRIPTION));
             iFiledescriptor.update(iConn);
             error = false;
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, new String[]{"Unable to save modified file descriptor:  ", sqle.getMessage()}, "Unable to save modified file descriptor!", JOptionPane.ERROR_MESSAGE);
-        } catch(Throwable t) {
-             if(iSBF != null) {
+        } catch (Throwable t) {
+            if (iSBF != null) {
                 iSBF.passHotPotato(t, "Unable to save modified file descriptor: " + t.getMessage());
             } else {
-                t.printStackTrace();
+                logger.error(t.getMessage(), t);
             }
         }
         // Confirm save to user.
-        if(!error) {
+        if (!error) {
             JOptionPane.showMessageDialog(this, "Saved modified file descriptor '" + txtShortLabel.getText().trim() + "'.", "Save successufl!", JOptionPane.INFORMATION_MESSAGE);
         }
         // Notify StoreBinaryFileGUI (if any).
-        if(iSBF != null) {
+        if (iSBF != null) {
             iSBF.fileDescriptorsChanged();
         }
         // Begone!
@@ -403,11 +402,10 @@ public class FiledescriptorDialog extends JDialog {
     }
 
     /**
-     * This method gets all data from the GUI components and does the validations.
-     * If it returns 'null', a validation has failed and the operation should be aborted.
+     * This method gets all data from the GUI components and does the validations. If it returns 'null', a validation
+     * has failed and the operation should be aborted.
      *
-     * @return  HashMap with the filled-out parameters from the GUI, or 'null' if a
-     *                  validation failed.
+     * @return HashMap with the filled-out parameters from the GUI, or 'null' if a validation failed.
      */
     private HashMap getDataFromScreen() {
         HashMap hm = null;
@@ -417,7 +415,7 @@ public class FiledescriptorDialog extends JDialog {
 
 
         // See if the not-NULL fields are filled out.
-        if(shortLabel.equals("")) {
+        if (shortLabel.equals("")) {
             JOptionPane.showMessageDialog(this, "File descriptor short label must be filled out!", "Short label has to be filled out!", JOptionPane.WARNING_MESSAGE);
             txtShortLabel.requestFocus();
         } else {

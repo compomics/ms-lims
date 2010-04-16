@@ -1,5 +1,7 @@
 package com.compomics.mslims.db.conversiontool;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Identification;
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslims.db.accessors.Fragmention;
@@ -26,6 +28,8 @@ import java.math.BigDecimal;
  * Created by IntelliJ IDEA. User: Niklaas Colaert Date: 7-jan-2008 Time: 12:23:10
  */
 public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
+    // Class specific log4j logger for MS_LIMS_6_Data_Updater instances.
+    private static Logger logger = Logger.getLogger(MS_LIMS_6_Data_Updater.class);
 
     /**
      * Boolean that indicates whether the tool is ran in stand-alone mode ('true') or not ('false').
@@ -83,7 +87,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
     public MS_LIMS_6_Data_Updater(String title, Connection aConn, String aDBName) {
         super(title);
         if (aConn == null) {
-            Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+            Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
             ConnectionDialog cd = new ConnectionDialog(this, this, "Connection for updater", lConnectionProperties);
             cd.setVisible(true);
         } else {
@@ -250,10 +254,10 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                         iUsed = new boolean[iIdentifications.length];
                         for (int j = 0; j < iIdentifications.length; j++) {
                             iUsed[j] = false;
-                            long spectrumfileid = iIdentifications[j].getL_spectrumfileid();
+                            long spectrumid = iIdentifications[j].getL_spectrumid();
                             PreparedStatement prepSpec = null;
                             prepSpec = iConnection.prepareStatement("select s.filename from spectrumfile as s where s.spectrumfileid = ? ");
-                            prepSpec.setLong(1, spectrumfileid);
+                            prepSpec.setLong(1, spectrumid);
                             ResultSet rsSpec = prepSpec.executeQuery();
                             while (rsSpec.next()) {
                                 iSpectrumfileNames[j] = rsSpec.getString(1);
@@ -292,7 +296,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                                 mcdf = new MascotDatfile(in);
                             } catch (IllegalArgumentException e) {
                                 errorDat = true;
-                                System.err.println("Error in reading datfile " + e + " for datfile: " + datfileIds.get(i) + " (" + rsDat.getString(2) + ")");
+                                logger.error("Error in reading datfile " + e + " for datfile: " + datfileIds.get(i) + " (" + rsDat.getString(2) + ")");
                                 txtInfo.append("\nError in reading datfile " + e + " for datfile: " + datfileIds.get(i) + " (" + rsDat.getString(2) + ")");
                             }
                         }
@@ -336,9 +340,9 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                         } catch (NumberFormatException n) {
                             errorDat = true;
                             txtInfo.append("\n" + "Number Format exception in datfile with datfileid = " + datfileIds.get(i) + " unable to update some identifications for project " + iProject.getProjectid());
-                            System.out.println("Number Format exception in datfile with datfileid = " + datfileIds.get(i) + " unable to update some identifications for project " + iProject.getProjectid());
+                            logger.info("Number Format exception in datfile with datfileid = " + datfileIds.get(i) + " unable to update some identifications for project " + iProject.getProjectid());
                         } catch (IllegalArgumentException e) {
-                            System.out.println(e);
+                            logger.info(e);
                             errorDat = true;
                             txtInfo.append("\n" + e);
                         }
@@ -348,10 +352,10 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                     }
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
                     error = true;
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e);
                     error = true;
                 }
                 return error;
@@ -368,7 +372,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                         inSeconds = true;
                     }
                     String duration = new BigDecimal(totalTime).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + (inSeconds ? " seconds" : " milliseconds");
-                    System.out.println(duration);
+                    logger.info(duration);
                     progress.setIndeterminate(false);
                     progress.setString("Updated project " + cmbProjects.getSelectedItem() + " in " + duration);
                     btnCancel.setText("Exit");
@@ -436,10 +440,10 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
 
                             for (int j = 0; j < iIdentifications.length; j++) {
                                 iUsed[j] = false;
-                                long spectrumfileid = iIdentifications[j].getL_spectrumfileid();
+                                long spectrumid = iIdentifications[j].getL_spectrumid();
                                 PreparedStatement prepSpec = null;
                                 prepSpec = iConnection.prepareStatement("select s.filename from spectrumfile as s where s.spectrumfileid = ? ");
-                                prepSpec.setLong(1, spectrumfileid);
+                                prepSpec.setLong(1, spectrumid);
                                 ResultSet rsSpec = prepSpec.executeQuery();
                                 while (rsSpec.next()) {
                                     iSpectrumfileNames[j] = rsSpec.getString(1);
@@ -479,7 +483,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                                 } catch (IllegalArgumentException e) {
                                     // There was an error reading the datfile!!!!
                                     errorDat = true;
-                                    System.err.println("Error in reading datfile " + e + " for datfile: " + datfileIds.get(i) + " (" + rsDat.getString(2) + ")");
+                                    logger.error("Error in reading datfile " + e + " for datfile: " + datfileIds.get(i) + " (" + rsDat.getString(2) + ")");
                                     txtInfo.append("\nError in reading datfile " + e + " for datfile: " + datfileIds.get(i) + " (" + rsDat.getString(2) + ")");
                                 }
 
@@ -533,9 +537,9 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                             } catch (NumberFormatException n) {
                                 errorDat = true;
                                 txtInfo.append("\n" + "Number Format exception in datfile with datfileid = " + datfileIds.get(i) + " unable to update some identifications for project " + iProject.getProjectid());
-                                System.out.println("Number Format exception in datfile with datfileid = " + datfileIds.get(i) + " unable to update some identifications for project " + iProject.getProjectid());
+                                logger.info("Number Format exception in datfile with datfileid = " + datfileIds.get(i) + " unable to update some identifications for project " + iProject.getProjectid());
                             } catch (IllegalArgumentException e) {
-                                System.out.println(e);
+                                logger.info(e);
                                 errorDat = true;
                                 txtInfo.append("\n" + e);
                             }
@@ -546,9 +550,9 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                         }
 
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        logger.error(e.getMessage(), e);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        logger.error(e.getMessage(), e);
                     }
                     long stopUpdating = System.currentTimeMillis();
                     double totalTime = 0.0;
@@ -559,7 +563,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                         inSeconds = true;
                     }
                     String duration = new BigDecimal(totalTime).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + (inSeconds ? " seconds" : " milliseconds");
-                    System.out.println(duration);
+                    logger.info(duration);
                     if (errorDat) {
                         txtInfo.append("\nUpdated project with errors! " + iProject + " in " + duration + " with " + datfileIds.size() + " datfiles ");
                         errorProjects.add(iProject);
@@ -990,12 +994,13 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                 }
                 rs.close();
                 prep.close();
-                System.out.println("Analysed project : " + projectsAll[i]);
+                logger.info("Analysed project : " + projectsAll[i]);
             }
             iProjects = new Project[selectedProjects.size()];
             selectedProjects.toArray(iProjects);
 
         } catch (SQLException sqle) {
+            logger.error(sqle.getMessage(), sqle);
             JOptionPane.showMessageDialog(this, new String[]{"Unable to find projects:  ", sqle.getMessage()}, "Error!", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -1025,9 +1030,9 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
             if (iConnection != null) {
                 try {
                     iConnection.close();
-                    System.out.println("DB connection closed.");
+                    logger.info("DB connection closed.");
                 } catch (Exception e) {
-                    System.err.println("\n\nUnable to close DB connection: " + e.getMessage() + "\n\n");
+                    logger.error("\n\nUnable to close DB connection: " + e.getMessage() + "\n\n");
                 }
             }
             System.exit(0);

@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.dialogs;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslims.gui.DiffAnalysisGUI;
 import com.compomics.mslims.util.diff.DifferentialProject;
@@ -25,14 +27,16 @@ import java.awt.event.KeyEvent;
  */
 
 /**
- * This class represents a dialog that pops up whenever a user wants to add a project to
- * the differential analysis list. It requests the user to complete relevant, additional
- * information about the project that is necessary to perform te differential analysis.
+ * This class represents a dialog that pops up whenever a user wants to add a project to the differential analysis list.
+ * It requests the user to complete relevant, additional information about the project that is necessary to perform te
+ * differential analysis.
  *
  * @author Lennart Martens
  * @version $Id: DifferentialProjectDialog.java,v 1.3 2004/10/13 10:05:36 lennart Exp $
  */
 public class DifferentialProjectDialog extends JDialog {
+    // Class specific log4j logger for DifferentialProjectDialog instances.
+    private static Logger logger = Logger.getLogger(DifferentialProjectDialog.class);
 
     private JTextField txtAlias = null;
 
@@ -83,11 +87,11 @@ public class DifferentialProjectDialog extends JDialog {
         JLabel lblSemiColon2 = new JLabel(": ");
         int aliasSpacer = lblAlias.getMinimumSize().width;
         int inverseSpacer = lblInverse.getMinimumSize().width;
-        if(aliasSpacer < inverseSpacer) {
-            aliasSpacer = 5 + (inverseSpacer-aliasSpacer);
+        if (aliasSpacer < inverseSpacer) {
+            aliasSpacer = 5 + (inverseSpacer - aliasSpacer);
             inverseSpacer = 5;
         } else {
-            inverseSpacer = 5 + (aliasSpacer-inverseSpacer);
+            inverseSpacer = 5 + (aliasSpacer - inverseSpacer);
             aliasSpacer = 5;
         }
 
@@ -139,7 +143,7 @@ public class DifferentialProjectDialog extends JDialog {
     /**
      * This method creates and lays out the button panel.
      *
-     * @return  JPanel with the buttons.
+     * @return JPanel with the buttons.
      */
     private JPanel getButtonPanel() {
         JButton btnOK = new JButton("OK");
@@ -154,7 +158,7 @@ public class DifferentialProjectDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     okPressed();
                 }
             }
@@ -172,7 +176,7 @@ public class DifferentialProjectDialog extends JDialog {
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     cancelPressed();
                 }
             }
@@ -194,7 +198,7 @@ public class DifferentialProjectDialog extends JDialog {
      */
     private void okPressed() {
         String alias = txtAlias.getText();
-        if(alias == null || alias.trim().equals("")) {
+        if (alias == null || alias.trim().equals("")) {
             JOptionPane.showMessageDialog(this, "Please enter a short alias for this project.", "No alias given!", JOptionPane.WARNING_MESSAGE);
             txtAlias.requestFocus();
             return;

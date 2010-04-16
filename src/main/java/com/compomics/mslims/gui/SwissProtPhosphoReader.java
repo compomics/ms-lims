@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Id_to_phosphoTableAccessor;
 import com.compomics.mslims.db.accessors.Identification;
 import com.compomics.mslims.db.accessors.Phosphorylation;
@@ -35,13 +37,14 @@ import java.util.Vector;
  */
 
 /**
- * This class allows the user to connect to a 'projects' database and select a project, after
- * which an accession numbers file is indicated, which will be used to search SwissProt for the
- * possible phosphorylations.
+ * This class allows the user to connect to a 'projects' database and select a project, after which an accession numbers
+ * file is indicated, which will be used to search SwissProt for the possible phosphorylations.
  *
  * @author Lennart Martens
  */
 public class SwissProtPhosphoReader extends FlamableJFrame implements Connectable {
+    // Class specific log4j logger for SwissProtPhosphoReader instances.
+    private static Logger logger = Logger.getLogger(SwissProtPhosphoReader.class);
 
     /**
      * Database connection.
@@ -104,21 +107,19 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
         this.constructScreen();
         // Display settings.
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((screen.width/10), (screen.height/10));
+        this.setLocation((screen.width / 10), (screen.height / 10));
         this.pack();
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
-     * @param aConn Connection with the DB connection.
-     * @param aDBName   String with an identifier for the connection, typically the
-     *                  name of the DB connected to.
+     * @param aConn   Connection with the DB connection.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
-        if(aConn == null) {
+        if (aConn == null) {
             this.dispose();
             System.exit(0);
         }
@@ -128,8 +129,7 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
     }
 
     /**
-     * Here we just close the DB connection, and then call
-     * the dispose() method of the superclass.
+     * Here we just close the DB connection, and then call the dispose() method of the superclass.
      */
     public void dispose() {
         this.closeConnection();
@@ -142,8 +142,7 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
     }
 
     /**
-     * Here we just close the DB connection, and then call
-     * the finalize() method of the superclass.
+     * Here we just close the DB connection, and then call the finalize() method of the superclass.
      */
     protected void finalize() throws Throwable {
         this.closeConnection();
@@ -171,7 +170,7 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     browseAccessionsPressed();
                 }
             }
@@ -219,15 +218,14 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
     }
 
     /**
-     * This method is called when the user presses the browse button
-     * for the Netphos output file.
+     * This method is called when the user presses the browse button for the Netphos output file.
      */
     private void browseAccessionsPressed() {
         File toOpen = null;
-        while(toOpen == null) {
+        while (toOpen == null) {
             JFileChooser jfc = new JFileChooser("/");
             int returnVal = jfc.showOpenDialog(SwissProtPhosphoReader.this);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
                 toOpen = jfc.getSelectedFile();
                 String path = null;
                 try {
@@ -235,16 +233,17 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
                     Vector tempVec = new Vector();
                     BufferedReader br = new BufferedReader(new FileReader(toOpen));
                     String line = null;
-                    while((line = br.readLine()) != null) {
+                    while ((line = br.readLine()) != null) {
                         line = line.trim();
-                        if(!line.equals("")) {
+                        if (!line.equals("")) {
                             tempVec.add(line);
                         }
                     }
                     br.close();
                     iAccessions = tempVec;
                     txtAccessions.setText(path);
-                } catch(IOException ioe) {
+                } catch (IOException ioe) {
+                    logger.error(ioe.getMessage(), ioe);
                     JOptionPane.showMessageDialog(SwissProtPhosphoReader.this, new String[]{"Unable to read '" + toOpen.getName() + "' as accession numbers file!", ioe.getMessage()}, "Unable to load Netphos output file!", JOptionPane.ERROR_MESSAGE);
                     toOpen = null;
                 }
@@ -257,7 +256,7 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
     /**
      * This method creates the buttonpanel.
      *
-     * @return  JPanel with the buttons.
+     * @return JPanel with the buttons.
      */
     private JPanel createButtonPanel() {
         JPanel jpanButtons = new JPanel();
@@ -275,7 +274,7 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     parsePressed();
                 }
             }
@@ -289,15 +288,15 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
             }
         });
         btnCancel.addKeyListener(new KeyAdapter() {
-                    /**
-                     * Invoked when a key has been pressed.
-                     */
-                    public void keyPressed(KeyEvent e) {
-                        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                            cancelPressed();
-                        }
-                    }
-                });
+            /**
+             * Invoked when a key has been pressed.
+             */
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    cancelPressed();
+                }
+            }
+        });
 
 
         jpanButtons.add(Box.createHorizontalGlue());
@@ -326,19 +325,19 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
         JComponent needsFocus = null;
         boolean fillOutError = false;
 
-        if(iAccessions == null) {
+        if (iAccessions == null) {
             needsFocus = btnBrowseAccessions;
             message = "You need to specify an accession numbers file first!";
             fillOutError = true;
         }
 
-        if(fillOutError) {
+        if (fillOutError) {
             JOptionPane.showMessageDialog(this, message, "Not all input fields correctly filled out!", JOptionPane.WARNING_MESSAGE);
             needsFocus.requestFocus();
             return;
         } else {
             // Find the project ID.
-            long projectid = ((Project)cmbProject.getSelectedItem()).getProjectid();
+            long projectid = ((Project) cmbProject.getSelectedItem()).getProjectid();
 
             // OK, we're all revved up with a place to go!
             // Start processing!
@@ -346,14 +345,14 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
             DefaultProgressBar progress = new DefaultProgressBar(this, "Parsing known SwissProt phosphorylation sites", 0, maximum);
             Thread t = new Thread(new InnerRunnable(iAccessions, projectid, progress));
             t.start();
-            progress.setSize(this.getWidth()/2, progress.getPreferredSize().height);
+            progress.setSize(this.getWidth() / 2, progress.getPreferredSize().height);
             progress.setVisible(true);
         }
     }
 
     /**
-     * This inner class implements the working logic behind the 'parsePressed' method. <br />
-     * It is a Runnable for progressbar purposes.
+     * This inner class implements the working logic behind the 'parsePressed' method. <br /> It is a Runnable for
+     * progressbar purposes.
      */
     private class InnerRunnable implements Runnable {
 
@@ -369,18 +368,20 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
          * The progressbar.
          */
         private DefaultProgressBar iProgress = null;
+
         /**
          * The constructor takes the necessary parameters.
          *
-         * @param aAccessions   vector with all the accession numbers.
-         * @param aProjectid    long with the link to the project we're using.
-         * @param aProgress DefaultProgressBar for indicating the progress on.
+         * @param aAccessions vector with all the accession numbers.
+         * @param aProjectid  long with the link to the project we're using.
+         * @param aProgress   DefaultProgressBar for indicating the progress on.
          */
         public InnerRunnable(Vector aAccessions, long aProjectid, DefaultProgressBar aProgress) {
             this.iAccessions = aAccessions;
             this.iProjectid = aProjectid;
             this.iProgress = aProgress;
         }
+
         /**
          * Workhorse method for a Thread.
          */
@@ -391,13 +392,13 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
             // MascotSequenceRetriever.
             MascotSequenceRetriever msr = new MascotSequenceRetriever("MDMetOx.properties");
             // Loop all accessions.
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 iProgress.setValue(counter);
                 // First accession nbr translation.
-                String accession = (String)iter.next();
+                String accession = (String) iter.next();
                 String upper = accession.toUpperCase();
-                if(!(upper.startsWith("P") || upper.startsWith("Q") || upper.startsWith("O"))) {
-                    System.out.println("Skipped accession '" + accession + "' because it didn't start with 'P', 'Q' or 'O'.");
+                if (!(upper.startsWith("P") || upper.startsWith("Q") || upper.startsWith("O"))) {
+                    logger.info("Skipped accession '" + accession + "' because it didn't start with 'P', 'Q' or 'O'.");
                     continue;
                 }
                 // Change message on progressbar.
@@ -409,18 +410,18 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
                     iProgress.setMessage("Parsing raw entry for protein " + accession);
                     Vector temps = parseFullTextReport(fullText);
                     int liSize = temps.size();
-                    for(int i=0;i<liSize;i++) {
+                    for (int i = 0; i < liSize; i++) {
                         // What we'll need to do now, is find all the identifications that correspond to the
                         // predicted phosphorylation sites, then extract their ID's, and link all to their
                         // respective phosphorylations.
-                        Object[] tempObj = (Object[])temps.get(i);
-                        int location = ((Integer)tempObj[1]).intValue();
+                        Object[] tempObj = (Object[]) temps.get(i);
+                        int location = ((Integer) tempObj[1]).intValue();
                         long link = 0l;
                         try {
                             Vector matches = Identification.getIdentifications(accession, location, iProjectid, iConn);
                             int liMatches = matches.size();
                             // See if this prediction has any relevance (ie.: we found at least one match in the DB).
-                            if(liMatches > 0) {
+                            if (liMatches > 0) {
                                 // Create a new Phosphorylation entry.
                                 HashMap hm = new HashMap(7);
                                 hm.put(Phosphorylation.ACCESSION, accession);
@@ -431,13 +432,13 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
                                 Phosphorylation p = new Phosphorylation(hm);
                                 p.persist(iConn);
                                 // Find the PK.
-                                Long tempLong = (Long)p.getGeneratedKeys()[0];
+                                Long tempLong = (Long) p.getGeneratedKeys()[0];
                                 link = tempLong.longValue();
                             }
-                            for(int j=0;j<liMatches;j++) {
+                            for (int j = 0; j < liMatches; j++) {
                                 // All these are identifications corresponding to this phosphorylation.
                                 // We need to store the relation in the id_to_phospho lookup table.
-                                long idid = ((Identification)matches.get(j)).getIdentificationid();
+                                long idid = ((Identification) matches.get(j)).getIdentificationid();
                                 HashMap hm = new HashMap(2);
                                 hm.put(Id_to_phosphoTableAccessor.L_ID, new Long(idid));
                                 hm.put(Id_to_phosphoTableAccessor.L_PHOSPHORYLATIONID, new Long(link));
@@ -445,35 +446,34 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
                                 Id_to_phosphoTableAccessor conv = new Id_to_phosphoTableAccessor(hm);
                                 conv.persist(iConn);
                             }
-                        } catch(SQLException sqle) {
-                            System.err.println("Error retrieving matches for accession '" + accession + "', location '" + location + "' and project '" + cmbProject.getSelectedItem() + "': " + sqle.getMessage());
+                        } catch (SQLException sqle) {
+                            logger.error("Error retrieving matches for accession '" + accession + "', location '" + location + "' and project '" + cmbProject.getSelectedItem() + "': " + sqle.getMessage());
                         }
                     }
                     counter++;
-                } catch(IOException ioe) {
-                    System.err.println("IOException retrieving fulltext report via Mascot for '" + accession + "': " + ioe.getMessage());
+                } catch (IOException ioe) {
+                    logger.error("IOException retrieving fulltext report via Mascot for '" + accession + "': " + ioe.getMessage());
                 }
             }
             iProgress.setValue(iProgress.getMaximum());
         }
 
         /**
-         * This method parses a SwissProt full-text report for
-         * phosphorylation annotations.
+         * This method parses a SwissProt full-text report for phosphorylation annotations.
          *
          * @param aText String with the full-text report.
-         * @return  Vector with the known phosphorylations (each element an Object[] with first the description,
-         *                 then the location as Integer).
+         * @return Vector with the known phosphorylations (each element an Object[] with first the description, then the
+         *         location as Integer).
          */
         private Vector parseFullTextReport(String aText) {
             Vector results = new Vector();
             try {
                 BufferedReader br = new BufferedReader(new StringReader(aText));
                 String line = null;
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     line = line.trim();
                     String upper = line.toUpperCase();
-                    if(upper.startsWith("FT   MOD_RES") && upper.indexOf("  PHOSPHORYLATION")>0) {
+                    if (upper.startsWith("FT   MOD_RES") && upper.indexOf("  PHOSPHORYLATION") > 0) {
                         // We found a phosphorylation annotation.
                         // Should be:
                         // FT   MOD_RES  xxx(start)  xxx(end)  PHOSPHORYLATION...
@@ -486,16 +486,16 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
                         int start = Integer.parseInt(st.nextToken());
                         // End location (should be the same).
                         int end = Integer.parseInt(st.nextToken());
-                        if(start != end) {
-                            System.err.println("Found start location " + start + " and end location " + end + "!");
+                        if (start != end) {
+                            logger.error("Found start location " + start + " and end location " + end + "!");
                         } else {
                             results.add(new Object[]{line.substring(upper.indexOf("PHOSPHORYLATION")), new Integer(start)});
                         }
                     }
                 }
-            } catch(IOException ioe) {
-                System.err.println("IOException while reading a String: " + ioe.getMessage());
-                ioe.printStackTrace();
+            } catch (IOException ioe) {
+                logger.error("IOException while reading a String: " + ioe.getMessage());
+                logger.error(ioe.getMessage(), ioe);
             }
             return results;
         }
@@ -522,30 +522,28 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
      */
     private void closeConnection() {
         try {
-            if(iConn != null) {
+            if (iConn != null) {
                 iConn.close();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
     /**
-     * This method will attempt to retrieve all relevant data from the
-     * local filesystem and the DB connection.
+     * This method will attempt to retrieve all relevant data from the local filesystem and the DB connection.
      */
     private void gatherData() {
         this.findProjects();
     }
 
     /**
-     * This method finds all project entries currently stored in the DB
-     * and fills out the relevant arrays with info.
+     * This method finds all project entries currently stored in the DB and fills out the relevant arrays with info.
      */
     private void findProjects() {
         try {
             this.iProjects = Project.getAllProjects(iConn);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             this.passHotPotato(sqle, "Unable to retrieve project data!");
         }
     }
@@ -557,34 +555,34 @@ public class SwissProtPhosphoReader extends FlamableJFrame implements Connectabl
             BufferedReader br = new BufferedReader(new FileReader(aFASTAFile));
             String line = null;
             boolean isFASTA = false;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
                 // Skip empty lines.
-                if(line.equals("")) {
+                if (line.equals("")) {
                     continue;
-                } else if(line.startsWith(">")) {
-                    if(!isFASTA) {
+                } else if (line.startsWith(">")) {
+                    if (!isFASTA) {
                         isFASTA = true;
                     }
                     // Remove the leading '>'.
                     line = line.substring(1);
                     // Find the accession number for Netphos, and that for the DB.
-                    if(line.startsWith("gi|")) {
+                    if (line.startsWith("gi|")) {
                         // Skip these.
                     } else {
                         int start = line.indexOf(" (");
                         int end = line.indexOf(") ");
-                        if(start < 0 || end < 0) {
-                            System.err.println("Could not find accession number conversion in: " + line + ".");
+                        if (start < 0 || end < 0) {
+                            logger.error("Could not find accession number conversion in: " + line + ".");
                             throw new IOException("Unable to parse FASTA entries in sequence file '" + aFASTAFile.getCanonicalPath() + "'!");
                         }
-                        temp.put(line.substring(0, start), line.substring(start+2, end));
+                        temp.put(line.substring(0, start), line.substring(start + 2, end));
                     }
                 }
             }
             br.close();
 
-            if(!isFASTA) {
+            if (!isFASTA) {
                 throw new IOException("Probably not a FASTA formatted file!");
             }
 

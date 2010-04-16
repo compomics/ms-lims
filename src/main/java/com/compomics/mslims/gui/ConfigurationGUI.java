@@ -1,5 +1,7 @@
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Instrument;
 import com.compomics.mslims.db.accessors.Protocol;
 import com.compomics.mslims.db.accessors.User;
@@ -42,6 +44,8 @@ import java.util.Vector;
  * The 'ConfigurationGUI ' class was created for setting up and configuration of the ms_lims database scheme.
  */
 public class ConfigurationGUI extends FlamableJFrame implements Connectable {
+    // Class specific log4j logger for ConfigurationGUI instances.
+    private static Logger logger = Logger.getLogger(ConfigurationGUI.class);
 // ------------------------------ FIELDS ------------------------------
 
     private JPanel jpanContent;
@@ -169,7 +173,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                     lResult = true;
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         }
         return lResult;
@@ -193,7 +197,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         // Connect to a MySQL database.
         btnConnect.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms_lims.properties");
+                Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "ms-lims.properties");
                 ConnectionDialog lDialog =
                         new ConnectionDialog(iFrame, ConfigurationGUI.this, "Establish DB connection", lConnectionProperties);
 
@@ -230,10 +234,10 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             iDatabaseReady = true;
                         } catch (SQLException e2) {
                             status("Failed to use database '" + aDatabaseName + "'!!");
-                            e2.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            logger.error(e2.getMessage(), e2);  //To change body of catch statement use File | Settings | File Templates.
                         }
                     } else {
-                        e1.printStackTrace();
+                        logger.error(e1.getMessage(), e1);
                         status("Failed to create '" + aDatabaseName + "'");
                         iDatabaseReady = false;
                     }
@@ -259,8 +263,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             status("Created database scheme in '" + txtDatabaseName.getText() + "'");
                         } catch (SQLException e1) {
                             status("Failed to apply the database scheme!!");
-                            System.err.println("Failing!");
-                            e1.printStackTrace();
+                            logger.error("Failing!");
+                            logger.error(e1.getMessage(), e1);
                         }
                     }
 
@@ -275,14 +279,14 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             btnSetSQLScheme.setEnabled(false);
                         } catch (SQLException e1) {
                             status("Failed to apply the projectanalyzer tools!!");
-                            System.err.println("Failing!");
-                            e1.printStackTrace();
+                            logger.error("Failing!");
+                            logger.error(e1.getMessage(), e1);
                         }
                     }
 
                 } catch (IOException e1) {
-                    System.err.println("Failing!");
-                    e1.printStackTrace();
+                    logger.error("Failing!");
+                    logger.error(e1.getMessage(), e1);
                 }
             }
         });
@@ -338,8 +342,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
                         }
                     } catch (SQLException e1) {
-                        System.err.println("Failing!");
-                        e1.printStackTrace();
+                        logger.error("Failing!");
+                        logger.error(e1.getMessage(), e1);
                     }
                 }
                 updateUserList();
@@ -367,8 +371,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
                     }
                 } catch (SQLException e1) {
-                    System.err.println("Failing!");
-                    e1.printStackTrace();
+                    logger.error("Failing!");
+                    logger.error(e1.getMessage(), e1);
                 }
                 updateUserList();
             }
@@ -394,8 +398,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
                     }
                 } catch (SQLException e1) {
-                    System.err.println("Failing!");
-                    e1.printStackTrace();
+                    logger.error("Failing!");
+                    logger.error(e1.getMessage(), e1);
                 }
                 updateProtocolList();
             }
@@ -423,8 +427,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
                     }
                 } catch (SQLException e1) {
-                    System.err.println("Failing!");
-                    e1.printStackTrace();
+                    logger.error("Failing!");
+                    logger.error(e1.getMessage(), e1);
                 }
                 updateProtocolList();
             }
@@ -448,8 +452,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             status("Added instrument '" + lInstrument.getName() + "'.");
                         }
                     } catch (SQLException e1) {
-                        System.err.println("Failing!");
-                        e1.printStackTrace();
+                        logger.error("Failing!");
+                        logger.error(e1.getMessage(), e1);
                     }
                 }
                 updateInstrumentList();
@@ -474,8 +478,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             ((Instrument) listDatabaseInstruments.getSelectedValue()).delete(iConnection);
                         }
                     } catch (SQLException e1) {
-                        System.err.println("Failing!");
-                        e1.printStackTrace();
+                        logger.error("Failing!");
+                        logger.error(e1.getMessage(), e1);
                     }
                 }
                 updateInstrumentList();
@@ -669,7 +673,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         jpanContent.setLayout(new GridBagLayout());
         tabMain = new JTabbedPane();
         tabMain.setTabLayoutPolicy(1);
-        tabMain.setTabPlacement(2);
+        tabMain.setTabPlacement(1);
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -1469,7 +1473,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
         }
         listUsers.repaint();
     }
@@ -1487,8 +1491,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                     iConnection.prepareStatement(aQuery);
             rs = lPreparedStatement.executeQuery();
         } catch (SQLException e) {
-            System.err.println("Failing!");
-            e.printStackTrace();
+            logger.error("Failing!");
+            logger.error(e.getMessage(), e);
         }
 
         return rs;
@@ -1519,8 +1523,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
             }
 
         } catch (SQLException e) {
-            System.err.println("Failing upon updating the instrument list!");
-            e.printStackTrace();
+            logger.error("Failing upon updating the instrument list!");
+            logger.error(e.getMessage(), e);
         }
 
         listDatabaseInstruments.setSize(listAvaillableInstruments.getSize());
@@ -1544,8 +1548,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                 listProtocols.setListData(lProtocols);
             }
         } catch (SQLException e) {
-            System.err.println("Failing!");
-            e.printStackTrace();
+            logger.error("Failing!");
+            logger.error(e.getMessage(), e);
         }
         listProtocols.repaint();
     }
@@ -1646,7 +1650,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             JOptionPane.showMessageDialog(new JFrame(), "\n\n The system failed to invoke your default web browser while attempting to access: \n\n " + url + "\n\n", "Browser Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }

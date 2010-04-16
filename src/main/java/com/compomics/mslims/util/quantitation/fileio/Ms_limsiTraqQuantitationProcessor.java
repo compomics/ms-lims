@@ -1,5 +1,7 @@
 package com.compomics.mslims.util.quantitation.fileio;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.interfaces.QuantitationProcessor;
 import com.compomics.rover.general.quantitation.RatioGroupCollection;
 import com.compomics.rover.general.fileio.readers.Mdf_iTraqReader;
@@ -10,13 +12,12 @@ import java.util.zip.GZIPInputStream;
 import java.io.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: niklaas
- * Date: 16-mrt-2009
- * Time: 12:25:22
- * To change this template use File | Settings | File Templates.
+ * Created by IntelliJ IDEA. User: niklaas Date: 16-mrt-2009 Time: 12:25:22 To change this template use File | Settings
+ * | File Templates.
  */
 public class Ms_limsiTraqQuantitationProcessor implements QuantitationProcessor {
+    // Class specific log4j logger for Ms_limsiTraqQuantitationProcessor instances.
+    private static Logger logger = Logger.getLogger(Ms_limsiTraqQuantitationProcessor.class);
 
     /**
      * The ms_lims connection to tie up quantitation information to ms_lims identifications.
@@ -38,9 +39,9 @@ public class Ms_limsiTraqQuantitationProcessor implements QuantitationProcessor 
     /**
      * Constructor
      *
-     * @param aConnection     MascotSearch containing the rov file.
-     * @param aFlamable       The flamable frame capturing the errors.
-     * @param aDatFileIds     The array with Datfileids to do.
+     * @param aConnection MascotSearch containing the rov file.
+     * @param aFlamable   The flamable frame capturing the errors.
+     * @param aDatFileIds The array with Datfileids to do.
      */
     public Ms_limsiTraqQuantitationProcessor(Connection aConnection, Flamable aFlamable, Long[] aDatFileIds) {
         iConnection = aConnection;
@@ -84,16 +85,16 @@ public class Ms_limsiTraqQuantitationProcessor implements QuantitationProcessor 
             PreparedStatement prepDat = null;
             prepDat = iConnection.prepareStatement("select * from datfile where datfileid = ?");
             Long id = iDatFileIds[iSearchCounter];
-            prepDat.setLong(1,id);
+            prepDat.setLong(1, id);
             ResultSet rsDat = prepDat.executeQuery();
-            while(rsDat.next()){
+            while (rsDat.next()) {
                 byte[] zipped = rsDat.getBytes("file");
                 ByteArrayInputStream bais = new ByteArrayInputStream(zipped);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 BufferedInputStream bis = new BufferedInputStream(new GZIPInputStream(bais));
                 BufferedOutputStream bos = new BufferedOutputStream(baos);
                 int read = -1;
-                while((read = bis.read()) != -1) {
+                while ((read = bis.read()) != -1) {
                     bos.write(read);
                 }
                 bos.flush();
@@ -106,7 +107,7 @@ public class Ms_limsiTraqQuantitationProcessor implements QuantitationProcessor 
 
                 lDatfileid = rsDat.getLong("datfileid");
 
-                lDatfile = new File(lTempMs_limsFolder.getAbsolutePath() , rsDat.getString("filename"));
+                lDatfile = new File(lTempMs_limsFolder.getAbsolutePath(), rsDat.getString("filename"));
                 PrintWriter out = new PrintWriter(lDatfile);
                 out.write(new String(result));
                 out.flush();

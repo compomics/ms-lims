@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio.mergefiles;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.MascotGenericFile;
 import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
 import com.compomics.util.interfaces.SpectrumFile;
@@ -29,14 +31,22 @@ import java.util.Vector;
  * @author Lennart Martens.
  */
 public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
+    // Class specific log4j logger for MascotGenericMergeFileReader instances.
+    private static Logger logger = Logger.getLogger(MascotGenericMergeFileReader.class);
 
-    /** This String holds the run identification for this mergefile. */
+    /**
+     * This String holds the run identification for this mergefile.
+     */
     protected String iRunName = null;
 
-    /** This String holds the comments located on top of the MascotGenericMergeFile. */
+    /**
+     * This String holds the comments located on top of the MascotGenericMergeFile.
+     */
     protected String iComments = null;
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public MascotGenericMergeFileReader() {
     }
 
@@ -44,7 +54,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * This constructor opens the specified mergefile and maps it to memory.
      *
      * @param aMergeFile String with the fully qualified name of the file.
-     *
      * @throws java.io.IOException when the file could not be read.
      */
     public MascotGenericMergeFileReader(String aMergeFile) throws IOException {
@@ -55,7 +64,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * This constructor opens the specified mergefile and maps it to memory.
      *
      * @param aMergeFile File with a pointer to the mergefile.
-     *
      * @throws java.io.IOException when the file could not be read.
      */
     public MascotGenericMergeFileReader(File aMergeFile) throws IOException {
@@ -104,7 +112,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * found. It is based on the 'corresponds' method of the PKLFile class.
      *
      * @param aMis MascotIdentifiedSpectrum to compare to.
-     *
      * @return PKLFile with the corresponding PKLFile or 'null' if none found.
      */
     public SpectrumFile findMatchingSpectrumFile(MascotIdentifiedSpectrum aMis) {
@@ -122,9 +129,9 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
         }
         // Check for a match, compensate possible aberrations.
         if (nbrIDs == 0) {
-            System.err.println("Found no match (" + nbrIDs + ") for '" + aMis.getSearchTitle() + "' in file '" + this.iFilename + "'!");
+            logger.error("Found no match (" + nbrIDs + ") for '" + aMis.getSearchTitle() + "' in file '" + this.iFilename + "'!");
         } else if (nbrIDs > 1) {
-            System.err.println("Found more than one match (" + nbrIDs + ") for '" + aMis.getSearchTitle() + "' in file '" + this.iFilename + "'!");
+            logger.error("Found more than one match (" + nbrIDs + ") for '" + aMis.getSearchTitle() + "' in file '" + this.iFilename + "'!");
         }
 
         return result;
@@ -135,7 +142,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * or 'null' if no match was found.
      *
      * @param aMis MascotIdentifiedSpectrum to compare to.
-     *
      * @return String  with the filename of the corresponding PKL file, or 'null' if none was found.
      */
     public String getCorrespondingSpectrumFilename(MascotIdentifiedSpectrum aMis) {
@@ -173,7 +179,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * This method reports whether this MergeFileReader can read the specified file.
      *
      * @param aFile File with the file to check readability for.
-     *
      * @return boolean that indicates whether this MergeFileReader can read the specified file.
      */
     public boolean canRead(File aFile) {
@@ -196,18 +201,18 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
 
                 //check the following line, the title must be readible by this MascotDistillerMergeFileReader
                 line = br.readLine();
-                if(line != null){
-                    try{
+                if (line != null) {
+                    try {
                         String lLCRun = null;
                         int lCompound = -1;
                         int lBeginScan = -1;
-                        int lEndScan = - 1;
+                        int lEndScan = -1;
                         int lSumOfScans = 1;
 
                         // a) Parse the Lcrun
                         lLCRun = line.substring(line.lastIndexOf('\\') + 1, line.lastIndexOf('.'));
 
-                        if(line.indexOf("TITLE=") == 0){
+                        if (line.indexOf("TITLE=") == 0) {
                             line = line.substring(6);
                         }
 
@@ -215,19 +220,19 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
                         lCompound = Integer.valueOf(line.substring(0, line.indexOf(':')));
 
                         // c) Find out the sum of scans
-                        if(line.indexOf("Sum") >= 0){
+                        if (line.indexOf("Sum") >= 0) {
                             // c1 Multiple scans from this spectrum!
                             lBeginScan = Integer.valueOf(line.substring(line.indexOf("range ") + 6, line.indexOf(" (rt=")));
                             lEndScan = Integer.valueOf(line.substring(line.indexOf(") to ") + 5, line.lastIndexOf(" (rt=")));
                             lSumOfScans = Integer.valueOf(line.substring(line.indexOf("Sum of ") + 7, line.lastIndexOf(" scans ")));
-                        }else{
+                        } else {
                             // c2 Single scan form this spectrum!
                             lBeginScan = Integer.valueOf(line.substring(line.indexOf("Scan ") + 5, line.indexOf(" (rt=")));
                         }
                         //if we can get here, this means the title is a distiller title.
                         //This is not a job for the MascotGenericMergeFileReader
                         result = false;
-                    } catch( IndexOutOfBoundsException e){
+                    } catch (IndexOutOfBoundsException e) {
                         //title could not be parsed
                         //this is ok for the MascotGenericMergeFileReader
                     }
@@ -259,7 +264,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * This method loads the specified file in this MergeFileReader.
      *
      * @param aFile File with the file to load.
-     *
      * @throws java.io.IOException when the loading operation failed.
      */
     public void load(File aFile) throws IOException {
@@ -383,7 +387,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * This method strips a line of its prefixed '#' markings. Note that no trimming is performed.
      *
      * @param aCommentLine String with the commentline to strip prefixed '#'-ings from.
-     *
      * @return String with the comment line minus the prefixed '#'-ings.
      */
     protected String cleanCommentMarks(String aCommentLine) {
@@ -399,7 +402,6 @@ public class MascotGenericMergeFileReader extends MergeFileReaderAncestor {
      * 'iFilename'), with an '_[aNumber]' spliced in before the extension (eg., myParent.mgf --> myParent_1.mgf).
      *
      * @param aNumber int with the number to splice into the filename.
-     *
      * @return String with a filename for this spectrumfile.
      */
     protected String createSpectrumFilename(int aNumber) {

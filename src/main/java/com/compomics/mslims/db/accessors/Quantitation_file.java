@@ -1,5 +1,7 @@
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +18,8 @@ import java.util.zip.GZIPOutputStream;
  */
 
 public class Quantitation_file extends Quantitation_fileTableAccessor {
+    // Class specific log4j logger for Quantitation_file instances.
+    private static Logger logger = Logger.getLogger(Quantitation_file.class);
 
     /**
      * This key in the HashMap allows the setting of file and filename to be replaced by the fully qualified filename
@@ -40,19 +44,13 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
     }
 
     /**
-     * This constructor reads the quantitation file from a resultset. The ResultSet should be positioned such that a single row
-     * can be read directly (i.e., without calling the 'next()' method on the ResultSet). The columns should be in this
-     * order: <br />
-     * Column 1: distiller_output_fileid <br />
-     * Column 2: filename  <br />
-     * Column 3: type  <br />
-     * Column 4: GZIPped bytes for thefile <br />
-     * Column 5: username <br />
-     * Column 6: creationdate <br />
-     * Column 7: modificationdate <br />
+     * This constructor reads the quantitation file from a resultset. The ResultSet should be positioned such that a
+     * single row can be read directly (i.e., without calling the 'next()' method on the ResultSet). The columns should
+     * be in this order: <br /> Column 1: distiller_output_fileid <br /> Column 2: filename  <br /> Column 3: type  <br
+     * /> Column 4: GZIPped bytes for thefile <br /> Column 5: username <br /> Column 6: creationdate <br /> Column 7:
+     * modificationdate <br />
      *
      * @param aRS ResultSet to read the data from.
-     *
      * @throws java.sql.SQLException when reading the ResultSet failed.
      */
     public Quantitation_file(ResultSet aRS) throws SQLException {
@@ -81,7 +79,9 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
         iModificationdate = (java.sql.Timestamp) aRS.getObject(7);
     }
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public Quantitation_file() {
         super();
     }
@@ -90,7 +90,6 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
      * This method returns the DAT file as unzipped bytes.
      *
      * @return byte[]  with the unzipped bytes for the DAT file.
-     *
      * @throws IOException when the unzipping process goes wrong.
      */
     public byte[] getUnzippedFile() throws IOException {
@@ -120,7 +119,6 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
      * This method returns a BufferedReader into the unzipped DAT file. It is up to the caller to close the reader.
      *
      * @return BufferedReader  connected to the unzipped DAT file.
-     *
      * @throws IOException when the unzipping process goes wrong.
      */
     public BufferedReader getBufferedReader() throws IOException {
@@ -136,7 +134,6 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
      *
      * @param aBytes byte[] with the data for the DAT file. This data will be zipped and subsequently sent to the
      *               superclass.
-     *
      * @throws IOException when the zipping process fails.
      */
     public void setUnzippedFile(byte[] aBytes) throws IOException {
@@ -164,7 +161,6 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
      * This method allows the setting of a file (it sets filename and the zipped bytes for the file).
      *
      * @param aFilename String with the FULL filename!
-     *
      * @throws IOException whenever the file could not be found, could not be read or could not be zipped.
      */
     public void setFileFromName(String aFilename) throws IOException {
@@ -188,9 +184,7 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
      * This method loads and zips the file data.
      *
      * @param aFile File with the data.
-     *
      * @return byte[]  with the GZIPped data.
-     *
      * @throws IOException whenever the GZIPping process fails.
      */
     private byte[] zipFile(File aFile) throws IOException {
@@ -215,8 +209,10 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
     }
 
     /**
-     * This static method verifies whether the given Quantitation file allready has an entry in the ms_lims system of the given connection.
-     * @param aFilename The 'quantitation_file' filename.
+     * This static method verifies whether the given Quantitation file allready has an entry in the ms_lims system of
+     * the given connection.
+     *
+     * @param aFilename   The 'quantitation_file' filename.
      * @param aConnection The Connection where to the database.
      * @return boolean status whether the file was found in the given database
      * @throws SQLException Throwed when an SQL error occurs.
@@ -233,11 +229,9 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
     /**
      * This method get all the quantitation_files for a list of identificationids from the database.
      *
-     * @param aConn     Connection to load the identification from.
+     * @param aConn              Connection to load the identification from.
      * @param aIdentificationIds String with the identificationids seperatated by ','
-     *
      * @return Quantitation_file The requested quantitationfiles
-     *
      * @throws SQLException when the select failed.
      */
     public static Quantitation_file[] getQuantitation_fileForIdentificationIds(Connection aConn, String aIdentificationIds) throws SQLException {
@@ -259,11 +253,9 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
     /**
      * This method gets the quantitation_file for a quantitation_file id from the database.
      *
-     * @param aConn     Connection to load the identification from.
-     * @param aFileId   The id for the quantitation file
-     *
+     * @param aConn   Connection to load the identification from.
+     * @param aFileId The id for the quantitation file
      * @return Quantitation_file The requested quantitationfile
-     *
      * @throws SQLException when the select failed.
      */
     public static Quantitation_file getQuantitation_fileForId(Connection aConn, Long aFileId) throws SQLException {

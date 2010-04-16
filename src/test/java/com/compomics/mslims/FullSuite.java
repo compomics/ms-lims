@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.TestZipUtil;
 import com.compomics.mslims.util.diff.TestDiffCouple;
 import com.compomics.mslims.util.netphos.TestNetphosOutputReader;
@@ -28,6 +30,8 @@ import junit.framework.TestSuite;
  * @author Lennart Martens
  */
 public class FullSuite extends TestCase {
+    // Class specific log4j logger for FullSuite instances.
+    private static Logger logger = Logger.getLogger(FullSuite.class);
 
     public FullSuite() {
         this("Full suite of test for LIMS project.");

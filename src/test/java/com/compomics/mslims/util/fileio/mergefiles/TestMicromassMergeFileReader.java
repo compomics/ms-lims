@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio.mergefiles;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.PKLFile;
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import com.compomics.mslims.util.fileio.mergefiles.MicromassMergeFileReader;
@@ -32,6 +34,8 @@ import java.io.IOException;
  * @see com.compomics.mslims.util.fileio.mergefiles.MicromassMergeFileReader
  */
 public class TestMicromassMergeFileReader extends TestCaseLM {
+    // Class specific log4j logger for TestMicromassMergeFileReader instances.
+    private static Logger logger = Logger.getLogger(TestMicromassMergeFileReader.class);
 
     public TestMicromassMergeFileReader() {
         this("Test for the MicromassMergeFileReader class.");
@@ -52,7 +56,7 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             BufferedReader br = new BufferedReader(new FileReader(super.getFullFilePath("testMicromassMergeFileReader_Control1.txt")));
             StringBuffer lsb = new StringBuffer();
             String line = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 lsb.append(line + "\n");
             }
             br.close();
@@ -61,12 +65,12 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             br = new BufferedReader(new FileReader(super.getFullFilePath("testMicromassMergeFileReader_Control2.txt")));
             lsb = new StringBuffer();
             line = null;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 lsb.append(line + "\n");
             }
             br.close();
             control2 = lsb.toString();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("Unable to read control files for test of MicromassMergeFileReader: " + ioe.getMessage() + "!");
         }
 
@@ -83,7 +87,7 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             mrf = new MicromassMergeFileReader(f);
             Assert.assertEquals(f.getName(), mrf.getFilename());
             Assert.assertEquals(control1, mrf.toString());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the first mergefilereader test: " + ioe.getMessage() + "!");
         }
 
@@ -98,7 +102,7 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             File f = new File(file);
             mrf = new MicromassMergeFileReader(f);
             Assert.assertEquals(control2, mrf.toString());
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the second mergefilereader test: " + ioe.getMessage() + "!");
         }
     }
@@ -116,7 +120,7 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             mis.setHighestMass(1931.03);
             mis.setLeastIntense(0.0091);
             mis.setMostIntense(1279.26);
-            PKLFile result = (PKLFile)mrf.findMatchingSpectrumFile(mis);
+            PKLFile result = (PKLFile) mrf.findMatchingSpectrumFile(mis);
             Assert.assertTrue(result != null);
             String filename = mrf.getCorrespondingSpectrumFilename(mis);
             Assert.assertEquals("caplc1709.032.2.2.pkl", filename);
@@ -129,13 +133,13 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             mis.setHighestMass(1268.0670);
             mis.setLeastIntense(0.1925);
             mis.setMostIntense(111.9731);
-            result = (PKLFile)mrf.findMatchingSpectrumFile(mis);
+            result = (PKLFile) mrf.findMatchingSpectrumFile(mis);
             Assert.assertTrue(result != null);
             filename = mrf.getCorrespondingSpectrumFilename(mis);
             Assert.assertEquals("caplc1708.102.2.2.pkl", filename);
             Assert.assertEquals(filename, result.getFilename());
 
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the matching of a PKL file in a MicromassMergeFileReader vs. a MIS: " + ioe.getMessage() + "!");
         }
     }
@@ -155,9 +159,9 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             String line = null;
             String[] control = new String[299];
             int counter = 0;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 int start = -1;
-                if((start = line.indexOf("caplc")) >= 0) {
+                if ((start = line.indexOf("caplc")) >= 0) {
                     control[counter] = line.substring(start).trim();
                     counter++;
                 }
@@ -166,10 +170,10 @@ public class TestMicromassMergeFileReader extends TestCaseLM {
             // Check them all.
             // (Note that this check relies on the MergeFileReader to store the PKL files in the order they
             // were read from the mergefile!)
-            for(int i = 0; i < names.length; i++) {
+            for (int i = 0; i < names.length; i++) {
                 Assert.assertEquals(control[i], names[i]);
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("IOException while testing the reporting of the PKL filenames by a MicromassMergeFileReader: " + ioe.getMessage() + "!");
         }
     }

@@ -8,7 +8,10 @@
  */
 package com.compomics.mslims.db.utils;
 
-import com.compomics.mslims.db.accessors.Spectrumfile;
+import com.compomics.mslims.db.accessors.Spectrum;
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.fileio.PKLFile;
 import com.compomics.util.general.CommandLineParser;
 
@@ -29,6 +32,8 @@ import java.util.Properties;
  * This class can be adapted to migrate databases to next releases.
  */
 public class DBTransferTool {
+    // Class specific log4j logger for DBTransferTool instances.
+    private static Logger logger = Logger.getLogger(DBTransferTool.class);
 
     /**
      * The String with the DB driver.
@@ -62,8 +67,7 @@ public class DBTransferTool {
     public static final String PASSWORD = "password";
 
     /**
-     * Constructor that takes the necessary properties for the DB connection
-     * as a parameter.
+     * Constructor that takes the necessary properties for the DB connection as a parameter.
      *
      * @param aPropFile Properties instance with the connection properties.
      */
@@ -78,7 +82,7 @@ public class DBTransferTool {
      */
     public void startConversion() {
         try {
-            Driver driver = (Driver)Class.forName(iDBDriver).newInstance();
+            Driver driver = (Driver) Class.forName(iDBDriver).newInstance();
             Connection lConn = driver.connect(iDBUrl, iDBProps);
             // --------------------------------------------------------
             //      YOUR CODE CAN START HERE
@@ -92,72 +96,76 @@ public class DBTransferTool {
 
             // First the PKL file content and filename.
             // We need to select all of them first.
-            String query = "select spectrumfileid, filename, searched, identified, l_projectid, creationdate, file, l_lcrunid, l_instrumentid from spectrumfile";
+            String query = "select spectrumid, filename, searched, identified, l_projectid, creationdate, l_lcrunid, l_instrumentid from spectrum";
             Statement stat = lConn.createStatement();
             ResultSet rs = stat.executeQuery(query);
             int specFileCounter = 0;
-            System.out.print("\n\nUpdating pklfiles to MGF files...");
-            while(rs.next()) {
+            logger.info("\n\nUpdating pklfiles to MGF files...");
+            while (rs.next()) {
                 specFileCounter++;
                 // Print a dot every 50 records.
-                if(specFileCounter%50 == 0) {
-                    System.out.print(".");
+                if (specFileCounter % 50 == 0) {
+                    logger.info(".");
                 }
 
-                // Create a Spectrumfile.
-                Spectrumfile specFile = new Spectrumfile(rs);
+                // Create a Spectrum.
+                Spectrum lSpectrum = new Spectrum(rs);
+                Spectrum_file lSpectrum_file = Spectrum_file.findFromID(lSpectrum.getSpectrumid(), lConn);
                 // Get filename and file content.
-                String filename = specFile.getFilename();
-                String content = new String(specFile.getUnzippedFile());
+                String filename = lSpectrum.getFilename();
+                String content = new String(lSpectrum_file.getUnzippedFile());
                 // Create a PKLFile.
                 PKLFile pkl = new PKLFile(filename, content);
                 String newContent = pkl.getMGFContents();
                 // Change the filename.
                 String newFilename = filename.substring(0, filename.lastIndexOf(".pkl")) + ".mgf";
-                // Replace the appropriate fields on the Spectrumfile.
-                specFile.setFilename(newFilename);
-                specFile.setUnzippedFile(newContent.getBytes());
-                specFile.update(lConn);
+                // Replace the appropriate fields on the Spectrum.
+                lSpectrum.setFilename(newFilename);
+                // Set the bytes into the Spectrum_file instance.
+                lSpectrum_file.setUnzippedFile(newContent.getBytes());
+                // Update the corresponding rows.
+                lSpectrum.update(lConn);
+                lSpectrum_file.update(lConn);
             }
             rs.close();
-            System.out.println("...Done!");
+            logger.info("...Done!");
 
             // Now to run the statement to update all filenames in the identification table.
-            System.out.println("\nUpdating filenames in the 'Identification' table...");
+            logger.info("\nUpdating filenames in the 'Identification' table...");
             query = "update identification set filename=concat(substring(filename, 1, (length(filename)-4)),'.mgf')";
             int idUpdateCounter = stat.executeUpdate(query);
-            System.out.println("Update complete!");
+            logger.info("Update complete!");
 
-            System.out.println("\n\nUpdated " + specFileCounter + " PKL files to MGF format and new filenames, and");
-            System.out.println("updated " + idUpdateCounter + " linked identifications with the new filenames.");
+            logger.info("\n\nUpdated " + specFileCounter + " PKL files to MGF format and new filenames, and");
+            logger.info("updated " + idUpdateCounter + " linked identifications with the new filenames.");
 
-            System.out.println("\n\nJob's done!\n\n");
+            logger.info("\n\nJob's done!\n\n");
             stat.close();
             // --------------------------------------------------------
             //      END YOUR CODE HERE
             // --------------------------------------------------------
-            if(lConn != null) {
+            if (lConn != null) {
                 lConn.close();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
     /**
      * The main method is the entry point for the application.
      *
-     * @param args  String[] with the start-up args.
+     * @param args String[] with the start-up args.
      */
     public static void main(String[] args) {
-        if(args == null || args.length == 0) {
+        if (args == null || args.length == 0) {
             printUsage();
         }
 
         CommandLineParser clp = new CommandLineParser(args, new String[]{"user", "password"});
         String user = clp.getOptionParameter("user");
         String password = clp.getOptionParameter("password");
-        if(clp.getParameters().length != 2) {
+        if (clp.getParameters().length != 2) {
             printUsage();
         }
         String driver = clp.getParameters()[0];
@@ -166,7 +174,7 @@ public class DBTransferTool {
         Properties props = new Properties();
         props.put(DRIVER, driver);
         props.put(URL, url);
-        if(user != null) {
+        if (user != null) {
             props.put(USER, user);
             props.put(PASSWORD, password);
         }
@@ -179,7 +187,7 @@ public class DBTransferTool {
      * This method prints usage information to the stderr stream and exits the JVM with the status flag raised.
      */
     private static void printUsage() {
-        System.err.println("\n\nUsage:\n\tDBTransferTool --user <db_username> --password <db_password> <db_driver> <db_url>\n\n");
+        logger.error("\n\nUsage:\n\tDBTransferTool --user <db_username> --password <db_password> <db_driver> <db_url>\n\n");
         System.exit(1);
     }
 }

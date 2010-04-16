@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
@@ -30,14 +32,15 @@ import java.util.ArrayList;
  */
 
 /**
- * This class will handle the differential analysis of a MALDI LC-MS analysis
- * of a sample. It also allows the export of Q-TOF / Esquire inclusion lists
- * based on the significant peaks.
+ * This class will handle the differential analysis of a MALDI LC-MS analysis of a sample. It also allows the export of
+ * Q-TOF / Esquire inclusion lists based on the significant peaks.
  *
  * @author Lennart Martens
  * @version $Id: MALDIDiffAnalysisGUI.java,v 1.7 2007/04/03 11:32:43 lennart Exp $
  */
 public class MALDIDiffAnalysisGUI extends FlamableJFrame {
+    // Class specific log4j logger for MALDIDiffAnalysisGUI instances.
+    private static Logger logger = Logger.getLogger(MALDIDiffAnalysisGUI.class);
 
 
     private JRadioButton rbtFileInput = null;
@@ -206,7 +209,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         bgInput.add(rbtFolderInput);
         rbtFileInput.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtFileInput.isSelected()) {
+                if (rbtFileInput.isSelected()) {
                     lblInputFolder.setEnabled(false);
                     txtInputFolder.setEnabled(false);
                     btnBrowseInputFolder.setEnabled(false);
@@ -219,7 +222,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         });
         rbtFolderInput.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtFolderInput.isSelected()) {
+                if (rbtFolderInput.isSelected()) {
                     lblInputFolder.setEnabled(true);
                     txtInputFolder.setEnabled(true);
                     btnBrowseInputFolder.setEnabled(true);
@@ -295,9 +298,9 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         chkS2nThreshold = new JCheckBox("Use signal-to-noise filtering at a ratio of ");
         chkS2nThreshold.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(chkS2nThreshold.isSelected()) {
+                if (chkS2nThreshold.isSelected()) {
                     txtS2nThreshold.setEnabled(true);
-                }else {
+                } else {
                     txtS2nThreshold.setEnabled(false);
                 }
             }
@@ -373,7 +376,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         // The instrument selection radiobuttons.
         rbtQTOF.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtQTOF.isSelected() && rbtInclusion.isSelected()) {
+                if (rbtQTOF.isSelected() && rbtInclusion.isSelected()) {
                     txtConeVoltage.setEnabled(true);
                     txtCollisionEnergy.setEnabled(true);
                 }
@@ -382,7 +385,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         rbtQTOF.setSelected(true);
         rbtEsquire.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtEsquire.isSelected()) {
+                if (rbtEsquire.isSelected()) {
                     txtConeVoltage.setEnabled(false);
                     txtCollisionEnergy.setEnabled(false);
                 }
@@ -419,7 +422,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         // The process selection components.
         rbtStatistics.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtStatistics.isSelected()) {
+                if (rbtStatistics.isSelected()) {
                     rbt95Conf.setEnabled(false);
                     rbt98Conf.setEnabled(false);
                     chkS2nThreshold.setEnabled(false);
@@ -441,11 +444,11 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         rbtStatistics.setSelected(true);
         rbtInclusion.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                if(rbtInclusion.isSelected()) {
+                if (rbtInclusion.isSelected()) {
                     rbt95Conf.setEnabled(true);
                     rbt98Conf.setEnabled(true);
                     chkS2nThreshold.setEnabled(true);
-                    if(chkS2nThreshold.isSelected()) {
+                    if (chkS2nThreshold.isSelected()) {
                         txtS2nThreshold.setEnabled(true);
                     }
                     txtOutputFolder.setEnabled(true);
@@ -453,7 +456,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
                     btnBrowseOutput.setEnabled(true);
                     rbtQTOF.setEnabled(true);
                     rbtEsquire.setEnabled(true);
-                    if(rbtQTOF.isSelected()) {
+                    if (rbtQTOF.isSelected()) {
                         txtConeVoltage.setEnabled(true);
                         lblConeVoltage.setEnabled(true);
                         txtCollisionEnergy.setEnabled(true);
@@ -500,7 +503,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
     /**
      * This method creates the button panel for this application.
      *
-     * @return  JPanel with the buttons.
+     * @return JPanel with the buttons.
      */
     private JPanel getButtonPanel() {
         // The buttons.
@@ -516,7 +519,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     actionPressed();
                 }
             }
@@ -534,7 +537,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
              * This event occurs when a key press is followed by a key release.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     close();
                 }
             }
@@ -553,17 +556,16 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
     }
 
     /**
-     * This method is called whenever the user presses the 'browse' button
-     * for the file input field.
+     * This method is called whenever the user presses the 'browse' button for the file input field.
      */
     private void browseFileInputPressed() {
         // File dialog for input, taking into account the starting
         // folder in the 'txtInputFile', if correct. Otherwise, use the
         // system root.
         File startHere = new File("/");
-        if(!txtInputFile.getText().trim().equals("")) {
-            File f= new File(txtInputFile.getText().trim());
-            if(f.exists()) {
+        if (!txtInputFile.getText().trim().equals("")) {
+            File f = new File(txtInputFile.getText().trim());
+            if (f.exists()) {
                 startHere = f;
             }
         }
@@ -574,7 +576,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         jfc.setFileFilter(new javax.swing.filechooser.FileFilter() {
             public boolean accept(File f) {
                 boolean result = false;
-                if(f.isDirectory() || f.getName().endsWith(".xml") || f.getName().endsWith(".XML")) {
+                if (f.isDirectory() || f.getName().endsWith(".xml") || f.getName().endsWith(".XML")) {
                     result = true;
                 }
                 return result;
@@ -585,23 +587,22 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
             }
         });
         returnVal = jfc.showOpenDialog(txtInputFile);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             txtInputFile.setText(jfc.getSelectedFile().getAbsoluteFile().toString());
         }
     }
 
     /**
-     * This method is called whenever the user presses the 'browse' button
-     * for the folder input field.
+     * This method is called whenever the user presses the 'browse' button for the folder input field.
      */
     private void browseFolderInputPressed() {
         // File dialog for input, taking into account the starting
         // folder in the 'txtInputFolder', if correct. Otherwise, use the
         // system root.
         File startHere = new File("/");
-        if(!txtInputFolder.getText().trim().equals("")) {
-            File f= new File(txtInputFolder.getText().trim());
-            if(f.exists()) {
+        if (!txtInputFolder.getText().trim().equals("")) {
+            File f = new File(txtInputFolder.getText().trim());
+            if (f.exists()) {
                 startHere = f;
             }
         }
@@ -611,23 +612,22 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         jfc.setDialogType(JFileChooser.CUSTOM_DIALOG);
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         returnVal = jfc.showDialog(txtInputFolder, "Select folder");
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             txtInputFolder.setText(jfc.getSelectedFile().getAbsoluteFile().toString());
         }
     }
 
     /**
-     * This method is called whenever the user presses the 'browse' button
-     * for the output field.
+     * This method is called whenever the user presses the 'browse' button for the output field.
      */
     private void browseOutputPressed() {
         // File dialog for output, taking into account the starting
         // folder in the 'txtOutputFolder', if correct. Otherwise, use the
         // system root.
         File startHere = new File("/");
-        if(!txtOutputFolder.getText().trim().equals("")) {
-            File f= new File(txtOutputFolder.getText().trim());
-            if(f.exists()) {
+        if (!txtOutputFolder.getText().trim().equals("")) {
+            File f = new File(txtOutputFolder.getText().trim());
+            if (f.exists()) {
                 startHere = f;
             }
         }
@@ -637,7 +637,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         jfc.setDialogType(JFileChooser.CUSTOM_DIALOG);
         jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         returnVal = jfc.showDialog(txtOutputFolder, "Select output folder");
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             txtOutputFolder.setText(jfc.getSelectedFile().getAbsoluteFile().toString());
         }
     }
@@ -647,44 +647,44 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
      */
     private void actionPressed() {
         File input = null;
-        if(rbtFileInput.isSelected()) {
+        if (rbtFileInput.isSelected()) {
             // Shared check for inputfile.
             String inputFile = txtInputFile.getText();
-            if(inputFile == null || inputFile.trim().equals("")) {
+            if (inputFile == null || inputFile.trim().equals("")) {
                 JOptionPane.showMessageDialog(this, "Please specify an input file to open!", "No file specified", JOptionPane.WARNING_MESSAGE);
                 txtInputFile.requestFocus();
                 return;
             }
             // See if the file exists.
             input = new File(inputFile);
-            if(!input.exists()) {
+            if (!input.exists()) {
                 JOptionPane.showMessageDialog(this, "Could not find the file you specified: '" + inputFile + "'!", "File not found!", JOptionPane.WARNING_MESSAGE);
                 txtInputFile.requestFocus();
                 return;
             }
             // See whether it is not a directory.
-            if(input.isDirectory()) {
+            if (input.isDirectory()) {
                 JOptionPane.showMessageDialog(this, "The file you specified: '" + inputFile + "' is a folder, not a file!", "Folder specified instead of file!", JOptionPane.WARNING_MESSAGE);
                 txtInputFile.requestFocus();
                 return;
             }
-        } else if(rbtFolderInput.isSelected()) {
+        } else if (rbtFolderInput.isSelected()) {
             // Shared check for inputfolder.
             String inputFile = txtInputFolder.getText();
-            if(inputFile == null || inputFile.trim().equals("")) {
+            if (inputFile == null || inputFile.trim().equals("")) {
                 JOptionPane.showMessageDialog(this, "Please specify an input folder to open!", "No folder specified", JOptionPane.WARNING_MESSAGE);
                 txtInputFolder.requestFocus();
                 return;
             }
             // See if the file exists.
             input = new File(inputFile);
-            if(!input.exists()) {
+            if (!input.exists()) {
                 JOptionPane.showMessageDialog(this, "Could not find the folder you specified: '" + inputFile + "'!", "Folder not found!", JOptionPane.WARNING_MESSAGE);
                 txtInputFolder.requestFocus();
                 return;
             }
             // See whether it is not a directory.
-            if(!input.isDirectory()) {
+            if (!input.isDirectory()) {
                 JOptionPane.showMessageDialog(this, "The folder you specified: '" + inputFile + "' is a file, not a folder!", "File specified instead of folder!", JOptionPane.WARNING_MESSAGE);
                 txtInputFolder.requestFocus();
                 return;
@@ -692,7 +692,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         }
         // Find the correct name for the project.
         String name = null;
-        if(input.isDirectory()) {
+        if (input.isDirectory()) {
             // For a folder, take the folder name.
             name = input.getName();
         } else {
@@ -701,17 +701,17 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         }
         // See whether we should use area or intensity.
         boolean area = true;
-        if(rbtIntensity.isSelected()) {
+        if (rbtIntensity.isSelected()) {
             area = false;
         }
         // Find the calibration.
-        InnerMALDICalibration calib = (InnerMALDICalibration)cmbCalibration.getSelectedItem();
+        InnerMALDICalibration calib = (InnerMALDICalibration) cmbCalibration.getSelectedItem();
         double calibration = calib.getCalibration();
-        System.out.println("Selected calibration: " + calibration);
+        logger.info("Selected calibration: " + calibration);
         // Forward to the correct action.
-        if(rbtStatistics.isSelected()) {
+        if (rbtStatistics.isSelected()) {
             doStatistics(input, name, area, calibration);
-        } else if(rbtInclusion.isSelected()) {
+        } else if (rbtInclusion.isSelected()) {
             doInclusionLists(input, name, area, calibration);
         }
     }
@@ -719,11 +719,11 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
     /**
      * This method will be called when the robust statistics need to be calculated.
      *
-     * @param   aInput  File with the input file.
-     * @param   aName   String with the name for the analysis.
-     * @param aUseArea  boolean that indicates whether to use compound area ('true') or intensity
-     *                          ('false') for the ratio calculation.
-     * @param aCalibration  double with the instrument calibration.
+     * @param aInput       File with the input file.
+     * @param aName        String with the name for the analysis.
+     * @param aUseArea     boolean that indicates whether to use compound area ('true') or intensity ('false') for the
+     *                     ratio calculation.
+     * @param aCalibration double with the instrument calibration.
      */
     private void doStatistics(File aInput, String aName, boolean aUseArea, double aCalibration) {
         MALDIDiffAnalysisWorker results = this.doCompoundProcessing("Analyzing '" + aInput.getName() + "'...", this, aName, aInput, aUseArea, aCalibration, null, -1, 0.0, 0, 0, 0);
@@ -735,35 +735,35 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
     /**
      * This method will be called when the inclusion lists need to be generated.
      *
-     * @param   aInput  File with the input file.
-     * @param   aName   String with the name for the analysis.
-     * @param aUseArea  boolean that indicates whether to use compound area ('true') or intensity
-     *                          ('false') for the ratio calculation.
-     * @param aCalibration  double with the instrument calibration.
+     * @param aInput       File with the input file.
+     * @param aName        String with the name for the analysis.
+     * @param aUseArea     boolean that indicates whether to use compound area ('true') or intensity ('false') for the
+     *                     ratio calculation.
+     * @param aCalibration double with the instrument calibration.
      */
     private void doInclusionLists(File aInput, String aName, boolean aUseArea, double aCalibration) {
         // Check the confidence interval.
         int confidence = -1;
-        if(rbt95Conf.isSelected()) {
+        if (rbt95Conf.isSelected()) {
             confidence = MALDIDiffAnalysisWorker.CONFIDENCE_95;
-        } else if(rbt98Conf.isSelected()) {
+        } else if (rbt98Conf.isSelected()) {
             confidence = MALDIDiffAnalysisWorker.CONFIDENCE_98;
         }
         // Check the signal-to-noise threshold.
         double s2nThreshold = -1.0;
-        if(chkS2nThreshold.isSelected()) {
+        if (chkS2nThreshold.isSelected()) {
             String s2nString = txtS2nThreshold.getText();
-            if(s2nString == null || s2nString.trim().equals("")) {
+            if (s2nString == null || s2nString.trim().equals("")) {
                 JOptionPane.showMessageDialog(this, "You need to specify a signal-to-noise threshold!", "No signal-to-noise threshold specified!", JOptionPane.WARNING_MESSAGE);
                 txtS2nThreshold.requestFocus();
                 return;
             }
             try {
                 s2nThreshold = Double.parseDouble(s2nString);
-                if(s2nThreshold <= 0.0) {
+                if (s2nThreshold <= 0.0) {
                     throw new NumberFormatException();
                 }
-            } catch(NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(this, "You need to specify a positive, non-zero decimal number!", "Incorrect signal-to-noise threshold specified!", JOptionPane.WARNING_MESSAGE);
                 txtS2nThreshold.requestFocus();
                 return;
@@ -771,48 +771,48 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         }
         // Check the instrument selection.
         int instrument = -1;
-        if(rbtQTOF.isSelected()) {
+        if (rbtQTOF.isSelected()) {
             instrument = MALDIDiffAnalysisWorker.QTOF;
-        } else if(rbtEsquire.isSelected()) {
+        } else if (rbtEsquire.isSelected()) {
             instrument = MALDIDiffAnalysisWorker.ESQUIRE;
         }
         // Check the additional fields and gather data.
         int coneVoltage = -1;
         int collisionEnergy = -1;
-        if(rbtQTOF.isSelected()) {
+        if (rbtQTOF.isSelected()) {
             String text = txtConeVoltage.getText();
-            if(text == null || text.trim().equals("")) {
+            if (text == null || text.trim().equals("")) {
                 JOptionPane.showMessageDialog(this, "You need to specify a cone voltage for the Q-TOF!", "No cone voltage specified!", JOptionPane.WARNING_MESSAGE);
                 txtConeVoltage.requestFocus();
                 return;
             }
             try {
                 coneVoltage = Integer.parseInt(text);
-            } catch(NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(this, "The cone voltage must be a non-zero, positive whole number!", "Incorrect cone voltage specified!", JOptionPane.WARNING_MESSAGE);
                 txtConeVoltage.requestFocus();
                 return;
             }
-            if(coneVoltage <= 0) {
+            if (coneVoltage <= 0) {
                 JOptionPane.showMessageDialog(this, "The cone voltage must be a non-zero, positive whole number!", "Incorrect cone voltage specified!", JOptionPane.WARNING_MESSAGE);
                 txtConeVoltage.requestFocus();
                 return;
             }
             // Collision energy.
             text = txtCollisionEnergy.getText();
-            if(text == null || text.trim().equals("")) {
+            if (text == null || text.trim().equals("")) {
                 JOptionPane.showMessageDialog(this, "You need to specify a collision energy for the Q-TOF!", "No collision energy specified!", JOptionPane.WARNING_MESSAGE);
                 txtCollisionEnergy.requestFocus();
                 return;
             }
             try {
                 collisionEnergy = Integer.parseInt(text);
-            } catch(NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 JOptionPane.showMessageDialog(this, "The collision energy must be a non-zero, positive whole number!", "Incorrect collision energy specified!", JOptionPane.WARNING_MESSAGE);
                 txtCollisionEnergy.requestFocus();
                 return;
             }
-            if(collisionEnergy <= 0) {
+            if (collisionEnergy <= 0) {
                 JOptionPane.showMessageDialog(this, "The collision energy must be a non-zero, positive whole number!", "Incorrect collision energy specified!", JOptionPane.WARNING_MESSAGE);
                 txtCollisionEnergy.requestFocus();
                 return;
@@ -820,18 +820,18 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         }
         // Output folder checks.
         String outString = txtOutputFolder.getText();
-        if(outString == null || outString.trim().equals("")) {
+        if (outString == null || outString.trim().equals("")) {
             JOptionPane.showMessageDialog(this, "You need to specify an output folder for the inclusion lists!", "No output folder specified!", JOptionPane.WARNING_MESSAGE);
             txtOutputFolder.requestFocus();
             return;
         }
         File output = new File(outString);
-        if(!output.exists()) {
+        if (!output.exists()) {
             JOptionPane.showMessageDialog(this, "The output folder you specified does not exist!", "Output folder does not exist!", JOptionPane.WARNING_MESSAGE);
             txtOutputFolder.requestFocus();
             return;
         }
-        if(!output.isDirectory()) {
+        if (!output.isDirectory()) {
             JOptionPane.showMessageDialog(this, "The output location you specified is not a folder!", "Output location is not a folder!", JOptionPane.WARNING_MESSAGE);
             txtOutputFolder.requestFocus();
             return;
@@ -847,24 +847,24 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
      * This method actually makes sure the required data is read and parsed.
      *
      * @param aProgressBarTitle String with a title for the progressbar that will be displayed.
-     * @param aWorkerParent Flamable with the parent for the actual workerthread.
+     * @param aWorkerParent     Flamable with the parent for the actual workerthread.
      * @param aProcessingName   String with a name for the processing (project name for instance).
-     * @param aInput    File with the input file or folder.
-     * @param aUseArea  boolean that indicates whether to use compound area ('true') or intensity
-     *                          ('false') for the ratio calculation.
-     * @param aCalibration  double with the instrument calibration.
-     * @param aOutput   File with the (optional) output file. Can be 'null' for no file.
-     * @param aConfidence   int with the (optional) confidence interval selected.
-     * @param aS2nThreshold   double with the (optional) signal-to-noise threshold selected.
-     * @param aInstrument   int with the (optional) output instrument selected.
-     * @param aConeVoltage  int with the (optional) cone voltage constant to output.
+     * @param aInput            File with the input file or folder.
+     * @param aUseArea          boolean that indicates whether to use compound area ('true') or intensity ('false') for
+     *                          the ratio calculation.
+     * @param aCalibration      double with the instrument calibration.
+     * @param aOutput           File with the (optional) output file. Can be 'null' for no file.
+     * @param aConfidence       int with the (optional) confidence interval selected.
+     * @param aS2nThreshold     double with the (optional) signal-to-noise threshold selected.
+     * @param aInstrument       int with the (optional) output instrument selected.
+     * @param aConeVoltage      int with the (optional) cone voltage constant to output.
      * @param aCollisionEnergy  int with the (optional) collision energy to output.
-     * @return  MALDIDiffAnalysisWorker with the results of the parsing and processing.
+     * @return MALDIDiffAnalysisWorker with the results of the parsing and processing.
      */
     private MALDIDiffAnalysisWorker doCompoundProcessing(String aProgressBarTitle, Flamable aWorkerParent, String aProcessingName, File aInput, boolean aUseArea, double aCalibration, File aOutput, int aConfidence, double aS2nThreshold, int aInstrument, int aConeVoltage, int aCollisionEnergy) {
         // The progress bar.
         DefaultProgressBar progress = new DefaultProgressBar(this, aProgressBarTitle, 0, 4);
-        progress.setSize(this.getWidth()/2, progress.getHeight());
+        progress.setSize(this.getWidth() / 2, progress.getHeight());
         // The worker.
         MALDIDiffAnalysisWorker mdaw = new MALDIDiffAnalysisWorker(this, aProcessingName, progress, aInput, aUseArea, aCalibration, aOutput, aConfidence, aS2nThreshold, aInstrument, aConeVoltage, aCollisionEnergy, null);
         // Start it!
@@ -878,37 +878,39 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
     /**
      * This method will init and pop-up a dialog with the results of the analysis.
      *
-     * @param aWorker   MALDIDiffAnalysisWorker which performed the work and will therefore
-     *                  be interrogated for the results.
-     * @param aInclusionListsWritten    boolean to indicate whether inclusion lists were written.
+     * @param aWorker                MALDIDiffAnalysisWorker which performed the work and will therefore be interrogated
+     *                               for the results.
+     * @param aInclusionListsWritten boolean to indicate whether inclusion lists were written.
      */
     private void showResults(MALDIDiffAnalysisWorker aWorker, boolean aInclusionListsWritten) {
         MALDIStatisticsResultsDialog msrd = null;
         int[] counts = aWorker.getCompoundCounts();
         double[] stats = aWorker.getStatisticsResults();
-        String aOrI = (rbtArea.isSelected())?"area":"intensity";
-        if(aInclusionListsWritten) {
+        String aOrI = (rbtArea.isSelected()) ? "area" : "intensity";
+        if (aInclusionListsWritten) {
             msrd = new MALDIStatisticsResultsDialog(this, "Results for " + aWorker.getName() + "(using " + aOrI + " for ratio calculation)", aWorker.getName(), counts[MALDIDiffAnalysisWorker.TOTAL_COUNT], counts[MALDIDiffAnalysisWorker.COUPLE_COUNT], counts[MALDIDiffAnalysisWorker.SINGLE_COUNT], counts[MALDIDiffAnalysisWorker.SKIPPED_COUNT], stats, aWorker.getCouples(), rbtArea.isSelected(), aWorker.getFileCount(), aWorker.getDifferentialCompoundCount());
         } else {
-            msrd = new MALDIStatisticsResultsDialog(this, "Results for " + aWorker.getName() + "(using " + aOrI + " for ratio calculation)", aWorker.getName(), counts[MALDIDiffAnalysisWorker.TOTAL_COUNT], counts[MALDIDiffAnalysisWorker.COUPLE_COUNT], counts[MALDIDiffAnalysisWorker.SINGLE_COUNT], counts[MALDIDiffAnalysisWorker.SKIPPED_COUNT], stats,aWorker.getCouples(), rbtArea.isSelected());
+            msrd = new MALDIStatisticsResultsDialog(this, "Results for " + aWorker.getName() + "(using " + aOrI + " for ratio calculation)", aWorker.getName(), counts[MALDIDiffAnalysisWorker.TOTAL_COUNT], counts[MALDIDiffAnalysisWorker.COUPLE_COUNT], counts[MALDIDiffAnalysisWorker.SINGLE_COUNT], counts[MALDIDiffAnalysisWorker.SKIPPED_COUNT], stats, aWorker.getCouples(), rbtArea.isSelected());
         }
-        msrd.setLocation(this.getX()+100, this.getY()+100);
+        msrd.setLocation(this.getX() + 100, this.getY() + 100);
         msrd.setVisible(true);
     }
 
     /**
-     * This method will attempt to read the 'MALDIDiffAnalysisGUI.properties' file
-     * from the classpath and read the calibrations from there.
+     * This method will attempt to read the 'MALDIDiffAnalysisGUI.properties' file from the classpath and read the
+     * calibrations from there.
      */
     private void readCalibrations() {
         try {
             Properties p = new Properties();
             InputStream is = ClassLoader.getSystemResourceAsStream("MALDIDiffAnalysisGUI.properties");
-            if(is == null) {
+            if (is == null) {
                 is = this.getClass().getClassLoader().getResourceAsStream("MALDIDiffAnalysisGUI.properties");
-                if(is == null) {
+                if (is == null) {
                     // Leave it at that.
-                    JOptionPane.showMessageDialog(this, new String[] { "Could not find file 'MALDIDiffAnalysisGUI.properties' in the classpath!", "No calibrations loaded, please fix and restart application!", "Exiting application."}, "Unable to load calibration data!", JOptionPane.ERROR_MESSAGE);
+                    String lMessage = "Could not find file 'MALDIDiffAnalysisGUI.properties' in the classpath!";
+                    logger.error(lMessage);
+                    JOptionPane.showMessageDialog(this, new String[]{lMessage, "No calibrations loaded, please fix and restart application!", "Exiting application."}, "Unable to load calibration data!", JOptionPane.ERROR_MESSAGE);
                     this.close();
                 }
             }
@@ -917,27 +919,29 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
             iCalibrations = new InnerMALDICalibration[p.size()];
             int counter = 0;
             while (iter.hasNext()) {
-                String key = (String)iter.next();
+                String key = (String) iter.next();
                 String value = p.getProperty(key);
                 double calibration = 0.0;
                 try {
                     calibration = Double.parseDouble(value);
-                } catch(NumberFormatException nfe) {
-                    JOptionPane.showMessageDialog(this, new String[] { "Could not read the calibration value for the '" + key + "' labelling!", "Value '" + value + "' was not a decimal number", "This calibration is set to '0.0'!"}, "Problem loading calibration data for '" + key + "'!", JOptionPane.ERROR_MESSAGE);
+                } catch (NumberFormatException nfe) {
+                    logger.error(nfe.getMessage(), nfe);
+
+                    JOptionPane.showMessageDialog(this, new String[]{"Could not read the calibration value for the '" + key + "' labelling!", "Value '" + value + "' was not a decimal number", "This calibration is set to '0.0'!"}, "Problem loading calibration data for '" + key + "'!", JOptionPane.ERROR_MESSAGE);
                 }
                 iCalibrations[counter] = new InnerMALDICalibration(key, calibration);
                 counter++;
             }
             is.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             // Do nothing.
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
     /**
-     * This class simply holds the two-piece calibration data
-     * (String with a labelling technique and double with the actual calibration value).
+     * This class simply holds the two-piece calibration data (String with a labelling technique and double with the
+     * actual calibration value).
      */
     private class InnerMALDICalibration {
         /**
@@ -950,11 +954,11 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         private double iCalibration = 0.0;
 
         /**
-         * This constructor takes the String with the labelling and the double with the
-         * corresponding calibration value.
+         * This constructor takes the String with the labelling and the double with the corresponding calibration
+         * value.
          *
-         * @param aLabelling    String with the labelling.
-         * @param aCalibration  double with the calibration value.
+         * @param aLabelling   String with the labelling.
+         * @param aCalibration double with the calibration value.
          */
         public InnerMALDICalibration(String aLabelling, double aCalibration) {
             this.iLabelling = aLabelling;
@@ -968,8 +972,7 @@ public class MALDIDiffAnalysisGUI extends FlamableJFrame {
         /**
          * This method reports on the calibration value.
          *
-         * @return  double  with the calibrated standard deviation
-         *                  for this labelling technique.
+         * @return double  with the calibrated standard deviation for this labelling technique.
          */
         public double getCalibration() {
             return iCalibration;

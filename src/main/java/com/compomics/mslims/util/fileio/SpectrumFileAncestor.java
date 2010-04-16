@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import org.apache.log4j.Logger;
+
 
 import com.compomics.util.interfaces.SpectrumFile;
 
@@ -51,12 +53,10 @@ public abstract class SpectrumFileAncestor implements SpectrumFile {
     protected double iIntensity = -1.0;
 
     /**
-     * This method reports on the charge of the precursor ion.
-     * Note that when the charge could not be determined, this
+     * This method reports on the charge of the precursor ion. Note that when the charge could not be determined, this
      * method will return '0'.
      *
-     * @return int with the charge of the precursor, or '0'
-     *         if no charge state is known.
+     * @return int with the charge of the precursor, or '0' if no charge state is known.
      */
     public int getCharge() {
         return iCharge;
@@ -81,9 +81,8 @@ public abstract class SpectrumFileAncestor implements SpectrumFile {
     }
 
     /**
-     * This method reports on the peaks in the spectrum, with the
-     * Doubles for the masses as keys in the HashMap, and the intensities
-     * for each peak as Double value for that mass key.
+     * This method reports on the peaks in the spectrum, with the Doubles for the masses as keys in the HashMap, and the
+     * intensities for each peak as Double value for that mass key.
      *
      * @return HashMap with Doubles as keys (the masses) and Doubles as values (the intensities).
      */
@@ -101,8 +100,7 @@ public abstract class SpectrumFileAncestor implements SpectrumFile {
     }
 
     /**
-     * This method sets the charge of the precursor ion. When the charge is not known,
-     * it should be set to '0'.
+     * This method sets the charge of the precursor ion. When the charge is not known, it should be set to '0'.
      *
      * @param aCharge int with the charge of the precursor ion.
      */
@@ -129,8 +127,7 @@ public abstract class SpectrumFileAncestor implements SpectrumFile {
     }
 
     /**
-     * This method sets the peaks on the spectrum.
-     * Doubles for the masses as keys in the HashMap, and the intensities
+     * This method sets the peaks on the spectrum. Doubles for the masses as keys in the HashMap, and the intensities
      * for each peak as Double value for that mass key.
      *
      * @param aPeaks HashMap with Doubles as keys (the masses) and Doubles as values (the intensities).

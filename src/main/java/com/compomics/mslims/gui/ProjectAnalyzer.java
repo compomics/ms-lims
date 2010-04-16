@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.db.accessors.Protocol;
 import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslims.db.accessors.Projectanalyzertool;
@@ -41,10 +43,11 @@ import java.util.*;
  * @version $Id: ProjectAnalyzer.java,v 1.9 2009/07/28 14:48:33 lennart Exp $
  */
 public class ProjectAnalyzer extends FlamableJFrame implements Connectable, ProjectManager {
+    // Class specific log4j logger for ProjectAnalyzer instances.
+    private static Logger logger = Logger.getLogger(ProjectAnalyzer.class);
 
     /**
-     * Boolean that indicates whether the tool is ran in
-     * stand-alone mode ('true') or not ('false').
+     * Boolean that indicates whether the tool is ran in stand-alone mode ('true') or not ('false').
      */
     private static boolean iStandAlone = true;
 
@@ -94,7 +97,6 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     private static SimpleDateFormat iSDF = new SimpleDateFormat(iDateTimeFormat);
 
 
-
     private JComboBox cmbProject = null;
     private JCheckBox chkSorting = null;
     private JTextField txtID = null;
@@ -118,31 +120,27 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     /**
      * Private default constructor.
      */
-    private ProjectAnalyzer() {}
+    private ProjectAnalyzer() {
+    }
 
     /**
-     * This constructor takes a title for the frame and makes sure the DB Connection
-     * is set up, the components are initialized and the GUI is layed out.
+     * This constructor takes a title for the frame and makes sure the DB Connection is set up, the components are
+     * initialized and the GUI is layed out.
      *
-     * @param aTitle    String with the title for the frame. Will be affixed with the
-     *                  database name.
+     * @param aTitle String with the title for the frame. Will be affixed with the database name.
      */
     public ProjectAnalyzer(String aTitle) {
         this(aTitle, null, null);
     }
 
     /**
-     * This constructor takes a title for the frame and a DB Connection
-     * to use (along with its name), the components are initialized and
-     * the GUI is layed out.
+     * This constructor takes a title for the frame and a DB Connection to use (along with its name), the components are
+     * initialized and the GUI is layed out.
      *
-     * @param   aTitle    String with the title for the frame. Will be affixed with the
-     *                  database name.
-     * @param   aConn   Connection with the database connection
-     *                  to use. 'null' means no connection specified
-     *                  so create your own (pops up ConnectionDialog).
-     * @param   aDBName String with the name for the database connection.
-     *                  Only read if aConn != null.
+     * @param aTitle  String with the title for the frame. Will be affixed with the database name.
+     * @param aConn   Connection with the database connection to use. 'null' means no connection specified so create
+     *                your own (pops up ConnectionDialog).
+     * @param aDBName String with the name for the database connection. Only read if aConn != null.
      */
     public ProjectAnalyzer(String aTitle, Connection aConn, String aDBName) {
         // Window closing stuff.
@@ -158,12 +156,12 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
         // Init the Map of tools that are active.
         iTools = new HashMap();
         // Display the connection dialog.
-        if(aConn == null) {
+        if (aConn == null) {
             this.getConnection();
         } else {
             this.passConnection(aConn, aDBName);
         }
-        if(iConnection == null) {
+        if (iConnection == null) {
             close();
         }
         // Set the title.
@@ -177,14 +175,14 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
         this.constructScreen();
         // Display settings.
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation((screen.width/10), (screen.height/10));
+        this.setLocation((screen.width / 10), (screen.height / 10));
         this.pack();
     }
 
     /**
-     * This method is meant to be called when the user has changed or added a project<br />
-     * Changes will then be read from the DB (along with all the other projects).
-     * Calling this method will result in a DB SQL statement being executed.
+     * This method is meant to be called when the user has changed or added a project<br /> Changes will then be read
+     * from the DB (along with all the other projects). Calling this method will result in a DB SQL statement being
+     * executed.
      */
     public void projectsChanged() {
         this.findProjects();
@@ -193,16 +191,14 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     }
 
     /**
-     * This method will be called by the class actually making the connection.
-     * It will pass the connection and an identifier String for that connection
-     * (typically the name of the database connected to).
+     * This method will be called by the class actually making the connection. It will pass the connection and an
+     * identifier String for that connection (typically the name of the database connected to).
      *
      * @param aConn   Connection with the DB connection.
-     * @param aDBName String with an identifier for the connection, typically the
-     *                name of the DB connected to.
+     * @param aDBName String with an identifier for the connection, typically the name of the DB connected to.
      */
     public void passConnection(Connection aConn, String aDBName) {
-        if(aConn == null) {
+        if (aConn == null) {
             close();
         }
         iConnection = aConn;
@@ -212,24 +208,23 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     /**
      * This method will be called by a tool that is closing.
      *
-     * @param   aTool   ProjectAnalyzerTool that is closing.
+     * @param aTool ProjectAnalyzerTool that is closing.
      */
     public void toolClosing(ProjectAnalyzerTool aTool) {
         String toolClass = aTool.getClass().getName();
         toolClass = toolClass.substring(toolClass.lastIndexOf(".") + 1);
-        Vector temp = (Vector)this.iTools.get(toolClass);
+        Vector temp = (Vector) this.iTools.get(toolClass);
         temp.remove(aTool);
         // If we just removed the last instance,
         // also delete the key.
-        if(temp.size() == 0) {
+        if (temp.size() == 0) {
             this.iTools.remove(toolClass);
         }
         updateTree();
     }
 
     /**
-     * This method will take care of organizing and laying out the GUI
-     * of the application.
+     * This method will take care of organizing and laying out the GUI of the application.
      */
     private void constructScreen() {
 
@@ -384,7 +379,7 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
              * Invoked when a key has been pressed.
              */
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     toolEngaged();
                 }
             }
@@ -432,12 +427,12 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
              * Invoked when the mouse has been clicked on a component.
              */
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2) {
+                if (e.getClickCount() == 2) {
                     TreePath selPath = treeSummary.getPathForLocation(e.getX(), e.getY());
-                    if(selPath != null) {
+                    if (selPath != null) {
                         Object clicked = selPath.getLastPathComponent();
-                        if(clicked instanceof ProjectAnalyzerTool) {
-                            ((ProjectAnalyzerTool)clicked).setActive();
+                        if (clicked instanceof ProjectAnalyzerTool) {
+                            ((ProjectAnalyzerTool) clicked).setActive();
                         }
                     }
                 }
@@ -445,7 +440,7 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
         });
         JPanel jpanToolSummary = new JPanel(new BorderLayout());
         jpanToolSummary.add(new JScrollPane(treeSummary), BorderLayout.CENTER);
-        jpanToolSummary.setPreferredSize(new Dimension(jpanToolSummary.getPreferredSize().width, jpanTop.getPreferredSize().height/5));
+        jpanToolSummary.setPreferredSize(new Dimension(jpanToolSummary.getPreferredSize().width, jpanTop.getPreferredSize().height / 5));
 
         // Splitpane between the top splitpane and the summary panel.
         JSplitPane splitPaneDown = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -471,13 +466,13 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
      * This method is called when the user clicks the 'modify project' button.
      */
     private void modifyProjectTriggered() {
-        if(cmbProject.getSelectedItem() != null) {
+        if (cmbProject.getSelectedItem() != null) {
             try {
-                ProjectDialog pd = new ProjectDialog(this, "Modify existing project", ProjectDialog.CHANGE, (Project)cmbProject.getSelectedItem(), iConnection);
+                ProjectDialog pd = new ProjectDialog(this, "Modify existing project", ProjectDialog.CHANGE, (Project) cmbProject.getSelectedItem(), iConnection);
                 Point p = this.getLocation();
-                pd.setLocation((int)(p.getX()) + 50, (int)(p.getY()) + 50);
+                pd.setLocation((int) (p.getX()) + 50, (int) (p.getY()) + 50);
                 pd.setVisible(true);
-            } catch(Throwable t) {
+            } catch (Throwable t) {
                 this.passHotPotato(t);
             }
         } else {
@@ -489,30 +484,33 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
      * This method is called when the user clicks the 'engage project' button.
      */
     private void toolEngaged() {
-        if(cmbTool.getSelectedItem() != null) {
-            Projectanalyzertool pat = (Projectanalyzertool)cmbTool.getSelectedItem();
+        if (cmbTool.getSelectedItem() != null) {
+            Projectanalyzertool pat = (Projectanalyzertool) cmbTool.getSelectedItem();
             try {
                 Object temp = Class.forName(pat.getToolclassname()).newInstance();
-                if(temp instanceof ProjectAnalyzerTool) {
-                    ProjectAnalyzerTool tool = (ProjectAnalyzerTool)temp;
+                if (temp instanceof ProjectAnalyzerTool) {
+                    ProjectAnalyzerTool tool = (ProjectAnalyzerTool) temp;
                     String toolClass = tool.getClass().getName();
                     toolClass = toolClass.substring(toolClass.lastIndexOf(".") + 1);
-                    if(iTools.containsKey(toolClass)) {
-                        Vector tempVec = (Vector)iTools.get(toolClass);
+                    if (iTools.containsKey(toolClass)) {
+                        Vector tempVec = (Vector) iTools.get(toolClass);
                         tempVec.add(tool);
                     } else {
                         Vector tempVec = new Vector();
                         tempVec.add(tool);
                         iTools.put(toolClass, tempVec);
                     }
-                    tool.engageTool(this, pat.getToolname(), pat.getToolparameters(), iConnection, iDBName, (Project)cmbProject.getSelectedItem());
+                    tool.engageTool(this, pat.getToolname(), pat.getToolparameters(), iConnection, iDBName, (Project) cmbProject.getSelectedItem());
                     updateTree();
                 } else {
-                    JOptionPane.showMessageDialog(this, "The tool is not a correct implementation!", "Cannot start tool!", JOptionPane.ERROR_MESSAGE);
+                    String lMessage = "The tool is not a correct implementation!";
+                    logger.error(lMessage);
+                    JOptionPane.showMessageDialog(this, lMessage, "Cannot start tool!", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch(ClassNotFoundException cnfe) {
+            } catch (ClassNotFoundException cnfe) {
+                logger.error(cnfe.getMessage(), cnfe);
                 JOptionPane.showMessageDialog(this, "Tool '" + pat.getToolclassname() + "' could not be found in your classpath!", "Tool not found!", JOptionPane.ERROR_MESSAGE);
-            } catch(Throwable t) {
+            } catch (Throwable t) {
                 this.passHotPotato(t);
             }
         } else {
@@ -523,14 +521,14 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     /**
      * The main method is the entry point for the application.
      *
-     * @param args  String[] with the start-up arguments.
+     * @param args String[] with the start-up arguments.
      */
     public static void main(String[] args) {
         ProjectAnalyzer pa = null;
         try {
             pa = new ProjectAnalyzer("Project analyzer application");
             pa.setVisible(true);
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             new ProjectAnalyzer().passHotPotato(t);
         }
     }
@@ -542,8 +540,7 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     }
 
     /**
-     * This method will attempt to retrieve all relevant data from the
-     * local filesystem and the DB connection.
+     * This method will attempt to retrieve all relevant data from the local filesystem and the DB connection.
      */
     private void gatherData() {
         this.findProjects();
@@ -553,15 +550,14 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     }
 
     /**
-     * This method will use the data retrieved in 'gatherData()' to fill out
-     * a few components.
+     * This method will use the data retrieved in 'gatherData()' to fill out a few components.
      */
     private void initializeComponents() {
         cmbProject = new JComboBox();
         cmbProject.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
-                    Project selected = (Project)e.getItem();
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    Project selected = (Project) e.getItem();
                     stateChangedProject(selected);
                 }
             }
@@ -571,7 +567,7 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
         chkSorting.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 boolean alphabetically = false;
-                if(chkSorting.isSelected()) {
+                if (chkSorting.isSelected()) {
                     alphabetically = true;
                 }
                 resortProjects(alphabetically);
@@ -622,75 +618,70 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     }
 
     /**
-     * This method fills out the cmbProject with the data in the
-     * iProjects Project[].
+     * This method fills out the cmbProject with the data in the iProjects Project[].
      */
     private void fillProjectPulldown() {
         cmbProject.setModel(new DefaultComboBoxModel(iProjects));
-        stateChangedProject((Project)cmbProject.getSelectedItem());
+        stateChangedProject((Project) cmbProject.getSelectedItem());
     }
 
     /**
-     * This method is called whenever the user selects another element in the
-     * project combobox (cmbProject).
+     * This method is called whenever the user selects another element in the project combobox (cmbProject).
      *
-     * @param aProject  Project that was selected in the combobox.
+     * @param aProject Project that was selected in the combobox.
      */
     private void stateChangedProject(Project aProject) {
-        if(aProject != null) {
+        if (aProject != null) {
             txtID.setText(Long.toString(aProject.getProjectid()));
             txtTitle.setText(aProject.getTitle());
             Long key = new Long(aProject.getL_userid());
-            User userValue = (User)iUsers.get(key);
+            User userValue = (User) iUsers.get(key);
             txtResponsible.setText(userValue.getName());
             key = new Long(aProject.getL_protocolid());
-            Protocol cofValue = (Protocol)iProtocol.get(key);
+            Protocol cofValue = (Protocol) iProtocol.get(key);
             txtProtocol.setText(cofValue.getType());
             txtUsername.setText(aProject.getUsername());
             txtCreationDate.setText(iSDF.format(aProject.getCreationdate()));
             txtModificationDate.setText(iSDF.format(aProject.getModificationdate()));
             txtDescription.setText(aProject.getDescription());
-            if(!txtDescription.getText().equals("")) {
+            if (!txtDescription.getText().equals("")) {
                 txtDescription.setCaretPosition(1);
             }
         }
     }
 
     /**
-     * This method fills out the cmbTools with the data in the
-     * iProjects Project[].
+     * This method fills out the cmbTools with the data in the iProjects Project[].
      */
     private void fillToolPulldown() {
         cmbTool.setModel(new DefaultComboBoxModel(iProjectAnalyzerTools));
         cmbTool.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
-                    Projectanalyzertool selected = (Projectanalyzertool)e.getItem();
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    Projectanalyzertool selected = (Projectanalyzertool) e.getItem();
                     stateChangedProjectanalyzertool(selected);
                 }
             }
         });
-        stateChangedProjectanalyzertool((Projectanalyzertool)cmbTool.getSelectedItem());
+        stateChangedProjectanalyzertool((Projectanalyzertool) cmbTool.getSelectedItem());
     }
 
     /**
-     * This method is called whenever the user selects another element in the
-     * projectanalyzertool combobox (cmbTool).
+     * This method is called whenever the user selects another element in the projectanalyzertool combobox (cmbTool).
      *
-     * @param aTool  Projectanalyzertool that was selected in the combobox.
+     * @param aTool Projectanalyzertool that was selected in the combobox.
      */
     private void stateChangedProjectanalyzertool(Projectanalyzertool aTool) {
-        if(aTool != null) {
+        if (aTool != null) {
             txtToolDetails.setText(aTool.getDescription());
-            if(!txtToolDetails.getText().equals("")) {
+            if (!txtToolDetails.getText().equals("")) {
                 txtToolDetails.setCaretPosition(1);
             }
         }
     }
 
     /**
-     * This method will shut down this application, triggering a JVM exit with
-     * status flag set to '0'.
+     * This method will shut down this application, triggering a JVM exit with status flag set to '0'.
      */
     private void close() {
         Collection temp = this.iTools.values();
@@ -701,19 +692,19 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
             ProjectAnalyzerTool[] tools = new ProjectAnalyzerTool[lVector.size()];
             lVector.toArray(tools);
             for (int j = 0; j < tools.length; j++) {
-                ProjectAnalyzerTool tool = (ProjectAnalyzerTool)tools[j];
+                ProjectAnalyzerTool tool = (ProjectAnalyzerTool) tools[j];
                 tool.close();
             }
         }
         this.setVisible(false);
         this.dispose();
-        if(iStandAlone) {
-            if(iConnection != null) {
+        if (iStandAlone) {
+            if (iConnection != null) {
                 try {
                     iConnection.close();
-                    System.out.println("DB connection closed.");
-                } catch(Exception e) {
-                    System.err.println("\n\nUnable to close DB connection: " + e.getMessage() + "\n\n");
+                    logger.info("DB connection closed.");
+                } catch (Exception e) {
+                    logger.error("\n\nUnable to close DB connection: " + e.getMessage() + "\n\n");
                 }
             }
             System.exit(0);
@@ -721,49 +712,45 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     }
 
     /**
-     * This method finds all project entries currently stored in the DB
-     * and fills out the relevant arrays with info.
+     * This method finds all project entries currently stored in the DB and fills out the relevant arrays with info.
      */
     private void findProjects() {
         try {
             iProjects = Project.getAllProjects(iConnection);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             this.passHotPotato(sqle, "Unable to retrieve project data!");
         }
     }
 
     /**
-     * This method collects all user information.
-     * It fills the 'iUsers' cache.
+     * This method collects all user information. It fills the 'iUsers' cache.
      */
     private void findUsers() {
         try {
             iUsers = User.getAllUsersAsMap(iConnection);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             this.passHotPotato(sqle, "Unable to retrieve user data!");
         }
     }
 
     /**
-     * This method collects all protocol information.
-     * It fills the 'iProtocol' cache.
+     * This method collects all protocol information. It fills the 'iProtocol' cache.
      */
     private void findProtocol() {
         try {
             iProtocol = Protocol.getAllProtocolsAsMap(iConnection);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             this.passHotPotato(sqle, "Unable to retrieve PROTOCOL data!");
         }
     }
 
     /**
-     * This method collects all tools from the DB.
-     * It fills the 'iTools' array.
+     * This method collects all tools from the DB. It fills the 'iTools' array.
      */
     private void findProjectAnalyzerTools() {
         try {
             iProjectAnalyzerTools = Projectanalyzertool.getAllProjectanalyzertools(iConnection, true);
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             this.passHotPotato(sqle, "Unable to retrieve project analyzer tools data!");
         }
     }
@@ -773,21 +760,20 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     }
 
     /**
-     * This method re-sorts the projects in the combobox.
-     * If the boolean is 'true', sorting is alphabetically on the project title,
-     * otherwise( boolean 'false') it is by project number (project id).
+     * This method re-sorts the projects in the combobox. If the boolean is 'true', sorting is alphabetically on the
+     * project title, otherwise( boolean 'false') it is by project number (project id).
      *
-     * @param aAlphabetically boolean to indicate whether sorting should be performed
-     *                        alphabetically ('true') or by project number ('false').
+     * @param aAlphabetically boolean to indicate whether sorting should be performed alphabetically ('true') or by
+     *                        project number ('false').
      */
     private void resortProjects(boolean aAlphabetically) {
         Comparator comp = null;
-        if(aAlphabetically) {
+        if (aAlphabetically) {
             // Alphabetic ordering of the project title.
             comp = new Comparator() {
                 public int compare(Object o, Object o1) {
-                    Project p1 = (Project)o;
-                    Project p2 = (Project)o1;
+                    Project p1 = (Project) o;
+                    Project p2 = (Project) o1;
                     return p1.getTitle().compareToIgnoreCase(p2.getTitle());
                 }
             };
@@ -795,9 +781,9 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
             // Ordering on the projectid.
             comp = new Comparator() {
                 public int compare(Object o, Object o1) {
-                    Project p1 = (Project)o;
-                    Project p2 = (Project)o1;
-                    return (int)(p2.getProjectid()-p1.getProjectid());
+                    Project p1 = (Project) o;
+                    Project p2 = (Project) o1;
+                    return (int) (p2.getProjectid() - p1.getProjectid());
                 }
             };
         }
@@ -806,8 +792,7 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
     }
 
     /**
-     * This method should be called when the application is
-     * not launched in stand-alone mode.
+     * This method should be called when the application is not launched in stand-alone mode.
      */
     public static void setNotStandAlone() {
         iStandAlone = false;
@@ -816,5 +801,5 @@ public class ProjectAnalyzer extends FlamableJFrame implements Connectable, Proj
 
     public boolean isStandAlone() {
         return iStandAlone;
-    }    
+    }
 }

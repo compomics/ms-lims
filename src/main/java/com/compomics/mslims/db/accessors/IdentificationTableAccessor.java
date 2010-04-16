@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.db.accessors;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.util.db.interfaces.Deleteable;
 import com.compomics.util.db.interfaces.Persistable;
 import com.compomics.util.db.interfaces.Retrievable;
@@ -27,232 +29,364 @@ import java.util.HashMap;
  * @author DBAccessor generator class (Lennart Martens).
  */
 public class IdentificationTableAccessor implements Deleteable, Retrievable, Updateable, Persistable {
+    // Class specific log4j logger for IdentificationTableAccessor instances.
+    private static Logger logger = Logger.getLogger(IdentificationTableAccessor.class);
 
-    /** This variable tracks changes to the object. */
+    /**
+     * This variable tracks changes to the object.
+     */
     protected boolean iUpdated = false;
 
-    /** This variable can hold generated primary key columns. */
+    /**
+     * This variable can hold generated primary key columns.
+     */
     protected Object[] iKeys = null;
 
-    /** This variable represents the contents for the 'identificationid' column. */
+    /**
+     * This variable represents the contents for the 'identificationid' column.
+     */
     protected long iIdentificationid = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'l_spectrumfileid' column. */
-    protected long iL_spectrumfileid = Long.MIN_VALUE;
+    /**
+     * This variable represents the contents for the 'l_spectrumid' column.
+     */
+    protected long iL_spectrumid = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'l_datfileid' column. */
+    /**
+     * This variable represents the contents for the 'l_datfileid' column.
+     */
     protected long iL_datfileid = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'datfile_query' column. */
+    /**
+     * This variable represents the contents for the 'datfile_query' column.
+     */
     protected long iDatfile_query = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'accession' column. */
+    /**
+     * This variable represents the contents for the 'accession' column.
+     */
     protected String iAccession = null;
 
 
-    /** This variable represents the contents for the 'start' column. */
+    /**
+     * This variable represents the contents for the 'start' column.
+     */
     protected long iStart = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'end' column. */
+    /**
+     * This variable represents the contents for the 'end' column.
+     */
     protected long iEnd = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'enzymatic' column. */
+    /**
+     * This variable represents the contents for the 'enzymatic' column.
+     */
     protected String iEnzymatic = null;
 
 
-    /** This variable represents the contents for the 'sequence' column. */
+    /**
+     * This variable represents the contents for the 'sequence' column.
+     */
     protected String iSequence = null;
 
 
-    /** This variable represents the contents for the 'modified_sequence' column. */
+    /**
+     * This variable represents the contents for the 'modified_sequence' column.
+     */
     protected String iModified_sequence = null;
 
 
-    /** This variable represents the contents for the 'ion_coverage' column. */
+    /**
+     * This variable represents the contents for the 'ion_coverage' column.
+     */
     protected String iIon_coverage = null;
 
 
-    /** This variable represents the contents for the 'score' column. */
+    /**
+     * This variable represents the contents for the 'score' column.
+     */
     protected long iScore = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'homology' column. */
+    /**
+     * This variable represents the contents for the 'homology' column.
+     */
     protected double iHomology = Double.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'exp_mass' column. */
+    /**
+     * This variable represents the contents for the 'exp_mass' column.
+     */
     protected Number iExp_mass = null;
 
 
-    /** This variable represents the contents for the 'cal_mass' column. */
+    /**
+     * This variable represents the contents for the 'cal_mass' column.
+     */
     protected Number iCal_mass = null;
 
 
-    /** This variable represents the contents for the 'light_isotope' column. */
+    /**
+     * This variable represents the contents for the 'light_isotope' column.
+     */
     protected Number iLight_isotope = null;
 
 
-    /** This variable represents the contents for the 'heavy_isotope' column. */
+    /**
+     * This variable represents the contents for the 'heavy_isotope' column.
+     */
     protected Number iHeavy_isotope = null;
 
 
-    /** This variable represents the contents for the 'valid' column. */
+    /**
+     * This variable represents the contents for the 'valid' column.
+     */
     protected int iValid = Integer.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'Description' column. */
+    /**
+     * This variable represents the contents for the 'Description' column.
+     */
     protected String iDescription = null;
 
 
-    /** This variable represents the contents for the 'identitythreshold' column. */
+    /**
+     * This variable represents the contents for the 'identitythreshold' column.
+     */
     protected long iIdentitythreshold = Long.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'confidence' column. */
+    /**
+     * This variable represents the contents for the 'confidence' column.
+     */
     protected Number iConfidence = null;
 
 
-    /** This variable represents the contents for the 'DB' column. */
+    /**
+     * This variable represents the contents for the 'DB' column.
+     */
     protected String iDb = null;
 
 
-    /** This variable represents the contents for the 'title' column. */
+    /**
+     * This variable represents the contents for the 'title' column.
+     */
     protected String iTitle = null;
 
 
-    /** This variable represents the contents for the 'precursor' column. */
+    /**
+     * This variable represents the contents for the 'precursor' column.
+     */
     protected Number iPrecursor = null;
 
 
-    /** This variable represents the contents for the 'charge' column. */
+    /**
+     * This variable represents the contents for the 'charge' column.
+     */
     protected int iCharge = Integer.MIN_VALUE;
 
 
-    /** This variable represents the contents for the 'isoforms' column. */
+    /**
+     * This variable represents the contents for the 'isoforms' column.
+     */
     protected String iIsoforms = null;
 
 
-    /** This variable represents the contents for the 'db_filename' column. */
+    /**
+     * This variable represents the contents for the 'db_filename' column.
+     */
     protected String iDb_filename = null;
 
 
-    /** This variable represents the contents for the 'mascot_version' column. */
+    /**
+     * This variable represents the contents for the 'mascot_version' column.
+     */
     protected String iMascot_version = null;
 
 
-    /** This variable represents the contents for the 'username' column. */
+    /**
+     * This variable represents the contents for the 'username' column.
+     */
     protected String iUsername = null;
 
 
-    /** This variable represents the contents for the 'creationdate' column. */
+    /**
+     * This variable represents the contents for the 'creationdate' column.
+     */
     protected java.sql.Timestamp iCreationdate = null;
 
 
-    /** This variable represents the contents for the 'modificationdate' column. */
+    /**
+     * This variable represents the contents for the 'modificationdate' column.
+     */
     protected java.sql.Timestamp iModificationdate = null;
 
 
-    /** This variable represents the key for the 'identificationid' column. */
+    /**
+     * This variable represents the key for the 'identificationid' column.
+     */
     public static final String IDENTIFICATIONID = "IDENTIFICATIONID";
 
-    /** This variable represents the key for the 'l_spectrumfileid' column. */
+    /**
+     * This variable represents the key for the 'l_spectrumid' column.
+     */
     public static final String L_SPECTRUMFILEID = "L_SPECTRUMFILEID";
 
-    /** This variable represents the key for the 'l_datfileid' column. */
+    /**
+     * This variable represents the key for the 'l_datfileid' column.
+     */
     public static final String L_DATFILEID = "L_DATFILEID";
 
-    /** This variable represents the key for the 'datfile_query' column. */
+    /**
+     * This variable represents the key for the 'datfile_query' column.
+     */
     public static final String DATFILE_QUERY = "DATFILE_QUERY";
 
-    /** This variable represents the key for the 'accession' column. */
+    /**
+     * This variable represents the key for the 'accession' column.
+     */
     public static final String ACCESSION = "ACCESSION";
 
-    /** This variable represents the key for the 'start' column. */
+    /**
+     * This variable represents the key for the 'start' column.
+     */
     public static final String START = "START";
 
-    /** This variable represents the key for the 'end' column. */
+    /**
+     * This variable represents the key for the 'end' column.
+     */
     public static final String END = "END";
 
-    /** This variable represents the key for the 'enzymatic' column. */
+    /**
+     * This variable represents the key for the 'enzymatic' column.
+     */
     public static final String ENZYMATIC = "ENZYMATIC";
 
-    /** This variable represents the key for the 'sequence' column. */
+    /**
+     * This variable represents the key for the 'sequence' column.
+     */
     public static final String SEQUENCE = "SEQUENCE";
 
-    /** This variable represents the key for the 'modified_sequence' column. */
+    /**
+     * This variable represents the key for the 'modified_sequence' column.
+     */
     public static final String MODIFIED_SEQUENCE = "MODIFIED_SEQUENCE";
 
-    /** This variable represents the key for the 'ion_coverage' column. */
+    /**
+     * This variable represents the key for the 'ion_coverage' column.
+     */
     public static final String ION_COVERAGE = "ION_COVERAGE";
 
-    /** This variable represents the key for the 'score' column. */
+    /**
+     * This variable represents the key for the 'score' column.
+     */
     public static final String SCORE = "SCORE";
 
-    /** This variable represents the key for the 'homology' column. */
+    /**
+     * This variable represents the key for the 'homology' column.
+     */
     public static final String HOMOLOGY = "HOMOLOGY";
 
-    /** This variable represents the key for the 'exp_mass' column. */
+    /**
+     * This variable represents the key for the 'exp_mass' column.
+     */
     public static final String EXP_MASS = "EXP_MASS";
 
-    /** This variable represents the key for the 'cal_mass' column. */
+    /**
+     * This variable represents the key for the 'cal_mass' column.
+     */
     public static final String CAL_MASS = "CAL_MASS";
 
-    /** This variable represents the key for the 'light_isotope' column. */
+    /**
+     * This variable represents the key for the 'light_isotope' column.
+     */
     public static final String LIGHT_ISOTOPE = "LIGHT_ISOTOPE";
 
-    /** This variable represents the key for the 'heavy_isotope' column. */
+    /**
+     * This variable represents the key for the 'heavy_isotope' column.
+     */
     public static final String HEAVY_ISOTOPE = "HEAVY_ISOTOPE";
 
-    /** This variable represents the key for the 'valid' column. */
+    /**
+     * This variable represents the key for the 'valid' column.
+     */
     public static final String VALID = "VALID";
 
-    /** This variable represents the key for the 'Description' column. */
+    /**
+     * This variable represents the key for the 'Description' column.
+     */
     public static final String DESCRIPTION = "DESCRIPTION";
 
-    /** This variable represents the key for the 'identitythreshold' column. */
+    /**
+     * This variable represents the key for the 'identitythreshold' column.
+     */
     public static final String IDENTITYTHRESHOLD = "IDENTITYTHRESHOLD";
 
-    /** This variable represents the key for the 'confidence' column. */
+    /**
+     * This variable represents the key for the 'confidence' column.
+     */
     public static final String CONFIDENCE = "CONFIDENCE";
 
-    /** This variable represents the key for the 'DB' column. */
+    /**
+     * This variable represents the key for the 'DB' column.
+     */
     public static final String DB = "DB";
 
-    /** This variable represents the key for the 'title' column. */
+    /**
+     * This variable represents the key for the 'title' column.
+     */
     public static final String TITLE = "TITLE";
 
-    /** This variable represents the key for the 'precursor' column. */
+    /**
+     * This variable represents the key for the 'precursor' column.
+     */
     public static final String PRECURSOR = "PRECURSOR";
 
-    /** This variable represents the key for the 'charge' column. */
+    /**
+     * This variable represents the key for the 'charge' column.
+     */
     public static final String CHARGE = "CHARGE";
 
-    /** This variable represents the key for the 'isoforms' column. */
+    /**
+     * This variable represents the key for the 'isoforms' column.
+     */
     public static final String ISOFORMS = "ISOFORMS";
 
-    /** This variable represents the key for the 'db_filename' column. */
+    /**
+     * This variable represents the key for the 'db_filename' column.
+     */
     public static final String DB_FILENAME = "DB_FILENAME";
 
-    /** This variable represents the key for the 'mascot_version' column. */
+    /**
+     * This variable represents the key for the 'mascot_version' column.
+     */
     public static final String MASCOT_VERSION = "MASCOT_VERSION";
 
-    /** This variable represents the key for the 'username' column. */
+    /**
+     * This variable represents the key for the 'username' column.
+     */
     public static final String USERNAME = "USERNAME";
 
-    /** This variable represents the key for the 'creationdate' column. */
+    /**
+     * This variable represents the key for the 'creationdate' column.
+     */
     public static final String CREATIONDATE = "CREATIONDATE";
 
-    /** This variable represents the key for the 'modificationdate' column. */
+    /**
+     * This variable represents the key for the 'modificationdate' column.
+     */
     public static final String MODIFICATIONDATE = "MODIFICATIONDATE";
 
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     public IdentificationTableAccessor() {
     }
 
@@ -260,15 +394,15 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
      * This constructor allows the creation of the 'IdentificationTableAccessor' object based on a set of values in the
      * HashMap.
      *
-     * @param    aParams    HashMap with the parameters to initialize this object with. <i>Please use only constants defined on
-     * this class as keys in the HashMap!</i>
+     * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
+     *                on this class as keys in the HashMap!</i>
      */
     public IdentificationTableAccessor(HashMap aParams) {
         if (aParams.containsKey(IDENTIFICATIONID)) {
             this.iIdentificationid = ((Long) aParams.get(IDENTIFICATIONID)).longValue();
         }
         if (aParams.containsKey(L_SPECTRUMFILEID)) {
-            this.iL_spectrumfileid = ((Long) aParams.get(L_SPECTRUMFILEID)).longValue();
+            this.iL_spectrumid = ((Long) aParams.get(L_SPECTRUMFILEID)).longValue();
         }
         if (aParams.containsKey(L_DATFILEID)) {
             this.iL_datfileid = ((Long) aParams.get(L_DATFILEID)).longValue();
@@ -371,12 +505,12 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     }
 
     /**
-     * This method returns the value for the 'L_spectrumfileid' column
+     * This method returns the value for the 'L_spectrumid' column
      *
-     * @return long    with the value for the L_spectrumfileid column.
+     * @return long    with the value for the L_spectrumid column.
      */
-    public long getL_spectrumfileid() {
-        return this.iL_spectrumfileid;
+    public long getL_spectrumid() {
+        return this.iL_spectrumid;
     }
 
     /**
@@ -643,7 +777,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Identificationid' column
      *
-     * @param    aIdentificationid    long with the value for the Identificationid column.
+     * @param aIdentificationid long with the value for the Identificationid column.
      */
     public void setIdentificationid(long aIdentificationid) {
         this.iIdentificationid = aIdentificationid;
@@ -651,19 +785,19 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     }
 
     /**
-     * This method sets the value for the 'L_spectrumfileid' column
+     * This method sets the value for the 'L_spectrumid' column
      *
-     * @param    aL_spectrumfileid    long with the value for the L_spectrumfileid column.
+     * @param aL_spectrumid long with the value for the L_spectrumid column.
      */
-    public void setL_spectrumfileid(long aL_spectrumfileid) {
-        this.iL_spectrumfileid = aL_spectrumfileid;
+    public void setL_spectrumid(long aL_spectrumid) {
+        this.iL_spectrumid = aL_spectrumid;
         this.iUpdated = true;
     }
 
     /**
      * This method sets the value for the 'L_datfileid' column
      *
-     * @param    aL_datfileid    long with the value for the L_datfileid column.
+     * @param aL_datfileid long with the value for the L_datfileid column.
      */
     public void setL_datfileid(long aL_datfileid) {
         this.iL_datfileid = aL_datfileid;
@@ -673,7 +807,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Datfile_query' column
      *
-     * @param    aDatfile_query    long with the value for the Datfile_query column.
+     * @param aDatfile_query long with the value for the Datfile_query column.
      */
     public void setDatfile_query(long aDatfile_query) {
         this.iDatfile_query = aDatfile_query;
@@ -683,7 +817,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Accession' column
      *
-     * @param    aAccession    String with the value for the Accession column.
+     * @param aAccession String with the value for the Accession column.
      */
     public void setAccession(String aAccession) {
         this.iAccession = aAccession;
@@ -693,7 +827,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Start' column
      *
-     * @param    aStart    long with the value for the Start column.
+     * @param aStart long with the value for the Start column.
      */
     public void setStart(long aStart) {
         this.iStart = aStart;
@@ -703,7 +837,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'End' column
      *
-     * @param    aEnd    long with the value for the End column.
+     * @param aEnd long with the value for the End column.
      */
     public void setEnd(long aEnd) {
         this.iEnd = aEnd;
@@ -713,7 +847,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Enzymatic' column
      *
-     * @param    aEnzymatic    String with the value for the Enzymatic column.
+     * @param aEnzymatic String with the value for the Enzymatic column.
      */
     public void setEnzymatic(String aEnzymatic) {
         this.iEnzymatic = aEnzymatic;
@@ -723,7 +857,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Sequence' column
      *
-     * @param    aSequence    String with the value for the Sequence column.
+     * @param aSequence String with the value for the Sequence column.
      */
     public void setSequence(String aSequence) {
         this.iSequence = aSequence;
@@ -733,7 +867,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Modified_sequence' column
      *
-     * @param    aModified_sequence    String with the value for the Modified_sequence column.
+     * @param aModified_sequence String with the value for the Modified_sequence column.
      */
     public void setModified_sequence(String aModified_sequence) {
         this.iModified_sequence = aModified_sequence;
@@ -743,7 +877,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Ion_coverage' column
      *
-     * @param    aIon_coverage    String with the value for the Ion_coverage column.
+     * @param aIon_coverage String with the value for the Ion_coverage column.
      */
     public void setIon_coverage(String aIon_coverage) {
         this.iIon_coverage = aIon_coverage;
@@ -753,7 +887,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Score' column
      *
-     * @param    aScore    long with the value for the Score column.
+     * @param aScore long with the value for the Score column.
      */
     public void setScore(long aScore) {
         this.iScore = aScore;
@@ -763,7 +897,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Homology' column
      *
-     * @param    aHomology    double with the value for the Homology column.
+     * @param aHomology double with the value for the Homology column.
      */
     public void setHomology(double aHomology) {
         this.iHomology = aHomology;
@@ -773,7 +907,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Exp_mass' column
      *
-     * @param    aExp_mass    Number with the value for the Exp_mass column.
+     * @param aExp_mass Number with the value for the Exp_mass column.
      */
     public void setExp_mass(Number aExp_mass) {
         this.iExp_mass = aExp_mass;
@@ -783,7 +917,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Cal_mass' column
      *
-     * @param    aCal_mass    Number with the value for the Cal_mass column.
+     * @param aCal_mass Number with the value for the Cal_mass column.
      */
     public void setCal_mass(Number aCal_mass) {
         this.iCal_mass = aCal_mass;
@@ -793,7 +927,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Light_isotope' column
      *
-     * @param    aLight_isotope    Number with the value for the Light_isotope column.
+     * @param aLight_isotope Number with the value for the Light_isotope column.
      */
     public void setLight_isotope(Number aLight_isotope) {
         this.iLight_isotope = aLight_isotope;
@@ -803,7 +937,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Heavy_isotope' column
      *
-     * @param    aHeavy_isotope    Number with the value for the Heavy_isotope column.
+     * @param aHeavy_isotope Number with the value for the Heavy_isotope column.
      */
     public void setHeavy_isotope(Number aHeavy_isotope) {
         this.iHeavy_isotope = aHeavy_isotope;
@@ -813,7 +947,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Valid' column
      *
-     * @param    aValid    int with the value for the Valid column.
+     * @param aValid int with the value for the Valid column.
      */
     public void setValid(int aValid) {
         this.iValid = aValid;
@@ -823,7 +957,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Description' column
      *
-     * @param    aDescription    String with the value for the Description column.
+     * @param aDescription String with the value for the Description column.
      */
     public void setDescription(String aDescription) {
         this.iDescription = aDescription;
@@ -833,7 +967,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Identitythreshold' column
      *
-     * @param    aIdentitythreshold    long with the value for the Identitythreshold column.
+     * @param aIdentitythreshold long with the value for the Identitythreshold column.
      */
     public void setIdentitythreshold(long aIdentitythreshold) {
         this.iIdentitythreshold = aIdentitythreshold;
@@ -843,7 +977,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Confidence' column
      *
-     * @param    aConfidence    Number with the value for the Confidence column.
+     * @param aConfidence Number with the value for the Confidence column.
      */
     public void setConfidence(Number aConfidence) {
         this.iConfidence = aConfidence;
@@ -853,7 +987,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Db' column
      *
-     * @param    aDb    String with the value for the Db column.
+     * @param aDb String with the value for the Db column.
      */
     public void setDb(String aDb) {
         this.iDb = aDb;
@@ -863,7 +997,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Title' column
      *
-     * @param    aTitle    String with the value for the Title column.
+     * @param aTitle String with the value for the Title column.
      */
     public void setTitle(String aTitle) {
         this.iTitle = aTitle;
@@ -873,7 +1007,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Precursor' column
      *
-     * @param    aPrecursor    Number with the value for the Precursor column.
+     * @param aPrecursor Number with the value for the Precursor column.
      */
     public void setPrecursor(Number aPrecursor) {
         this.iPrecursor = aPrecursor;
@@ -883,7 +1017,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Charge' column
      *
-     * @param    aCharge    int with the value for the Charge column.
+     * @param aCharge int with the value for the Charge column.
      */
     public void setCharge(int aCharge) {
         this.iCharge = aCharge;
@@ -893,7 +1027,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Isoforms' column
      *
-     * @param    aIsoforms    String with the value for the Isoforms column.
+     * @param aIsoforms String with the value for the Isoforms column.
      */
     public void setIsoforms(String aIsoforms) {
         this.iIsoforms = aIsoforms;
@@ -903,7 +1037,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Db_filename' column
      *
-     * @param    aDb_filename    String with the value for the Db_filename column.
+     * @param aDb_filename String with the value for the Db_filename column.
      */
     public void setDb_filename(String aDb_filename) {
         this.iDb_filename = aDb_filename;
@@ -913,7 +1047,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Mascot_version' column
      *
-     * @param    aMascot_version    String with the value for the Mascot_version column.
+     * @param aMascot_version String with the value for the Mascot_version column.
      */
     public void setMascot_version(String aMascot_version) {
         this.iMascot_version = aMascot_version;
@@ -923,7 +1057,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Username' column
      *
-     * @param    aUsername    String with the value for the Username column.
+     * @param aUsername String with the value for the Username column.
      */
     public void setUsername(String aUsername) {
         this.iUsername = aUsername;
@@ -933,7 +1067,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Creationdate' column
      *
-     * @param    aCreationdate    java.sql.Timestamp with the value for the Creationdate column.
+     * @param aCreationdate java.sql.Timestamp with the value for the Creationdate column.
      */
     public void setCreationdate(java.sql.Timestamp aCreationdate) {
         this.iCreationdate = aCreationdate;
@@ -943,7 +1077,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
     /**
      * This method sets the value for the 'Modificationdate' column
      *
-     * @param    aModificationdate    java.sql.Timestamp with the value for the Modificationdate column.
+     * @param aModificationdate java.sql.Timestamp with the value for the Modificationdate column.
      */
     public void setModificationdate(java.sql.Timestamp aModificationdate) {
         this.iModificationdate = aModificationdate;
@@ -986,7 +1120,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
         while (lRS.next()) {
             hits++;
             iIdentificationid = lRS.getLong("identificationid");
-            iL_spectrumfileid = lRS.getLong("l_spectrumfileid");
+            iL_spectrumid = lRS.getLong("l_spectrumid");
             iL_datfileid = lRS.getLong("l_datfileid");
             iDatfile_query = lRS.getLong("datfile_query");
             iAccession = (String) lRS.getObject("accession");
@@ -1037,9 +1171,9 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
             return 0;
         }
         PreparedStatement lStat =
-                aConn.prepareStatement("UPDATE identification SET identificationid = ?, l_spectrumfileid = ?, l_datfileid = ?, datfile_query = ?, accession = ?, start = ?, end = ?, enzymatic = ?, sequence = ?, modified_sequence = ?, ion_coverage = ?, score = ?, homology = ?, exp_mass = ?, cal_mass = ?, light_isotope = ?, heavy_isotope = ?, valid = ?, Description = ?, identitythreshold = ?, confidence = ?, DB = ?, title = ?, precursor = ?, charge = ?, isoforms = ?, db_filename = ?, mascot_version = ?, username = ?, creationdate = ?, modificationdate = CURRENT_TIMESTAMP WHERE identificationid = ?");
+                aConn.prepareStatement("UPDATE identification SET identificationid = ?, l_spectrumid = ?, l_datfileid = ?, datfile_query = ?, accession = ?, start = ?, end = ?, enzymatic = ?, sequence = ?, modified_sequence = ?, ion_coverage = ?, score = ?, homology = ?, exp_mass = ?, cal_mass = ?, light_isotope = ?, heavy_isotope = ?, valid = ?, Description = ?, identitythreshold = ?, confidence = ?, DB = ?, title = ?, precursor = ?, charge = ?, isoforms = ?, db_filename = ?, mascot_version = ?, username = ?, creationdate = ?, modificationdate = CURRENT_TIMESTAMP WHERE identificationid = ?");
         lStat.setLong(1, iIdentificationid);
-        lStat.setLong(2, iL_spectrumfileid);
+        lStat.setLong(2, iL_spectrumid);
         lStat.setLong(3, iL_datfileid);
         lStat.setLong(4, iDatfile_query);
         lStat.setObject(5, iAccession);
@@ -1083,16 +1217,16 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
      */
     public int persist(Connection aConn) throws SQLException {
         PreparedStatement lStat =
-                aConn.prepareStatement("INSERT INTO identification (identificationid, l_spectrumfileid, l_datfileid, datfile_query, accession, start, end, enzymatic, sequence, modified_sequence, ion_coverage, score, homology, exp_mass, cal_mass, light_isotope, heavy_isotope, valid, Description, identitythreshold, confidence, DB, title, precursor, charge, isoforms, db_filename, mascot_version, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+                aConn.prepareStatement("INSERT INTO identification (identificationid, l_spectrumid, l_datfileid, datfile_query, accession, start, end, enzymatic, sequence, modified_sequence, ion_coverage, score, homology, exp_mass, cal_mass, light_isotope, heavy_isotope, valid, Description, identitythreshold, confidence, DB, title, precursor, charge, isoforms, db_filename, mascot_version, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
         if (iIdentificationid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {
             lStat.setLong(1, iIdentificationid);
         }
-        if (iL_spectrumfileid == Long.MIN_VALUE) {
+        if (iL_spectrumid == Long.MIN_VALUE) {
             lStat.setNull(2, 4);
         } else {
-            lStat.setLong(2, iL_spectrumfileid);
+            lStat.setLong(2, iL_spectrumid);
         }
         if (iL_datfileid == Long.MIN_VALUE) {
             lStat.setNull(3, 4);
@@ -1205,50 +1339,50 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
             lStat.setObject(24, iPrecursor);
         }
         if (iCharge == Integer.MIN_VALUE) {
-			lStat.setNull(25, 5);
-		} else {
-			lStat.setInt(25, iCharge);
-		}
-		if(iIsoforms == null) {
-			lStat.setNull(26, -1);
-		} else {
-			lStat.setObject(26, iIsoforms);
-		}
-		if(iDb_filename == null) {
-			lStat.setNull(27, 12);
-		} else {
-			lStat.setObject(27, iDb_filename);
-		}
-		if(iMascot_version == null) {
-			lStat.setNull(28, 12);
-		} else {
-			lStat.setObject(28, iMascot_version);
-		}
-		int result = lStat.executeUpdate();
+            lStat.setNull(25, 5);
+        } else {
+            lStat.setInt(25, iCharge);
+        }
+        if (iIsoforms == null) {
+            lStat.setNull(26, -1);
+        } else {
+            lStat.setObject(26, iIsoforms);
+        }
+        if (iDb_filename == null) {
+            lStat.setNull(27, 12);
+        } else {
+            lStat.setObject(27, iDb_filename);
+        }
+        if (iMascot_version == null) {
+            lStat.setNull(28, 12);
+        } else {
+            lStat.setObject(28, iMascot_version);
+        }
+        int result = lStat.executeUpdate();
 
-		// Retrieving the generated keys (if any).
-		ResultSet lrsKeys = lStat.getGeneratedKeys();
-		ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
-		int colCount = lrsmKeys.getColumnCount();
-		iKeys = new Object[colCount];
-		while(lrsKeys.next()) {
-			for(int i=0;i<iKeys.length;i++) {
-				iKeys[i] = lrsKeys.getObject(i+1);
-			}
-		}
-		lrsKeys.close();
-		lStat.close();
-		this.iUpdated = false;
-		return result;
-	}
+        // Retrieving the generated keys (if any).
+        ResultSet lrsKeys = lStat.getGeneratedKeys();
+        ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
+        int colCount = lrsmKeys.getColumnCount();
+        iKeys = new Object[colCount];
+        while (lrsKeys.next()) {
+            for (int i = 0; i < iKeys.length; i++) {
+                iKeys[i] = lrsKeys.getObject(i + 1);
+            }
+        }
+        lrsKeys.close();
+        lStat.close();
+        this.iUpdated = false;
+        return result;
+    }
 
-	/**
+    /**
      * This method will return the automatically generated key for the insert if one was triggered, or 'null' otherwise.
      *
      * @return Object[]    with the generated keys.
      */
-	public Object[] getGeneratedKeys() {
-		return this.iKeys;
+    public Object[] getGeneratedKeys() {
+        return this.iKeys;
 	}
 
 }

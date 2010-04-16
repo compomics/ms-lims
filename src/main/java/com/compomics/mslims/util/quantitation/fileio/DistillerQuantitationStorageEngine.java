@@ -1,5 +1,7 @@
 package com.compomics.mslims.util.quantitation.fileio;
 
+import org.apache.log4j.Logger;
+
 
 import com.compomics.mslims.util.interfaces.QuantitationStorageEngine;
 import com.compomics.mslims.db.accessors.Quantitation_file;
@@ -24,11 +26,12 @@ import java.sql.SQLException;
 import java.math.BigDecimal;
 
 /**
- * Created by IntelliJ IDEA.
- * User: Kenny Date: 25-nov-2008 Time: 11:47:19
- * The 'QuantitationStorageEngine ' class was created for
+ * Created by IntelliJ IDEA. User: Kenny Date: 25-nov-2008 Time: 11:47:19 The 'QuantitationStorageEngine ' class was
+ * created for
  */
 public class DistillerQuantitationStorageEngine implements QuantitationStorageEngine {
+    // Class specific log4j logger for DistillerQuantitationStorageEngine instances.
+    private static Logger logger = Logger.getLogger(DistillerQuantitationStorageEngine.class);
 // ------------------------------ FIELDS ------------------------------
 
     private Flamable iFlamable;
@@ -38,7 +41,8 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
 
     /**
      * Construct a QuantitationStorageEngine for Distiller project files.
-     * @param aFlamable The error handler.
+     *
+     * @param aFlamable   The error handler.
      * @param aConnection The database connnection to store the quantitation.
      */
     public DistillerQuantitationStorageEngine(final Flamable aFlamable, final Connection aConnection) {
@@ -52,10 +56,9 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
 // --------------------- Interface QuantitationStorageEngine ---------------------
 
     /**
-     * The DistillerQuantitationStorageEngine stores a collection of DistillerRatioGroups into the ms_lims system.
-     * The distiller quantitation file will be zipped and persisted and identificationid's are matched from the lims system.
-     * <br><br>
-     * {@inheritDoc}
+     * The DistillerQuantitationStorageEngine stores a collection of DistillerRatioGroups into the ms_lims system. The
+     * distiller quantitation file will be zipped and persisted and identificationid's are matched from the lims system.
+     * <br><br> {@inheritDoc}
      */
     public boolean storeQuantitation(final RatioGroupCollection aRatioGroupCollection) throws IOException, SQLException {
         //only if ratioSoureType is distiller store Distiller output xml files
@@ -64,11 +67,11 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
         // 1. Store the quantitation file;
 
         // Return without storage if the distiller file is allready in the database!
-        if(Quantitation_file.isStoredInDatabase((String) aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME), iConnection)){
+        if (Quantitation_file.isStoredInDatabase((String) aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME), iConnection)) {
             //iFlamable.passHotPotato(new Throwable("Distiller output xml file '" + aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME) + "' has allready been processed!!"));
             //this distiller rov file is already stored in the database, ask the user if they want to store it again
-            int answer = JOptionPane.showConfirmDialog( new JFrame(), "The distiller rov file ( "+ (String) aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME) +" ) was already stored in the database.\n Do you want to store it again?", "Problem storing rov file",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
-            if (answer == JOptionPane.YES_OPTION){
+            int answer = JOptionPane.showConfirmDialog(new JFrame(), "The distiller rov file ( " + (String) aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME) + " ) was already stored in the database.\n Do you want to store it again?", "Problem storing rov file", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (answer == JOptionPane.YES_OPTION) {
                 //ok store it again
             } else {
                 //do not store it
@@ -77,20 +80,20 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
         }
 
         //First things first: store the distiller.xml file
-         //find the temporary folder
+        //find the temporary folder
         File lTempfolder = File.createTempFile("temp", "temp").getParentFile();
         File lTempRovFolder = new File(lTempfolder, "mslims");
         File lTempTaskFolder = new File(lTempRovFolder, (String) aRatioGroupCollection.getMetaData(QuantitationMetaType.MASCOTTASKID));
         File lTempUnzippedRovFileFolder = new File(lTempTaskFolder, (String) aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME));
 
         // Does the ms_lims temporary folder exists anyway?
-        if(!lTempRovFolder.exists()){
+        if (!lTempRovFolder.exists()) {
             iFlamable.passHotPotato(new Throwable("Tempory folder '" + lTempTaskFolder.getName() + "' for distiller output xml files could not be found!"));
             return false;
         }
 
         // Does the rov file folder exists?
-        if(!lTempUnzippedRovFileFolder.exists()){
+        if (!lTempUnzippedRovFileFolder.exists()) {
             iFlamable.passHotPotato(new Throwable("Tempory file folder with distiller output xml file could not be found!"));
             return false;
         }
@@ -103,18 +106,18 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
             File lUnzippedRovFile = lUnzippedRovFileArray[i];
             // Potential buggy!!
             // We assume this file is always named 'rover_data+bb8'.
-            if(lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb8") != -1){
+            if (lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb8") != -1) {
                 //distiller xml file found!
                 lQuantitationFile = lUnzippedRovFile;
             }
             // or this file is always named 'rover_data+bb8'.
-            if(lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb9") != -1){
+            if (lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb9") != -1) {
                 //distiller xml file found!
                 lQuantitationFile = lUnzippedRovFile;
             }
         }
 
-         // The buffer to hold the distiller xml file.
+        // The buffer to hold the distiller xml file.
         StringBuffer all = new StringBuffer();
         BufferedReader input = null;
         // Local file.
@@ -123,7 +126,7 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
 
         // Reading the quantitation file and clearing empty lines.
         String line = null;
-        while((line = input.readLine()) != null) {
+        while ((line = input.readLine()) != null) {
             all.append(line + "\n");
         }
 
@@ -144,15 +147,15 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
         // we split the String here if necessary.
         String temp = lQuantitationFileContent;
         subset = new ArrayList();
-        while(temp.length() > 10000000) {
+        while (temp.length() > 10000000) {
             subset.add(temp.substring(0, 10000000));
             temp = temp.substring(10000000);
         }
         // Now to process everything using a ByteArrayOutputStream.
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if(subset != null) {
+        if (subset != null) {
             for (Iterator lIterator = subset.iterator(); lIterator.hasNext();) {
-                String s = (String)lIterator.next();
+                String s = (String) lIterator.next();
                 baos.write(s.getBytes());
             }
         }
@@ -173,49 +176,49 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
         lDistillerOutputFileId = Long.valueOf(lGeneratedKeys[0].toString());
 
 
-    //Store the ratios
+        //Store the ratios
 
-    int lNumberOfHits = aRatioGroupCollection.size();
-    for(int i = 0; i<lNumberOfHits; i ++){
-        RatioGroup lRatioGroup = (RatioGroup) aRatioGroupCollection.get(i);
-        //Check if we need to store these ratios
-        if(lRatioGroup.getNumberOfIdentifications() > 0){
-            //Identifications linked to the ratios, store them
+        int lNumberOfHits = aRatioGroupCollection.size();
+        for (int i = 0; i < lNumberOfHits; i++) {
+            RatioGroup lRatioGroup = (RatioGroup) aRatioGroupCollection.get(i);
+            //Check if we need to store these ratios
+            if (lRatioGroup.getNumberOfIdentifications() > 0) {
+                //Identifications linked to the ratios, store them
 
 
-            //first store the file ref and file link in the quantitation group table
-            HashMap hmQuantitationGroup = new HashMap();
-            hmQuantitationGroup.put(Quantitation_group.L_QUANTITATION_FILEID, lDistillerOutputFileId);
-            hmQuantitationGroup.put(Quantitation_group.FILE_REF, String.valueOf(((DistillerRatioGroup)lRatioGroup).getReferenceOfParentHit()));
-            Quantitation_group quant_group = new Quantitation_group(hmQuantitationGroup);
-            quant_group.persist(iConnection);
+                //first store the file ref and file link in the quantitation group table
+                HashMap hmQuantitationGroup = new HashMap();
+                hmQuantitationGroup.put(Quantitation_group.L_QUANTITATION_FILEID, lDistillerOutputFileId);
+                hmQuantitationGroup.put(Quantitation_group.FILE_REF, String.valueOf(((DistillerRatioGroup) lRatioGroup).getReferenceOfParentHit()));
+                Quantitation_group quant_group = new Quantitation_group(hmQuantitationGroup);
+                quant_group.persist(iConnection);
 
-            long lL_quantitationGroupid = quant_group.getQuantitation_groupid();
+                long lL_quantitationGroupid = quant_group.getQuantitation_groupid();
 
-            //now store the ratios
-            int lNumberOfRatios = lRatioGroup.getNumberOfRatios();
-            for(int r = 0; r<lNumberOfRatios; r ++){
-                DistillerRatio lRatio = (DistillerRatio) lRatioGroup.getRatio(r);
+                //now store the ratios
+                int lNumberOfRatios = lRatioGroup.getNumberOfRatios();
+                for (int r = 0; r < lNumberOfRatios; r++) {
+                    DistillerRatio lRatio = (DistillerRatio) lRatioGroup.getRatio(r);
 
-                HashMap hm = new HashMap();
-                hm.put(Quantitation.TYPE, lRatio.getType());
-                hm.put(Quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
-                BigDecimal lBigDecimal = new BigDecimal(lRatio.getRatio(false));
-                lBigDecimal = lBigDecimal.setScale(5, BigDecimal.ROUND_HALF_DOWN);
-                hm.put(Quantitation.RATIO, lBigDecimal.doubleValue());
-                //only if ratioSoureType is distiller store Distiller specific ratio information
-                // cast
-                hm.put(Quantitation.STANDARD_ERROR, lRatio.getQuality());
-                hm.put(Quantitation.VALID, lRatio.getValid());
-                Quantitation quant = new Quantitation(hm);
-                quant.persist(iConnection);
-            }
-            // now store the quantitation to identification links
+                    HashMap hm = new HashMap();
+                    hm.put(Quantitation.TYPE, lRatio.getType());
+                    hm.put(Quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
+                    BigDecimal lBigDecimal = new BigDecimal(lRatio.getRatio(false));
+                    lBigDecimal = lBigDecimal.setScale(5, BigDecimal.ROUND_HALF_DOWN);
+                    hm.put(Quantitation.RATIO, lBigDecimal.doubleValue());
+                    //only if ratioSoureType is distiller store Distiller specific ratio information
+                    // cast
+                    hm.put(Quantitation.STANDARD_ERROR, lRatio.getQuality());
+                    hm.put(Quantitation.VALID, lRatio.getValid());
+                    Quantitation quant = new Quantitation(hm);
+                    quant.persist(iConnection);
+                }
+                // now store the quantitation to identification links
 
-            int lNumberOfIdentifications = lRatioGroup.getNumberOfIdentifications();
-            for(int k = 0 ; k<lNumberOfIdentifications; k++){
-                IdentificationExtension lIdentification = (IdentificationExtension)lRatioGroup.getIdentification(k);
-                if(lIdentification != null){
+                int lNumberOfIdentifications = lRatioGroup.getNumberOfIdentifications();
+                for (int k = 0; k < lNumberOfIdentifications; k++) {
+                    IdentificationExtension lIdentification = (IdentificationExtension) lRatioGroup.getIdentification(k);
+                    if (lIdentification != null) {
                         HashMap hm = new HashMap();
                         hm.put(Identification_to_quantitation.TYPE, lRatioGroup.getPeptideType(k));
                         hm.put(Identification_to_quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
@@ -226,7 +229,7 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
                 }
             }
         }
-    return true;
+        return true;
     }
 
 }

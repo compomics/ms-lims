@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util;
 
+import org.apache.log4j.Logger;
+
 import com.compomics.mslims.util.ZipUtil;
 import junit.TestCaseLM;
 import junit.framework.Assert;
@@ -25,10 +27,12 @@ import java.util.HashMap;
 /**
  * This class implements the testscenario for the ZipUtil class.
  *
- * @see com.compomics.mslims.util.ZipUtil
  * @author Lennart Martens
+ * @see com.compomics.mslims.util.ZipUtil
  */
 public class TestZipUtil extends TestCaseLM {
+    // Class specific log4j logger for TestZipUtil instances.
+    private static Logger logger = Logger.getLogger(TestZipUtil.class);
 
     public TestZipUtil() {
         this("Test for the ZipUtil class.");
@@ -39,8 +43,7 @@ public class TestZipUtil extends TestCaseLM {
     }
 
     /**
-     * This method test the zipping behaviour of the
-     * component.
+     * This method test the zipping behaviour of the component.
      */
     public void testZip() {
         // This test uses the test.pkl file in the classpath for testing.
@@ -61,20 +64,20 @@ public class TestZipUtil extends TestCaseLM {
             bytes3 = ZipUtil.toZippedBytes(fis, filename, 512);
             fis.close();
             bytes4 = ZipUtil.toZippedBytes(tempBytes, filename2);
-        } catch(IOException ioe) {
-            fail("IOException occurred while attempting to access file '"+filename+"': "+ioe.getMessage());
+        } catch (IOException ioe) {
+            fail("IOException occurred while attempting to access file '" + filename + "': " + ioe.getMessage());
         }
 
         // Now unzip and compare.
-        byte[] result =  null;
+        byte[] result = null;
         try {
             File lFile = new File(filename);
             long length = lFile.length();
             FileInputStream fis = new FileInputStream(lFile);
-            result = new byte[(int)length];
+            result = new byte[(int) length];
             fis.read(result);
             fis.close();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             fail("Unable to load file for checking correct zipping behaviour! " + ioe.getMessage());
         }
         String resultStr = new String(result);
@@ -84,9 +87,9 @@ public class TestZipUtil extends TestCaseLM {
             Assert.assertEquals(resultStr, new String(ZipUtil.unzipBytes(bytes3)));
 
             HashMap hm = ZipUtil.unzipBytesAndFileName(bytes4);
-            Assert.assertEquals(testMe, new String((byte[])hm.get(ZipUtil.BYTES)));
-            Assert.assertEquals(filename2, (String)hm.get(ZipUtil.FILENAME));
-        } catch(IOException ioe) {
+            Assert.assertEquals(testMe, new String((byte[]) hm.get(ZipUtil.BYTES)));
+            Assert.assertEquals(filename2, (String) hm.get(ZipUtil.FILENAME));
+        } catch (IOException ioe) {
             fail("Unable to unzipp zipped bytes. " + ioe.getMessage());
         }
     }

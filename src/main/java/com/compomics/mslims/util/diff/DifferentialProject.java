@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.util.diff;
 
+import org.apache.log4j.Logger;
+
 /*
  * CVS information:
  *
@@ -20,6 +22,8 @@ package com.compomics.mslims.util.diff;
  * @version $Id: DifferentialProject.java,v 1.1 2004/10/12 11:54:56 lennart Exp $
  */
 public class DifferentialProject {
+    // Class specific log4j logger for DifferentialProject instances.
+    private static Logger logger = Logger.getLogger(DifferentialProject.class);
 
     private long iProjectID = -1;
     private String iProjectTitle = null;
@@ -36,6 +40,7 @@ public class DifferentialProject {
     public boolean isInverse() {
         return iInverse;
     }
+
     public String getProjectAlias() {
         return iProjectAlias;
     }
@@ -49,6 +54,6 @@ public class DifferentialProject {
     }
 
     public String toString() {
-        return this.iProjectID + ". " + this.iProjectTitle + " (" + this.iProjectAlias + ", " + (this.iInverse?"":"not ") + "inverted) ";
+        return this.iProjectID + ". " + this.iProjectTitle + " (" + this.iProjectAlias + ", " + (this.iInverse ? "" : "not ") + "inverted) ";
     }
 }
