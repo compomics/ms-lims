@@ -69,7 +69,7 @@ public class MsLimsStarter {
         File lApplicationFolder = PropertiesManager.getInstance().getApplicationFolder(CompomicsTools.MSLIMS);
 
         /**
-         * The name of the omssa parser jar file. Must be equal to the name
+         * The name of the ms-lims parser jar file. Must be equal to the name
          * given in the pom file.
          */
         String jarFileName = "ms-lims-" + lProperties.get("version") + ".jar";

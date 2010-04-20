@@ -121,7 +121,6 @@ public class MS_LIMS extends JFrame implements Connectable {
             }
         });
 
-        //PropertiesManager.getInstance().updateLog4jConfiguration(CompomicsTools.MSLIMS);
         logger.info("Starting mslims");
 
         int frameWidth = 600;
@@ -752,6 +751,7 @@ public class MS_LIMS extends JFrame implements Connectable {
     ;
 
     public static void main(String[] args) {
+        PropertiesManager.getInstance().updateLog4jConfiguration(CompomicsTools.MSLIMS);
         new MS_LIMS("ms_lims (version " + getVersion() + ")");
     }
 
