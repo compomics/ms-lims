@@ -90,6 +90,7 @@ public class MascotDistillerStorageEngine implements SpectrumStorageEngine {
         Vector spectra = mfr.getSpectrumFiles();
         int liSize = spectra.size();
         int counter = 0;
+        logger.debug("Starting to iterate spectra of lcrun " + aLCRun.getName());
         for (int i = 0; i < liSize; i++) {
             MascotGenericFile lMascotGenericFile = (MascotGenericFile) spectra.elementAt(i);
             HashMap data = new HashMap(9);
@@ -107,15 +108,16 @@ public class MascotDistillerStorageEngine implements SpectrumStorageEngine {
             // The highest intensity.
             data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMascotGenericFile.getHighestIntensity());
             // Create the database object.
+            // logger.debug("Creating Spectrum instance for " + lMascotGenericFile.getFilename());
             Spectrum lSpectrum = new Spectrum(data);
             lSpectrum.persist(aConn);
 
             // Get the spectrumid from the generated keys.
-            Long lSpectrumfileID = (Long) lSpectrum.getGeneratedKeys()[0];
+            Long lSpectrumid = (Long) lSpectrum.getGeneratedKeys()[0];
             // Create the Spectrum_file instance.
             Spectrum_file lSpectrum_file = new Spectrum_file();
             // Set spectrumid
-            lSpectrum_file.setL_spectrumid(lSpectrumfileID);
+            lSpectrum_file.setL_spectrumid(lSpectrumid);
             // Set the filecontent
             // Read the contents for the file into a byte[].
             byte[] fileContents = lMascotGenericFile.toString().getBytes();

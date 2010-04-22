@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.*;
 
 import com.compomics.util.db.interfaces.*;
+import org.apache.log4j.Logger;
 
 /*
  * CVS information:
@@ -25,6 +26,8 @@ import com.compomics.util.db.interfaces.*;
  * @author DBAccessor generator class (Lennart Martens).
  */
 public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateable, Persistable {
+    // Class specific log4j logger for Spectrum instances.
+    private static Logger logger = Logger.getLogger(Spectrum.class);
 
     /**
      * This variable tracks changes to the object.
@@ -595,6 +598,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
+        //logger.debug("initiating persist call of " + iFilename);
         PreparedStatement lStat = aConn.prepareStatement("INSERT INTO spectrum (spectrumid, l_lcrunid, l_projectid, l_instrumentid, searched, identified, filename, total_spectrum_intensity, highest_peak_in_spectrum, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
         if (iSpectrumid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
@@ -641,11 +645,15 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
         } else {
             lStat.setObject(9, iHighest_peak_in_spectrum);
         }
+        //logger.debug("executing update call of " + iFilename);
         int result = lStat.executeUpdate();
+        //logger.debug("executed update call of " + iFilename);
 
         // Retrieving the generated keys (if any).
+        //logger.debug("retrieving keys after update call of " + iFilename);
         ResultSet lrsKeys = lStat.getGeneratedKeys();
         ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
+
         int colCount = lrsmKeys.getColumnCount();
         iKeys = new Object[colCount];
         while (lrsKeys.next()) {
@@ -655,6 +663,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
         }
         lrsKeys.close();
         lStat.close();
+        //logger.debug("retrieved keys after update call of " + iFilename);
         // Verify that we have a single, generated key.
         if (iKeys != null && iKeys.length == 1) {
             // Since we have exactly one key specified, and only
@@ -663,6 +672,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
             iSpectrumid = ((Number) iKeys[0]).longValue();
         }
         this.iUpdated = false;
+        //logger.debug("all done storing " + iFilename);
         return result;
     }
 

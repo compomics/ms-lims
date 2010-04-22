@@ -61,5 +61,6 @@ public interface SpectrumStorageEngine {
      * @throws java.io.IOException   when the filereading goes wrong.
      * @throws java.sql.SQLException when the DB storage goes wrong.
      */
-    public abstract int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn) throws IOException, SQLException;
+    public abstract int
+    loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn) throws IOException, SQLException;
 }
