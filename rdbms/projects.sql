@@ -335,7 +335,7 @@ CREATE TABLE `quantitation_group` (
 `creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
 `modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
 PRIMARY KEY  (`quantitation_groupid`),
-KEY `l_quantitation_fileid` (`l_quantitation_fileid`),
+KEY `l_quantitation_fileid` (`l_quantitation_fileid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 --
