@@ -6,8 +6,6 @@
  */
 package com.compomics.mslims.gui;
 
-import org.apache.log4j.Logger;
-
 import com.compomics.mslims.gui.dialogs.AboutDialog;
 import com.compomics.mslims.gui.dialogs.CustomLauncherDialog;
 import com.compomics.mslims.gui.quantitation.QuantitationTypeChooser;
@@ -19,6 +17,7 @@ import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.io.PropertiesManager;
+import com.compomics.util.io.StartBrowser;
 import com.jgoodies.looks.FontPolicies;
 import com.jgoodies.looks.FontPolicy;
 import com.jgoodies.looks.FontSet;
@@ -26,6 +25,7 @@ import com.jgoodies.looks.FontSets;
 import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import com.jgoodies.looks.plastic.theme.Silver;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -643,6 +643,8 @@ public class MS_LIMS extends JFrame implements Connectable {
         peptizer.setEnclosedByLims(true);
         CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
         dialog.setMs_lims_project_selected();
+        throw new RuntimeException("Induced IllegalArgumentException uppon clicking Peptizer!!");
+        
     }
 
     public void genericQueryBtnActionPerformed(ActionEvent evt) {
@@ -751,8 +753,27 @@ public class MS_LIMS extends JFrame implements Connectable {
     ;
 
     public static void main(String[] args) {
-        PropertiesManager.getInstance().updateLog4jConfiguration(CompomicsTools.MSLIMS);
-        new MS_LIMS("ms_lims (version " + getVersion() + ")");
+        PropertiesManager.getInstance().updateLog4jConfiguration(logger, CompomicsTools.MSLIMS);
+        logger.debug("Starting ms-lims " + getVersion());
+        logger.debug("OS : " + System.getProperties().getProperty("os.name"));
+        try {
+            new MS_LIMS("ms_lims (version " + getVersion() + ")");
+        } catch (Throwable e) {
+            logger.error(e.getMessage());
+             int lResult = javax.swing.JOptionPane.showOptionDialog(null,
+                    e.getMessage(),
+                    "ms-lims: unexpected failure",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.ERROR_MESSAGE,
+                    UIManager.getIcon("OptionPane.errorIcon"),
+                    new Object[]{"Report issue", "Exit"},
+                    "Report issue");
+
+            if (lResult == JOptionPane.OK_OPTION) {
+                String lIssuesPage = new String("http://code.google.com/p/ms-lims/issues/list");
+                StartBrowser.start(lIssuesPage);
+            }
+        }
     }
 
     /**

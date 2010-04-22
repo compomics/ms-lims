@@ -280,26 +280,6 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
             lStat.setBinaryStream(2, bais1, iFile.length);
         }
         int result = lStat.executeUpdate();
-
-        // Retrieving the generated keys (if any).
-        ResultSet lrsKeys = lStat.getGeneratedKeys();
-        ResultSetMetaData lrsmKeys = lrsKeys.getMetaData();
-        int colCount = lrsmKeys.getColumnCount();
-        iKeys = new Object[colCount];
-        while (lrsKeys.next()) {
-            for (int i = 0; i < iKeys.length; i++) {
-                iKeys[i] = lrsKeys.getObject(i + 1);
-            }
-        }
-        lrsKeys.close();
-        lStat.close();
-        // Verify that we have a single, generated key.
-        if (iKeys != null && iKeys.length == 1) {
-            // Since we have exactly one key specified, and only
-            // one Primary Key column, we can infer that this was the
-            // generated column, and we can therefore initialize it here.
-            iL_spectrumid = ((Number) iKeys[0]).longValue();
-        }
         this.iUpdated = false;
         return result;
     }
