@@ -288,7 +288,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.0.2</version>
+            <version>3.1</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.

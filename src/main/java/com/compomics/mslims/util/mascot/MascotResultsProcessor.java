@@ -571,10 +571,9 @@ public class MascotResultsProcessor {
 
 
         // Get all the queries...
-        Vector queries = aMDF.getQueryList();
         // Map to transfer query ID into peptidehits.
         QueryToPeptideMapInf queryToPepMap = aMDF.getQueryToPeptideMap();
-        Iterator iter = queries.iterator();
+        Iterator iter = aMDF.getQueryIterator();
         int lQueryCounter = 0;
         while (iter.hasNext()) {
             // Get the query.
@@ -805,8 +804,8 @@ public class MascotResultsProcessor {
      * @param aMDF MascotDatfile from which the spectra are read.
      */
     private void addSearchedSpectra(MascotDatfileInf aMDF) {
-        Iterator iter = aMDF.getQueryList().iterator();
-        HashSet filenames = new HashSet(aMDF.getQueryList().size());
+        Iterator iter = aMDF.getQueryIterator();
+        HashSet filenames = new HashSet(aMDF.getNumberOfQueries());
 
         Parameters parameters = aMDF.getParametersSection();
         // check if the mdf is from a multifile
