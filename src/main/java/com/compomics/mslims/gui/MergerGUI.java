@@ -67,7 +67,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
     /**
      * Constant String with the database connection properties file.
      */
-    private static final String iConProps = "MergerGUI.properties";
+    private static final String iConProps = "ms-lims.properties";
 
     /**
      * The Projects.
