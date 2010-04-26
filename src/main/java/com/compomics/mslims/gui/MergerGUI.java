@@ -617,7 +617,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
             logger.info("Where clause: " + whereClause);
             Statement stat = iConn.createStatement();
             ResultSet rs = stat
-                    .executeQuery("select count(*) from spectrum"
+                    .executeQuery("select count(*) from spectrum "
                             + whereClause);
             rs.next();
             int count = rs.getInt(1);
@@ -626,7 +626,7 @@ public class MergerGUI extends FlamableJFrame implements Connectable {
             if (count == 0) {
                 result = JOptionPane.showConfirmDialog(this, new String[]{
                         "No files selected by this query!",
-                        "Do you want to merge another set of spectrum files?",
+                        "Do you want to merge another set of spectra?",
                         "\n"}, "Finished processing files.",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.INFORMATION_MESSAGE);
