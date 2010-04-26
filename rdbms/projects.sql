@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.30, for Win32 (ia32)
+-- MySQL dump 10.13  Distrib 5.1.37, for debian-linux-gnu (i486)
 --
--- Host: muppet03    Database: projects
+-- Host: localhost    Database: projects_2apr
 -- ------------------------------------------------------
--- Server version	4.1.18-nt
+-- Server version	5.1.37-1ubuntu5.1-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -20,398 +20,482 @@
 --
 
 DROP TABLE IF EXISTS `binfile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `binfile` (
-`binfileid` int(10) unsigned NOT NULL auto_increment,
-`l_projectid` int(10) unsigned NOT NULL default '0',
-`l_filedescriptionid` int(10) unsigned NOT NULL default '0',
-`file` longblob NOT NULL,
-`filename` varchar(250) NOT NULL default '',
-`comments` text,
-`originalpath` varchar(250) NOT NULL default '',
-`originalhost` varchar(50) NOT NULL default '',
-`originaluser` varchar(50) NOT NULL default '',
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`binfileid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `binfileid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_projectid` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_filedescriptionid` int(10) unsigned NOT NULL DEFAULT '0',
+  `file` longblob NOT NULL,
+  `filename` varchar(250) NOT NULL DEFAULT '',
+  `comments` text,
+  `originalpath` varchar(250) NOT NULL DEFAULT '',
+  `originalhost` varchar(50) NOT NULL DEFAULT '',
+  `originaluser` varchar(50) NOT NULL DEFAULT '',
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`binfileid`)
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `datfile`
 --
 
 DROP TABLE IF EXISTS `datfile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `datfile` (
-`datfileid` int(10) unsigned NOT NULL auto_increment,
-`filename` varchar(250) NOT NULL default '',
-`file` longblob NOT NULL,
-`server` varchar(250) NOT NULL default '',
-`folder` varchar(250) NOT NULL default '',
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`datfileid`),
-KEY `Filename` USING HASH (`filename`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 MAX_ROWS=1000000 AVG_ROW_LENGTH=2658940;
+  `datfileid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `filename` varchar(250) NOT NULL DEFAULT '',
+  `file` longblob NOT NULL,
+  `server` varchar(250) NOT NULL DEFAULT '',
+  `folder` varchar(250) NOT NULL DEFAULT '',
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`datfileid`),
+  KEY `Filename` (`filename`) USING HASH
+) ENGINE=MyISAM AUTO_INCREMENT=60454 DEFAULT CHARSET=latin1 MAX_ROWS=1000000 AVG_ROW_LENGTH=2658940;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `filedescriptor`
 --
 
 DROP TABLE IF EXISTS `filedescriptor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `filedescriptor` (
-`filedescriptorid` int(10) unsigned NOT NULL auto_increment,
-`short_label` varchar(100) NOT NULL default '',
-`description` text,
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`filedescriptorid`),
-UNIQUE KEY `short_label` (`short_label`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `filedescriptorid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `short_label` varchar(100) NOT NULL DEFAULT '',
+  `description` text,
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`filedescriptorid`),
+  UNIQUE KEY `short_label` (`short_label`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `fragmention`
 --
 
 DROP TABLE IF EXISTS `fragmention`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fragmention` (
-`fragmentionid` int(10) unsigned NOT NULL auto_increment,
-`l_identificationid` int(10) unsigned NOT NULL default '0',
-`iontype` int(10) unsigned NOT NULL default '0',
-`ionname` varchar(45) NOT NULL default '',
-`l_ionscoringid` int(10) unsigned NOT NULL default '0',
-`mz` decimal(12,4) NOT NULL default '0.0000',
-`intensity` int(10) unsigned default NULL,
-`fragmentionnumber` int(10) unsigned default NULL,
-`massdelta` decimal(12,4) default NULL,
-`masserrormargin` decimal(12,4) NOT NULL default '0.0000',
-`username` varchar(45) NOT NULL default '',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`fragmentionid`),
-KEY `l_identificationid index` (`l_identificationid`),
-KEY `l_ionscoringid index` (`l_ionscoringid`),
-KEY `iontype index` USING BTREE (`iontype`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `fragmentionid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_identificationid` int(10) unsigned NOT NULL DEFAULT '0',
+  `iontype` int(10) unsigned NOT NULL DEFAULT '0',
+  `ionname` varchar(45) NOT NULL DEFAULT '',
+  `l_ionscoringid` int(10) unsigned NOT NULL DEFAULT '0',
+  `mz` decimal(12,4) NOT NULL DEFAULT '0.0000',
+  `intensity` int(10) unsigned DEFAULT NULL,
+  `fragmentionnumber` int(10) unsigned DEFAULT NULL,
+  `massdelta` decimal(12,4) DEFAULT NULL,
+  `masserrormargin` decimal(12,4) NOT NULL DEFAULT '0.0000',
+  `username` varchar(45) NOT NULL DEFAULT '',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`fragmentionid`),
+  KEY `l_identificationid index` (`l_identificationid`),
+  KEY `l_ionscoringid index` (`l_ionscoringid`),
+  KEY `iontype index` (`iontype`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=78490429 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `id_to_phospho`
 --
 
 DROP TABLE IF EXISTS `id_to_phospho`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `id_to_phospho` (
-`l_id` int(10) unsigned NOT NULL default '0',
-`l_phosphorylationid` int(10) unsigned NOT NULL default '0',
-`conversionid` int(10) unsigned NOT NULL auto_increment,
-PRIMARY KEY  (`conversionid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `l_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_phosphorylationid` int(10) unsigned NOT NULL DEFAULT '0',
+  `conversionid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`conversionid`)
+) ENGINE=MyISAM AUTO_INCREMENT=6538 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `identification`
 --
 
 DROP TABLE IF EXISTS `identification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `identification` (
-`identificationid` int(10) unsigned NOT NULL auto_increment,
-`l_spectrumfileid` int(10) unsigned NOT NULL default '0',
-`l_datfileid` int(10) unsigned NOT NULL default '0',
-`datfile_query` int(10) unsigned default NULL,
-`accession` varchar(50) NOT NULL default '',
-`start` int(10) unsigned NOT NULL default '0',
-`end` int(10) unsigned NOT NULL default '0',
-`enzymatic` char(2) NOT NULL default '',
-`sequence` varchar(150) NOT NULL default '',
-`modified_sequence` text NOT NULL,
-`ion_coverage` text,
-`score` int(10) unsigned NOT NULL default '0',
-`homology` double default NULL,
-`exp_mass` decimal(12,4) NOT NULL default '0.0000',
-`cal_mass` decimal(12,4) NOT NULL default '0.0000',
-`light_isotope` decimal(12,4) default NULL,
-`heavy_isotope` decimal(12,4) default NULL,
-`valid` tinyint(4) default NULL,
-`Description` text NOT NULL,
-`identitythreshold` int(50) unsigned NOT NULL default '0',
-`confidence` decimal(12,4) NOT NULL default '0.0500',
-`DB` varchar(50) NOT NULL default '',
-`title` varchar(250) NOT NULL default '',
-`precursor` decimal(12,4) NOT NULL default '0.0000',
-`charge` smallint(50) unsigned NOT NULL default '0',
-`isoforms` text,
-`db_filename` varchar(100) default NULL,
-`mascot_version` varchar(25) default NULL,
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`identificationid`),
-KEY `title_index` (`title`),
-KEY `sequence_index` (`sequence`),
-KEY `modified_sequence_index` (`modified_sequence`(50)),
-KEY `accession_index` (`accession`),
-KEY `l_spectrumfileid` (`l_spectrumfileid`),
-KEY `l_datfileid` (`l_datfileid`),
-KEY `valid` (`valid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
+  `identificationid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_spectrumid` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_datfileid` int(10) unsigned NOT NULL DEFAULT '0',
+  `datfile_query` int(10) unsigned DEFAULT NULL,
+  `accession` varchar(50) NOT NULL DEFAULT '',
+  `start` int(10) unsigned NOT NULL DEFAULT '0',
+  `end` int(10) unsigned NOT NULL DEFAULT '0',
+  `enzymatic` char(2) NOT NULL DEFAULT '',
+  `sequence` varchar(150) NOT NULL DEFAULT '',
+  `modified_sequence` text NOT NULL,
+  `ion_coverage` text,
+  `score` int(10) unsigned NOT NULL DEFAULT '0',
+  `homology` double DEFAULT NULL,
+  `exp_mass` decimal(12,4) NOT NULL DEFAULT '0.0000',
+  `cal_mass` decimal(12,4) NOT NULL DEFAULT '0.0000',
+  `light_isotope` decimal(12,4) DEFAULT NULL,
+  `heavy_isotope` decimal(12,4) DEFAULT NULL,
+  `valid` tinyint(4) DEFAULT NULL,
+  `Description` text NOT NULL,
+  `identitythreshold` int(50) unsigned NOT NULL DEFAULT '0',
+  `confidence` decimal(12,4) NOT NULL DEFAULT '0.0500',
+  `DB` varchar(50) NOT NULL DEFAULT '',
+  `title` varchar(250) NOT NULL DEFAULT '',
+  `precursor` decimal(12,4) NOT NULL DEFAULT '0.0000',
+  `charge` smallint(50) unsigned NOT NULL DEFAULT '0',
+  `isoforms` text,
+  `db_filename` varchar(100) DEFAULT NULL,
+  `mascot_version` varchar(25) DEFAULT NULL,
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`identificationid`),
+  KEY `title_index` (`title`),
+  KEY `sequence_index` (`sequence`),
+  KEY `modified_sequence_index` (`modified_sequence`(50)),
+  KEY `accession_index` (`accession`),
+  KEY `l_spectrumfileid` (`l_spectrumid`),
+  KEY `l_datfileid` (`l_datfileid`),
+  KEY `valid` (`valid`)
+) ENGINE=MyISAM AUTO_INCREMENT=3551731 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `identification_to_quantitation`
 --
 
 DROP TABLE IF EXISTS `identification_to_quantitation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `identification_to_quantitation` (
-`itqid` int(10) unsigned NOT NULL auto_increment,
-`l_identificationid` int(10) unsigned NOT NULL default '0',
-`l_quantitation_groupid` int(10) unsigned NOT NULL default '0',
-`type` varchar(15) NOT NULL default '',
-`username` varchar(45) NOT NULL default '',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`itqid`),
-KEY `identification id` (`l_identificationid`),
-KEY `type` (`type`),
-KEY `quantitation id` USING BTREE (`l_quantitation_groupid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+  `itqid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_identificationid` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_quantitation_groupid` int(10) unsigned NOT NULL DEFAULT '0',
+  `type` varchar(15) NOT NULL DEFAULT '',
+  `username` varchar(45) NOT NULL DEFAULT '',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`itqid`),
+  KEY `identification id` (`l_identificationid`),
+  KEY `type` (`type`),
+  KEY `l_quantitation_groupid` (`l_quantitation_groupid`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=1968964 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `instrument`
 --
 
 DROP TABLE IF EXISTS `instrument`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `instrument` (
-`instrumentid` int(10) unsigned NOT NULL auto_increment,
-`name` varchar(150) default NULL,
-`description` text,
-`storageclassname` varchar(250) default NULL,
-`propertiesfilename` varchar(250) default NULL,
-`differential_calibration` decimal(12,8) default NULL,
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`instrumentid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `instrumentid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) DEFAULT NULL,
+  `description` text,
+  `storageclassname` varchar(250) DEFAULT NULL,
+  `propertiesfilename` varchar(250) DEFAULT NULL,
+  `differential_calibration` decimal(12,8) DEFAULT NULL,
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`instrumentid`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `ionscoring`
 --
 
 DROP TABLE IF EXISTS `ionscoring`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ionscoring` (
-`ionscoringid` int(10) unsigned NOT NULL default '0',
-`description` varchar(255) NOT NULL default '',
-`username` varchar(45) NOT NULL default '',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`ionscoringid`)
+  `ionscoringid` int(10) unsigned NOT NULL DEFAULT '0',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `username` varchar(45) NOT NULL DEFAULT '',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ionscoringid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `lcrun`
 --
 
 DROP TABLE IF EXISTS `lcrun`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `lcrun` (
-`lcrunid` int(10) unsigned NOT NULL auto_increment,
-`l_projectid` int(10) unsigned NOT NULL default '0',
-`description` text,
-`filecount` int(11) NOT NULL default '0',
-`name` varchar(150) NOT NULL default '',
-`dvd_master_number` int(11) default NULL,
-`dvd_secondary_number` int(10) unsigned default NULL,
-`primary_fraction` int(10) unsigned default NULL,
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`lcrunid`),
-UNIQUE KEY `name` (`name`),
-KEY `creationdateindex` (`creationdate`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `lcrunid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_projectid` int(10) unsigned NOT NULL DEFAULT '0',
+  `description` text,
+  `filecount` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(150) NOT NULL DEFAULT '',
+  `dvd_master_number` int(11) DEFAULT NULL,
+  `dvd_secondary_number` int(10) unsigned DEFAULT NULL,
+  `primary_fraction` int(10) unsigned DEFAULT NULL,
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`lcrunid`),
+  UNIQUE KEY `name` (`name`),
+  KEY `creationdateindex` (`creationdate`)
+) ENGINE=MyISAM AUTO_INCREMENT=61536 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `phosphorylation`
 --
 
 DROP TABLE IF EXISTS `phosphorylation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phosphorylation` (
-`phosphorylationid` int(10) unsigned NOT NULL auto_increment,
-`l_status` int(10) unsigned NOT NULL default '0',
-`residue` varchar(20) default NULL,
-`location` int(10) unsigned NOT NULL default '0',
-`accession` varchar(250) NOT NULL default '',
-`context` varchar(100) default NULL,
-`score` decimal(12,5) default NULL,
-`threshold` decimal(12,5) default NULL,
-`creationdate` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-`description` varchar(250) default NULL,
-PRIMARY KEY  (`phosphorylationid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `phosphorylationid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_status` int(10) unsigned NOT NULL DEFAULT '0',
+  `residue` varchar(20) DEFAULT NULL,
+  `location` int(10) unsigned NOT NULL DEFAULT '0',
+  `accession` varchar(250) NOT NULL DEFAULT '',
+  `context` varchar(100) DEFAULT NULL,
+  `score` decimal(12,5) DEFAULT NULL,
+  `threshold` decimal(12,5) DEFAULT NULL,
+  `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `description` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`phosphorylationid`)
+) ENGINE=MyISAM AUTO_INCREMENT=2804 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `project`
 --
 
 DROP TABLE IF EXISTS `project`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
-`projectid` int(10) unsigned NOT NULL auto_increment,
-`l_userid` int(10) unsigned NOT NULL default '0',
-`l_protocolid` int(10) unsigned NOT NULL default '0',
-`title` varchar(250) NOT NULL default '',
-`description` text,
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`projectid`),
-UNIQUE KEY `title` (`title`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `projectid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_protocolid` int(10) unsigned NOT NULL DEFAULT '0',
+  `title` varchar(250) NOT NULL DEFAULT '',
+  `description` text,
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`projectid`),
+  UNIQUE KEY `title` (`title`)
+) ENGINE=MyISAM AUTO_INCREMENT=787 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `projectanalyzertool`
 --
 
 DROP TABLE IF EXISTS `projectanalyzertool`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `projectanalyzertool` (
-`projectanalyzertoolid` int(10) unsigned NOT NULL auto_increment,
-`toolname` varchar(100) NOT NULL default '',
-`description` text,
-`toolclassname` varchar(250) NOT NULL default '',
-`toolparameters` text,
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`projectanalyzertoolid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `projectanalyzertoolid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `toolname` varchar(100) NOT NULL DEFAULT '',
+  `description` text,
+  `toolclassname` varchar(250) NOT NULL DEFAULT '',
+  `toolparameters` text,
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`projectanalyzertoolid`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `protocol`
 --
 
 DROP TABLE IF EXISTS `protocol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `protocol` (
-`protocolid` int(10) unsigned NOT NULL auto_increment,
-`type` varchar(50) NOT NULL default '',
-`description` text,
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  USING BTREE (`protocolid`),
-UNIQUE KEY `type` USING BTREE (`type`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `protocolid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `description` text,
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`protocolid`) USING BTREE,
+  UNIQUE KEY `type` (`type`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `quantitation`
 --
 
 DROP TABLE IF EXISTS `quantitation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `quantitation` (
-`quantitationid` int(10) unsigned NOT NULL auto_increment,
-`l_quantitation_groupid` int(10) unsigned NOT NULL default '0',
-`ratio` double NOT NULL default '0',
-`standard_error` double default NULL,
-`type` varchar(15) NOT NULL default '',
-`valid` tinyint(1) default NULL,
-`comment` varchar(100) default NULL,
-`username` varchar(45) NOT NULL default '',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`quantitationid`),
-KEY `ratio` (`ratio`),
-KEY `type` (`type`),
-KEY `l_quantitation_groupid` (`l_quantitation_groupid`),
-KEY `valid` (`valid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
-
---
--- Table structure for table `quantitation_group`
---
-
-DROP TABLE IF EXISTS `quantitation_group`;
-CREATE TABLE `quantitation_group` (
-`quantitation_groupid` int(10) unsigned NOT NULL auto_increment,
-`l_quantitation_fileid` INTEGER UNSIGNED NOT NULL,
-`file_ref` VARCHAR(15) NOT NULL,
-`username` varchar(45) NOT NULL default '',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`quantitation_groupid`),
-KEY `l_quantitation_fileid` (`l_quantitation_fileid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+  `quantitationid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_quantitation_groupid` int(10) unsigned NOT NULL DEFAULT '0',
+  `ratio` double NOT NULL DEFAULT '0',
+  `standard_error` double DEFAULT NULL,
+  `type` varchar(15) NOT NULL DEFAULT '',
+  `valid` tinyint(1) DEFAULT NULL,
+  `comment` varchar(100) DEFAULT NULL,
+  `username` varchar(45) NOT NULL DEFAULT '',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`quantitationid`),
+  KEY `ratio` (`ratio`),
+  KEY `type` (`type`),
+  KEY `valid` (`valid`),
+  KEY `l_quantitation_groupid` (`l_quantitation_groupid`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=1167796 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `quantitation_file`
 --
 
 DROP TABLE IF EXISTS `quantitation_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `quantitation_file` (
-`quantitation_fileid` int(10) unsigned NOT NULL auto_increment,
-`filename` varchar(100) NOT NULL default '',
-`type` varchar(15) NOT NULL default '',
-`file` longblob NOT NULL,
-`username` varchar(45) NOT NULL default '',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  USING BTREE (`quantitation_fileid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+  `quantitation_fileid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `filename` varchar(100) NOT NULL DEFAULT '',
+  `type` varchar(15) NOT NULL DEFAULT '',
+  `file` longblob NOT NULL,
+  `username` varchar(45) NOT NULL DEFAULT '',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`quantitation_fileid`) USING BTREE,
+  KEY `filename` (`filename`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=16237 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `spectrumfile`
+-- Table structure for table `quantitation_group`
 --
 
-DROP TABLE IF EXISTS `spectrumfile`;
-CREATE TABLE `spectrumfile` (
-`spectrumfileid` int(10) unsigned NOT NULL auto_increment,
-`l_lcrunid` int(10) unsigned NOT NULL default '0',
-`l_projectid` int(10) unsigned NOT NULL default '0',
-`l_instrumentid` int(10) unsigned NOT NULL default '0',
-`searched` int(10) unsigned default '0',
-`identified` int(10) unsigned default '0',
-`file` longblob NOT NULL,
-`filename` varchar(250) NOT NULL default '',
-`total_spectrum_intensity` DECIMAL(20,4) NOT NULL default '0.0',
-`highest_peak_in_spectrum` DECIMAL(20,4) NOT NULL default '0.0',
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`spectrumfileid`),
-UNIQUE KEY `filename` (`filename`),
-UNIQUE KEY `filename_index` (`filename`),
-KEY `l_projectid_index` (`l_projectid`),
-KEY `l_instrumentid` (`l_instrumentid`),
-KEY `l_lcrunidindex` (`l_lcrunid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 MAX_ROWS=10000000 AVG_ROW_LENGTH=10000;
+DROP TABLE IF EXISTS `quantitation_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `quantitation_group` (
+  `quantitation_groupid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_quantitation_fileid` int(10) unsigned NOT NULL,
+  `file_ref` varchar(15) NOT NULL,
+  `username` varchar(45) NOT NULL,
+  `creationdate` datetime NOT NULL,
+  `modificationdate` datetime NOT NULL,
+  PRIMARY KEY (`quantitation_groupid`)
+) ENGINE=MyISAM AUTO_INCREMENT=1005349 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `spectrum`
+--
+
+DROP TABLE IF EXISTS `spectrum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `spectrum` (
+  `spectrumid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_lcrunid` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_projectid` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_instrumentid` int(10) unsigned NOT NULL DEFAULT '0',
+  `searched` int(10) unsigned DEFAULT '0',
+  `identified` int(10) unsigned DEFAULT '0',
+  `filename` varchar(250) NOT NULL DEFAULT '',
+  `total_spectrum_intensity` decimal(20,4) NOT NULL DEFAULT '0.0000',
+  `highest_peak_in_spectrum` decimal(20,4) NOT NULL DEFAULT '0.0000',
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`spectrumid`),
+  UNIQUE KEY `filename` (`filename`),
+  UNIQUE KEY `filename_index` (`filename`),
+  KEY `l_projectid_index` (`l_projectid`),
+  KEY `l_instrumentid` (`l_instrumentid`),
+  KEY `l_lcrunidindex` (`l_lcrunid`)
+) ENGINE=MyISAM AUTO_INCREMENT=28157382 DEFAULT CHARSET=latin1 MAX_ROWS=10000000 AVG_ROW_LENGTH=10000;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `spectrum_file`
+--
+
+DROP TABLE IF EXISTS `spectrum_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `spectrum_file` (
+  `l_spectrumid` int(10) unsigned NOT NULL,
+  `file` longblob NOT NULL,
+  PRIMARY KEY (`l_spectrumid`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `status`
+--
+
+DROP TABLE IF EXISTS `status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `status` (
+  `statusid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`statusid`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `user`
 --
 
 DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-`userid` int(10) unsigned NOT NULL auto_increment,
-`name` varchar(100) NOT NULL default '',
-`username` varchar(45) NOT NULL default 'CONVERSION_FROM_MS_LIMS_4',
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`userid`),
-UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `userid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`userid`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `validation`
 --
 
 DROP TABLE IF EXISTS `validation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `validation` (
-`validationid` int(10) unsigned NOT NULL auto_increment,
-`l_identificationid` int(10) unsigned NOT NULL default '0',
-`comment` text DEFAULT NULL,
-`status` tinyint(1) unsigned NOT NULL default '0',
-`l_userid` int(11) DEFAULT NULL,
-`creationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-`modificationdate` datetime NOT NULL default '0000-00-00 00:00:00',
-PRIMARY KEY  (`validationid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
+  `validationid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `l_identificationid` int(10) unsigned NOT NULL DEFAULT '0',
+  `comment` text NOT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `l_userid` int(11) DEFAULT NULL,
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`validationid`)
+) ENGINE=MyISAM AUTO_INCREMENT=5084 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -422,6 +506,4 @@ PRIMARY KEY  (`validationid`)
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-03-11 12:32:31
-
-
+-- Dump completed on 2010-04-26 16:56:45
