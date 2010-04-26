@@ -69,7 +69,7 @@ public class IdentificationTableModel extends AbstractTableModel {
                 result = "IdentificationID";
                 break;
             case 1:
-                result = "L_spectrumfileID";
+                result = "L_spectrumID";
                 break;
             case 2:
                 result = "L_datfileID";
