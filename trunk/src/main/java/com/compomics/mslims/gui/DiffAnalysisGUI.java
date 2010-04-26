@@ -486,7 +486,7 @@ public class DiffAnalysisGUI extends JFrame implements Connectable, Flamable {
         JPanel jpanWhereAddition = new JPanel();
         jpanWhereAddition.setLayout(new BoxLayout(jpanWhereAddition, BoxLayout.Y_AXIS));
         jpanWhereAddition.setBorder(BorderFactory.createTitledBorder("Optional addition to where clause"));
-        JLabel lblWhereAddition = new JLabel("Prefix identification columns with 'i.' and spectrumfile columns with 's.'! ");
+        JLabel lblWhereAddition = new JLabel("Prefix identification columns with 'i.' and spectrum columns with 's.'! ");
         Font oldFont = lblWhereAddition.getFont();
         lblWhereAddition.setFont(new Font(oldFont.getName(), Font.BOLD | Font.ITALIC, oldFont.getSize()));
         if (this.getBackground() != Color.red) {

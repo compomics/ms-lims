@@ -85,7 +85,7 @@ public class Spectrum extends SpectrumTableAccessor {
         rs.close();
         ps.close();
         if (counter != 1) {
-            throw new SQLException("Select based on spectrumfile name '" + aFileName + "' resulted in " + counter + " results!");
+            throw new SQLException("Select based on spectrum name '" + aFileName + "' resulted in " + counter + " results!");
         }
 
         return temp;
@@ -95,15 +95,15 @@ public class Spectrum extends SpectrumTableAccessor {
     /**
      * This method will find a spectrum file from the current connection, based on the specified spectrumid.
      *
-     * @param aSpectrumfileid long with the spectrumid of the spectrum file to find.
+     * @param aSpectrumID long with the spectrumid of the spectrum file to find.
      * @param aConn           Connection to read the spectrum File from.
      * @return Spectrumfile with the data.
      * @throws SQLException when the retrieval did not succeed.
      */
-    public static Spectrum findFromID(long aSpectrumfileid, Connection aConn) throws SQLException {
+    public static Spectrum findFromID(long aSpectrumID, Connection aConn) throws SQLException {
         Spectrum temp = null;
         PreparedStatement ps = aConn.prepareStatement(getBasicSelect() + " where spectrumid = ?");
-        ps.setLong(1, aSpectrumfileid);
+        ps.setLong(1, aSpectrumID);
         ResultSet rs = ps.executeQuery();
         int counter = 0;
         while (rs.next()) {
@@ -113,7 +113,7 @@ public class Spectrum extends SpectrumTableAccessor {
         rs.close();
         ps.close();
         if (counter != 1) {
-            SQLException sqe = new SQLException("Select based on spectrumfile ID '" + aSpectrumfileid + "' resulted in " + counter + " results instead of 1!");
+            SQLException sqe = new SQLException("Select based on spectrum ID '" + aSpectrumID + "' resulted in " + counter + " results instead of 1!");
             logger.error(sqe.getMessage(), sqe);
             throw sqe;
         }
@@ -192,7 +192,7 @@ public class Spectrum extends SpectrumTableAccessor {
     public static Object[][] getFilenameAndIdentifiedStatusForAllSpectraForProject(long aProjectID, Connection aConn) throws SQLException {
         Object[][] result = null;
         ArrayList temp = new ArrayList();
-        String query = "select spectrumid, filename, identified from spectrumwhere l_projectid = ?";
+        String query = "select spectrumid, filename, identified from spectrum where l_projectid = ?";
 
         PreparedStatement ps = aConn.prepareStatement(query);
         ps.setLong(1, aProjectID);
@@ -229,7 +229,7 @@ public class Spectrum extends SpectrumTableAccessor {
     public static void addOneToSearchedFlag(String[] aFilenames, Connection aConn) throws SQLException {
         // The Prepped stat.
         Statement stat = aConn.createStatement();
-        String query = "update spectrumfile set searched = searched+1, modificationdate=CURRENT_TIMESTAMP where filename in ";
+        String query = "update spectrum set searched = searched+1, modificationdate=CURRENT_TIMESTAMP where filename in ";
         StringBuffer sb = new StringBuffer("(");
         for (int i = 0; i < aFilenames.length; i++) {
             String lFilename = aFilenames[i];
@@ -243,7 +243,7 @@ public class Spectrum extends SpectrumTableAccessor {
         int resultUpdate = stat.executeUpdate(query);
         stat.close();
         if (resultUpdate != aFilenames.length) {
-            throw new SQLException("Error while updating SpectrumFile table for filenames.\nNumber of updated rows was " + resultUpdate + " instead of the expected " + aFilenames.length + "!");
+            throw new SQLException("Error while updating Spectrum table for filenames.\nNumber of updated rows was " + resultUpdate + " instead of the expected " + aFilenames.length + "!");
         }
     }
 

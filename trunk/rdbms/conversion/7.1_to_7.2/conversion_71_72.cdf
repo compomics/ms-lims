@@ -71,3 +71,6 @@ ALTER TABLE `spectrum` CHANGE COLUMN `spectrumfileid` `spectrumid` int(10) UNSIG
 
 # Step 14 - alter identification.l_spectrumfileid to identification.l_spectrumid
 ALTER TABLE `identification` CHANGE COLUMN `l_spectrumfileid` `l_spectrumid` int(10) unsigned NOT NULL DEFAULT '0';
+
+# Step 15 - add index to quantitation_file table on the filename
+ALTER TABLE `quantitation_file` ADD INDEX filename USING BTREE(`filename`);

@@ -398,7 +398,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                                 filename = lSpectrum.getFilename();
                             } catch (SQLException sqle) {
                                 logger.error(sqle.getMessage(), sqle);
-                                JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected spectrumfile (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load spectrumfile data!", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected spectrum (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load spectrum data!", JOptionPane.ERROR_MESSAGE);
                                 return;
                             }
                         } else {

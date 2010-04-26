@@ -459,6 +459,7 @@ public class MascotResultsProcessor {
                 //  - identification: update spectrumfile + l_spectrumid + l_datfileid.
                 if (ps instanceof Identification) {
                     Identification ita = (Identification) ps;
+                    logger.debug("Start persisting identification of spectrumid " + ita.getL_spectrumid());
                     // We need to update the spectrumfile as well.
                     Spectrum lSpectrum = Spectrum.findFromName(ita.getTemporarySpectrumfilename(), iConn);
                     if (lSpectrum.getIdentified() > 0) {
@@ -468,6 +469,7 @@ public class MascotResultsProcessor {
                     }
                     // Update it.
                     lSpectrum.update(iConn);
+                    logger.debug("Persisted identification of spectrumid " + ita.getL_spectrumid());
                     ita.setL_spectrumid(lSpectrum.getSpectrumid());
                     // Now to find the datfile ID.
                     Object l_datfileid = iDatfilenameToDatfileid.get(ita.getTemporaryDatfilename());
@@ -477,6 +479,7 @@ public class MascotResultsProcessor {
                     ita.setL_datfileid(((Number) l_datfileid).longValue());
                 }
                 ps.persist(iConn);
+                
                 // See if we have:
                 //  - Datfile: in this case, we need to retrieve the generated key and store it in
                 //             a mapping.
