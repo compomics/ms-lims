@@ -31,7 +31,7 @@
 #  - Change the classname for each instrument's StorageEngine.
 
 # Step 1
-!com.compomics.mslims.db.conversiontool.implementations.StorageEngine_Package_Change_StepImpl
+!com.compomics.mslims.db.conversiontool.implementations.Package_Change_StepImpl
 
 # Step 2 - create the new quantitation_group table
 CREATE TABLE `quantitation_group` (  `quantitation_groupid` INTEGER UNSIGNED NOT NULL,  `l_quantitation_fileid` INTEGER UNSIGNED NOT NULL,  `file_ref` VARCHAR(15) NOT NULL,  `username` VARCHAR(45) NOT NULL,  `creationdate` DATETIME NOT NULL,  `modificationdate` DATETIME NOT NULL ) ENGINE = MyISAM;

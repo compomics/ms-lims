@@ -15,11 +15,11 @@ import java.sql.SQLException;
  * <p/>
  * This class
  */
-public class StorageEngine_Package_Change_StepImpl implements DBConverterStep {
-    // Class specific log4j logger for StorageEngine_Package_Change_StepImpl instances.
-    private static Logger logger = Logger.getLogger(StorageEngine_Package_Change_StepImpl.class);
+public class Package_Change_StepImpl implements DBConverterStep {
+    // Class specific log4j logger for Package_Change_StepImpl instances.
+    private static Logger logger = Logger.getLogger(Package_Change_StepImpl.class);
 
-    public StorageEngine_Package_Change_StepImpl() {
+    public Package_Change_StepImpl() {
         // Empty constructor.
     }
 
