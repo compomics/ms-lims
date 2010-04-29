@@ -113,7 +113,7 @@ public class ProjectReporter {
         // Write and execute the queries.
         // 1. Standard queries.
         //  1.a. Number of spectra in the DB.
-        String numSpectraQuery = "select count(*) from spectrumwhere l_projectid = " + iProject.getProjectid();
+        String numSpectraQuery = "select count(*) from spectrum where l_projectid = " + iProject.getProjectid();
         long startTime = System.currentTimeMillis();
         ResultSet rs = stat.executeQuery(numSpectraQuery);
         rs.next();
