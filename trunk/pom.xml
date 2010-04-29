@@ -201,7 +201,7 @@
                 </executions>
             </plugin>
 
-              <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
@@ -290,15 +290,21 @@
             <version>3.0.3</version>
             <type>jar</type>
         </dependency>
-          <!-- This project depends on the rover JAR file.
-          -->
+        <!-- This project depends on the rover JAR file.
+        -->
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>rover</artifactId>
             <version>2.0</version>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>ms-lims</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
+
         <!-- This project depends on the Mascot Datfile JAR file.
         -->
         <dependency>
@@ -315,6 +321,7 @@
             <version>0.3</version>
             <type>jar</type>
         </dependency>
+
         <!-- This project depends on the peptizer JAR file.
           -->
         <dependency>
@@ -322,11 +329,17 @@
             <artifactId>peptizer</artifactId>
             <version>1.5</version>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>ms-lims</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-      
+
 
         <!-- This project depends on the commons-io JAR file.
-          -->
+        -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -370,9 +383,9 @@
             <version>1.0.4</version>
             <type>jar</type>
         </dependency>
-    
+
         <!-- This project depends on the jgoodies JAR file.
-          -->
+        -->
         <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>looks</artifactId>
