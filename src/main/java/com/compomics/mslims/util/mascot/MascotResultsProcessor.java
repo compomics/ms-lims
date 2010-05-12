@@ -361,7 +361,7 @@ public class MascotResultsProcessor {
                 // Put all params in a HashMap with the correct keys.
                 HashMap hm = new HashMap();
                 hm.put(IdentificationTableAccessor.ACCESSION, accession);
-                hm.put(IdentificationTableAccessor.CAL_MASS, new Double(mis.getTheoreticalMass()));
+                hm.put(IdentificationTableAccessor.CAL_MASS, new BigDecimal(mis.getTheoreticalMass()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue());
                 hm.put(IdentificationTableAccessor.END, new Long(mis.getEnd(accession)));
                 hm.put(IdentificationTableAccessor.ENZYMATIC, descr);
                 hm.put(IdentificationTableAccessor.EXP_MASS, new Double(mis.getMeasuredMass()));
