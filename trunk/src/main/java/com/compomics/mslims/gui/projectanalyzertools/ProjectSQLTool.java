@@ -1034,7 +1034,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version" +
-                    " from identification as i, spectrum as s, spectrum_file as sf where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : ""));
+                    " from identification as i, spectrum as s" + (chkIncludeFile.isSelected() ? ", spectrum_file as sf" : "") + " where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : ""));
             // See if there is an instrument selection.
             if (instrumentID >= 0) {
                 query.append(" and s.l_instrumentid=" + instrumentID);
@@ -1051,7 +1051,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                 query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                         "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                         "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version, count(*) as 'Number of spectra' " +
-                        "from identification as i, spectrum as s , spectrum_file as sf where i.valid >= 1 and s.spectrumid = i.l_spectrumid " + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and s.l_projectid=" + iProject.getProjectid() + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : "") + " group by i.sequence");
+                        "from identification as i, spectrum as s" + (chkIncludeFile.isSelected() ? ", spectrum_file as sf" : "") + " where i.valid >= 1 and s.spectrumid = i.l_spectrumid " + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and s.l_projectid=" + iProject.getProjectid() + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : "") + " group by i.sequence");
             }
         } else if (rbtSeq.isSelected()) {
             String param = txtSeq.getText();
@@ -1065,7 +1065,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version " +
-                    "from identification as i, spectrum as s, spectrum_file as sf where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and i.sequence like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
+                    "from identification as i, spectrum as s" + (chkIncludeFile.isSelected() ? ", spectrum_file as sf" : "") + " where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and i.sequence like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
         } else if (rbtModSeq.isSelected()) {
             String param = txtModSeq.getText();
             if (param != null && !param.trim().equals("")) {
@@ -1078,7 +1078,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version " +
-                    "from identification as i, spectrum as s, spectrum_file as sf where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and i.modified_sequence like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
+                    "from identification as i, spectrum as s" + (chkIncludeFile.isSelected() ? ", spectrum_file as sf" : "") + " where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and i.modified_sequence like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
         } else if (rbtTitle.isSelected()) {
             String param = txtTitle.getText();
             if (param != null && !param.trim().equals("")) {
@@ -1091,7 +1091,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version " +
-                    "from identification as i, spectrum as s, spectrum_file as sf where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and i.title like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
+                    "from identification as i, spectrum as s" + (chkIncludeFile.isSelected() ? ", spectrum_file as sf" : "") + " where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and i.title like '" + param + "'" + (instrumentID >= 0 ? " and s.l_instrumentid=" + instrumentID : ""));
         } else if (rbtUniqueProteins.isSelected()) {
             query.append("select substring(i.accession, 1, if((locate('.', i.accession)-1) >0, locate('.', i.accession)-1, length(i.accession))) as versionless_accession, ");
             if (chkOmitIPIXRefs.isSelected()) {
@@ -1156,7 +1156,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
             query.append(prefix + "i.identificationid, i.l_datfileid, i.l_spectrumid, s.filename, i.accession, i.start, i.end, i.enzymatic, i.sequence, i.modified_sequence, i.ion_coverage, i.score, i.exp_mass,\n" +
                     "i.cal_mass, i.light_isotope, i.heavy_isotope, i.valid, trim(i.Description) as Description, i.creationdate, i.identitythreshold, i.confidence,\n" +
                     "i.DB, i.title, i.precursor, i.charge, i.isoforms, i.db_filename, i.mascot_version " +
-                    "from identification as i, spectrum as s, spectrum_file as sf where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and ");
+                    "from identification as i, spectrum as s" + (chkIncludeFile.isSelected() ? ", spectrum_file as sf" : "") + " where i.valid >= 1 and s.spectrumid = i.l_spectrumid and s.l_projectid=" + iProject.getProjectid() + (chkIncludeFile.isSelected() ? " and s.spectrumid = sf.l_spectrumid " : "") + " and ");
             // See if we need light, heavy or both.
             String singleHeavy = "(i.light_isotope = 0 and i.heavy_isotope>0)";
             String singleLight = "(i.light_isotope>0 and i.heavy_isotope=0)";
