@@ -613,4 +613,15 @@ Change log
  - Version 7.1
          The 7.1 version of ms_lims adds two columns to spectrumfile (used for peak intensity normalization): total ion count and highest peak in spectrum.
 
-         
+ - Version 7.3
+         The 7.3 version of ms_lims changes the quantification tables
+
+ - Version 7.3.1
+          The 7.3.1 version of ms_lims has a minor bug fix that happened while storing identifications with very precise calculated masses
+
+ - Version 7.3.2
+          The 7.3.2 version of ms_lims has three minor bug fixes; first is a fix for the incorrect colouring of timestamp and byte array fields in results tables, second is the removal of a cartesian cross condition in all ProjectAnalyzer QueryTool queries when 'include spectrum' was NOT selected. On production databases, the resulting massive result set typically crashed the client. Third, when a long query in Generic Query failed, no error box was shown to the user, and the feedback labels on the progress bar and the status label remained at their pre-query state.
+
+
+
+

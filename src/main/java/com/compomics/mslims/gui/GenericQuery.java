@@ -840,7 +840,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
             }
         } catch (SQLException sqle) {
             logger.error(sqle.getMessage(), sqle);
-            JOptionPane.showMessageDialog(this, new String[]{"Unfortunately, your query failed, (see below for query): " + sqle.getMessage(), aSQL}, "Query failed!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Unfortunately, your query failed: " + sqle.getMessage(), "Query failed!", JOptionPane.ERROR_MESSAGE);
             lblStatus.setForeground(Color.red);
             lblStatus.setText("Query failed: " + sqle.getMessage());
             progress.setString("Query failed!");
