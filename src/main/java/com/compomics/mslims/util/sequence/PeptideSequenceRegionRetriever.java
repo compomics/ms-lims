@@ -31,9 +31,7 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class PeptideSequenceRegionRetriever {
-    // Class specific log4j logger for PeptideSequenceRegionRetriever instances.
-    private static Logger logger = Logger.getLogger(PeptideSequenceRegionRetriever.class);
-
+    
     /**
      * The MascotSequenceRetriever that will return all FASTA sequences.
      */
@@ -120,7 +118,7 @@ public class PeptideSequenceRegionRetriever {
             String accession = (String) iter.next();
             int start = accession.indexOf("§");
             if (start >= 0) {
-                accession = accession.substring(0, start);
+                continue;
             }
             String sequence = null;
             try {
@@ -142,8 +140,7 @@ public class PeptideSequenceRegionRetriever {
                 sr.close();
                 sequence = sb.toString();
             } catch (IOException ioe) {
-                logger.error("\nAccession number '" + accession + "' did not yield any hits. It was skipped.");
-                logger.error(ioe.getMessage(), ioe);
+                System.err.println("\nAccession number '" + accession + "' did not yield any hits. It was skipped.");
                 continue;
             }
             Object stored = all.get(accession);

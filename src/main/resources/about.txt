@@ -622,6 +622,5 @@ Change log
  - Version 7.3.2
           The 7.3.2 version of ms_lims has three minor bug fixes; first is a fix for the incorrect colouring of timestamp and byte array fields in results tables, second is the removal of a cartesian cross condition in all ProjectAnalyzer QueryTool queries when 'include spectrum' was NOT selected. On production databases, the resulting massive result set typically crashed the client. Third, when a long query in Generic Query failed, no error box was shown to the user, and the feedback labels on the progress bar and the status label remained at their pre-query state.
 
-
-
-
+ - Version 7.3.3
+          The 7.3.3 version of ms_lims corrects a bug in the output of RetrievePeptide, where only errors were redirected to the output file, and everything else went to the log file as 'INFO' statements. Simultaneously, performance and redundancy coping at accession number level was improved as well.

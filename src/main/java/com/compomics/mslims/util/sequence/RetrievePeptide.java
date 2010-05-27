@@ -31,8 +31,6 @@ import java.util.Vector;
  * @author Lennart Martens
  */
 public class RetrievePeptide {
-    // Class specific log4j logger for RetrievePeptide instances.
-    private static Logger logger = Logger.getLogger(RetrievePeptide.class);
 
     /**
      * Main method for this program. Start-up parameters are the following:
@@ -53,19 +51,19 @@ public class RetrievePeptide {
         String database = clp.getOptionParameter("database");
         String hostname = clp.getOptionParameter("hostname");
         if (hostname == null) {
-            logger.error("\n\nYou need to specify a Mascot server hostname (eg. mascotserv.domain.com) to retrieve the sequences from!\n");
+            System.err.println("\n\nYou need to specify a Mascot server hostname (eg. mascotserv.domain.com) to retrieve the sequences from!\n");
             printUsage();
         }
         String infile = clp.getOptionParameter("infile");
         String nRes = clp.getOptionParameter("Nres");
         if (nRes == null && infile == null) {
-            logger.error("\n\nYou need to specify the maximum number of residues to grab at N-terminal side!\n");
+            System.err.println("\n\nYou need to specify the maximum number of residues to grab at N-terminal side!\n");
             printUsage();
         }
         int nres = 0;
         String cRes = clp.getOptionParameter("Cres");
         if (cRes == null && infile == null) {
-            logger.error("\n\nYou need to specify the maximum number of residues to grab at C-terminal side!\n");
+            System.err.println("\n\nYou need to specify the maximum number of residues to grab at C-terminal side!\n");
             printUsage();
         }
         int cres = 0;
@@ -78,13 +76,13 @@ public class RetrievePeptide {
             try {
                 nres = Integer.parseInt(nRes);
             } catch (Exception e) {
-                logger.error("\n\nYou need to specify a positive whole number of residues to grab at N-terminal side!\n");
+                System.err.println("\n\nYou need to specify a positive whole number of residues to grab at N-terminal side!\n");
                 printUsage();
             }
             try {
                 cres = Integer.parseInt(cRes);
             } catch (Exception e) {
-                logger.error("\n\nYou need to specify a positive whole number of residues to grab at C-terminal side!\n");
+                System.err.println("\n\nYou need to specify a positive whole number of residues to grab at C-terminal side!\n");
                 printUsage();
             }
 
@@ -92,13 +90,13 @@ public class RetrievePeptide {
             sequence = clp.getOptionParameter("sequence").trim();
             accession = clp.getOptionParameter("accession").trim();
             if (sequence == null || accession == null) {
-                logger.error("\n\nYou need to specify either a sequence and accession OR a file with these!\n");
+                System.err.println("\n\nYou need to specify either a sequence and accession OR a file with these!\n");
                 printUsage();
             }
         } else {
             input = new File(infile);
             if (!input.exists()) {
-                logger.error("\n\nThe input file you specified (" + infile + ") does not exist!\n");
+                System.err.println("\n\nThe input file you specified (" + infile + ") does not exist!\n");
                 System.exit(1);
             }
             file = true;
@@ -123,14 +121,14 @@ public class RetrievePeptide {
                     }
                     StringTokenizer lst = new StringTokenizer(line, ",;");
                     if (lst.countTokens() != 4) {
-                        logger.error("\n\nFile is not structured correctly!\nShould be: accession,sequence,nterm residue number,cterm residue number!");
-                        logger.error("Proceeding with currently read entries.\n");
+                        System.err.println("\n\nFile is not structured correctly!\nShould be: accession,sequence,nterm residue number,cterm residue number!");
+                        System.err.println("Proceeding with currently read entries.\n");
                         break;
                     } else {
                         String ac = lst.nextToken().trim();
                         if (counter == 1 && ac.equalsIgnoreCase("accession")) {
                             // Probable header line.
-                            logger.error("\nSkipped probable header at line 1, starting with '" + ac + "'.\n");
+                            System.err.println("\nSkipped probable header at line 1, starting with '" + ac + "'.\n");
                             continue;
                         }
                         String seq = lst.nextToken().trim();
@@ -142,10 +140,10 @@ public class RetrievePeptide {
                         } catch (Exception e) {
                             // If it is line 1, it is probably the header.
                             if (counter != 1) {
-                                logger.error("\n\nThe number of residues for N-terminal and C-terminal inclusion should be positive, whole numbers!");
-                                logger.error("Proceeding with currently read entries.\n");
+                                System.err.println("\n\nThe number of residues for N-terminal and C-terminal inclusion should be positive, whole numbers!");
+                                System.err.println("Proceeding with currently read entries.\n");
                             } else {
-                                logger.error("\nSkipped probable header '" + line + "' at line 1.\n");
+                                System.err.println("\nSkipped probable header '" + line + "' at line 1.\n");
                                 continue;
                             }
                         }
@@ -166,8 +164,8 @@ public class RetrievePeptide {
             }
             visualizeVector(result);
         } catch (IOException ioe) {
-            logger.error("\n\nIOException occurred! Could not read from file!");
-            logger.error(ioe.getMessage(), ioe);
+            System.err.println("\n\nIOException occurred! Could not read from file!");
+            ioe.printStackTrace();
         }
     }
 
@@ -176,9 +174,9 @@ public class RetrievePeptide {
      * This method prints information on the usage of the program to the stderr.
      */
     private static void printUsage() {
-        logger.error("\n\nUsage:\n\n\tPeptideSequenceRegion --infile <inputfile> --hostname <Mascot_server_hostname> [--database <Mascot_DB_name]]\n");
-        logger.error("\t OR\n");
-        logger.error("\tPeptideSequenceRegion --residues <residues_retained_on_either_side> --sequence <sequence> --accession <db_accession_number> --servername <Mascot_server_hostname> [--database <Mascot_DB_name]\n");
+        System.err.println("\n\nUsage:\n\n\tPeptideSequenceRegion --infile <inputfile> --hostname <Mascot_server_hostname> [--database <Mascot_DB_name]]\n");
+        System.err.println("\t OR\n");
+        System.err.println("\tPeptideSequenceRegion --residues <residues_retained_on_either_side> --sequence <sequence> --accession <db_accession_number> --servername <Mascot_server_hostname> [--database <Mascot_DB_name]\n");
         System.exit(1);
     }
 
@@ -188,15 +186,15 @@ public class RetrievePeptide {
      * @param aVector Vector with the results of the query.
      */
     private static void visualizeVector(Vector aVector) {
-        logger.info("\n\n;Accession;Query;Nterm;Cterm;Found;Nterm addition;Cterm addition;Complete");
+        System.out.println("\n\n;Accession;Query;Nterm;Cterm;Found;Nterm addition;Cterm addition;Complete");
         int liSize = aVector.size();
         for (int i = 0; i < liSize; i++) {
             SequenceRegion sr = (SequenceRegion) aVector.get(i);
-            logger.info(";" + sr.getAccession() + ";" + sr.getQuerySequence() + ";" + sr.getNterminalResidueCount() + ";" + sr.getCterminalResidueCount() + ";" + sr.isFound() + ";");
+            System.out.print(";" + sr.getAccession() + ";" + sr.getQuerySequence() + ";" + sr.getNterminalResidueCount() + ";" + sr.getCterminalResidueCount() + ";" + sr.isFound() + ";");
             if (sr.isFound()) {
-                logger.info(sr.getNterminalAddition() + ";" + sr.getCterminalAddition() + ";" + sr.getRetrievedSequence());
+                System.out.println(sr.getNterminalAddition() + ";" + sr.getCterminalAddition() + ";" + sr.getRetrievedSequence());
             } else {
-                logger.info(";" + ";");
+                System.out.println(";" + ";");
             }
         }
     }
