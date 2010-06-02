@@ -100,6 +100,7 @@ public class DbConversionToolGuiEdition {
                 // Timing.
                 long startTime = System.currentTimeMillis();
                 // Perform step.
+
                 boolean error = step.performConversionStep(iConn);
                 // Timing again.
                 long endTime = System.currentTimeMillis();

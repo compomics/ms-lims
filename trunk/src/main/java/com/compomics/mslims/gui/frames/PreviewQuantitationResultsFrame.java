@@ -254,6 +254,7 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
         progress.setSize(350, 100);
         progress.setMessage("Starting up...");
 
+        
         // This HashMap will save report information succes or failure rate of storage of the RatioGroupCollections
         HashMap<String, Boolean> lWorkerReport = new HashMap<String, Boolean>();
 

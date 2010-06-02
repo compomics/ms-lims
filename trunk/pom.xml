@@ -11,7 +11,7 @@
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.3.3</version.number>
+        <version.number>7.3.4</version.number>
         <logging.level.default>WARN</logging.level.default>
         <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
         <logging.file.max.size>5000KB</logging.file.max.size>
@@ -107,6 +107,12 @@
                                 <resource>
                                     <directory>src/main/resources</directory>
                                     <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>rdbms</directory>
+                                    <includes>
+                                        <include>*.sql</include>
+                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>

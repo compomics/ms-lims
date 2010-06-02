@@ -624,3 +624,6 @@ Change log
 
  - Version 7.3.3
           The 7.3.3 version of ms_lims corrects a bug in the output of RetrievePeptide, where only errors were redirected to the output file, and everything else went to the log file as 'INFO' statements. Simultaneously, performance and redundancy coping at accession number level was improved as well.
+
+ - Version 7.3.4
+          The 7.3.4 version of ms_lims corrects a bug in the descriptive numbers project analyzer tool. When no acetylated peptides are identified (i.e. butylation project) then a zero-division was done. Also, a warning is now presented to the user in the quantitationpreview when quantitationgroups could not be linked to peptide identifications. Finally, a processing bug due to file format updates in the new Mascot Server 2.3 have been solved.

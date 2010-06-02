@@ -360,13 +360,17 @@ public class ProjectReporter {
                 // Report part for all acetylated.
                 report.append("\t\t+ " + sum + " acetylated peptides (" + percent + "%), of which:\n");
                 // Report part for N-term acetylated.
-                String detailPercent = new BigDecimal((((double) numNtermAce) / ((double) sum)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                report.append("\t\t\t° " + numNtermAce + " were N-terminal (starting at position 1 or 2) (" + percentNtermAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
-                // Report part for internal acetylated.
-                detailPercent = new BigDecimal((((double) numInternalAce) / ((double) sum)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                report.append("\t\t\t° " + numInternalAce + " were internal (starting at position > 2) (" + percentInternalAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
-                if (aProgress != null) {
-                    advanceProgressBar(aProgress);
+                if(sum > 0){
+                    // Bugfix 100602 (mslims-7.3.4)
+                    // If no acetylated peptides where found, then skip this part of the report.
+                    String detailPercent = new BigDecimal((((double) numNtermAce) / ((double) sum)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
+                    report.append("\t\t\t° " + numNtermAce + " were N-terminal (starting at position 1 or 2) (" + percentNtermAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
+                    // Report part for internal acetylated.
+                    detailPercent = new BigDecimal((((double) numInternalAce) / ((double) sum)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
+                    report.append("\t\t\t° " + numInternalAce + " were internal (starting at position > 2) (" + percentInternalAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
+                    if (aProgress != null) {
+                        advanceProgressBar(aProgress);
+                    }
                 }
                 //   2.a.8. Count the number of N-terminal 3-deutero acetylated peptides.
                 String numNtermAcD3Query = "select count(*) from identification as i, spectrum as f where i.l_spectrumid=f.spectrumid and f.l_projectid=" + iProject.getProjectid() + " and i.valid > 0 and i.modified_sequence regexp '^AcD3-.*' and (start=1 or start=2)";

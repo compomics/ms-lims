@@ -125,7 +125,7 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
 
                     // Keep track of the 'TITLE' value for further usage in the filename creation.
                     // Note that this is the only difference with the parent.
-                    if (line.indexOf("TITLE") >= 0) {
+                    if (line.startsWith("TITLE")) {
                         iCurrentSpectrumTitle = line;
                         if (lMultiFile) {
                             //check if this is linked to two files
@@ -137,17 +137,17 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
                         }
                     }
                     // Keep track of the 'SCANS' value for further usage in the filename creation.
-                    if (line.indexOf("SCANS") >= 0) {
+                    if (line.startsWith("SCANS")) {
                         iCurrentSpectrumScans = line;
                     }
 
                     // Keep track of the 'CHARGE' value for further usage in the filename creation.
-                    if (line.indexOf("CHARGE") >= 0) {
+                    if (line.startsWith("CHARGE")) {
                         iCurrentCharge = line.substring(line.indexOf("=") + 1);
                     }
 
                     // See if it was an 'END IONS', in which case we stop being in a spectrum.
-                    if (line.indexOf("END IONS") >= 0) {
+                    if (line.startsWith("END IONS")) {
                         // End detected. Much to do!
                         // Reset boolean.
                         inSpectrum = false;
@@ -172,7 +172,7 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
                     }
                 }
                 // If we're not in a spectrum, see if the line is 'BEGIN IONS', which marks the begin of a spectrum!
-                else if (line.indexOf("BEGIN IONS") >= 0) {
+                else if (line.startsWith("BEGIN IONS")) {
                     inSpectrum = true;
                     spectrum.append(line + "\n");
                 }
