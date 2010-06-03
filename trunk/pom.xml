@@ -316,7 +316,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.1</version>
+            <version>3.2</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.
@@ -333,7 +333,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>peptizer</artifactId>
-            <version>1.5</version>
+            <version>1.5.2</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
