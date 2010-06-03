@@ -78,16 +78,7 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
                 return false;
             }
         }
-        // Verify whether all RatioGroups are linked to identifications!
-        if (hasIdentificationsInEachQuantitationGroup(aRatioGroupCollection)) {
-            int answer = JOptionPane.showConfirmDialog(new JFrame(), "Some RatioGroups could not be linked to peptide identifications!!\nDo you want to continue storing the quantitation files in the database?", "Problem storing rov file", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (answer == JOptionPane.YES_OPTION) {
-                //ok store it again
-            } else {
-                //do not store it
-                return false;
-            }
-        }
+
 
         //First things first: store the distiller.xml file
         //find the temporary folder
@@ -242,22 +233,6 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
         return true;
     }
 
-    /**
-     * Verify whether each ratioGroup has an identification linked to it.
-     * @return Boolean on the
-     * @param aRatioGroupCollection
-     */
-    private boolean hasIdentificationsInEachQuantitationGroup(final RatioGroupCollection aRatioGroupCollection) {
-        int lCounter = 0;
-        for (Iterator lIterator = aRatioGroupCollection.iterator(); lIterator.hasNext();) {
-            RatioGroup lRatioGroup = (RatioGroup) lIterator.next();
-            if(lRatioGroup.getNumberOfIdentifications() > 0){
-                // Ok, this ratiogroup has a linked peptide identification.
-                lCounter++;
-            }
-        }
 
-        return lCounter == aRatioGroupCollection.size();
-    }
 
 }
