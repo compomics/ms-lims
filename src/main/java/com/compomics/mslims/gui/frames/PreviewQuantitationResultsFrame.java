@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.gui.frames;
 
+import com.compomics.rover.general.quantitation.RatioGroup;
 import org.apache.log4j.Logger;
 
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
@@ -104,7 +105,14 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
             this.passHotPotato(new Throwable("Quantitation processor was not created properly!! "));
         }
 
-
+        // Verify whether all RatioGroups are linked to identifications!
+        for (Iterator<RatioGroupCollection> lRatioGroupCollectionIterator = iQuantitationResults.iterator(); lRatioGroupCollectionIterator.hasNext();) {
+            RatioGroupCollection lRatioGroupCollection = lRatioGroupCollectionIterator.next();
+            if(!hasIdentificationsInEachRatioGroup(lRatioGroupCollection)){
+                JOptionPane.showMessageDialog(new JFrame(), "Some RatioGroups could not be linked to peptide identifications!!\n", "Problem previewing rov file", JOptionPane.WARNING_MESSAGE);
+                break;
+            };
+        }
     }
 
     /**
@@ -249,6 +257,7 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
      * This method is called when the user presses 'store'.
      */
     private void storeTriggered() {
+
         DefaultProgressBar progress =
                 new DefaultProgressBar(this, "Processing quantitation preview results...", 0, iQuantitationResults.size() + 2);
         progress.setSize(350, 100);
@@ -409,5 +418,23 @@ public class PreviewQuantitationResultsFrame extends JFrame implements Flamable 
                 new QuantitationWorker(iQuantitationProcessor, iQuantitationResults, this, progress);
         worker.start();
         progress.setVisible(true);
+    }
+
+
+    /**
+     * Verify whether each ratioGroup has an identification linked to it.
+     * @return Boolean on the
+     * @param aRatioGroupCollection
+     */
+    private boolean hasIdentificationsInEachRatioGroup(final RatioGroupCollection aRatioGroupCollection) {
+        int lCounter = 0;
+        for (Iterator lIterator = aRatioGroupCollection.iterator(); lIterator.hasNext();) {
+            RatioGroup lRatioGroup = (RatioGroup) lIterator.next();
+            if(lRatioGroup.getNumberOfIdentifications() > 0){
+                // Ok, this ratiogroup has a linked peptide identification.
+                lCounter++;
+            }
+        }
+        return lCounter == aRatioGroupCollection.size();
     }
 }
