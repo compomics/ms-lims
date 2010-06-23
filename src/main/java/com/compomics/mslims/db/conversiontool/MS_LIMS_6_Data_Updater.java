@@ -234,7 +234,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                     // Get all the datfileids for one project
                     long projectid = iProject.getProjectid();
                     PreparedStatement prepDatIds = null;
-                    prepDatIds = iConnection.prepareStatement("select i.l_datfileid from identification as i, spectrumfile as s where i.l_spectrumfileid = s.spectrumfileid and s.l_projectid = ? group by i.l_datfileid");
+                    prepDatIds = iConnection.prepareStatement("select i.l_datfileid from identification as i, spectrum as s where i.l_spectrumid = s.spectrumid and s.l_projectid = ? group by i.l_datfileid");
                     prepDatIds.setLong(1, projectid);
                     ResultSet rsDatIds = prepDatIds.executeQuery();
                     datfileIds = new Vector();
@@ -249,14 +249,14 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                         // Get all the identifications for one project and for one datfileid
                         String addMysql = " i.l_datfileid = " + datfileIds.get(i);
                         iIdentifications = Identification.getAllIdentificationsforProject(iConnection, projectid, addMysql);
-                        // Get for every identification the spectrumfilename and the threshold
+                        // Get for every identification the spectrumname and the threshold
                         iSpectrumfileNames = new String[iIdentifications.length];
                         iUsed = new boolean[iIdentifications.length];
                         for (int j = 0; j < iIdentifications.length; j++) {
                             iUsed[j] = false;
                             long spectrumid = iIdentifications[j].getL_spectrumid();
                             PreparedStatement prepSpec = null;
-                            prepSpec = iConnection.prepareStatement("select s.filename from spectrumfile as s where s.spectrumfileid = ? ");
+                            prepSpec = iConnection.prepareStatement("select s.filename from spectrum as s where s.spectrumid = ? ");
                             prepSpec.setLong(1, spectrumid);
                             ResultSet rsSpec = prepSpec.executeQuery();
                             while (rsSpec.next()) {
@@ -419,7 +419,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                         // Get all the datfileids for one project
                         long projectid = iProject.getProjectid();
                         PreparedStatement prepDatIds = null;
-                        prepDatIds = iConnection.prepareStatement("select i.l_datfileid from identification as i, spectrumfile as s where i.l_spectrumfileid = s.spectrumfileid and s.l_projectid = ? group by i.l_datfileid");
+                        prepDatIds = iConnection.prepareStatement("select i.l_datfileid from identification as i, spectrum as s where i.l_spectrumid = s.spectrumid and s.l_projectid = ? group by i.l_datfileid");
                         prepDatIds.setLong(1, projectid);
                         ResultSet rsDatIds = prepDatIds.executeQuery();
                         datfileIds = new Vector();
@@ -434,7 +434,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                             // Get all the identifications for one project and for one datfileid
                             String addMysql = " i.l_datfileid = " + datfileIds.get(i);
                             iIdentifications = Identification.getAllIdentificationsforProject(iConnection, projectid, addMysql);
-                            // Get for every identification the spectrumfilename and the threshold
+                            // Get for every identification the spectrumname and the threshold
                             iSpectrumfileNames = new String[iIdentifications.length];
                             iUsed = new boolean[iIdentifications.length];
 
@@ -442,7 +442,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                                 iUsed[j] = false;
                                 long spectrumid = iIdentifications[j].getL_spectrumid();
                                 PreparedStatement prepSpec = null;
-                                prepSpec = iConnection.prepareStatement("select s.filename from spectrumfile as s where s.spectrumfileid = ? ");
+                                prepSpec = iConnection.prepareStatement("select s.filename from spectrum as s where s.spectrumid = ? ");
                                 prepSpec.setLong(1, spectrumid);
                                 ResultSet rsSpec = prepSpec.executeQuery();
                                 while (rsSpec.next()) {
@@ -510,7 +510,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                                         }
                                         // if some of the modified sequence aren't found
                                         for (int m = 0; m < iMod_seqs.length; m++) {
-                                            // if some of the modified sequence aren't found use the mod_seq for an identification with the same spectrumfilename
+                                            // if some of the modified sequence aren't found use the mod_seq for an identification with the same spectrumname
                                             if (iMod_seqs[m] == null) {
                                                 for (int l = 0; l < iIdentifications.length; l++) {
                                                     if ((iSpectrumfileNames[l].equalsIgnoreCase(iSpectrumfileNames[m])) && m != l) {
@@ -976,7 +976,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
             for (int i = 0; i < projectsAll.length; i++) {
 
                 PreparedStatement prep = null;
-                prep = iConnection.prepareStatement("select i.ion_coverage from identification as i , spectrumfile as s where i.l_spectrumfileid = s.spectrumfileid and s.l_projectid = ?");
+                prep = iConnection.prepareStatement("select i.ion_coverage from identification as i , spectrum as s where i.l_spectrumid = s.spectrumid and s.l_projectid = ?");
                 prep.setLong(1, projectsAll[i].getProjectid());
                 ResultSet rs = prep.executeQuery();
 

@@ -125,9 +125,9 @@ public class Datfiles_and_Identification_to_50DBConverterStepImpl implements DBC
             logger.info("\t Dropping index 'datfilename' on identification(datfile)...");
             stat.execute("drop index datfilename on identification");
             logger.info("\t Done.");
-            // Continue with the link from identification to spectrumfile.
+            // Continue with the link from identification to spectrum.
             // Here, we'll need to find all spectrum filenames for all identifications.
-            // Subsequently, we update the identifications after retrieving the corresponding spectrumfile id.
+            // Subsequently, we update the identifications after retrieving the corresponding spectrum id.
             data = null;
             ArrayList filenames = new ArrayList();
             rs = stat.executeQuery("select distinct filename from identification");
@@ -138,8 +138,8 @@ public class Datfiles_and_Identification_to_50DBConverterStepImpl implements DBC
             stat.close();
             // Okay, we've got the spectrum filenames.
             // Now to the identifications and the updates thereof.
-            PreparedStatement psFindSpectrumfileid = aConn.prepareStatement("select spectrumfileid from spectrumwhere filename=?");
-            psUpdateIdentification = aConn.prepareStatement("update identification set l_spectrumfileid=?, modificationdate=CURRENT_TIMESTAMP where filename=?");
+            PreparedStatement psFindSpectrumfileid = aConn.prepareStatement("select spectrumid from spectrumwhere filename=?");
+            psUpdateIdentification = aConn.prepareStatement("update identification set l_spectrumid=?, modificationdate=CURRENT_TIMESTAMP where filename=?");
             for (Iterator lIterator = filenames.iterator(); lIterator.hasNext();) {
                 String filename = (String) lIterator.next();
                 psFindSpectrumfileid.setString(1, filename);

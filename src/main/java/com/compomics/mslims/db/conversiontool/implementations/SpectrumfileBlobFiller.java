@@ -33,7 +33,7 @@ public class SpectrumfileBlobFiller implements DBConverterStep {
         iMaximumSpectrumfileid = -1;
         try {
             // Get the number of spectra currently stored in the table.
-            PreparedStatement stat = aConn.prepareStatement("select MAX(spectrumfileid) from spectrumfile;");
+            PreparedStatement stat = aConn.prepareStatement("select MAX(spectrumid) from spectrum;");
             ResultSet rs = stat.executeQuery();
             while (rs.next()) {
                 iMaximumSpectrumfileid = rs.getInt(1);
@@ -41,7 +41,7 @@ public class SpectrumfileBlobFiller implements DBConverterStep {
             rs.close();
             stat.close();
 
-            // Start iterating all spectrumfile rows in the database.
+            // Start iterating all spectrum rows in the database.
             while (lRollingOffset < iMaximumSpectrumfileid) {
 
                 String lQuery = getSpectrumfileQuery(lRollingOffset, lNumberOfSpectrumfiles, aConn);
@@ -58,7 +58,7 @@ public class SpectrumfileBlobFiller implements DBConverterStep {
             }
 
             // Ok, exiting the while loop means that the rolling offset has finished
-            // fetching all spectrumfiles with an id below the MAX value.
+            // fetching all spectrums with an id below the MAX value.
             lError = false;
         } catch (SQLException e) {
             logger.error("SQLException thrown while filling the spectrum_file blob table!!", e);
@@ -69,10 +69,10 @@ public class SpectrumfileBlobFiller implements DBConverterStep {
     }
 
     /**
-     * This method returns the ideal number of spectrumfiles that should be used for the cycic updates.
+     * This method returns the ideal number of spectrums that should be used for the cycic updates.
      *
      * @param aConn
-     * @return The number of spectrumfiles that is ideally used to perfrom subselects in relation to the MySQL
+     * @return The number of spectrums that is ideally used to perfrom subselects in relation to the MySQL
      *         open_file_limit.
      */
     private int getNumberOfSpectrumfiles(final Connection aConn) {
@@ -99,10 +99,10 @@ public class SpectrumfileBlobFiller implements DBConverterStep {
     private String getSpectrumfileQuery(int aOffset, int aLength, final Connection aConn) throws SQLException {
         String lResult = null;
 
-        // First assert whether the next set of spectrumfileid enhold any spectra at all.
+        // First assert whether the next set of spectrumid enhold any spectra at all.
         int lCurrentMin = aOffset;
         int lCurrentMax = aOffset + aLength;
-        String lTestQuery = "select spectrumfileid from spectrumfile where spectrumfileid >= " + lCurrentMin + " and spectrumfileid < " + lCurrentMax;
+        String lTestQuery = "select spectrumid from spectrum where spectrumid >= " + lCurrentMin + " and spectrumid < " + lCurrentMax;
         PreparedStatement stat = aConn.prepareStatement(lTestQuery);
         ResultSet rs = stat.executeQuery();
         boolean passTest = false;
@@ -114,7 +114,7 @@ public class SpectrumfileBlobFiller implements DBConverterStep {
         stat.close();
         rs.close();
 
-        // If passed, get a new batch of spectrumfileid's based on a rolling index
+        // If passed, get a new batch of spectrumid's based on a rolling index
         if (lSpectrumfileids.size() > 0) {
             StringBuilder sb = new StringBuilder();
 
@@ -128,10 +128,10 @@ public class SpectrumfileBlobFiller implements DBConverterStep {
             */
 
             sb.append("INSERT INTO spectrum_file (l_spectrumid, file) VALUES ");
-            // Add subselects for each spectrumfile.
+            // Add subselects for each spectrum.
             for (int i = 0; i < lSpectrumfileids.size(); i++) {
                 Integer lCurrentSpectrumfileid = lSpectrumfileids.get(i);
-                sb.append("(" + lCurrentSpectrumfileid + ", (SELECT file from spectrumfile where spectrumfileid=" + lCurrentSpectrumfileid + "))");
+                sb.append("(" + lCurrentSpectrumfileid + ", (SELECT file from spectrum where spectrumid=" + lCurrentSpectrumfileid + "))");
                 // Stop at the end.
                 if (lCurrentSpectrumfileid == iMaximumSpectrumfileid) {
                     break;
