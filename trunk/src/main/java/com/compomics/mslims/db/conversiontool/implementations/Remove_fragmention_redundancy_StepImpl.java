@@ -33,7 +33,7 @@ public class Remove_fragmention_redundancy_StepImpl implements DBConverterStep {
         int lSuccess = 0;
         double lThreshold = 10000;
         try {
-            // First locate all relevant spectrumfile rows.
+            // First locate all relevant spectrum rows.
             PreparedStatement lPrepearedStatementIdentifications = aConn.prepareStatement("SELECT identificationid FROM identification");
             ResultSet rsOuter = lPrepearedStatementIdentifications.executeQuery();
 

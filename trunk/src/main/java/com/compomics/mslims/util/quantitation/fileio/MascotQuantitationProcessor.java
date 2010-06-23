@@ -247,11 +247,18 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
         //get the folder
         File lFolder = new File(aDistillerProject.substring(0, aDistillerProject.lastIndexOf(System.getProperty("file.separator")) + 1));
 
+        if (!lFolder.exists()) {
+            iFlamable.passHotPotato(new Throwable("The folder with the .rov files ' " + aDistillerProject + "' could not be located!!\nMaybe you are not working on the computer where the raw data is located."));
+            return null;
+        }
+
         File lFile = null;
 
         //get the .rov file (there's a possibility that the filename is a little bit different near the end)
         int fileCounter = 0;
+
         for (int i = 0; i < lFolder.listFiles().length; i++) {
+
             if (lFolder.listFiles()[i].getName().startsWith(aDistillerProject.substring(aDistillerProject.lastIndexOf(System.getProperty("file.separator")) + 1, aDistillerProject.lastIndexOf("."))) && lFolder.listFiles()[i].getName().endsWith(".rov")) {
                 lFile = lFolder.listFiles()[i];
                 fileCounter = fileCounter + 1;

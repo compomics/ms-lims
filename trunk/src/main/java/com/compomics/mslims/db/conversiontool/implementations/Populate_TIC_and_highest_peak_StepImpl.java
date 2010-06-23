@@ -42,7 +42,7 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
         // We'll have to ensure that, for each spectrum that does not yet have
         // a total intensity or highest peak, that these two columns are populated.
         try {
-            // First locate all relevant spectrumfile rows.
+            // First locate all relevant spectrum rows.
             Statement stat = aConn.createStatement();
             ResultSet rs = stat.executeQuery("select spectrumid from spectrumwhere (highest_peak_in_spectrum is null or total_spectrum_intensity is null) or (highest_peak_in_spectrum = 0.0 or total_spectrum_intensity = 0.0)");
             ArrayList<Integer> spectra = new ArrayList<Integer>();
@@ -51,10 +51,10 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
             }
             rs.close();
             stat.close();
-            logger.info("\tFound " + spectra.size() + " spectrumfile records to update.");
+            logger.info("\tFound " + spectra.size() + " spectrum records to update.");
 
             // Now update each of these.
-            PreparedStatement ps = aConn.prepareStatement("update spectrumfile set highest_peak_in_spectrum=?, total_spectrum_intensity=? where spectrumid=?");
+            PreparedStatement ps = aConn.prepareStatement("update spectrum set highest_peak_in_spectrum=?, total_spectrum_intensity=? where spectrumid=?");
             int count = 0;
             int triedCount = 0;
             double rollingThreshold = 5.0;
@@ -77,13 +77,13 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
                     ps.setLong(3, specID);
                     int updated = ps.executeUpdate();
                     if (updated != 1) {
-                        logger.error(" *** Error updating spectrumfile with id '" + specID + "': updated " + updated + " rows instead of the expected 1!");
+                        logger.error(" *** Error updating spectrum with id '" + specID + "': updated " + updated + " rows instead of the expected 1!");
                     } else {
                         count++;
                     }
                 }
                 catch (Exception e) {
-                    logger.error(" *** Error catched while updating spectrumfile with id '" + specID + "' Setting intensity fields to '-1'. " +
+                    logger.error(" *** Error catched while updating spectrum with id '" + specID + "' Setting intensity fields to '-1'. " +
                             "\n*** Message:" + e.getMessage());
                     logger.error(e.getMessage(), e);
                     // If an error was thrown, set the intensity fields to -1 in the catch block.
@@ -96,9 +96,9 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
                 }
             }
 
-            logger.info("\tSuccessfully updated " + count + " out of " + spectra.size() + " spectrumfile records.");
+            logger.info("\tSuccessfully updated " + count + " out of " + spectra.size() + " spectrum records.");
             if ((count - spectra.size()) < 0) {
-                logger.error("\n *** Note that there were " + (spectra.size() - count) + " spectrumfile rows that were NOT updated!\n *** Please see error messages above (indicated by 'leading ***') for details!");
+                logger.error("\n *** Note that there were " + (spectra.size() - count) + " spectrum rows that were NOT updated!\n *** Please see error messages above (indicated by 'leading ***') for details!");
             }
             // Flag successful completion.
             error = false;
@@ -126,7 +126,7 @@ public class Populate_TIC_and_highest_peak_StepImpl implements DBConverterStep {
 
         int updated = aPs.executeUpdate();
         if (updated != 1) {
-            logger.error(" *** Error updating spectrumfile with id '" + aSpecID + "': updated " + updated + " rows instead of the expected 1!");
+            logger.error(" *** Error updating spectrum with id '" + aSpecID + "': updated " + updated + " rows instead of the expected 1!");
         }
     }
 }

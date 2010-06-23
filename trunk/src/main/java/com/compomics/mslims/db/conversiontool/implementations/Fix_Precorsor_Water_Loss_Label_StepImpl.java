@@ -82,7 +82,7 @@ public class Fix_Precorsor_Water_Loss_Label_StepImpl implements DBConverterStep 
             } while (lCountToLimit == lLimit);
 
 
-            logger.info("\tSuccessfully updated " + lSuccess + " out of " + lTriedCount + " spectrumfile records.");
+            logger.info("\tSuccessfully updated " + lSuccess + " out of " + lTriedCount + " spectrum records.");
 
         } catch (Exception e) {
             logger.error("\n\nError updating Fragmention ionnames from H20(numeric) to H2O(character): ");

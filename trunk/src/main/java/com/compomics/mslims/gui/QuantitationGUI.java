@@ -6,6 +6,9 @@
  */
 package com.compomics.mslims.gui;
 
+import com.compomics.util.enumeration.CompomicsTools;
+import com.compomics.util.io.PropertiesManager;
+import com.healthmarketscience.jackcess.Database;
 import org.apache.log4j.Logger;
 
 import com.compomics.util.gui.dialogs.ConnectionDialog;
@@ -26,6 +29,7 @@ import com.compomics.util.interfaces.Flamable;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -417,8 +421,9 @@ public class QuantitationGUI extends JFrame implements Connectable, Flamable {
      * This method attempts to connect to the Mascot Task DB via ODBC and read the relevant information.
      */
     private void readTaskDB() {
-        try {
-            Properties props = new Properties();
+        Properties props = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "QuantitationGUI.properties");
+        Boolean useAccess = new Boolean(props.getProperty("USE_ACCESS"));
+        if (!useAccess) {
             try {
                 InputStream is = this.getClass().getClassLoader().getResourceAsStream("QuantitationGUI.properties");
                 if (is == null) {
@@ -480,20 +485,81 @@ public class QuantitationGUI extends JFrame implements Connectable, Flamable {
                         }
                     }
 
+
                     // @TODO
                     // Better exception handling for the ODBC/JDBC bridge driver!!
                 } catch (SQLException sqle) {
                     throw new SQLException("Unable to read data from the Mascot Daemon TaskDB '" + sqle.getMessage() + "'!");
                 }
-            } catch (IOException ioe) {
-                throw new SQLException("Could not find configurationfile 'QuantitationGUI.properties' in the classpath!");
+            }catch (SQLException sqle){
+                logger.error(sqle.getMessage(), sqle);
+                JOptionPane.showMessageDialog(this, new String[]{"There were fatal errors trying to access the Mascot Daemon Task DB:", sqle.getMessage()}, "Unable to retrieve data from TaskDB!", JOptionPane.ERROR_MESSAGE);
+                this.close();
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+                JOptionPane.showMessageDialog(this, new String[]{"There were fatal errors trying to access the Mascot Daemon Task DB:", e.getMessage()}, "Unable to read the properties!", JOptionPane.ERROR_MESSAGE);
+                this.close();
             }
-        } catch (SQLException sqle) {
-            logger.error(sqle.getMessage(), sqle);
-            JOptionPane.showMessageDialog(this, new String[]{"There were fatal errors trying to access the Mascot Daemon Task DB:", sqle.getMessage()}, "Unable to retrieve data from TaskDB!", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
+        }else{
+            // Retrieve from MS Access file.
+            try {
+                String fileLocation = props.getProperty("MS_ACCESS_FILE");
+                if (fileLocation == null) {
+                    throw new IOException("Key 'MS_ACCESS_FILE' in file 'QuantitationGUI.properties' was not defined or NULL!");
+                }
+
+                File taskDBFile = null;
+                while (taskDBFile == null) {
+                    // Default directory location is the root of this drive.
+                    String root = fileLocation;
+                    File test = new File(root.trim());
+                    // See if it exists.
+                    if (!test.exists()) {
+                        // Just go to the user home folder.
+                        root = System.getProperty("user.dir") + File.separator;
+                    }
+                    JFileChooser jfc = new JFileChooser(root);
+                    jfc.setDialogTitle("Open Mascot Daemon TaskDB file (.mdb file)");
+                    // Set the mdb file name filter.
+                    jfc.setFileFilter(new FileNameExtensionFilter("MS Access files", "mdb"));
+                    // Select file.
+                    int returnVal = jfc.showOpenDialog(QuantitationGUI.this);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        taskDBFile = jfc.getSelectedFile();
+                        if (!taskDBFile.exists()) {
+                            String lMessage = "The '" + taskDBFile.getName() + " file was not found!";
+                            logger.error(lMessage);
+                            JOptionPane.showMessageDialog(QuantitationGUI.this, new String[]{lMessage}, " file was not found!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        break;
+                    }
+                }
+
+                // Should have a file now!
+                Database taskDB = Database.open(taskDBFile, true);
+                int rowCount = taskDB.getTable("Mascot_Daemon_Results").getRowCount();
+                rowCount += taskDB.getTable("Mascot_Daemon_Tasks").getRowCount();
+
+                DefaultProgressBar dpb = new DefaultProgressBar(this, "Reading Mascot Daemon Task DB Access file...", 0, rowCount+2);
+                dpb.setResizable(false);
+                dpb.setSize(350, 100);
+                dpb.setMessage("Connecting...");
+                iTasks = new Vector();
+                ReadMascotTaskDBWorker worker = new ReadMascotTaskDBWorker(taskDB, iTasks, this, dpb);
+                worker.start();
+                dpb.setVisible(true);
+                taskDB.close();
+
+            } catch (IOException ioe) {
+                logger.error(ioe.getMessage(), ioe);
+                JOptionPane.showMessageDialog(this, new String[]{"There were fatal errors trying to access the Mascot Daemon Task DB Access file:", ioe.getMessage()}, "Unable to retrieve data from TaskDB!", JOptionPane.ERROR_MESSAGE);
+                this.close();
+            }
         }
     }
+
+
 
 
     /**

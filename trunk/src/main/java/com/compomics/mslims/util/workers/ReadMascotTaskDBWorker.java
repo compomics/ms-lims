@@ -215,6 +215,11 @@ public class ReadMascotTaskDBWorker extends SwingWorker {
 
                 MascotSearch lMascotSearch = new MascotSearch(searchStatus, searchTitle, db, mergefile, datfile, startDate, endDate, task_uid);
 
+                // If there is a distiller project together with this search, then add it to the search.
+                if (distiller_project != null) {
+                    lMascotSearch.setDistiller_project(distiller_project);
+                }
+
                 if (mascotResults.containsKey(task_uid)) {
                     // Add result to existing task UID.
                     Vector temp = mascotResults.get(task_uid);
