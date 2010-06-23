@@ -623,7 +623,10 @@ Change log
           The 7.3.2 version of ms_lims has three minor bug fixes; first is a fix for the incorrect colouring of timestamp and byte array fields in results tables, second is the removal of a cartesian cross condition in all ProjectAnalyzer QueryTool queries when 'include spectrum' was NOT selected. On production databases, the resulting massive result set typically crashed the client. Third, when a long query in Generic Query failed, no error box was shown to the user, and the feedback labels on the progress bar and the status label remained at their pre-query state.
 
  - Version 7.3.3
-          The 7.3.3 version of ms_lims corrects a bug in the output of RetrievePeptide, where only errors were redirected to the output file, and everything else went to the log file as 'INFO' statements. Simultaneously, performance and redundancy coping at accession number level was improved as well.
+         The 7.3.3 version of ms_lims corrects a bug in the output of RetrievePeptide, where only errors were redirected to the output file, and everything else went to the log file as 'INFO' statements. Simultaneously, performance and redundancy coping at accession number level was improved as well.
 
  - Version 7.3.4
           The 7.3.4 version of ms_lims corrects a bug in the descriptive numbers project analyzer tool. When no acetylated peptides are identified (i.e. butylation project) then a zero-division was done. Also, a warning is now presented to the user in the quantitationpreview when quantitationgroups could not be linked to peptide identifications. Finally, a processing bug due to file format updates in the new Mascot Server 2.3 have been solved.
+
+- Version 7.4
+          The 7.4 version of ms_lims alters the access to the Mascot Daemon TaskDB; there is now the choice to connect to it as an RDBMS (e.g., through the JDBC/ODBC bridge driver, or directly to a MySQL instance), or to connect to an MS Access .mdb file (the default setting of Mascot Daemon). The latter now ensures that 64 bit Java versions on 64 bit operating systems can still read 32 bit Access mdb files. The IdentificationGUI.properties file is used to configure between RDBMS and Access modes.
