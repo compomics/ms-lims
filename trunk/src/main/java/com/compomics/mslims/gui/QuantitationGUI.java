@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.gui;
 
+import com.compomics.util.io.FilenameExtensionFilter;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.io.PropertiesManager;
 import com.healthmarketscience.jackcess.Database;
@@ -521,7 +522,7 @@ public class QuantitationGUI extends JFrame implements Connectable, Flamable {
                     JFileChooser jfc = new JFileChooser(root);
                     jfc.setDialogTitle("Open Mascot Daemon TaskDB file (.mdb file)");
                     // Set the mdb file name filter.
-                    jfc.setFileFilter(new FileNameExtensionFilter("MS Access files", "mdb"));
+                    jfc.setFileFilter(new FilenameExtensionFilter("mdb", "MS Access files"));
                     // Select file.
                     int returnVal = jfc.showOpenDialog(QuantitationGUI.this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
