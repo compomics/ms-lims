@@ -6,7 +6,7 @@
  */
 package com.compomics.mslims.gui;
 
-import com.compomics.mslims.util.fileio.FileExtensionFilter;
+import com.compomics.util.io.FilenameExtensionFilter;
 import com.healthmarketscience.jackcess.Database;
 import org.apache.log4j.Logger;
 
@@ -30,7 +30,6 @@ import com.compomics.util.sun.TableSorter;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.TreeModel;
@@ -544,7 +543,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
                     JFileChooser jfc = new JFileChooser(root);
                     jfc.setDialogTitle("Open Mascot Daemon TaskDB file (.mdb file)");
                     // Set the mdb file name filter.
-                    jfc.setFileFilter(new FileNameExtensionFilter("MS Access files", "mdb"));
+                    jfc.setFileFilter(new FilenameExtensionFilter("mdb", "MS Access files"));
                     // Select file.
                     int returnVal = jfc.showOpenDialog(IdentificationGUI.this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
