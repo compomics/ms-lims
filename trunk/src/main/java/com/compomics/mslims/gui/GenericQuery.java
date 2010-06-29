@@ -374,6 +374,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         rs.close();
                         stat.close();
                         // The URL will be stored here.
+                        // http://curry.ugent.be/mascot/cgi/master_results.pl?file=../data/20100621/F052648.dat&_querylist=all&REPTYPE=peptide
                         String url = server + "/cgi/master_results.pl?file=" + folder + filename;
                         // The process.
                         StartBrowser.start(url);
@@ -497,31 +498,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         logger.error(ioe.getMessage(), ioe);
                         JOptionPane.showMessageDialog(GenericQuery.this, "Unable to save data to file: " + ioe.getMessage(), "Unable to write data to file!", JOptionPane.ERROR_MESSAGE);
                     }
-                } else if (e.getClickCount() >= 2 && (tblResult.getColumnName(col) != null) && tblResult.getColumnName(col).trim().equalsIgnoreCase("l_datfileid")) {
-                    // Get the data from the 'datfile' table.
-                    try {
-                        Statement stat = iConn.createStatement();
-                        ResultSet rs = stat.executeQuery("select server, folder, filename from datfile where datfileid=" + tblResult.getValueAt(row, col));
-                        // Only one row expected.
-                        rs.next();
-                        String server = rs.getString(1);
-                        String folder = rs.getString(2);
-                        String filename = rs.getString(3);
-                        rs.close();
-                        stat.close();
-                        // The URL will be stored here.
-                        String url = server + "/x-cgi/ms-showtext.exe?" + folder + filename;
-                        // The process.
-                        StartBrowser.start(url);
-
-                    } catch (SQLException sqle) {
-                        logger.error(sqle.getMessage(), sqle);
-                        JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected datfile (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load datfile data!", JOptionPane.ERROR_MESSAGE);
-                    } catch (Exception exc) {
-                        logger.error(exc.getMessage(), exc);
-                        JOptionPane.showMessageDialog((Component) comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
-                    }
-                } else if (e.getClickCount() >= 2 && (tblResult.getColumnName(col) != null) && tblResult.getColumnName(col).trim().equalsIgnoreCase("ion_coverage")) {
+                }else if (e.getClickCount() >= 2 && (tblResult.getColumnName(col) != null) && tblResult.getColumnName(col).trim().equalsIgnoreCase("ion_coverage")) {
                     // Get all the fragment ions for this identification.
                     long idid = -1;
                     String modSeq = null;
