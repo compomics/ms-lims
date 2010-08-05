@@ -828,7 +828,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                                     fragments.add(lIon);
                                 }
                             }
-                            SequenceFragmentationPanel sfp = new SequenceFragmentationPanel(modSeq, fragments);
+                            SequenceFragmentationPanel sfp = new SequenceFragmentationPanel(modSeq, fragments, true);
                             JDialog dialog = new JDialog(ProjectSQLTool.this, "Fragment peak annotation", false);
                             dialog.addWindowListener(new WindowAdapter() {
                                 /**

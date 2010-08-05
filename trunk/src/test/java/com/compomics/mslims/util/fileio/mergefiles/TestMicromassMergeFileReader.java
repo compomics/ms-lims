@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import com.compomics.mslims.util.fileio.PKLFile;
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
-import com.compomics.mslims.util.fileio.mergefiles.MicromassMergeFileReader;
 import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
 import junit.TestCaseLM;
 import junit.framework.Assert;

@@ -487,8 +487,8 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
         for (int i = 0; i < components.length; i++) {
             Component lComponent = components[i];
             if (lComponent instanceof SpectrumPanel) {
-                double tempMin = ((SpectrumPanel) lComponent).getMinMass();
-                double tempMax = ((SpectrumPanel) lComponent).getMaxMass();
+                double tempMin = ((SpectrumPanel) lComponent).getMinXAxisValue();
+                double tempMax = ((SpectrumPanel) lComponent).getMaxXAxisValue();
                 if (tempMin < min) {
                     min = tempMin;
                 }
@@ -612,7 +612,7 @@ public class ClusterTreeGUI extends FlamableJFrame implements Connectable, Spect
                             filenameColor = Color.red;
                         }
                         final SpectrumPanel temp = new SpectrumPanel(new MascotGenericFile(filename, new String(lSpectrum_file.getUnzippedFile())));
-                        temp.setSpectrumFilenameColor(filenameColor);
+                        temp.setFilenameColor(filenameColor);
                         temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
                         temp.addSpectrumPanelListener(this);
                         JButton btnDelete = new JButton("Delete");
