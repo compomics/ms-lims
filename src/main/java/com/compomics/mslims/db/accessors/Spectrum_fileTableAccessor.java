@@ -281,6 +281,7 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
         }
         int result = lStat.executeUpdate();
         this.iUpdated = false;
+        lStat.close();
         return result;
     }
 
