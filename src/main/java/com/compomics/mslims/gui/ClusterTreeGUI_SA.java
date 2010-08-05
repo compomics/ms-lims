@@ -411,7 +411,7 @@ public class ClusterTreeGUI_SA extends FlamableJFrame implements SpectrumPanelLi
         for (int i = 0; i < components.length; i++) {
             Component lComponent = components[i];
             if (lComponent instanceof SpectrumPanel) {
-                double tempMax = ((SpectrumPanel) lComponent).getMaxMass();
+                double tempMax = ((SpectrumPanel) lComponent).getMaxXAxisValue();
                 if (tempMax > max) {
                     max = tempMax;
                 }

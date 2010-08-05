@@ -30,6 +30,7 @@ import com.compomics.util.sun.TableSorter;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.TreeModel;
@@ -543,7 +544,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
                     JFileChooser jfc = new JFileChooser(root);
                     jfc.setDialogTitle("Open Mascot Daemon TaskDB file (.mdb file)");
                     // Set the mdb file name filter.
-                    jfc.setFileFilter(new FilenameExtensionFilter("mdb", "MS Access files"));
+                    jfc.setFileFilter(new FileNameExtensionFilter("mdb", "MS Access files"));
                     // Select file.
                     int returnVal = jfc.showOpenDialog(IdentificationGUI.this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -554,9 +555,10 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
                             JOptionPane.showMessageDialog(IdentificationGUI.this, new String[]{lMessage}, " file was not found!", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        break;
+                        return;
                     }
                 }
+
 
                 // Should have a file now!
                 Database taskDB = taskDB = Database.open(taskDBFile, true);
