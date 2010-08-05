@@ -630,3 +630,6 @@ Change log
 
 - Version 7.4
           The 7.4 version of ms_lims alters the access to the Mascot Daemon TaskDB; there is now the choice to connect to it as an RDBMS (e.g., through the JDBC/ODBC bridge driver, or directly to a MySQL instance), or to connect to an MS Access .mdb file (the default setting of Mascot Daemon). The latter now ensures that 64 bit Java versions on 64 bit operating systems can still read 32 bit Access mdb files. The IdentificationGUI.properties file is used to configure between RDBMS and Access modes.
+
+- Version 7.4.1
+          The 7.4.1 version of ms_lims fixes a bug that was introduced in the storage of spectrum files, where a memory leak occurred that could result in instability of ms_lims.
