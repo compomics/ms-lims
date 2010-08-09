@@ -544,7 +544,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
                     JFileChooser jfc = new JFileChooser(root);
                     jfc.setDialogTitle("Open Mascot Daemon TaskDB file (.mdb file)");
                     // Set the mdb file name filter.
-                    jfc.setFileFilter(new FileNameExtensionFilter("mdb", "MS Access files"));
+                    jfc.setFileFilter(new FileNameExtensionFilter("MS Access files", "mdb"));
                     // Select file.
                     int returnVal = jfc.showOpenDialog(IdentificationGUI.this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
