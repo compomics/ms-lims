@@ -36,7 +36,7 @@ CREATE TABLE `binfile` (
   `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`binfileid`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,7 +57,7 @@ CREATE TABLE `datfile` (
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`datfileid`),
   KEY `Filename` (`filename`) USING HASH
-) ENGINE=MyISAM AUTO_INCREMENT=60454 DEFAULT CHARSET=latin1 MAX_ROWS=1000000 AVG_ROW_LENGTH=2658940;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 MAX_ROWS=1000000 AVG_ROW_LENGTH=2658940;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +76,7 @@ CREATE TABLE `filedescriptor` (
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`filedescriptorid`),
   UNIQUE KEY `short_label` (`short_label`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `fragmention` (
   KEY `l_identificationid index` (`l_identificationid`),
   KEY `l_ionscoringid index` (`l_ionscoringid`),
   KEY `iontype index` (`iontype`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=78490429 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +119,7 @@ CREATE TABLE `id_to_phospho` (
   `l_phosphorylationid` int(10) unsigned NOT NULL DEFAULT '0',
   `conversionid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`conversionid`)
-) ENGINE=MyISAM AUTO_INCREMENT=6538 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +169,7 @@ CREATE TABLE `identification` (
   KEY `l_spectrumfileid` (`l_spectrumid`),
   KEY `l_datfileid` (`l_datfileid`),
   KEY `valid` (`valid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3551731 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,7 +191,7 @@ CREATE TABLE `identification_to_quantitation` (
   KEY `identification id` (`l_identificationid`),
   KEY `type` (`type`),
   KEY `l_quantitation_groupid` (`l_quantitation_groupid`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=1968964 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,7 +212,7 @@ CREATE TABLE `instrument` (
   `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`instrumentid`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -254,7 +254,7 @@ CREATE TABLE `lcrun` (
   PRIMARY KEY (`lcrunid`),
   UNIQUE KEY `name` (`name`),
   KEY `creationdateindex` (`creationdate`)
-) ENGINE=MyISAM AUTO_INCREMENT=61536 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -276,7 +276,7 @@ CREATE TABLE `phosphorylation` (
   `creationdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `description` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`phosphorylationid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2804 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -297,7 +297,7 @@ CREATE TABLE `project` (
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`projectid`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=MyISAM AUTO_INCREMENT=787 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,7 +317,7 @@ CREATE TABLE `projectanalyzertool` (
   `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`projectanalyzertoolid`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,7 +336,7 @@ CREATE TABLE `protocol` (
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`protocolid`) USING BTREE,
   UNIQUE KEY `type` (`type`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,7 +362,7 @@ CREATE TABLE `quantitation` (
   KEY `type` (`type`),
   KEY `valid` (`valid`),
   KEY `l_quantitation_groupid` (`l_quantitation_groupid`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=1167796 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,7 +382,7 @@ CREATE TABLE `quantitation_file` (
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`quantitation_fileid`) USING BTREE,
   KEY `filename` (`filename`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=16237 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -400,7 +400,7 @@ CREATE TABLE `quantitation_group` (
   `creationdate` datetime NOT NULL,
   `modificationdate` datetime NOT NULL,
   PRIMARY KEY (`quantitation_groupid`)
-) ENGINE=MyISAM AUTO_INCREMENT=1005349 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -410,7 +410,7 @@ CREATE TABLE `quantitation_group` (
 --
 
 DROP TABLE IF EXISTS `scan`;
-CREATE TABLE  `projects_7_5`.`scan` (
+CREATE TABLE  `scan` (
   `scanid` int(10) NOT NULL AUTO_INCREMENT,
   `l_spectrumid` int(10) unsigned NOT NULL DEFAULT '0',
   `number` smallint(6) DEFAULT '0',
@@ -478,7 +478,7 @@ CREATE TABLE `status` (
   `statusid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`statusid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -499,7 +499,7 @@ CREATE TABLE `user` (
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`userid`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -518,7 +518,7 @@ CREATE TABLE `validation` (
   `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`validationid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5084 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
