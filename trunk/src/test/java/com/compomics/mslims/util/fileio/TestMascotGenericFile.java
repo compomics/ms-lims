@@ -45,6 +45,45 @@ public class TestMascotGenericFile extends TestCaseLM {
     }
 
     /**
+     * this method simply tests the retention time in Mascot generic files.
+     */
+    public void testRetention() {
+        try {
+            // No retention time, return 0.
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_1.mgf")));
+            Assert.assertEquals(1, mgf.getRetentionInSeconds().length);
+            Assert.assertEquals(6.0, mgf.getRetentionInSeconds()[0]);
+        } catch (IOException ioe) {
+            fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
+        }
+
+        try {
+            // Sum of scans.
+            // Returns the first retention time, track its summed status, and retain all retention times in the embedded properties.
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_5.mgf")));
+            Assert.assertEquals(1207.5892, mgf.getRetentionInSeconds()[0]);
+            Assert.assertEquals(1208.5323, mgf.getRetentionInSeconds()[1]);
+            Assert.assertEquals(2, mgf.getRetentionInSeconds().length);
+            Assert.assertEquals(548, mgf.getScanNumbers()[0]);
+            Assert.assertEquals(549, mgf.getScanNumbers()[1]);
+            Assert.assertEquals(2, mgf.getScanNumbers().length);
+            Assert.assertEquals(true, mgf.isSumOfScans());
+            Assert.assertEquals("1207.5892,1208.5323", mgf.getExtraEmbeddedProperty("RTINSECONDS"));
+        } catch (IOException ioe) {
+            fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
+        }
+
+        try {
+            // Sum of scans.
+            // Returns the first retention time, track its summed status, and retain all retention times in the embedded properties.
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestRetentionEsquire.mgf")));
+            Assert.assertEquals(1608.0, mgf.getRetentionInSeconds()[0]);
+        } catch (IOException ioe) {
+            fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
+        }
+    }
+
+    /**
      * This method simply test the creation of a Mascot generic file.
      */
     public void testCreation() {
@@ -241,6 +280,17 @@ public class TestMascotGenericFile extends TestCaseLM {
 
             control.close();
             toTest.close();
+        } catch (IOException ioe) {
+            fail("IOException thrown while testing to read and write an MGF file: " + ioe.getMessage());
+        }
+
+        // Test 6, this mgf file lacks the + sign folowing the charge state (cfr. proteowizard output!)
+        try {
+
+            File input = new File(super.getFullFilePath("TestMascotGenericFile_6.mgf"));
+            MascotGenericFile mgf = new MascotGenericFile(input);
+            // Writing to temporary file.
+            Assert.assertEquals(2, mgf.getCharge());
         } catch (IOException ioe) {
             fail("IOException thrown while testing to read and write an MGF file: " + ioe.getMessage());
         }
