@@ -52,6 +52,7 @@ public abstract class SpectrumFileAncestor implements SpectrumFile {
      */
     protected double iIntensity = -1.0;
 
+
     /**
      * This method reports on the charge of the precursor ion. Note that when the charge could not be determined, this
      * method will return '0'.
@@ -144,6 +145,7 @@ public abstract class SpectrumFileAncestor implements SpectrumFile {
     public void setPrecursorMZ(double aPrecursorMZ) {
         this.iPrecursorMz = aPrecursorMZ;
     }
+
 
     public double getTotalIntensity() {
         Iterator iter = this.iPeaks.values().iterator();

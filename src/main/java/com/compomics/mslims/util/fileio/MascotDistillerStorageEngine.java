@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import com.compomics.mslims.db.accessors.ScanTableAccessor;
 import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.db.accessors.Spectrum_file;
 import org.apache.log4j.Logger;
@@ -107,10 +108,16 @@ public class MascotDistillerStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lMascotGenericFile.getTotalIntensity());
             // The highest intensity.
             data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMascotGenericFile.getHighestIntensity());
+            // The charge.
+            data.put(Spectrum.CHARGE, lMascotGenericFile.getCharge());
+            // The precursorMZ.
+            data.put(Spectrum.MASS_TO_CHARGE, lMascotGenericFile.getPrecursorMZ());
+
             // Create the database object.
             // logger.debug("Creating Spectrum instance for " + lMascotGenericFile.getFilename());
             Spectrum lSpectrum = new Spectrum(data);
             lSpectrum.persist(aConn);
+
 
             // Get the spectrumid from the generated keys.
             Long lSpectrumid = (Long) lSpectrum.getGeneratedKeys()[0];
@@ -125,6 +132,24 @@ public class MascotDistillerStorageEngine implements SpectrumStorageEngine {
             lSpectrum_file.setUnzippedFile(fileContents);
             // Create the database object.
             lSpectrum_file.persist(aConn);
+
+            // Now persist the scan information, if any.
+            if(lMascotGenericFile.getRetentionInSeconds() != null){
+                double[] lRTInSeconds = lMascotGenericFile.getRetentionInSeconds();
+                int[] lScanNumbers = lMascotGenericFile.getScanNumbers();
+                for (int j = 0; j < lRTInSeconds.length; j++) {
+                    double lRTInSecond = lRTInSeconds[j];
+
+                    ScanTableAccessor lScanTableAccessor = new ScanTableAccessor();
+                    lScanTableAccessor.setL_spectrumid(lSpectrumid);
+                    lScanTableAccessor.setRtsec(lRTInSecond);
+                    if(lScanNumbers != null){
+                        lScanTableAccessor.setNumber(lScanNumbers[j]);
+                    }
+                    lScanTableAccessor.persist(aConn);
+                }
+            }
+
             counter++;
         }
         return counter;

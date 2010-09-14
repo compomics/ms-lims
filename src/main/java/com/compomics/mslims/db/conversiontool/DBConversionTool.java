@@ -130,7 +130,7 @@ public class DBConversionTool {
                 } else {
                     logger.info("     ... FAILED!");
                     // Skip further steps!!
-                    logger.info("(skipping " + (instructions.size() - counter) + " following steps)");
+                    logger.info("(cancelling the remaining " + (instructions.size() - counter) + " update steps)");
                     break;
                 }
                 logger.info(" (step took " + bdDelta.toString() + " seconds)");

@@ -107,6 +107,11 @@ public class ABI4700SpectrumStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lFile.getTotalIntensity());
             // The highest intensity.
             data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lFile.getHighestIntensity());
+            // The charge.
+            data.put(Spectrum.CHARGE, lFile.getCharge());
+            // The precursorMZ.
+            data.put(Spectrum.MASS_TO_CHARGE, lFile.getPrecursorMZ());
+
             // Create the database object.
             Spectrum lSpectrum = new Spectrum(data);
             lSpectrum.persist(aConn);
@@ -124,6 +129,8 @@ public class ABI4700SpectrumStorageEngine implements SpectrumStorageEngine {
             lSpectrum_file.setUnzippedFile(fileContents);
             // Create the database object.
             lSpectrum_file.persist(aConn);
+
+            
 
             counter++;
         }
