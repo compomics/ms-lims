@@ -79,6 +79,16 @@ public class MascotGenericFile extends SpectrumFileAncestor {
     private static final String IONS_END = "END IONS";
 
     /**
+     * This constant defines the retention time tag for the precursor ion.
+     */
+    private static final String RETENTION = "RTINSECONDS";
+
+    /**
+     * This constant defines the scan number tags for the Mascot generic file.
+     */
+    private static final String SCAN_NUMBERS = "SCANS";
+
+    /**
      * This Properties instance contains all the Embedded properties that are listed in a Mascot Generic File.
      */
     private Properties iExtraEmbeddedParameters;
@@ -383,7 +393,7 @@ public class MascotGenericFile extends SpectrumFileAncestor {
             // Charge is now: trimmedCharge without the sign character,
             // negated if necessary.
 
-            charge = Integer.parseInt(trimmedCharge.substring(0, trimmedCharge.length() - 1));
+            charge = Integer.parseInt(trimmedCharge.substring(0, 1));
             if (negate) {
                 charge = -charge;
             }
@@ -499,6 +509,73 @@ public class MascotGenericFile extends SpectrumFileAncestor {
     }
 
     /**
+     * This method extracts the retention time from the RTINSECONDS key, or looks for 'min' in the TITLE.
+     *
+     * @return The retention time as a double value.
+     *         If this MGF file is a sum of scans, the double[] consists of multiple retention times for each scan number.
+     *         And if neither the RTINSECONDS value, or the 'min' value in the title was found, the method returns NULL.
+     */
+    public double[] getRetentionInSeconds() {
+        double[] lResult = null;
+        // First, try to find if RTINSECONDS is within embedded parameters.
+        if (iExtraEmbeddedParameters != null && iExtraEmbeddedParameters.containsKey(RETENTION)) {
+            String lValue = String.valueOf(iExtraEmbeddedParameters.get(RETENTION));
+
+            String[] lValues = lValue.split("[-,]");
+
+            lResult = new double[lValues.length];
+            for (int i = 0; i < lValues.length; i++) {
+                String s = lValues[i];
+                lResult[i] = Double.parseDouble(s);
+            }
+
+            // Second, try to find 'min' in the title section - for Esquire data!
+        } else if (getTitle().toLowerCase().endsWith(" min")) {
+            String lTitle = getTitle().toLowerCase();
+            int lIndexStop = lTitle.indexOf(" min");
+            int lIndexStart = lTitle.lastIndexOf(") ");
+
+            if (lIndexStart == -1) {
+                lIndexStart = lTitle.lastIndexOf("), ");
+            }
+
+            lResult = new double[]{0};
+
+            if (lIndexStop != -1 && (lIndexStop - lIndexStart < 10)) {
+                // We need an index to stop, and the length cannot be more then  5chars!! (max '999.9' min)
+                String s = lTitle.substring(lIndexStart + 2, lIndexStop);
+                double d = Double.parseDouble(s); // From minutes ...
+                lResult[0] = d * 60; // .. to seconds!!
+
+            }
+        }
+        return lResult;
+    }
+
+    /**
+     * This method extracts the retention time from the RTINSECONDS key, or looks for 'min' in the TITLE.
+     *
+     * @return The retention time as a double value.
+     *         If this MGF file is a sum of scans, the double[] consists of multiple retention times for each scan number.
+     *         And if neither the RTINSECONDS value, or the 'min' value in the title was found, the method returns NULL.
+     */
+    public int[] getScanNumbers() {
+        int[] lResult = null;
+        // Try to find if SCAN_NUMBERS is within embedded parameters.
+        if (iExtraEmbeddedParameters != null && iExtraEmbeddedParameters.containsKey(SCAN_NUMBERS)) {
+            String lValue = String.valueOf(iExtraEmbeddedParameters.get(SCAN_NUMBERS));
+            String[] lValues = lValue.split("[-,]");
+            lResult = new int[lValues.length];
+            for (int i = 0; i < lValues.length; i++) {
+                String s = lValues[i];
+                lResult[i] = Integer.parseInt(s);
+            }
+        }
+        return lResult;
+    }
+
+
+    /**
      * This method writes the MGF object to the specified Writer.
      *
      * @param aWriter             Writer to write a String representation of this class to.
@@ -506,6 +583,7 @@ public class MascotGenericFile extends SpectrumFileAncestor {
      *                            it is false, the title is set as the title.
      * @throws IOException when the writing failed.
      */
+
     private void writeToWriter(Writer aWriter, boolean aSubstituteFilename) throws IOException {
         BufferedWriter bw = new BufferedWriter(aWriter);
 
@@ -528,6 +606,7 @@ public class MascotGenericFile extends SpectrumFileAncestor {
         if (this.getCharge() != 0) {
             bw.write(CHARGE + "=" + this.processCharge(this.getCharge()) + "\n");
         }
+        // Note that the retention time is also within the embedded parameters!!
         // If there are any extra embedded parameters in the mascot generic file,
         // also write them in this header section.
         if (this.iExtraEmbeddedParameters != null) {
@@ -560,5 +639,20 @@ public class MascotGenericFile extends SpectrumFileAncestor {
         bw.write(IONS_END);
 
         bw.flush();
+    }
+
+    /**
+     * Returns whether this mgf file is created as a sum of different scans.
+     *
+     * @return boolean
+     */
+    public boolean isSumOfScans() {
+        boolean b = false;
+        String lEmbeddedProperty = getExtraEmbeddedProperty("SCANS");
+        // Multiple scan numbers are separated by a dash sign.
+        if (lEmbeddedProperty.split("-").length > 1) {
+            b = true;
+        }
+        return b;
     }
 }
