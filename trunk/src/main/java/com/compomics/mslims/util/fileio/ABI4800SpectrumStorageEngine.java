@@ -103,6 +103,11 @@ public class ABI4800SpectrumStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lMascotGenericFile.getTotalIntensity());
             // The highest intensity.
             data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMascotGenericFile.getHighestIntensity());
+            // The charge.
+            data.put(Spectrum.CHARGE, lMascotGenericFile.getCharge());
+            // The precursorMZ.
+            data.put(Spectrum.MASS_TO_CHARGE, lMascotGenericFile.getPrecursorMZ());
+            
             // Create the database object.
             Spectrum lSpectrum = new Spectrum(data);
             lSpectrum.persist(aConn);

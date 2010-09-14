@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import com.compomics.mslims.db.accessors.ScanTableAccessor;
 import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.db.accessors.Spectrum_file;
 import org.apache.log4j.Logger;
@@ -105,17 +106,22 @@ public class EsquireSpectrumStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lMascotGenericFile.getTotalIntensity());
             // The highest intensity.
             data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMascotGenericFile.getHighestIntensity());
+            // The charge.
+            data.put(Spectrum.CHARGE, lMascotGenericFile.getCharge());
+            // The precursorMZ.
+            data.put(Spectrum.MASS_TO_CHARGE, lMascotGenericFile.getPrecursorMZ());
+
 
             // Create the database object.
             Spectrum lSpectrum = new Spectrum(data);
             lSpectrum.persist(aConn);
 
             // Get the spectrumid from the generated keys.
-            Long lSpectrumfileID = (Long) lSpectrum.getGeneratedKeys()[0];
+            Long lSpectrumid = (Long) lSpectrum.getGeneratedKeys()[0];
             // Create the Spectrum_file instance.
             Spectrum_file lSpectrum_file = new Spectrum_file();
             // Set spectrumid
-            lSpectrum_file.setL_spectrumid(lSpectrumfileID);
+            lSpectrum_file.setL_spectrumid(lSpectrumid);
             // Set the filecontent
             // Read the contents for the file into a byte[].
             byte[] fileContents = lMascotGenericFile.toString().getBytes();
@@ -124,8 +130,44 @@ public class EsquireSpectrumStorageEngine implements SpectrumStorageEngine {
             // Create the database object.
             lSpectrum_file.persist(aConn);
 
+            // Now persist the scan information, if any.
+            if(lMascotGenericFile.getRetentionInSeconds() != null){
+                double[] lRTInSeconds = lMascotGenericFile.getRetentionInSeconds();
+                int[] lScanNumbers = lMascotGenericFile.getScanNumbers();
+                for (int j = 0; j < lRTInSeconds.length; j++) {
+                    double lRTInSecond = lRTInSeconds[j];
+
+                    ScanTableAccessor lScanTableAccessor = new ScanTableAccessor();
+                    lScanTableAccessor.setL_spectrumid(lSpectrumid);
+                    lScanTableAccessor.setRtsec(lRTInSecond);
+                    if(lScanNumbers != null){
+                        lScanTableAccessor.setNumber(lScanNumbers[j]);
+                    }
+                    lScanTableAccessor.persist(aConn);
+                }
+            }
             counter++;
         }
         return counter;
+    }
+
+    /**
+     * This method attempts to parse the retiontion time from the title of esquire mgf files.
+     * @param aTitle TITLE variable in the mgf files produced by the Esquire IT.
+     * @return Retention time in seconds.
+     */
+    private double parseRetentionTimeInSecondsFromTitle(String aTitle) {
+        aTitle = aTitle.toLowerCase();
+        int lIndexStop = aTitle.indexOf(" min");
+        int lIndexStart = aTitle.lastIndexOf("( ");
+        double result = 0;
+
+        if(lIndexStop != -1){
+            String s = aTitle.substring(lIndexStart + 2, lIndexStop);
+            result = Double.parseDouble(s); // In minutes!!
+            result = result * 60; // To seconds!!
+        }
+
+        return result;
     }
 }
