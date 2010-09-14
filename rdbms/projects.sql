@@ -403,6 +403,24 @@ CREATE TABLE `quantitation_group` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1005349 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+
+--
+-- Table structure for table `scan`
+--
+
+DROP TABLE IF EXISTS `scan`;
+CREATE TABLE  `projects_7_5`.`scan` (
+  `scanid` int(10) NOT NULL AUTO_INCREMENT,
+  `l_spectrumid` int(10) unsigned NOT NULL DEFAULT '0',
+  `number` smallint(6) DEFAULT '0',
+  `rtsec` decimal(20,4) DEFAULT '0.0000',
+  `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`scanid`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+
 --
 -- Table structure for table `spectrum`
 --
@@ -418,6 +436,8 @@ CREATE TABLE `spectrum` (
   `searched` int(10) unsigned DEFAULT '0',
   `identified` int(10) unsigned DEFAULT '0',
   `filename` varchar(250) NOT NULL DEFAULT '',
+  `charge` int(11) DEFAULT NULL,
+  `mass_to_charge` decimal(20,4) DEFAULT NULL,
   `total_spectrum_intensity` decimal(20,4) NOT NULL DEFAULT '0.0000',
   `highest_peak_in_spectrum` decimal(20,4) NOT NULL DEFAULT '0.0000',
   `username` varchar(45) NOT NULL DEFAULT 'CONVERSION_FROM_MS_LIMS_4',
@@ -429,8 +449,9 @@ CREATE TABLE `spectrum` (
   KEY `l_projectid_index` (`l_projectid`),
   KEY `l_instrumentid` (`l_instrumentid`),
   KEY `l_lcrunidindex` (`l_lcrunid`)
-) ENGINE=MyISAM AUTO_INCREMENT=28157382 DEFAULT CHARSET=latin1 MAX_ROWS=10000000 AVG_ROW_LENGTH=10000;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 MAX_ROWS=10000000 AVG_ROW_LENGTH=10000;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `spectrum_file`
@@ -459,6 +480,9 @@ CREATE TABLE `status` (
   PRIMARY KEY (`statusid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
 
 --
 -- Table structure for table `user`
