@@ -1,8 +1,8 @@
 /*
  * Created by the DBAccessor generator.
  * Programmer: Lennart Martens
- * Date: 01/09/2010
- * Time: 15:36:30
+ * Date: 14/09/2010
+ * Time: 16:13:46
  */
 package com.compomics.mslims.db.accessors;
 

@@ -115,10 +115,12 @@ public class QTrapSpectrumStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lMascotGenericFile.getTotalIntensity());
             // The highest intensity.
             data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMascotGenericFile.getHighestIntensity());
-            // The charge.
-            data.put(Spectrum.CHARGE, lMascotGenericFile.getCharge());
+            // The charge - as long for the database accessor.
+            Long lCharge = new Long(lMascotGenericFile.getCharge());
+            data.put(Spectrum.CHARGE, lCharge);
             // The precursorMZ.
             data.put(Spectrum.MASS_TO_CHARGE, lMascotGenericFile.getPrecursorMZ());
+
 
 
             // Create the database object.

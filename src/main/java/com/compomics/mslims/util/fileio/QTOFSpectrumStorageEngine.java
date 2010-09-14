@@ -109,9 +109,10 @@ public class QTOFSpectrumStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.L_PROJECTID, new Long(aProjectid));
             data.put(Spectrum.L_INSTRUMENTID, new Long(aInstrumentid));
             data.put(Spectrum.SEARCHED, new Long(0));
-            // The charge.
-            data.put(Spectrum.CHARGE, pklFile.getCharge());
-            // The precursorMZ.
+            // The charge - as long for the database accessor.
+            Long lCharge = new Long(pklFile.getCharge());
+            data.put(Spectrum.CHARGE, lCharge);
+                        // The precursorMZ.
             data.put(Spectrum.MASS_TO_CHARGE, pklFile.getPrecursorMZ());
 
 
