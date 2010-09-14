@@ -107,9 +107,10 @@ public class ABI4700SpectrumStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lFile.getTotalIntensity());
             // The highest intensity.
             data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lFile.getHighestIntensity());
-            // The charge.
-            data.put(Spectrum.CHARGE, lFile.getCharge());
-            // The precursorMZ.
+            // The charge - as long for the database accessor.
+            Long lCharge = new Long(lFile.getCharge());
+            data.put(Spectrum.CHARGE, lCharge);
+                        // The precursorMZ.
             data.put(Spectrum.MASS_TO_CHARGE, lFile.getPrecursorMZ());
 
             // Create the database object.
