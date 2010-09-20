@@ -387,11 +387,12 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         logger.error(exc.getMessage(), exc);
                         JOptionPane.showMessageDialog((Component) comp, "Unable to open internet view of selected entry: " + exc.getMessage() + ".", "Unable to open browser window", JOptionPane.ERROR_MESSAGE);
                     }
-                } else if ((e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON2) && (comp instanceof ByteArrayRenderer || tblResult.getColumnName(col).trim().equalsIgnoreCase("l_spectrumid"))) {
+                } else if ((e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON2) &&
+                        (comp instanceof ByteArrayRenderer || tblResult.getColumnName(col).trim().endsWith("spectrumid"))) {
                     byte[] result = null;
                     String filename = "Spectrum";
                     try {
-                        if (tblResult.getColumnName(col).trim().equalsIgnoreCase("l_spectrumid")) {
+                        if (tblResult.getColumnName(col).trim().endsWith("spectrumid")) {
                             try {
                                 Spectrum lSpectrum = Spectrum.findFromID(((Number) tblResult.getValueAt(row, col)).longValue(), iConn);
                                 Spectrum_file lSpectrum_file = Spectrum_file.findFromID(lSpectrum.getSpectrumid(), iConn);
