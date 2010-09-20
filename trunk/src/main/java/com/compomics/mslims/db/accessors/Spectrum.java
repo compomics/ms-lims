@@ -218,7 +218,7 @@ public class Spectrum extends SpectrumTableAccessor {
      *         where-clause.
      */
     public static String getBasicSelect() {
-        return "select spectrumid, l_lcrunid, l_projectid, l_instrumentid, searched, identified, filename, total_spectrum_intensity, highest_peak_in_spectrum, username, creationdate, modificationdate from spectrum";
+        return "select spectrumid, l_lcrunid, l_projectid, l_instrumentid, searched, identified, filename, charge, mass_to_charge, total_spectrum_intensity, highest_peak_in_spectrum, username, creationdate, modificationdate from spectrum";
     }
 
     /**
