@@ -95,7 +95,7 @@
                 <version>2.3</version>
                 <executions>
                     <execution>
-                        <id>copy-resources2</id>
+                        <id>copy-compile-resources</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -127,7 +127,7 @@
                 <version>2.3</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-package-resources</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -316,7 +316,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.2</version>
+            <version>3.2.1</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.
