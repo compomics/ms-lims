@@ -30,9 +30,6 @@ import javax.swing.*;
 public class MsLimsStarter {
 
 
-    private boolean debug = false;
-
-
     /**
      * Starts the launcher by calling the launch method. Use this as the main class in the jar file.
      */
@@ -93,10 +90,6 @@ public class MsLimsStarter {
                 + quote + " com.compomics.mslims.gui.MS_LIMS";
 
         System.out.println(cmdLine);
-
-        if (debug) {
-            //logger.info(cmdLine);
-        }
 
         try {
             // Run the process!
