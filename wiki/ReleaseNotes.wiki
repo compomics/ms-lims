@@ -1,0 +1,9 @@
+# Short summary of changes for each version of ms-lims. (as from version 7.2)
+
+----
+
+*Changes in ms-lims 7.5 (September 28. 2010):*
+ * FEATURE: Created the scan table to persist spectrum retention time in the database schema.
+ * FEATURE: Creatted variables for the mass-to-charge ratio and the charge value for each spectrum.
+ * DEPENDENCY CHANGES: Utilities-3.12, MascotDatfile-3.2.1, Peptizer-1.6
+----
