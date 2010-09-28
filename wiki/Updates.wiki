@@ -2,7 +2,7 @@
 
 = 7.4 to 7.5 (2010-08-30)=
 * sf
-  * sf
+  - sf
     * sfefs
     * fsfe
   * sfesf
