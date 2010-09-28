@@ -1,0 +1,11 @@
+#ms-lims update scripts.
+
+= 7.4 to 7.5 =
+
+  * sf
+  * sf
+    * sfefs
+    * fsfe
+  * sfesf
+
+= 7.3 to 7.4 =
