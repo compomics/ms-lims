@@ -1,8 +1,7 @@
 #ms-lims update scripts.
 
-= 7.4 to 7.5 =
-
-  * sf
+= 7.4 to 7.5 (2010-08-30)=
+* sf
   * sf
     * sfefs
     * fsfe
