@@ -1,3 +1,4 @@
+#labels Featured
 * Save the ms-lims update scripts as .cdf and apply them by using the ConfigurationGUI in the ms-lims menu.*
 
 ----
