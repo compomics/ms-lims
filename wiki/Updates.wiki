@@ -1,4 +1,4 @@
-*Apply the following ms-lims update scripts if needed by using the ConfigurationGUI of ms-lims.*
+*Save the ms-lims update scripts as .cdf and apply them by using the ConfigurationGUI in the ms-lims menu.*
 
 ----
 = 7.2 to 7.5 (2010-08-30)=
