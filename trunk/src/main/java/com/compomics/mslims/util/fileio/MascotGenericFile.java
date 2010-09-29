@@ -107,6 +107,13 @@ public class MascotGenericFile extends SpectrumFileAncestor {
     }
 
     /**
+     * This empty constructor enables the creation of a new MascotGenericFile via its setters.
+     */
+    public MascotGenericFile(){
+        // Empty constructor to create new file from scratch.
+    }
+
+    /**
      * This constructor takes the filename of the MGF File as argument and loads it form the hard drive.
      *
      * @param aFilename File with the pointer to the MGF File.
