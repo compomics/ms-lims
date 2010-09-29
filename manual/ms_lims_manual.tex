@@ -93,7 +93,6 @@
 		
 		\vspace{0.8cm} Proteomics and Bioinformatics group \linebreak Departement of Medical Protein Research \linebreak VIB and Faculty of Medicine and Health Sciences, Ghent University \vspace{1cm} \linebreak
 		
-		
 		\date \url{http://ms-lims.googlecode.com/} 
 	\end{center}
 \end{titlepage}
@@ -172,81 +171,6 @@ Now the installation has completed, the MySQL database needs some extra configur
 \end{itemize}
 The MySQL server is up and running now. We can now proceed installing ms-lims itself.
 
-%% Chapter on ms-lims installation.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Mass Spectrometry LIMS (ms-lims)}\label{mslims}
-
-%% ms-lims
-\subsection*{Downloading ms-lims} Ms-lims is distributed in a .zip file which can be downloaded from \url{http://code.google.com/p/ms-lims/downloads/list}. Download the latest version from that site and unzip this the content into your application folder of choice (e.g. ../Program Files/ms-lims/). \npar Ms-lims can subsequently be started via double-clicking ms-lims-x.y-jar. 
-
-\subsection*{Configuring ms-lims} After double-clicking ms-lims.x.y-jar, the main window with the distinct ms-lims tools. The \textbf{Connection Dialog} will immediately start through which you must make a connection to the previously installed MySQL server. 
-
-\begin{figure}
-	[H] 
-	\includegraphics[width=0.80\textwidth]{../Images/connection-empty.png} \centering \label{fig:connection} \caption{The Connection Dialog allows then users to connect to the running MySQL server.} 
-\end{figure}
-
-\npar Enter \emph{your.mysqlserver.com} in the Database URL field, then enter your username and password before establishing the database connection by clicking the \textbf{Connect} button.
-\npar Ok, now ms-lims is connected to the MySQL server, and we have to configure a ms-lims database onto the MySQL server. This can be done by using the \textbf{ConfigurationGUI} that can be started in the menu via \emph{Menu > Database Configuration}. 
-
-\npar Different steps in the ConfigurationGUI are separated in multiple tabs in the top. 
-\begin{description}
-	\item[summary] Gives an brief overview of the active database.
-	\item[database] Creates the ms-lims relational database scheme into your MySQL database. A relational schema defines a collection of tables, providing structure for the mass spectrometry data that needs to be stored in the database. Just as fragmentation spectra are stored in one table, peptide identifications are stored in different table. Hence, a connection between both tables is maintained. More, both are connected to another table that reflects which instrument was used. As such, you can eventually retrieve all spectra from a given instrument or all peptides containing a particular sequence. 
-	
-	\begin{figure}
-		[H] 
-		\includegraphics[width=0.80 
-		\textwidth]{../Images/config-database.png} \centering \label{fig:config-database} \caption{The database tab in the ConfigurationGUI.} 
-	\end{figure}
-	
-	\begin{itemize}
-		\item \textbf{Connect} to the MySQL database system you previously installed by using the 'root' username and password . Fill in the address of the computer that has the MySQL server running. If the MySQL server is installed on this system, fill in \textbf{'localhost' }to refer to this local computer. Otherwise, fill in the address of the computer within your network. 
-		\item \textbf{Create SQL Database} to create a new ms-lims database on the MySQL server. Fill in an appropriate name such as \textbf{'projects' } to as a identifier for the ms-lims database. 
-		\item \textbf{Set SQL Scheme for ms-lims} to the (ex.) 'projects' database. 
-	\end{itemize}
-	Now the database is structured, it is ready to store mass spectrometry data in a relational manner. 
-	\item[users] Add or remove ms-lims users from the database system. An ms-lims user can be a mass spectrometrist storing fragmentation spectra or a informatician storing peptide identification results. 
-	\begin{figure}
-		[H] 
-		\includegraphics[width=0.80 
-		\textwidth]{../Images/config-user.png} \centering \label{fig:config-user} \caption{The user tab in the ConfigurationGUI.} 
-	\end{figure}
-	
-	\item[protocols] Add or remove ms-lims protocols from the database system. 
-	\begin{figure}
-		[H] 
-		\includegraphics[width=0.80 
-		\textwidth]{../Images/config-protocol.png} \centering \label{fig:config-protocol} \caption{The protocol tab in the ConfigurationGUI.} 
-	\end{figure}
-	
-	
-	\item[instrument] Add or remove ms-lims instruments from the database system. ms-lims is independent from mass spectrometer vendors by storing fragmentation spectra in a uniform manner. Hence, as different vendors have different forms of output, .pkl files versus .xml or single versus merged files, ms-lims has different engines to store each fragmentation spectrum as a single entity independent from vendors. In this panel you are ought to define which instrument is used in order to store the data into ms-lims appropriately. \\\textit{If your instrument of choice is not listed, please contact the ms-lims user group at \url{http://groups.google.com/group/ms_lims}} 
-
-	\begin{figure}
-		[H] 
-		\includegraphics[width=0.80 
-		\textwidth]{../Images/config-instrument.png} \centering \label{fig:config-instrument} \caption{The instrument tab in the ConfigurationGUI.} 
-	\end{figure}
-
-\end{description}
-\npar Ok, the MySQL database is now running a relational database scheme capable for managing proteomics data. Only a few minor steps to go!
-
-
-\subsection*{Updating ms-lims}
-\npar Ms-lims is a continuously growing system and it is required to create new tables in the database schema or modify the existing content in the database. Therefore, we provide \textbf{update scripts} if required and these updates can also be applied in the ConfigurationGUI. Please find the latest update scripts on the ms-lims project site (\url{http://code.google.com/p/ms-lims/wiki/Updates}).
-
-\begin{figure}
-	[H] 
-	\includegraphics[width=0.80 
-	\textwidth]{../Images/config-update.png} \centering \label{fig:config-update} \caption{The update tab in the ConfigurationGUI.} 
-\end{figure}
-
-
-%% Chapter on database connections.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Tie up the loose ends} \npar Two more issues remain, both are about tying up the loose ends between ms-lims and other software. First is about allowing ms-lims users accessing the MySQL database. 
-
 \subsection*{Adding MySQL users} It is important to distinguish two user identities. First there is an ms-lims identity for users in the lab environment, being the researchers working on the bench or at the mass spectrometer. These identities are created by configuring ms-lims. Second there is a MySQL identity to access the database itself. While the former is a simple identifier who the project or data belongs to, the latter comes with a password and purely serves to interact with the MySQL database. Currently, there is only one MySQL user: the 'root' user. As you might remember, we named this the 'master' user as it comes with full control. This user can create other users with equal or minor permissions. We will now add new users to the database to tie up ms-lims to the MySQL database.To add new users to the MySQL system, we prefer to use the \textbf{MySQL Administrator Tool}. 
 \begin{itemize}
 	\item Goto the MySQL website at \url{http://mysql.com} 
@@ -278,12 +202,91 @@ This MySQL administrator tool allows you to configure all types of settings of t
 \end{itemize}
 \npar Ok, by now we have a ms-lims database scheme running on a MySQL server that can be accessed by multiple users. One last issue remains: peptide identifications by Mascot.
 
+%% Chapter on ms-lims installation.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{ms-lims: Mass Spectrometry driven LIMS}\label{mslims}
+
+%% ms-lims
+\subsection*{Download} Ms-lims is distributed in a .zip file which can be downloaded from \url{http://code.google.com/p/ms-lims/downloads/list}. Download the latest version from that site and unzip this the content into your application folder of choice (e.g. ../Program Files/ms-lims/). \npar Ms-lims can subsequently be started via double-clicking ms-lims-x.y-jar. 
+
+\subsection*{Configuration} After double-clicking ms-lims.x.y-jar, the main window with the distinct ms-lims tools. The \textbf{Connection Dialog} will immediately start through which you must make a connection to the previously installed MySQL server. 
+\begin{figure}
+	[H] 
+	\includegraphics[width=0.80 
+	\textwidth]{../Images/connection-empty.png} \centering \label{fig:connection} \caption{The Connection Dialog allows then users to connect to the running MySQL server.} 
+\end{figure}
+
+\npar Enter \emph{your.mysqlserver.com} in the Database URL field, then enter your username and password before establishing the database connection by clicking the \textbf{Connect} button. \npar Ok, now ms-lims is connected to the MySQL server, and we have to configure a ms-lims database onto the MySQL server. This can be done by using the \textbf{ConfigurationGUI} that can be started in the menu via \emph{Menu > Database Configuration}. 
+
+\npar Different steps in the ConfigurationGUI are separated in multiple tabs in the top. 
+\begin{description}
+	\item[summary] Gives an brief overview of the active database. 
+	\item[database] Creates the ms-lims relational database scheme into your MySQL database. A relational schema defines a collection of tables, providing structure for the mass spectrometry data that needs to be stored in the database. Just as fragmentation spectra are stored in one table, peptide identifications are stored in different table. Hence, a connection between both tables is maintained. More, both are connected to another table that reflects which instrument was used. As such, you can eventually retrieve all spectra from a given instrument or all peptides containing a particular sequence. 
+	\begin{figure}
+		[H] 
+		\includegraphics[width=0.80 
+		\textwidth]{../Images/config-database.png} \centering \label{fig:config-database} \caption{The database tab in the ConfigurationGUI.} 
+	\end{figure}
+	\begin{itemize}
+		\item \textbf{Connect} to the MySQL database system you previously installed by using the 'root' username and password . Fill in the address of the computer that has the MySQL server running. If the MySQL server is installed on this system, fill in \textbf{'localhost' }to refer to this local computer. Otherwise, fill in the address of the computer within your network. 
+		\item \textbf{Create SQL Database} to create a new ms-lims database on the MySQL server. Fill in an appropriate name such as \textbf{'projects' } to as a identifier for the ms-lims database. 
+		\item \textbf{Set SQL Scheme for ms-lims} to the (ex.) 'projects' database. 
+	\end{itemize}
+	Now the database is structured, it is ready to store mass spectrometry data in a relational manner. 
+	\item[users] Add or remove ms-lims users from the database system. An ms-lims user can be a mass spectrometrist storing fragmentation spectra or a informatician storing peptide identification results. 
+	\begin{figure}
+		[H] 
+		\includegraphics[width=0.80 
+		\textwidth]{../Images/config-user.png} \centering \label{fig:config-user} \caption{The user tab in the ConfigurationGUI.} 
+	\end{figure}
+	
+	\item[protocols] Add or remove ms-lims protocols from the database system. 
+	\begin{figure}
+		[H] 
+		\includegraphics[width=0.80 
+		\textwidth]{../Images/config-protocol.png} \centering \label{fig:config-protocol} \caption{The protocol tab in the ConfigurationGUI.} 
+	\end{figure}
+	
+	\item[instrument] Add or remove ms-lims instruments from the database system. ms-lims is independent from mass spectrometer vendors by storing fragmentation spectra in a uniform manner. Hence, as different vendors have different forms of output, .pkl files versus .xml or single versus merged files, ms-lims has different engines to store each fragmentation spectrum as a single entity independent from vendors. In this panel you are ought to define which instrument is used in order to store the data into ms-lims appropriately. \\\textit{If your instrument of choice is not listed, please contact the ms-lims user group at \url{http://groups.google.com/group/ms_lims}} 
+	\begin{figure}
+		[H] 
+		\includegraphics[width=0.80 
+		\textwidth]{../Images/config-instrument.png} \centering \label{fig:config-instrument} \caption{The instrument tab in the ConfigurationGUI.} 
+	\end{figure}
+\end{description}
+\npar Ok, the MySQL database is now running a relational database scheme capable for managing proteomics data. Only a few minor steps to go!
+
+\subsection*{Updates} \npar Ms-lims is a continuously growing system and it is required to create new tables in the database schema or modify the existing content in the database. Therefore, we provide \textbf{update scripts} if required and these updates can also be applied in the ConfigurationGUI. Please find the latest update scripts on the ms-lims project site (\url{http://code.google.com/p/ms-lims/wiki/Updates}). 
+\begin{figure}
+	[H] 
+	\includegraphics[width=0.80 
+	\textwidth]{../Images/config-update.png} \centering \label{fig:config-update} \caption{The update tab in the ConfigurationGUI.} 
+\end{figure}
+
+\subsection*{Logs and Properties} \npar The properties and log files are saved to the user's home directory in the \textbf{.compomics/ms-lims/} folder. Two files can be found there: 
+\begin{itemize}
+	
+	\item[mslims-log4j.log] This text file logs all the normal output and the unexpected errors that occur while running ms-lims. If something unexpected occurs, please attach this file while posting the issue on \url{http://code.google.com/p/ms-lims/issues/list}. 
+	\item[mslims.properties] This properties file contains startup properties of ms-lims. 
+\end{itemize}
+
+\begin{tabular*}{0.80\textwidth}
+	{| l | p{0.69\textwidth}|}
+\hline
+  user &                                                                                                                                                                                       The default username for the database connection.\\
+\hline
+   url &                                                                                                                                                                                   The default url to the database. (Leave the default!)\\
+\hline
+driver &                                                                                                                                                         The default java driver to create the database connection. (Leave the default!)\\
+\hline
+  java & The Java startup parameters. Change \textbf{Xmx...m} to set your preferred amount of memory usage. Xmx1024m would for instance result in 1024MB virtual memory. This parameter should be increased if you receive out of memory errors.\\
+\hline
+\end{tabular*}
 
 \part{Ms-lims Tools}
 
 % Reset counters for the second part.
-\setcounter{chapter}{0}
-\setcounter{figure}{0}
+\setcounter{chapter}{0} \setcounter{figure}{0}
 
 \chapter{Overview}\label{Overview} \npar After ms-lims has been successfully installed, the end-users can start making use of the client tools that work the database. Some tools serve to insert information in the database, while others assist to extract and interpret the information that has been stored in the database. The hierarchy of the tools is similar to the time course of an experiment. First, a project must be created to encompass all information involved in a single experiment, and this can be done via the ProjectManager tool (\ref{sec:projectmanager}). Second, the MS/MS spectra must be stored in the ms-lims database by the SpectrumStorage tool (\ref{sec:spectrumstorage}), and the MS/MS spectra can be extracted from the database subsequently by MergerGUI (\ref{sec:merger}) for further analysis by external database search engines. Once the Ms/MS spectra interpretation into peptide identifications by Mascot has been completed, the searches can be stored into ms-lims by IdentificationGUI (\ref{sec:identification}). Furthermore, if peptide quantification was performed in parallel by Mascot, then this can be persisted into the database as well by the QuantitationGUI (\ref{sec:quantitation}). Following these storage tools, all information can be further analyzed via standardized project reports of the ProjectAnalyzer tool (\ref{sec:projectanalyzer}) or via custom SQL queries in the GenericQuery tool (\ref{sec:genericquery}). Finally, the results can be validated in depth on the level of peptide identifications by Peptizer (\ref{sec:peptizer}) or peptide quantitations by Rover (\ref{sec:rover}). \\Each of these tools are explained in the following sections.
 
