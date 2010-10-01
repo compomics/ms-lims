@@ -70,20 +70,21 @@ public class Validation extends ValidationTableAccessor {
 
     /**
      * Returns the validation instance for the given identificationud.
+     *
      * @param l_identificationid The identificationid of the identified MS/MS spectrum.
-     * @param aConnection The ms-lims database connection.
+     * @param aConnection        The ms-lims database connection.
      * @return The Validation object for the identificationid, or null if no validation was found for this identificaitonid.
      * @throws SQLException
      */
-    public Validation getValidation(long l_identificationid, Connection aConnection) throws SQLException {
+    public static Validation getValidation(long l_identificationid, Connection aConnection) throws SQLException {
         String lQuery = "select * from validation where l_identificationid = " + l_identificationid;
         PreparedStatement ps = aConnection.prepareStatement(lQuery);
         ResultSet lResultSet = ps.executeQuery();
-        if(lResultSet.next() == true){
+        if (lResultSet.next() == true) {
             // Ok, Validation row is found. Return!
             Validation lValidation = new Validation(lResultSet);
             return lValidation;
-        }else{
+        } else {
             // No validation is found for this identificationid! Return null.
             return null;
         }
