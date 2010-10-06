@@ -34,7 +34,10 @@
 # Step 1 - Create the scangroup, charge and masstocharge values in the spectrum table.
 ALTER TABLE spectrum ADD COLUMN mass_to_charge DECIMAL(20,4) NULL DEFAULT NULL AFTER filename, ADD COLUMN charge INT NULL DEFAULT NULL AFTER filename;
 
-# Step 2 - Create the scan table.
+# Step 2 - Create indices for the charge and masstochargevalues.
+ALTER TABLE `projects`.`spectrum` ADD INDEX charge USING BTREE(`charge`), ADD INDEX mass_to_charge USING BTREE(`mass_to_charge`);
+
+# Step 3 - Create the scan table.
 CREATE  TABLE IF NOT EXISTS `scan` (  `scanid` INT(10) NOT NULL AUTO_INCREMENT ,  `l_spectrumid` INT(10) UNSIGNED NOT NULL DEFAULT '0' ,  `number` SMALLINT NULL DEFAULT '0' ,  `rtsec` DECIMAL(20,4) NULL DEFAULT '0' ,  `creationdate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,  `modificationdate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,  PRIMARY KEY (`scanid`) ) ENGINE = MyISAM;
 
 # Step 4 - Fill the tables.
