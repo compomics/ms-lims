@@ -1,10 +1,11 @@
 #labels Featured
-# Short summary of changes for each version of ms-lims. (as from version 7.2)
+# Short summary of changes for each version of ms-lims. (starting from version 7.5)
 
 ----
 
-*Changes in ms-lims 7.5 (September 28. 2010):*
+*Changes in ms-lims 7.5 (Octobre 8. 2010):*
  * FEATURE: Created the scan table to persist spectrum retention time in the database schema.
  * FEATURE: Creatted variables for the mass-to-charge ratio and the charge value for each spectrum.
- * DEPENDENCY CHANGES: Utilities-3.12, MascotDatfile-3.2.1, Peptizer-1.6
+ * FEATURE: Updated one-to-one validation of Peptizer validation into ms-lims. Furthermore, comments are automatically generated based on Agent results.
+ * DEPENDENCY CHANGES: Utilities-3.12, MascotDatfile-3.2.1, Peptizer-1.7.1
 ----
