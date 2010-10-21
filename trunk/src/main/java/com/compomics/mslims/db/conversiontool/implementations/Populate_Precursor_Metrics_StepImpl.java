@@ -15,8 +15,6 @@ import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Iterator;
 /*
  * CVS information:
  *
@@ -47,6 +45,7 @@ public class Populate_Precursor_Metrics_StepImpl implements DBConverterStep {
         boolean error = false;
         int limit = 10000;
         int loopCounter = 0;
+        MascotGenericFile mgf = null;
         // Do the process in pieces of size=limit.
 
         // We'll have to ensure that, for each spectrum that does not yet have
@@ -67,14 +66,23 @@ public class Populate_Precursor_Metrics_StepImpl implements DBConverterStep {
                 ResultSet rs = stat.executeQuery("select * from spectrum where (mass_to_charge is null or charge is null) limit " + limit);
                 Spectrum lSpectrum;
                 Spectrum_file lSpectrum_file;
-                MascotGenericFile mgf;
 
                 while (rs.next()) {
                     lSpectrum = new Spectrum(rs);
                     lSpectrum_file = Spectrum_file.findFromID(lSpectrum.getSpectrumid(), aConn);
-                    mgf = new MascotGenericFile(lSpectrum.getFilename(), new String(lSpectrum_file.getUnzippedFile()));
-                    int lCharge = mgf.getCharge();
-                    double lMZ = mgf.getPrecursorMZ();
+
+                    double lMZ;
+                    int lCharge;
+
+                    if (lSpectrum_file == null) {
+                        logger.info("Spectrum_file not found for spectrumid '" + lSpectrum.getSpectrumid() + "'!!\n Setting charge and mass_to_charge to 0.");
+                        lCharge = 0;
+                        lMZ = 0;
+                    } else {
+                        mgf = new MascotGenericFile(lSpectrum.getFilename(), new String(lSpectrum_file.getUnzippedFile()));
+                        lCharge = mgf.getCharge();
+                        lMZ = mgf.getPrecursorMZ();
+                    }
 
                     PreparedStatement ps = aConn.prepareStatement("update spectrum set mass_to_charge=?, charge=? where spectrumid=?");
                     ps.setDouble(1, lMZ);
@@ -85,19 +93,21 @@ public class Populate_Precursor_Metrics_StepImpl implements DBConverterStep {
                     ps.close();
 
                     // Now persist the scan information, if any.
-                    if (mgf.getRetentionInSeconds() != null) {
-                        double[] lRTInSeconds = mgf.getRetentionInSeconds();
-                        int[] lScanNumbers = mgf.getScanNumbers();
-                        for (int j = 0; j < lRTInSeconds.length; j++) {
-                            double lRTInSecond = lRTInSeconds[j];
+                    if (mgf != null) {
+                        if (mgf.getRetentionInSeconds() != null) {
+                            double[] lRTInSeconds = mgf.getRetentionInSeconds();
+                            int[] lScanNumbers = mgf.getScanNumbers();
+                            for (int j = 0; j < lRTInSeconds.length; j++) {
+                                double lRTInSecond = lRTInSeconds[j];
 
-                            ScanTableAccessor lScanTableAccessor = new ScanTableAccessor();
-                            lScanTableAccessor.setL_spectrumid(lSpectrum.getSpectrumid());
-                            lScanTableAccessor.setRtsec(lRTInSecond);
-                            if (lScanNumbers != null) {
-                                lScanTableAccessor.setNumber(lScanNumbers[j]);
+                                ScanTableAccessor lScanTableAccessor = new ScanTableAccessor();
+                                lScanTableAccessor.setL_spectrumid(lSpectrum.getSpectrumid());
+                                lScanTableAccessor.setRtsec(lRTInSecond);
+                                if (lScanNumbers != null) {
+                                    lScanTableAccessor.setNumber(lScanNumbers[j]);
+                                }
+                                lScanTableAccessor.persist(aConn);
                             }
-                            lScanTableAccessor.persist(aConn);
                         }
                     }
 
@@ -118,7 +128,7 @@ public class Populate_Precursor_Metrics_StepImpl implements DBConverterStep {
                     BigDecimal bd = new BigDecimal(lProgressPercentage);
                     bd.setScale(1, BigDecimal.ROUND_UP);
                     lProgressPercentage = bd.doubleValue();
-                    System.out.print("\t" + lProgressPercentage + "%\n");
+                    logger.info("\t" + lProgressPercentage + "%\n");
                 }
 
                 // If less then limit, then the sql query offered less rows then the limit and this was the last resultset!!
@@ -133,7 +143,7 @@ public class Populate_Precursor_Metrics_StepImpl implements DBConverterStep {
             // Flag successful completion.
             error = false;
         } catch (Exception e) {
-            logger.error("\n\nError updating Spectrum with retention time, precursorMZ or charge: ");
+            logger.error("\n\nError updating Spectrum with retention time, precursorMZ or charge: \n" + mgf.toString());
             logger.error(e.getMessage());
             logger.error(e.getMessage(), e);
             error = true;

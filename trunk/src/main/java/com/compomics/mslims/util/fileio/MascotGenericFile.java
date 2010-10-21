@@ -6,9 +6,8 @@
  */
 package com.compomics.mslims.util.fileio;
 
-import org.apache.log4j.Logger;
-
 import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -109,7 +108,7 @@ public class MascotGenericFile extends SpectrumFileAncestor {
     /**
      * This empty constructor enables the creation of a new MascotGenericFile via its setters.
      */
-    public MascotGenericFile(){
+    public MascotGenericFile() {
         // Empty constructor to create new file from scratch.
     }
 
@@ -398,12 +397,17 @@ public class MascotGenericFile extends SpectrumFileAncestor {
 
         if (!multiCharge) {
             // Charge is now: trimmedCharge without the sign character,
-            // negated if necessary.
-
-            charge = Integer.parseInt(trimmedCharge.substring(0, 1));
-            if (negate) {
-                charge = -charge;
+            if (trimmedCharge.length() == 1) {
+                charge = Integer.parseInt(trimmedCharge);
+            } else {
+                // Charge is now: trimmedCharge including the sign character.
+                // negated if necessary.
+                charge = Integer.parseInt(trimmedCharge.substring(0, 1));
+                if (negate) {
+                    charge = -charge;
+                }
             }
+
         }
 
         return charge;
