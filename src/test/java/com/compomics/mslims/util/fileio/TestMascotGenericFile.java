@@ -6,12 +6,9 @@
  */
 package com.compomics.mslims.util.fileio;
 
-import org.apache.log4j.Logger;
-
-import com.compomics.mslims.util.fileio.MascotGenericFile;
-import com.compomics.mslims.util.fileio.mergefiles.MascotGenericMergeFileReader;
 import junit.TestCaseLM;
 import junit.framework.Assert;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.Collections;
@@ -287,6 +284,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         // Test 6, this mgf file lacks the + sign folowing the charge state (cfr. proteowizard output!)
         try {
 
+            System.out.println("TESTING MGF without CHARGE");
             File input = new File(super.getFullFilePath("TestMascotGenericFile_6.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.

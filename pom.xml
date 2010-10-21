@@ -11,7 +11,7 @@
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.5</version.number>
+        <version.number>7.5.1</version.number>
         <logging.level.default>WARN</logging.level.default>
         <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
         <logging.file.max.size>5000KB</logging.file.max.size>
