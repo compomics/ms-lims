@@ -19,7 +19,7 @@ Change log
         The 2.6 version adds spectrum storage facilities for the Bruker Ultraflex LIFT spectra.
 
  - Version 2.6.1
-        The 2.6.1 version changes the precursor parsing for Ultraflex LIFT spectra to reading the mass from the pathname ('x.LIFT.LIFT' folder) instead of from the XML file (last peak in the peaklist).
+        The 2.6.1 version changes the precursor parsing for Ultraflex LIFT spectra to reading the mass from the aFile ('x.LIFT.LIFT' folder) instead of from the XML file (last peak in the peaklist).
 
  - Version 2.7
         The 2.7 version solves a serious issue concerning isoform parsing from results obtained from truncated or otherwise processed databases from which the redundancy has been cleared with DBToolkit.
@@ -314,7 +314,7 @@ Change log
         The 2.6 version adds spectrum storage facilities for the Bruker Ultraflex LIFT spectra.
 
  - Version 2.6.1
-        The 2.6.1 version changes the precursor parsing for Ultraflex LIFT spectra to reading the mass from the pathname ('x.LIFT.LIFT' folder) instead of from the XML file (last peak in the peaklist).
+        The 2.6.1 version changes the precursor parsing for Ultraflex LIFT spectra to reading the mass from the aFile ('x.LIFT.LIFT' folder) instead of from the XML file (last peak in the peaklist).
 
  - Version 2.7
         The 2.7 version solves a serious issue concerning isoform parsing from results obtained from truncated or otherwise processed databases from which the redundancy has been cleared with DBToolkit.
@@ -633,3 +633,5 @@ Change log
 
 - Version 7.4.1
           The 7.4.1 version of ms_lims fixes a bug that was introduced in the storage of spectrum files, where a memory leak occurred that could result in instability of ms_lims.
+- Version 7.5.2
+          The 7.5.2 version of ms_lims adds storage engine for Bruker MicroTOFQ and update the storage engine of the bruker Ultraflex mass spectrometers.

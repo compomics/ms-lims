@@ -6,11 +6,10 @@
  */
 package com.compomics.mslims.util.fileio.mergefiles;
 
-import org.apache.log4j.Logger;
-
 import com.compomics.mslims.util.fileio.PKLFile;
 import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
 import com.compomics.util.interfaces.SpectrumFile;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -215,7 +214,7 @@ public class MicromassMergeFileReader extends MergeFileReaderAncestor {
                 String line = null;
                 line = br.readLine();
                 while (line != null && line.trim().equals("")) {
-                    br.readLine();
+                    line = br.readLine();
                 }
                 // Now we have the first non-empty line in 'line'.
                 try {

@@ -6,12 +6,11 @@
  */
 package com.compomics.mslims.util.workers;
 
-import org.apache.log4j.Logger;
-
 import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.util.sun.SwingWorker;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,11 +126,8 @@ public class LoadUltraflexXMLWorker extends SwingWorker {
         // Cycle all found items.
         for (int i = 0; i < files.length; i++) {
             File lFile = files[i];
-            // Only look at directories.
             if (lFile.isDirectory()) {
-                // If the dirname contains '.lift.lift' (regardless of case),
-                // it's a liftspectrum.
-                if (lFile.getName().toLowerCase().indexOf(".lift.lift") >= 0) {
+                if (isLiftFolder(lFile)) {
                     aMSMSFiles.add(lFile.getName());
                 } else {
                     // Keep trying.
@@ -139,5 +135,27 @@ public class LoadUltraflexXMLWorker extends SwingWorker {
                 }
             }
         }
+    }
+
+    /**
+     * This method returns whether the given File is a required LIFT folder.
+     *
+     * @param aFile Diretory with appropriate filename.
+     * @return True if the folder contains ".lift.lift", ".lift" or ".lift_2".
+     */
+    public static boolean isLiftFolder(File aFile) {
+        // Only look at directories.
+        // If the dirname contains '.lift.lift' (regardless of case),
+        // it's a liftspectrum.
+
+        if (aFile.getName().toLowerCase().indexOf(".lift.lift") >= 0) {
+            return true;
+        } else if (aFile.getName().toLowerCase().indexOf(".lift") >= 0) {
+            return true;
+        } else if (aFile.getName().toLowerCase().indexOf(".lift_2") >= 0) {
+            return true;
+        }
+        // No diretory,
+        return false;
     }
 }

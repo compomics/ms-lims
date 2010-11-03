@@ -1,8 +1,7 @@
 package com.compomics.mslims.db.factory;
 
-import org.apache.log4j.Logger;
-
 import com.compomics.mslims.db.accessors.Instrument;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 
@@ -23,10 +22,10 @@ public class InstrumentFactory {
     public static final int MICROMASS_QTOF = 6;
     public static final int THERMO_FT_ICR = 7;
     public static final int THERMO_ORBITRAP = 8;
-    //public static final int UNKNOWN = 9;
+    public static final int BRUKER_MICROTOFQ = 9;
 
 
-    private static int lInstrumentCount = 9;
+    private static int lInstrumentCount = 10;
 
     public static Instrument createInstrument(int aInstrumentType) {
         HashMap lParams = new HashMap();
@@ -95,21 +94,19 @@ public class InstrumentFactory {
             case THERMO_ORBITRAP:
                 lParams.put(Instrument.NAME, "Thermo-Finigan LTQ-Orbitrap");
                 lParams.put(Instrument.DESCRIPTION, "The Thermo-Finigan Orbitrap mass spectrometer combined with a linear iontrap");
-                lParams.put(Instrument.STORAGECLASSNAME, null);
+                lParams.put(Instrument.STORAGECLASSNAME, "com.compomics.mslims.util.fileio.EsquireSpectrumStorageEngine");
                 lParams.put(Instrument.PROPERTIESFILENAME, null);
                 lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.14277715);
                 break;
 
-            /**
-             * Removed the unknown instrument type since it cannot represent any valid spectrumfile hierarchy.
-             case UNKNOWN:
-             lParams.put(Instrument.NAME, "Unknown instrument");
-             lParams.put(Instrument.DESCRIPTION, "Spectra coming from an unknown source.");
-             lParams.put(Instrument.STORAGECLASSNAME, null);
-             lParams.put(Instrument.PROPERTIESFILENAME, null);
-             lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.14277715);
-             break;
-             */
+            case BRUKER_MICROTOFQ:
+                lParams.put(Instrument.NAME, "Bruker microTOFQ");
+                lParams.put(Instrument.DESCRIPTION, "The bruker microTOFQ mass spectrometer");
+                lParams.put(Instrument.STORAGECLASSNAME, "com.compomics.mslims.util.fileio.MicroTOFQStorageEngine");
+                lParams.put(Instrument.PROPERTIESFILENAME, "QTOFSpectrumStorage.properties");
+                lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.238714);
+                break;
+
         }
 
         return new Instrument(lParams);
