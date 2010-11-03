@@ -6,15 +6,14 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.db.accessors.Spectrum_file;
-import org.apache.log4j.Logger;
-
-import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.util.fileio.interfaces.SpectrumStorageEngine;
 import com.compomics.mslims.util.workers.LoadUltraflexXMLWorker;
 import com.compomics.util.interfaces.Flamable;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -149,7 +148,7 @@ public class UltraflexSpectrumStorageEngine implements SpectrumStorageEngine {
         for (int i = 0; i < list.length; i++) {
             File lFile = list[i];
             if (lFile.isDirectory()) {
-                if (lFile.getName().toLowerCase().indexOf(".lift.lift") >= 0) {
+                if (LoadUltraflexXMLWorker.isLiftFolder(lFile)) {
                     // Include the name of the next-to-previous (parent's parent)
                     // folder as well.
                     File parent = lFile.getParentFile();

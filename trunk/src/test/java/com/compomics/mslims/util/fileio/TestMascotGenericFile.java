@@ -284,7 +284,6 @@ public class TestMascotGenericFile extends TestCaseLM {
         // Test 6, this mgf file lacks the + sign folowing the charge state (cfr. proteowizard output!)
         try {
 
-            System.out.println("TESTING MGF without CHARGE");
             File input = new File(super.getFullFilePath("TestMascotGenericFile_6.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.
