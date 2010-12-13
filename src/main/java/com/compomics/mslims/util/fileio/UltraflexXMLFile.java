@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import com.compomics.mslims.util.workers.LoadUltraflexXMLWorker;
 import org.apache.log4j.Logger;
 
 import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
@@ -376,9 +377,9 @@ public class UltraflexXMLFile extends SpectrumFileAncestor {
         File temp = aFile.getParentFile();
         boolean lbContinue = true;
         while (lbContinue && temp != null) {
-            // Find the '.LIFT.LIFT' signature.
-            if (temp.getName().endsWith(".LIFT.LIFT")) {
-                String mass = temp.getName().substring(0, temp.getName().indexOf(".LIFT.LIFT"));
+            // Find the '.LIFT.*' signature.
+            if(LoadUltraflexXMLWorker.isLiftFolder(temp)){
+                String mass = temp.getName().toLowerCase().substring(0, temp.getName().toLowerCase().indexOf(".lift"));
                 try {
                     result = Double.parseDouble(mass);
                     lbContinue = false;
