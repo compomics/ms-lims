@@ -2,9 +2,12 @@
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
 ----
 
+*Changes in ms-lims 7.5.4 (March 21. 2011):*
+ * DEPENDENCY CHANGE: updated Peptizer dependency to version 1.7.5.
+----
+
 *Changes in ms-lims 7.5.2 (November 3. 2010):*
  * FEATURE: A new storage engine for Bruker MicroTOFQ has been created. Furthermore, the Bruker Ultraflex storage engine has been changed moderately to support a wider structure of MGF files.
-
 ----
 
 *Changes in ms-lims 7.5.1 (Octobre 21. 2010):*
