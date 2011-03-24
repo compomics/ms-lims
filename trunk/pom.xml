@@ -11,7 +11,7 @@
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.5.4</version.number>
+        <version.number>7.5.5</version.number>
         <logging.level.default>WARN</logging.level.default>
         <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
         <logging.file.max.size>5000KB</logging.file.max.size>
@@ -224,6 +224,61 @@
                 </executions>
             </plugin>
 
+
+            <!-- Assembly plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2-beta-5</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/zip.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- this is used for inheritance merges -->
+                        <phase>package</phase>
+                        <!-- append to the packaging phase. -->
+                        <goals>
+                            <goal>single</goal>
+                            <!-- goals == mojos -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- google code upload plugin -->
+            <plugin>
+                <groupId>org.riedelcastro</groupId>
+                <artifactId>gcupload-maven-plugin</artifactId>
+                <version>0.9</version>
+                <configuration>
+                    <projectName>ms-lims</projectName>
+                    <uploads>
+                        <upload>
+                            <extensions>zip</extensions>
+                            <labels>Type-Library,Featured</labels>
+                            <summary>Release package of ${project.artifactId} version ${project.version}</summary>
+                        </upload>
+                    </uploads>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>upload-gc</id>
+                        <!-- this is used for inheritance merges -->
+                        <phase>deploy</phase>
+                        <!-- append to the packaging phase. -->
+                        <goals>
+                            <goal>gcupload</goal>
+                            <!-- goals == mojos -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 
@@ -246,6 +301,15 @@
         </repository>
 
     </repositories>
+
+
+    <!-- Plugin repositories-->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repository.riedelcastro.org</id>
+            <url>http://repository.riedelcastro.org</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <!-- Dependencies -->
     <dependencies>
@@ -316,7 +380,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.2.1</version>
+            <version>3.2.3</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.
@@ -333,7 +397,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>peptizer</artifactId>
-            <version>1.7.5</version>
+            <version>1.7.6</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
