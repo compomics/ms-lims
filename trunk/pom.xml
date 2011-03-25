@@ -145,6 +145,25 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-package-license</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>LICENSE-2.0.txt</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -397,7 +416,7 @@
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>peptizer</artifactId>
-            <version>1.7.6</version>
+            <version>1.7.7</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
