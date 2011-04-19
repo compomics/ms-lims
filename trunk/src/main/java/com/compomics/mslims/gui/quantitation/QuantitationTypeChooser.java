@@ -76,7 +76,7 @@ public class QuantitationTypeChooser extends JFrame {
         jpanContent = new JPanel();
         jpanContent.setLayout(new GridBagLayout());
         final JLabel label1 = new JLabel();
-        label1.setText("Choos your type of quantitation import method:");
+        label1.setText("Choose your type of quantitation import method:");
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
