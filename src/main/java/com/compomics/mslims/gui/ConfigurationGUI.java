@@ -73,7 +73,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
     private JTextField txtProtocolDescription;
     private JButton btnAddProtocol;
     private JButton btnRemoveProtocol;
-    private JList listAvaillableInstruments;
+    private JList listAvailableInstruments;
     private JList listDatabaseInstruments;
     private JPanel jpanStatus;
     private JLabel lblStatus;
@@ -435,11 +435,11 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         });
 
         /**
-         * Adds the selected Instrument from the 'Availlable' list, into the ms_lims database scheme.
+         * Adds the selected Instrument from the 'Available' list, into the ms_lims database scheme.
          */
         btnAddInstrument.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                Instrument lInstrument = ((Instrument) listAvaillableInstruments.getSelectedValue());
+                Instrument lInstrument = ((Instrument) listAvailableInstruments.getSelectedValue());
                 if (lInstrument != null) {
                     String lInstrumentName = lInstrument.getName();
                     ResultSet rs =
@@ -1171,12 +1171,12 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         gbc.ipady = 2;
         gbc.insets = new Insets(3, 3, 3, 3);
         jpanInstrument.add(panel3, gbc);
-        panel3.setBorder(BorderFactory.createTitledBorder("Availlable Instruments"));
-        listAvaillableInstruments = new JList();
-        listAvaillableInstruments.setLayoutOrientation(0);
+        panel3.setBorder(BorderFactory.createTitledBorder("Available Instruments"));
+        listAvailableInstruments = new JList();
+        listAvailableInstruments.setLayoutOrientation(0);
         final DefaultListModel defaultListModel3 = new DefaultListModel();
-        listAvaillableInstruments.setModel(defaultListModel3);
-        listAvaillableInstruments.setSelectionMode(0);
+        listAvailableInstruments.setModel(defaultListModel3);
+        listAvailableInstruments.setSelectionMode(0);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -1186,7 +1186,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         gbc.ipadx = 2;
         gbc.ipady = 2;
         gbc.insets = new Insets(3, 3, 3, 3);
-        panel3.add(listAvaillableInstruments, gbc);
+        panel3.add(listAvailableInstruments, gbc);
         final JPanel spacer18 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -1502,7 +1502,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
      * updates the instrument list.
      */
     private void updateInstrumentList() {
-        listAvaillableInstruments.setListData(InstrumentFactory.createAllInstruments());
+        listAvailableInstruments.setListData(InstrumentFactory.createAllInstruments());
 
         try {
 
@@ -1527,8 +1527,8 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
             logger.error(e.getMessage(), e);
         }
 
-        listDatabaseInstruments.setSize(listAvaillableInstruments.getSize());
-        listAvaillableInstruments.repaint();
+        listDatabaseInstruments.setSize(listAvailableInstruments.getSize());
+        listAvailableInstruments.repaint();
         listDatabaseInstruments.repaint();
     }
 
