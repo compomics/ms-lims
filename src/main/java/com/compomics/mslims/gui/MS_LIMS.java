@@ -803,7 +803,7 @@ public class MS_LIMS extends JFrame implements Connectable {
         try {
             new MS_LIMS("ms_lims (version " + getVersion() + ")");
         } catch (Throwable e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
              int lResult = javax.swing.JOptionPane.showOptionDialog(null,
                     e.getMessage(),
                     "ms-lims: unexpected failure",

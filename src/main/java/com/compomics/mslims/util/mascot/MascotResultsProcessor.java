@@ -487,7 +487,8 @@ public class MascotResultsProcessor {
                     Datfile datfile = (Datfile) ps;
                     iDatfilenameToDatfileid.put(datfile.getFilename(), ps.getGeneratedKeys()[0]);
                 }
-                //  - Identification: in this case, we still need to store the fragment ions.
+                //  - Identification: in this case, we still need to store the fragment ions
+                //      & a neutral Validation entry (version 7.6).
                 else if (ps instanceof Identification) {
                     Identification id = (Identification) ps;
                     double tol = id.getFragmentMassTolerance();
@@ -509,6 +510,15 @@ public class MascotResultsProcessor {
                         Fragmention fi_db = new Fragmention(hm);
                         fi_db.persist(iConn);
                     }
+
+                    // Create and persist Validation for the new Identification.
+                    HashMap lValidationMap = new HashMap();
+                    lValidationMap.put(Validation.L_IDENTIFICATIONID, id.getGeneratedKeys()[0]);
+                    lValidationMap.put(Validation.L_VALIDATIONTYPEID, Validationtype.NOT_VALIDATED);
+
+                    Validation lValidation = new Validation(lValidationMap);
+                    lValidation.persist(iConn);
+
                 }
                 if (aProgress != null) {
                     aProgress.setValue(aProgress.getValue() + 1);

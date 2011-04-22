@@ -80,23 +80,6 @@ CREATE TABLE `filedescriptor` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `fragmentation`
---
-
-DROP TABLE IF EXISTS `fragmentation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `fragmentation` (
-  `fragmentationid` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `description` VARCHAR(45) NOT NULL,
-  `username` VARCHAR(45) NOT NULL,
-  `creationdate` DATETIME NOT NULL,
-  `modificationdate` DATETIME NOT NULL,
-  PRIMARY KEY (`fragmentationid`)
-) ENGINE = MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `fragmention`
 --
 
@@ -164,6 +147,7 @@ CREATE TABLE `identification` (
   `cal_mass` decimal(12,4) NOT NULL DEFAULT '0.0000',
   `light_isotope` decimal(12,4) DEFAULT NULL,
   `heavy_isotope` decimal(12,4) DEFAULT NULL,
+  `valid` tinyint(4) DEFAULT NULL,
   `Description` text NOT NULL,
   `identitythreshold` int(50) unsigned NOT NULL DEFAULT '0',
   `confidence` decimal(12,4) NOT NULL DEFAULT '0.0500',
@@ -183,7 +167,8 @@ CREATE TABLE `identification` (
   KEY `modified_sequence_index` (`modified_sequence`(50)),
   KEY `accession_index` (`accession`),
   KEY `l_spectrumfileid` (`l_spectrumid`),
-  KEY `l_datfileid` (`l_datfileid`)
+  KEY `l_datfileid` (`l_datfileid`),
+  KEY `valid` (`valid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -247,7 +232,6 @@ CREATE TABLE `ionscoring` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
 --
 -- Table structure for table `lcrun`
 --
@@ -271,43 +255,6 @@ CREATE TABLE `lcrun` (
   UNIQUE KEY `name` (`name`),
   KEY `creationdateindex` (`creationdate`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `modification_conversion`
---
-
-DROP TABLE IF EXISTS `modification_conversion`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `modification_conversion` (
- `modification_conversionid` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
- `modification` VARCHAR(45) NOT NULL,
- `conversion` VARCHAR(45) NOT NULL,
- `username` VARCHAR(45) NOT NULL,
- `creationdate` DATETIME NOT NULL,
- `modificationdate` DATETIME NOT NULL,
- PRIMARY KEY (`modification_conversionid`),
- UNIQUE KEY(`modification`)
-) ENGINE = MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ms_lims_properties`
---
-DROP TABLE IF EXISTS `ms_lims_properties`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ms_lims_properties` (
-  `ms_lims_propertiesid` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `key` VARCHAR(45) NOT NULL,
-  `value` VARCHAR(45) NOT NULL,
-  `username` VARCHAR(45) NOT NULL,
-  `creationdate` DATETIME NOT NULL,
-  `modificationdate` DATETIME NOT NULL,
-  PRIMARY KEY (`ms_lims_propertiesid`),
-  UNIQUE KEY(`key`)
-) ENGINE = MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -485,7 +432,6 @@ CREATE TABLE `spectrum` (
   `spectrumid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `l_lcrunid` int(10) unsigned NOT NULL DEFAULT '0',
   `l_projectid` int(10) unsigned NOT NULL DEFAULT '0',
-  `l_fragmentationid` int(10) unsigned NOT NULL DEFAULT '0',
   `l_instrumentid` int(10) unsigned NOT NULL DEFAULT '0',
   `searched` int(10) unsigned DEFAULT '0',
   `identified` int(10) unsigned DEFAULT '0',
@@ -535,6 +481,9 @@ CREATE TABLE `status` (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+
+
 --
 -- Table structure for table `user`
 --
@@ -560,45 +509,25 @@ CREATE TABLE `user` (
 DROP TABLE IF EXISTS `validation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-
 CREATE TABLE `validation` (
   `validationid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `l_identificationid` int(10) unsigned NOT NULL DEFAULT '0',
-  `l_validationtypeid` int(11) NOT NULL DEFAULT '0',
-  `auto_comment` text,
-  `manual_comment` text,
-  `username` varchar(45) DEFAULT NULL,
+  `comment` text NOT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `l_userid` int(11) DEFAULT NULL,
   `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modificationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`validationid`),
-  KEY `l_identificationid` (`l_identificationid`)
-) ENGINE=MyISAM  AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`validationid`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Table structure for table `validationtype`
---
-DROP TABLE IF EXISTS `validationtype`;
-CREATE TABLE `validationtype` (
-  `validationtypeid` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`validationtypeid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Insert default validation values.
--- NOT-VALIDATED
-INSERT INTO `validationtype` (`validationtypeid`, `name`) VALUES ( 0, "not validated");
-
--- AUTOMATIC ACCEPT
-INSERT INTO `validationtype` (`validationtypeid`, `name`) VALUES ( 1, "automatic accepted");
--- AUTOMATIC REJECT
-INSERT INTO `validationtype` (`validationtypeid`, `name`) VALUES ( -1, "automatic rejected");
-
--- MANUAL ACCEPT
-INSERT INTO `validationtype` (`validationtypeid`, `name`) VALUES ( 2, "manual accepted");
--- MANUAL REJECT
-INSERT INTO `validationtype` (`validationtypeid`, `name`) VALUES ( -2, "manual rejected");
-
--- Insert default ionscoring types
-INSERT INTO ionscoring (`ionscoringid`, `description`, `username`, `creationdate`, `modificationdate`) VALUES (0,"scoring-FALSE||significant-FALSE","default", CURDATE(), CURDATE());
-INSERT INTO ionscoring (`ionscoringid`, `description`, `username`, `creationdate`, `modificationdate`) VALUES (1,"scoring-FALSE||significant-TRUE","default", CURDATE(), CURDATE());
-INSERT INTO ionscoring (`ionscoringid`, `description`, `username`, `creationdate`, `modificationdate`) VALUES (2,"scoring-TRUE||significant-TRUE","default", CURDATE(), CURDATE());
+-- Dump completed on 2010-04-26 16:56:45
