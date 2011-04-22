@@ -6,12 +6,9 @@
  */
 package com.compomics.mslims.util.fileio;
 
-import com.compomics.mslims.db.accessors.ScanTableAccessor;
-import com.compomics.mslims.db.accessors.Spectrum;
-import com.compomics.mslims.db.accessors.Spectrum_file;
+import com.compomics.mslims.db.accessors.*;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.util.fileio.interfaces.MergeFileReader;
 import com.compomics.mslims.util.fileio.interfaces.SpectrumStorageEngine;
@@ -76,7 +73,7 @@ public class EsquireSpectrumStorageEngine implements SpectrumStorageEngine {
      * @throws java.io.IOException   when the filereading goes wrong.
      * @throws java.sql.SQLException when the DB storage goes wrong.
      */
-    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn) throws IOException, SQLException {
+    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn, Fragmentation aFragmentation) throws IOException, SQLException {
         // Get a hanlde to the parent folder.
         File parent = new File(aLCRun.getPathname());
 
@@ -97,6 +94,7 @@ public class EsquireSpectrumStorageEngine implements SpectrumStorageEngine {
             // The links.
             data.put(Spectrum.L_LCRUNID, new Long(aLCRun.getLcrunid()));
             data.put(Spectrum.L_PROJECTID, new Long(aProjectid));
+            data.put(Spectrum.L_FRAGMENTATIONID, aFragmentation.getFragmentationid());
             // The flags.
             data.put(Spectrum.IDENTIFIED, new Long(0));
             data.put(Spectrum.SEARCHED, new Long(0));

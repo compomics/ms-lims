@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.util.fileio;
 
+import com.compomics.mslims.db.accessors.Fragmentation;
 import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.db.accessors.Spectrum_file;
 import org.apache.log4j.Logger;
@@ -81,7 +82,7 @@ public class QTOFSpectrumStorageEngine implements SpectrumStorageEngine {
      * @throws java.io.IOException   when the filereading goes wrong.
      * @throws java.sql.SQLException when the DB storage goes wrong.
      */
-    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn) throws IOException, SQLException {
+    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn, Fragmentation aFragmentation) throws IOException, SQLException {
         // Get the LCRun name.
         String lcName = aLCRun.getName();
         // Find the associated files.
@@ -107,6 +108,7 @@ public class QTOFSpectrumStorageEngine implements SpectrumStorageEngine {
             data.put(Spectrum.IDENTIFIED, new Long(0));
             data.put(Spectrum.L_LCRUNID, new Long(lCaplcID));
             data.put(Spectrum.L_PROJECTID, new Long(aProjectid));
+            data.put(Spectrum.L_FRAGMENTATIONID, aFragmentation.getFragmentationid());
             data.put(Spectrum.L_INSTRUMENTID, new Long(aInstrumentid));
             data.put(Spectrum.SEARCHED, new Long(0));
             // The charge - as long for the database accessor.

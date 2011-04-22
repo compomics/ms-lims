@@ -1,8 +1,8 @@
 /*
  * Created by the DBAccessor generator.
  * Programmer: Lennart Martens
- * Date: 14/09/2010
- * Time: 16:13:46
+ * Date: 30/11/2010
+ * Time: 13:56:55
  */
 package com.compomics.mslims.db.accessors;
 
@@ -51,6 +51,12 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 	 * This variable represents the contents for the 'l_projectid' column.
 	 */
 	protected long iL_projectid = Long.MIN_VALUE;
+
+
+	/**
+	 * This variable represents the contents for the 'l_fragmentationid' column.
+	 */
+	protected long iL_fragmentationid = Long.MIN_VALUE;
 
 
 	/**
@@ -135,6 +141,11 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 	public static final String L_PROJECTID = "L_PROJECTID";
 
 	/**
+	 * This variable represents the key for the 'l_fragmentationid' column.
+	 */
+	public static final String L_FRAGMENTATIONID = "L_FRAGMENTATIONID";
+
+	/**
 	 * This variable represents the key for the 'l_instrumentid' column.
 	 */
 	public static final String L_INSTRUMENTID = "L_INSTRUMENTID";
@@ -214,6 +225,9 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 		if(aParams.containsKey(L_PROJECTID)) {
 			this.iL_projectid = ((Long)aParams.get(L_PROJECTID)).longValue();
 		}
+		if(aParams.containsKey(L_FRAGMENTATIONID)) {
+			this.iL_fragmentationid = ((Long)aParams.get(L_FRAGMENTATIONID)).longValue();
+		}
 		if(aParams.containsKey(L_INSTRUMENTID)) {
 			this.iL_instrumentid = ((Long)aParams.get(L_INSTRUMENTID)).longValue();
 		}
@@ -262,6 +276,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 		this.iSpectrumid = aResultSet.getLong("spectrumid");
 		this.iL_lcrunid = aResultSet.getLong("l_lcrunid");
 		this.iL_projectid = aResultSet.getLong("l_projectid");
+		this.iL_fragmentationid = aResultSet.getLong("l_fragmentationid");
 		this.iL_instrumentid = aResultSet.getLong("l_instrumentid");
 		this.iSearched = aResultSet.getLong("searched");
 		this.iIdentified = aResultSet.getLong("identified");
@@ -303,6 +318,15 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 	 */
 	public long getL_projectid() {
 		return this.iL_projectid;
+	}
+
+	/**
+	 * This method returns the value for the 'L_fragmentationid' column
+	 * 
+	 * @return	long	with the value for the L_fragmentationid column.
+	 */
+	public long getL_fragmentationid() {
+		return this.iL_fragmentationid;
 	}
 
 	/**
@@ -431,6 +455,16 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 	 */
 	public void setL_projectid(long aL_projectid) {
 		this.iL_projectid = aL_projectid;
+		this.iUpdated = true;
+	}
+
+	/**
+	 * This method sets the value for the 'L_fragmentationid' column
+	 * 
+	 * @param	aL_fragmentationid	long with the value for the L_fragmentationid column.
+	 */
+	public void setL_fragmentationid(long aL_fragmentationid) {
+		this.iL_fragmentationid = aL_fragmentationid;
 		this.iUpdated = true;
 	}
 
@@ -584,6 +618,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 			iSpectrumid = lRS.getLong("spectrumid");
 			iL_lcrunid = lRS.getLong("l_lcrunid");
 			iL_projectid = lRS.getLong("l_projectid");
+			iL_fragmentationid = lRS.getLong("l_fragmentationid");
 			iL_instrumentid = lRS.getLong("l_instrumentid");
 			iSearched = lRS.getLong("searched");
 			iIdentified = lRS.getLong("identified");
@@ -644,21 +679,22 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 		if(!this.iUpdated) {
 			return 0;
 		}
-		PreparedStatement lStat = aConn.prepareStatement("UPDATE spectrum SET spectrumid = ?, l_lcrunid = ?, l_projectid = ?, l_instrumentid = ?, searched = ?, identified = ?, filename = ?, charge = ?, mass_to_charge = ?, total_spectrum_intensity = ?, highest_peak_in_spectrum = ?, username = ?, creationdate = ?, modificationdate = CURRENT_TIMESTAMP WHERE spectrumid = ?");
+		PreparedStatement lStat = aConn.prepareStatement("UPDATE spectrum SET spectrumid = ?, l_lcrunid = ?, l_projectid = ?, l_fragmentationid = ?, l_instrumentid = ?, searched = ?, identified = ?, filename = ?, charge = ?, mass_to_charge = ?, total_spectrum_intensity = ?, highest_peak_in_spectrum = ?, username = ?, creationdate = ?, modificationdate = CURRENT_TIMESTAMP WHERE spectrumid = ?");
 		lStat.setLong(1, iSpectrumid);
 		lStat.setLong(2, iL_lcrunid);
 		lStat.setLong(3, iL_projectid);
-		lStat.setLong(4, iL_instrumentid);
-		lStat.setLong(5, iSearched);
-		lStat.setLong(6, iIdentified);
-		lStat.setObject(7, iFilename);
-		lStat.setLong(8, iCharge);
-		lStat.setObject(9, iMass_to_charge);
-		lStat.setObject(10, iTotal_spectrum_intensity);
-		lStat.setObject(11, iHighest_peak_in_spectrum);
-		lStat.setObject(12, iUsername);
-		lStat.setObject(13, iCreationdate);
-		lStat.setLong(14, iSpectrumid);
+		lStat.setLong(4, iL_fragmentationid);
+		lStat.setLong(5, iL_instrumentid);
+		lStat.setLong(6, iSearched);
+		lStat.setLong(7, iIdentified);
+		lStat.setObject(8, iFilename);
+		lStat.setLong(9, iCharge);
+		lStat.setObject(10, iMass_to_charge);
+		lStat.setObject(11, iTotal_spectrum_intensity);
+		lStat.setObject(12, iHighest_peak_in_spectrum);
+		lStat.setObject(13, iUsername);
+		lStat.setObject(14, iCreationdate);
+		lStat.setLong(15, iSpectrumid);
 		int result = lStat.executeUpdate();
 		lStat.close();
 		this.iUpdated = false;
@@ -673,7 +709,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 	 * @param   aConn Connection to the persitent store.
 	 */
 	public int persist(Connection aConn) throws SQLException {
-		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO spectrum (spectrumid, l_lcrunid, l_projectid, l_instrumentid, searched, identified, filename, charge, mass_to_charge, total_spectrum_intensity, highest_peak_in_spectrum, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO spectrum (spectrumid, l_lcrunid, l_projectid, l_fragmentationid, l_instrumentid, searched, identified, filename, charge, mass_to_charge, total_spectrum_intensity, highest_peak_in_spectrum, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
 		if(iSpectrumid == Long.MIN_VALUE) {
 			lStat.setNull(1, 4);
 		} else {
@@ -689,45 +725,50 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 		} else {
 			lStat.setLong(3, iL_projectid);
 		}
-		if(iL_instrumentid == Long.MIN_VALUE) {
+		if(iL_fragmentationid == Long.MIN_VALUE) {
 			lStat.setNull(4, 4);
 		} else {
-			lStat.setLong(4, iL_instrumentid);
+			lStat.setLong(4, iL_fragmentationid);
 		}
-		if(iSearched == Long.MIN_VALUE) {
+		if(iL_instrumentid == Long.MIN_VALUE) {
 			lStat.setNull(5, 4);
 		} else {
-			lStat.setLong(5, iSearched);
+			lStat.setLong(5, iL_instrumentid);
 		}
-		if(iIdentified == Long.MIN_VALUE) {
+		if(iSearched == Long.MIN_VALUE) {
 			lStat.setNull(6, 4);
 		} else {
-			lStat.setLong(6, iIdentified);
+			lStat.setLong(6, iSearched);
+		}
+		if(iIdentified == Long.MIN_VALUE) {
+			lStat.setNull(7, 4);
+		} else {
+			lStat.setLong(7, iIdentified);
 		}
 		if(iFilename == null) {
-			lStat.setNull(7, 12);
+			lStat.setNull(8, 12);
 		} else {
-			lStat.setObject(7, iFilename);
+			lStat.setObject(8, iFilename);
 		}
 		if(iCharge == Long.MIN_VALUE) {
-			lStat.setNull(8, 4);
+			lStat.setNull(9, 4);
 		} else {
-			lStat.setLong(8, iCharge);
+			lStat.setLong(9, iCharge);
 		}
 		if(iMass_to_charge == null) {
-			lStat.setNull(9, 3);
-		} else {
-			lStat.setObject(9, iMass_to_charge);
-		}
-		if(iTotal_spectrum_intensity == null) {
 			lStat.setNull(10, 3);
 		} else {
-			lStat.setObject(10, iTotal_spectrum_intensity);
+			lStat.setObject(10, iMass_to_charge);
 		}
-		if(iHighest_peak_in_spectrum == null) {
+		if(iTotal_spectrum_intensity == null) {
 			lStat.setNull(11, 3);
 		} else {
-			lStat.setObject(11, iHighest_peak_in_spectrum);
+			lStat.setObject(11, iTotal_spectrum_intensity);
+		}
+		if(iHighest_peak_in_spectrum == null) {
+			lStat.setNull(12, 3);
+		} else {
+			lStat.setObject(12, iHighest_peak_in_spectrum);
 		}
 		int result = lStat.executeUpdate();
 
@@ -744,7 +785,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 		lrsKeys.close();
 		lStat.close();
 		// Verify that we have a single, generated key.
-		if(iKeys != null && iKeys.length == 1) {
+		if(iKeys != null && iKeys.length == 1 && iKeys[0] != null) {
 			// Since we have exactly one key specified, and only
 			// one Primary Key column, we can infer that this was the
 			// generated column, and we can therefore initialize it here.

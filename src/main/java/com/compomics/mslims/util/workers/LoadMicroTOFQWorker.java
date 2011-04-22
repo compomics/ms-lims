@@ -1,6 +1,6 @@
 package com.compomics.mslims.util.workers;
 
-import be.proteomics.util.sun.SwingWorker;
+import com.compomics.util.sun.SwingWorker;
 import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.util.fileio.filters.MascotGenericFileFilter;

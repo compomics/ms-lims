@@ -6,9 +6,12 @@
  */
 package com.compomics.mslims.gui;
 
+import com.compomics.mslims.db.accessors.Modification_conversion;
+import com.compomics.mslims.db.accessors.Ms_lims_properties;
 import com.compomics.mslims.gui.dialogs.AboutDialog;
 import com.compomics.mslims.gui.dialogs.CustomLauncherDialog;
 import com.compomics.mslims.gui.quantitation.QuantitationTypeChooser;
+import com.compomics.mslims.util.fileio.ModificationConversionIO;
 import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;
 import com.compomics.peptizer.util.fileio.ConnectionManager;
@@ -77,6 +80,7 @@ public class MS_LIMS extends JFrame implements Connectable {
     private JButton storeBinaryFileBtn = new JButton();
     private JButton projectAnalyzerBtn = new JButton();
     private JButton quantitationValidationBtn = new JButton();
+    private JButton msfStorerBtn = new JButton();
     private JButton customBtn = new JButton();
 
     private JButton exitBtn = new JButton();
@@ -92,6 +96,8 @@ public class MS_LIMS extends JFrame implements Connectable {
     private JLabel storeBinaryFileLbl = new JLabel();
     private JLabel projectAnalyzerLbl = new JLabel();
     private JLabel quantitationValidationLbl = new JLabel();
+    private JLabel msfStorerLbl = new JLabel();
+    private JLabel citeLbl = new JLabel();
     String curDir;
     private JMenuBar menuBar;
     private JMenu menu, submenu;
@@ -123,8 +129,8 @@ public class MS_LIMS extends JFrame implements Connectable {
 
         logger.info("Starting mslims");
 
-        int frameWidth = 600;
-        int frameHeight = 670;
+        int frameWidth = 640;
+        int frameHeight = 770;
         setSize(frameWidth, frameHeight);
 
         //Before we start we will delete all the files and folders in temp/mslims. Files could 
@@ -317,6 +323,8 @@ public class MS_LIMS extends JFrame implements Connectable {
 
         menuBar.add(menu);
 
+        this.setIconImage(new ImageIcon(getClass().getResource("/compomics.png")).getImage());
+
         // Buttons
         projectManagerBtn.setBounds(40, 20, 150, 40);
         projectManagerBtn.setText("ProjectManager");
@@ -418,8 +426,17 @@ public class MS_LIMS extends JFrame implements Connectable {
             }
         });
 
+        msfStorerBtn.setBounds(40, 570, 150, 40);
+        msfStorerBtn.setText("Msf storer");
+        cp.add(msfStorerBtn);
+        msfStorerBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                msfStorerBtnActionPerformed(evt);
+            }
+        });
 
-        customBtn.setBounds(360, 570, 90, 30);
+
+        customBtn.setBounds(360, 670, 90, 30);
         customBtn.setText("Custom...");
         cp.add(customBtn);
         customBtn.addActionListener(new ActionListener() {
@@ -428,7 +445,7 @@ public class MS_LIMS extends JFrame implements Connectable {
             }
         });
 
-        exitBtn.setBounds(470, 570, 90, 30);
+        exitBtn.setBounds(470, 670, 90, 30);
         exitBtn.setText("Exit");
         cp.add(exitBtn);
         exitBtn.addActionListener(new ActionListener() {
@@ -494,11 +511,33 @@ public class MS_LIMS extends JFrame implements Connectable {
         quantitationValidationLbl.setText("Start quantitation validation");
         quantitationValidationLbl.setFont(new Font("Arial", Font.PLAIN, 13));
         cp.add(quantitationValidationLbl);
+        msfStorerLbl.setBounds(220, 570, 350, 40);
+        msfStorerLbl.setText("Store identifications and quantifications from .msf files");
+        msfStorerLbl.setFont(new Font("Arial", Font.PLAIN, 13));
+        cp.add(msfStorerLbl);
+        citeLbl.setBounds(40, 620, 600, 40);
+        citeLbl.setText("Please cite: Helsens, et al. ms_lims, a simple yet powerful open source LIMS for ms-driven proteomics. Proteomics 2010 Mar;10(6):1261-4.");
+        citeLbl.setFont(new Font("Arial", Font.ITALIC, 9));
+        cp.add(citeLbl);
 
         setJMenuBar(menuBar);
         setResizable(false);
         setVisible(true);
         getConnection();
+        //check if the modification conversion file is up to date
+        int lNewVersion = Ms_lims_properties.getModificationConversionVersion(iConn);
+        ModificationConversionIO lLocalMC = new ModificationConversionIO();
+        int lOldVersion = lLocalMC.getLocalModificationConversionVersion();
+        logger.error("Old version= " + lOldVersion);
+        logger.error("New version= " + lNewVersion);
+        if(lOldVersion != lNewVersion){
+            try {
+                logger.error("Writting new version");
+                lLocalMC.writeModificationConversionFile(lNewVersion, Modification_conversion.getAllModificationConversions(iConn));
+            } catch (SQLException e) {
+                logger.error(e);
+            }
+        }
     }
 
     private void configurationMenuActionPerformed() {
@@ -611,6 +650,11 @@ public class MS_LIMS extends JFrame implements Connectable {
         valQaunt.setVisible(true);
     }
 
+    public void msfStorerBtnActionPerformed(ActionEvent evt) {
+        MsfStorer msfStorer = new MsfStorer(iConn);
+        msfStorer.setVisible(true);
+    }
+
     public void mergerBtnActionPerformed(ActionEvent evt) {
         MergerGUI.setNotStandAlone();
         MergerGUI merger = new MergerGUI("MergerGUI", iConn, iDBName);
@@ -640,7 +684,7 @@ public class MS_LIMS extends JFrame implements Connectable {
     private void peptizerBtnActionPerformed(final ActionEvent aEvt) {
         ConnectionManager.getInstance().setConnection(iConn);
         PeptizerGUI peptizer = new PeptizerGUI();
-        peptizer.setEnclosedByLims(true);
+        peptizer.setsConnectedToMsLims(true);
         CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
         dialog.setMs_lims_project_selected();
         throw new RuntimeException("Induced IllegalArgumentException uppon clicking Peptizer!!");

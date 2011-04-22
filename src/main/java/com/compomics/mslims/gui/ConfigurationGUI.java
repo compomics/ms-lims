@@ -1,10 +1,10 @@
 package com.compomics.mslims.gui;
 
+import com.compomics.mascotdatfile.util.mascot.ModificationConversion;
+import com.compomics.mslims.db.accessors.*;
+import com.compomics.mslims.util.fileio.ModificationConversionIO;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Instrument;
-import com.compomics.mslims.db.accessors.Protocol;
-import com.compomics.mslims.db.accessors.User;
 import com.compomics.mslims.db.conversiontool.DbConversionToolGuiEdition;
 import com.compomics.mslims.db.conversiontool.MS_LIMS_6_Data_Updater;
 import com.compomics.mslims.db.conversiontool.MS_LIMS_7_Data_Updater;
@@ -34,9 +34,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA. User: Kenny Date: 28-okt-2008 Time: 9:59:16
@@ -92,6 +90,10 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
     private JLabel lblNoDbCdf;
     private JComboBox cmbDataUpdateTools;
     private JButton launchUpdateToolButton;
+    private JTextField txtModification;
+    private JTextField txtConversion;
+    private JButton storeNewModificationButton;
+    private JButton loadModificationsButton;
 
     private JFrame iFrame;
     private Connection iConnection;
@@ -572,6 +574,93 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                 }
             }
         });
+        storeNewModificationButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (iConnection != null) {
+                    try {
+                        String lConversion = txtConversion.getText();
+                        String lModification = txtModification.getText();
+                        if (lModification.length() != 0) {
+                            if (lConversion.length() != 0) {
+                                HashMap lMap = new HashMap();
+                                lMap.put(Modification_conversion.CONVERSION, lConversion);
+                                lMap.put(Modification_conversion.MODIFICATION, lModification);
+                                Modification_conversion lMC = new Modification_conversion(lMap);
+                                lMC.persist(iConnection);
+                                //store the new modification to a new file
+                                ModificationConversionIO lLocalMC = new ModificationConversionIO();
+                                int lNewestVersion = Ms_lims_properties.getModificationConversionVersion(iConnection);
+                                lNewestVersion = lNewestVersion + 1;
+                                try {
+                                    lLocalMC.writeModificationConversionFile(lNewestVersion, Modification_conversion.getAllModificationConversions(iConnection));
+                                    Ms_lims_properties.setModificationConversionVersion(iConnection, lNewestVersion);
+                                } catch (SQLException e2) {
+                                    logger.error(e2);
+                                }
+                                JOptionPane.showMessageDialog(new JFrame(), "The conversion was stored.", "Succes", JOptionPane.INFORMATION_MESSAGE);
+
+                            } else {
+                                JOptionPane.showMessageDialog(new JFrame(), "The conversion cannot be empty.", "No conversion", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(new JFrame(), "The modification cannot be empty.", "No modification", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (SQLException e1) {
+                        JOptionPane.showMessageDialog(new JFrame(), "An error occured while storing your modification conversion\n" + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "There is no connection to the ms_lims database.", "No connection", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+
+        loadModificationsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (iConnection != null) {
+                    int answer = JOptionPane.showConfirmDialog(new JFrame(), "This will delete all existing modification conversions from the database.\nAll the modification conversions in the modificationConverstion.txt file will be stored in the db.\nAre you sure that you want to continue?", "Load modification conversions from file ", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    if (answer == JOptionPane.YES_OPTION) {
+
+                        try {
+                            //1.truncate the modification conversion table
+                            PreparedStatement lPreparedStatement = iConnection.prepareStatement("truncate table modification_conversion");
+                            lPreparedStatement.execute();
+                            //2.store new data
+                            ModificationConversion lmc = ModificationConversion.getInstance();
+                            HashMap lMap = lmc.getConversionMap();
+                            Iterator iterator = lMap.keySet().iterator();
+                            while (iterator.hasNext()) {
+                                String lModi = iterator.next().toString();
+                                String lConversion = lMap.get(lModi).toString();
+                                HashMap lPersistMap = new HashMap();
+                                lPersistMap.put(Modification_conversion.CONVERSION, lConversion);
+                                lPersistMap.put(Modification_conversion.MODIFICATION, lModi);
+                                Modification_conversion lMC = new Modification_conversion(lPersistMap);
+                                lMC.persist(iConnection);
+                            }
+                            //3.store new local file
+                            ModificationConversionIO lLocalMC = new ModificationConversionIO();
+                            int lNewestVersion = Ms_lims_properties.getModificationConversionVersion(iConnection);
+                            lNewestVersion = lNewestVersion + 1;
+                            try {
+                                lLocalMC.writeModificationConversionFile(lNewestVersion, Modification_conversion.getAllModificationConversions(iConnection));
+                                Ms_lims_properties.setModificationConversionVersion(iConnection, lNewestVersion);
+                            } catch (SQLException e2) {
+                                logger.error(e2);
+                            }
+                            JOptionPane.showMessageDialog(new JFrame(), "The conversions were stored.", "Succes", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (SQLException e1) {
+                            logger.error(e1);
+                        }
+
+
+                    } else {
+                        //do nothing
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -662,8 +751,9 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
     }
 
     /**
-     * Method generated by IntelliJ IDEA GUI Designer >>> IMPORTANT!! <<< DO NOT edit this method OR call it in your
-     * code!
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
      *
      * @noinspection ALL
      */
@@ -1391,6 +1481,90 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         dataUpdatePanel.add(spacer22, gbc);
+        final JPanel panel7 = new JPanel();
+        panel7.setLayout(new GridBagLayout());
+        tabMain.addTab("Modification conversion", panel7);
+        final JPanel panel8 = new JPanel();
+        panel8.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel7.add(panel8, gbc);
+        panel8.setBorder(BorderFactory.createTitledBorder(null, "Add a modification conversion", TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Tahoma", panel8.getFont().getStyle(), 16)));
+        final JLabel label11 = new JLabel();
+        label11.setHorizontalAlignment(0);
+        label11.setHorizontalTextPosition(0);
+        label11.setText("Modification");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel8.add(label11, gbc);
+        final JLabel label12 = new JLabel();
+        label12.setHorizontalAlignment(0);
+        label12.setHorizontalTextPosition(0);
+        label12.setText("Conversion");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel8.add(label12, gbc);
+        txtModification = new JTextField();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel8.add(txtModification, gbc);
+        txtConversion = new JTextField();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel8.add(txtConversion, gbc);
+        storeNewModificationButton = new JButton();
+        storeNewModificationButton.setText("Store");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel8.add(storeNewModificationButton, gbc);
+        final JPanel panel9 = new JPanel();
+        panel9.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        panel7.add(panel9, gbc);
+        panel9.setBorder(BorderFactory.createTitledBorder(null, "Load modification conversions", TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Tahoma", panel9.getFont().getStyle(), 16)));
+        loadModificationsButton = new JButton();
+        loadModificationsButton.setText("Load");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel9.add(loadModificationsButton, gbc);
         jpanStatus = new JPanel();
         jpanStatus.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();

@@ -708,6 +708,97 @@
               </grid>
             </children>
           </grid>
+          <grid id="55054" layout-manager="GridBagLayout">
+            <constraints>
+              <tabbedpane title="Modification conversion"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="cfc1" layout-manager="GridBagLayout">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties/>
+                <border type="none" title="Add a modification conversion" title-justification="2" title-position="1">
+                  <font name="Tahoma" size="16"/>
+                </border>
+                <children>
+                  <component id="2773f" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                      <horizontalTextPosition value="0"/>
+                      <text value="Modification"/>
+                    </properties>
+                  </component>
+                  <component id="9580e" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                      <horizontalTextPosition value="0"/>
+                      <text value="Conversion"/>
+                    </properties>
+                  </component>
+                  <component id="9c678" class="javax.swing.JTextField" binding="txtModification">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                      <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="e6596" class="javax.swing.JTextField" binding="txtConversion">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                      <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="99f8" class="javax.swing.JButton" binding="storeNewModificationButton">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Store"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <grid id="e3282" layout-manager="GridBagLayout">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag top="5" left="5" bottom="5" right="5" weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties/>
+                <border type="none" title="Load modification conversions" title-justification="2" title-position="1">
+                  <font name="Tahoma" size="16"/>
+                </border>
+                <children>
+                  <component id="b559f" class="javax.swing.JButton" binding="loadModificationsButton">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <text value="Load"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
         </children>
       </tabbedpane>
       <grid id="79fc0" binding="jpanStatus" layout-manager="GridBagLayout">

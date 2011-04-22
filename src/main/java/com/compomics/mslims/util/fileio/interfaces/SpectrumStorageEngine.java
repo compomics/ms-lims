@@ -6,6 +6,7 @@
  */
 package com.compomics.mslims.util.fileio.interfaces;
 
+import com.compomics.mslims.db.accessors.Fragmentation;
 import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.util.interfaces.Flamable;
@@ -62,5 +63,5 @@ public interface SpectrumStorageEngine {
      * @throws java.sql.SQLException when the DB storage goes wrong.
      */
     public abstract int
-    loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn) throws IOException, SQLException;
+    loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn, Fragmentation aFragmentation) throws IOException, SQLException;
 }
