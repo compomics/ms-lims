@@ -1,5 +1,6 @@
 package com.compomics.mslims.util.fileio;
 
+import com.compomics.mslims.db.accessors.Fragmentation;
 import com.compomics.mslims.db.accessors.LCRun;
 import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.db.accessors.Spectrum_file;
@@ -61,7 +62,7 @@ public class MicroTOFQStorageEngine implements SpectrumStorageEngine {
      * @throws java.io.IOException   when the filereading goes wrong.
      * @throws java.sql.SQLException when the DB storage goes wrong.
      */
-    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn) throws IOException, SQLException {
+    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn, Fragmentation aFragmentation) throws IOException, SQLException {
         int counter = 0;
 
         // Get a hanlde to the parent folder.
@@ -88,6 +89,7 @@ public class MicroTOFQStorageEngine implements SpectrumStorageEngine {
                     // The links.
                     data.put(Spectrum.L_LCRUNID, new Long(aLCRun.getLcrunid()));
                     data.put(Spectrum.L_PROJECTID, new Long(aProjectid));
+                    data.put(Spectrum.L_FRAGMENTATIONID, aFragmentation.getFragmentationid());
                     // The flags.
                     data.put(Spectrum.IDENTIFIED, new Long(0));
                     data.put(Spectrum.SEARCHED, new Long(0));

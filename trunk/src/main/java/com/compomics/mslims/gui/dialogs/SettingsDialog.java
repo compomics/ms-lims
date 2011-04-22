@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.compomics.mslims.gui.FTPSatellite;
 import com.compomics.util.gui.JLabelAndComponentPanel;
-import com.compomics.util.io.FTPClient2;
+import com.compomics.util.io.FTPClient;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -414,7 +414,7 @@ public class SettingsDialog extends JDialog {
         }
 
         // Try the connection.
-        FTPClient2 ftp = new FTPClient2(host, user, password);
+        FTPClient ftp = new FTPClient(host, user, password);
         String main = "Test for host '" + host + "' with user '" + user + "' ";
         this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         try {

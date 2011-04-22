@@ -554,6 +554,8 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
                             logger.error(lMessage);
                             JOptionPane.showMessageDialog(IdentificationGUI.this, new String[]{lMessage}, " file was not found!", JOptionPane.ERROR_MESSAGE);
                         }
+                        props.setProperty("MS_ACCESS_FILE", taskDBFile.getAbsolutePath());
+                        PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties", props);
                     } else {
                         return;
                     }

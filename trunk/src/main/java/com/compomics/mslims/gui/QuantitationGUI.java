@@ -522,7 +522,7 @@ public class QuantitationGUI extends JFrame implements Connectable, Flamable {
                     JFileChooser jfc = new JFileChooser(root);
                     jfc.setDialogTitle("Open Mascot Daemon TaskDB file (.mdb file)");
                     // Set the mdb file name filter.
-                    jfc.setFileFilter(new FilenameExtensionFilter("mdb", "MS Access files"));
+                    jfc.setFileFilter(new FileNameExtensionFilter("MS Access files", "mdb"));
                     // Select file.
                     int returnVal = jfc.showOpenDialog(QuantitationGUI.this);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -532,6 +532,8 @@ public class QuantitationGUI extends JFrame implements Connectable, Flamable {
                             logger.error(lMessage);
                             JOptionPane.showMessageDialog(QuantitationGUI.this, new String[]{lMessage}, " file was not found!", JOptionPane.ERROR_MESSAGE);
                         }
+                        props.setProperty("MS_ACCESS_FILE", taskDBFile.getAbsolutePath());
+                        PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS, "QuantitationGUI.properties", props);
                     } else {
                         break;
                     }
@@ -546,11 +548,27 @@ public class QuantitationGUI extends JFrame implements Connectable, Flamable {
                 dpb.setResizable(false);
                 dpb.setSize(350, 100);
                 dpb.setMessage("Connecting...");
-                iTasks = new Vector();
-                ReadMascotTaskDBWorker worker = new ReadMascotTaskDBWorker(taskDB, iTasks, this, dpb);
+                Vector lTasks = new Vector();
+                ReadMascotTaskDBWorker worker = new ReadMascotTaskDBWorker(taskDB, lTasks, this, dpb);
                 worker.start();
                 dpb.setVisible(true);
                 taskDB.close();
+
+
+                //filter only the distiller projects
+                iTasks = new Vector();
+                for (int i = 0; i < lTasks.size(); i++) {
+                    // As seen as there is a child with quantitation, we must display the task itself.
+                    MascotTask lMascotTask = (MascotTask) lTasks.elementAt(i);
+                    int lNumberOfSearches = lMascotTask.countSearches();
+                    for (int j = 0; j < lNumberOfSearches; j++) {
+                        MascotSearch lMascotSearch = lMascotTask.getSearch(j);
+                        if (lMascotSearch.hasDistillerProject()) {
+                            iTasks.add(lMascotTask);
+                            break;
+                        }
+                    }
+                }
 
             } catch (IOException ioe) {
                 logger.error(ioe.getMessage(), ioe);

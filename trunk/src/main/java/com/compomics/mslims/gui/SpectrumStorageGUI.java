@@ -96,6 +96,11 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
     private Project[] iProjects = null;
 
     /**
+     * The Fragmentations.
+     */
+    private Fragmentation[] iFragmentations = null;
+
+    /**
      * The Instruments.
      */
     private Instrument[] iInstruments = null;
@@ -168,6 +173,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
 
     private JList lstLCruns = null;
     private JComboBox cmbProject = null;
+    private JComboBox cmbFragmentation = null;
     private JCheckBox chkProjectSorting = null;
     private JTextField txtResponsible = null;
     private JTextField txtProtocol = null;
@@ -185,6 +191,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
     private JButton btnNewProject = null;
     private JButton btnModifyProject = null;
     private JButton btnExit = null;
+    private Fragmentation iFragmentation;
 
     /**
      * Default empty constructor made private.
@@ -282,6 +289,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
             this.findLCrunNames();
         }
         this.findProjects();
+        this.findFragmentations();
         this.findUsers();
         this.findProtocol();
     }
@@ -310,6 +318,17 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     Project selected = (Project) e.getItem();
                     stateChangedProject(selected);
+                }
+            }
+        });
+        cmbFragmentation = new JComboBox();
+        cmbFragmentation.setPreferredSize(new Dimension(50,20));
+        cmbFragmentation.setMaximumSize(new Dimension(50,20));
+        cmbFragmentation.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    Fragmentation selected = (Fragmentation) e.getItem();
+                    stateChangedFragmentation(selected);
                 }
             }
         });
@@ -351,6 +370,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
         txtDescription.setEditable(false);
 
         fillProjectPulldown();
+        fillFragmentationPulldown();
     }
 
 
@@ -799,6 +819,17 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
     }
 
     /**
+     * This method finds all project entries currently stored in the DB and fills out the relevant arrays with info.
+     */
+    private void findFragmentations() {
+        try {
+            iFragmentations = Fragmentation.getFragmentations(iConn);
+        } catch (SQLException sqle) {
+            this.passHotPotato(sqle, "Unable to retrieve fragmentations!");
+        }
+    }
+
+    /**
      * This method collects all user information. It fills the 'iUsers' cache.
      */
     private void findUsers() {
@@ -848,6 +879,14 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
     }
 
     /**
+     * This method fills out the cmbProject with the data in the iProjects Project[].
+     */
+    private void fillFragmentationPulldown() {
+        cmbFragmentation.setModel(new DefaultComboBoxModel(iFragmentations));
+        stateChangedFragmentation((Fragmentation) cmbFragmentation.getSelectedItem());
+    }
+
+    /**
      * This method is called whenever the user selects another element in the project combobox (cmbProject).
      *
      * @param aProject Project that was selected in the combobox.
@@ -869,6 +908,17 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
             if (!txtDescription.getText().equals("")) {
                 txtDescription.setCaretPosition(1);
             }
+        }
+    }
+
+    /**
+     * This method is called whenever the user selects another element in the project combobox (cmbFragmentation).
+     *
+     * @param aFragmentation Fragmentation that was selected in the combobox.
+     */
+    private void stateChangedFragmentation(Fragmentation aFragmentation) {
+        if (aFragmentation != null) {
+            iFragmentation = aFragmentation;
         }
     }
 
@@ -958,6 +1008,8 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
         JPanel jpanButtons = new JPanel();
         jpanButtons.setLayout(new BoxLayout(jpanButtons, BoxLayout.X_AXIS));
         jpanButtons.add(Box.createHorizontalGlue());
+        jpanButtons.add(cmbFragmentation);
+        jpanButtons.add(Box.createHorizontalStrut(5));
         jpanButtons.add(btnAssign);
         jpanButtons.add(Box.createHorizontalStrut(5));
         jpanButtons.add(btnStore);
@@ -1024,7 +1076,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
                             run.setLcrunid(l.longValue());
                             // Now get all spectra and store these as well.
                             pklCounter +=
-                                    iEngine.loadAndStoreSpectrumFiles(run, projectid, iSelectedInstrument.getInstrumentid(), iConn);
+                                    iEngine.loadAndStoreSpectrumFiles(run, projectid, iSelectedInstrument.getInstrumentid(), iConn, iFragmentation);
                             caplcCounter++;
                             progress.setValue(caplcCounter);
                         }

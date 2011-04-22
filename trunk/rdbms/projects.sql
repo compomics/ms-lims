@@ -80,6 +80,23 @@ CREATE TABLE `filedescriptor` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `fragmentation`
+--
+
+DROP TABLE IF EXISTS `fragmentation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fragmentation` (
+  `fragmentationid` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `description` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `creationdate` DATETIME NOT NULL,
+  `modificationdate` DATETIME NOT NULL,
+  PRIMARY KEY (`fragmentationid`)
+) ENGINE = MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `fragmention`
 --
 
@@ -258,6 +275,43 @@ CREATE TABLE `lcrun` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `modification_conversion`
+--
+
+DROP TABLE IF EXISTS `modification_conversion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `modification_conversion` (
+ `modification_conversionid` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+ `modification` VARCHAR(45) NOT NULL,
+ `conversion` VARCHAR(45) NOT NULL,
+ `username` VARCHAR(45) NOT NULL,
+ `creationdate` DATETIME NOT NULL,
+ `modificationdate` DATETIME NOT NULL,
+ PRIMARY KEY (`modification_conversionid`),
+ UNIQUE KEY(`modification`)
+) ENGINE = MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ms_lims_properties`
+--
+DROP TABLE IF EXISTS `ms_lims_properties`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ms_lims_properties` (
+  `ms_lims_propertiesid` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `key` VARCHAR(45) NOT NULL,
+  `value` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `creationdate` DATETIME NOT NULL,
+  `modificationdate` DATETIME NOT NULL,
+  PRIMARY KEY (`ms_lims_propertiesid`),
+  UNIQUE KEY(`key`)
+) ENGINE = MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `phosphorylation`
 --
 
@@ -432,6 +486,7 @@ CREATE TABLE `spectrum` (
   `spectrumid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `l_lcrunid` int(10) unsigned NOT NULL DEFAULT '0',
   `l_projectid` int(10) unsigned NOT NULL DEFAULT '0',
+  `l_fragmentationid` int(10) unsigned NOT NULL DEFAULT '0',
   `l_instrumentid` int(10) unsigned NOT NULL DEFAULT '0',
   `searched` int(10) unsigned DEFAULT '0',
   `identified` int(10) unsigned DEFAULT '0',

@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import com.compomics.mslims.gui.dialogs.SettingsDialog;
 import com.compomics.mslims.util.fileio.mergers.PKLMergerAndStorer;
 import com.compomics.util.interfaces.PickUp;
-import com.compomics.util.io.FTPClient2;
+import com.compomics.util.io.FTPClient;
 import com.compomics.util.io.FolderMonitor;
 
 import javax.swing.*;
@@ -286,7 +286,7 @@ public class FTPSatellite extends JFrame implements com.compomics.util.interface
                 try {
                     File result = iMerger.mergeFilesToFile(allFiles, "mergeFile_" + System.currentTimeMillis() + ".txt");
 
-                    FTPClient2 ftp = new FTPClient2(this.iHost, this.iUser, this.iPassword);
+                    FTPClient ftp = new FTPClient(this.iHost, this.iUser, this.iPassword);
                     ftp.sendTextFile(result.getCanonicalPath());
 
                     result.deleteOnExit();

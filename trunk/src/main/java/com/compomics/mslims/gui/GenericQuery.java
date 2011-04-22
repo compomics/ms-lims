@@ -656,7 +656,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
 
         ConnectionManager.getInstance().setConnection(iConn);
         PeptizerGUI peptizer = new PeptizerGUI();
-        peptizer.setEnclosedByLims(true);
+        peptizer.setsConnectedToMsLims(true);
         CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
         dialog.setMs_lims_identification_id_selected(list);
 
