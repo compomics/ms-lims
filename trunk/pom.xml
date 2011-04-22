@@ -12,7 +12,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
     <!-- Set the version number for the whole project -->
     <properties>
         <version.number>7.6</version.number>
-        <logging.level.default>WARN</logging.level.default>
+        <logging.level.default>ALL</logging.level.default>
         <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
         <logging.file.max.size>5000KB</logging.file.max.size>
         <logging.pattern>[%d{dd-MMM-yyyy HH:mm:ss} - %p] "%m" (%C:%L)%n</logging.pattern>
@@ -439,6 +439,20 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <type>jar</type>
         </dependency>
 
+        <!-- This project depends on the peptizer JAR file.
+          -->
+        <dependency>
+            <groupId>com.compomics</groupId>
+            <artifactId>peptizer</artifactId>
+            <version>1.8</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>ms-lims</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!-- This project depends on the commons-io JAR file.
         -->
