@@ -89,7 +89,7 @@ public class MsfStorer extends JFrame {
     private Vector<Parser> iParsedMsfs = new Vector<Parser>();
     private Vector<String> iMsfFileLocations = new Vector<String>();
     private double iThreshold = 0.05;
-    private ScoreType iMajorScoreType;
+    private Vector<ScoreType> iMajorScoreType = new Vector<ScoreType>();
     private Vector<Peptide> iPeptidesToStore = new Vector<Peptide>();
     private HashMap<String, Long> iSpectrumIdMap = new HashMap<String, Long>();
     private HashMap<String, Double> iSpectrumScoreMap = new HashMap<String, Double>();
@@ -189,7 +189,7 @@ public class MsfStorer extends JFrame {
                             //set the major score type
                             for (int s = 0; s < lParser.getScoreTypes().size(); s++) {
                                 if (lParser.getScoreTypes().get(s).getIsMainScore() == 1) {
-                                    iMajorScoreType = lParser.getScoreTypes().get(s);
+                                    iMajorScoreType.add(lParser.getScoreTypes().get(s));
                                 }
                             }
 
