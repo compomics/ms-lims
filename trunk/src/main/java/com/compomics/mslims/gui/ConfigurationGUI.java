@@ -630,6 +630,10 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             ModificationConversion lmc = ModificationConversion.getInstance();
                             HashMap lMap = lmc.getConversionMap();
                             Iterator iterator = lMap.keySet().iterator();
+                            int lCounterOk = 0;
+                            int lCounterNotOk = 0;
+                            String lErrorString = "";
+
                             while (iterator.hasNext()) {
                                 String lModi = iterator.next().toString();
                                 String lConversion = lMap.get(lModi).toString();
@@ -637,7 +641,14 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                                 lPersistMap.put(Modification_conversion.CONVERSION, lConversion);
                                 lPersistMap.put(Modification_conversion.MODIFICATION, lModi);
                                 Modification_conversion lMC = new Modification_conversion(lPersistMap);
-                                lMC.persist(iConnection);
+                                try {
+                                    lMC.persist(iConnection);
+                                    lCounterOk =  lCounterOk + 1;
+                                } catch (SQLException e2) {
+                                    lCounterNotOk =  lCounterNotOk + 1;
+                                    lErrorString = lErrorString + "\n" + e2.getMessage();
+                                    logger.error(e2);
+                                }
                             }
                             //3.store new local file
                             ModificationConversionIO lLocalMC = new ModificationConversionIO();
@@ -649,7 +660,11 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             } catch (SQLException e2) {
                                 logger.error(e2);
                             }
-                            JOptionPane.showMessageDialog(new JFrame(), "The conversions were stored.", "Succes", JOptionPane.INFORMATION_MESSAGE);
+                            if(lCounterNotOk == 0){
+                                JOptionPane.showMessageDialog(new JFrame(), "The" + lCounterOk + " conversions were stored.", "Succes", JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(new JFrame(), lCounterOk + " conversions were stored.\n" + lCounterNotOk + " conversions not stored!" + lErrorString  , "Stored with errors!!!", JOptionPane.WARNING_MESSAGE);
+                            }
                         } catch (SQLException e1) {
                             logger.error(e1);
                         }

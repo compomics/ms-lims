@@ -371,21 +371,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <type>jar</type>
         </dependency>
 
-        <!-- This project depends on the peptizer JAR file.
-          -->
-        <dependency>
-            <groupId>com.compomics</groupId>
-            <artifactId>peptizer</artifactId>
-            <version>1.8</version>
-            <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.compomics</groupId>
-                    <artifactId>ms-lims</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- This project depends on the utilities JAR file.
           -->
         <dependency>
@@ -397,6 +382,10 @@ http://www.w3.org/2001/XMLSchema-instance ">
                 <exclusion>
                     <groupId>com.compomics</groupId>
                     <artifactId>peptizer</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>psidev.psi.tools</groupId>
+                    <artifactId>xxindex</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -451,6 +440,10 @@ http://www.w3.org/2001/XMLSchema-instance ">
                 <exclusion>
                     <groupId>com.compomics</groupId>
                     <artifactId>ms-lims</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>uk.ac.ebi.pride.jaxb</groupId>
+                    <artifactId>pride-jaxb</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
