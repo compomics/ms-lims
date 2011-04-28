@@ -64,6 +64,10 @@ public class PopulateValidation_StepImpl implements DBConverterStep {
             rs.next();
             int lMaxIdentificationID = rs.getInt(1);
 
+            rs.close();
+            lPreparedStatement.close();
+
+
             // Ok! Now we now the max value to grow the intervals.
             iRange = 10000;
             int lLoopsNeeded = (lMaxIdentificationID / iRange) + 1;
@@ -122,23 +126,28 @@ public class PopulateValidation_StepImpl implements DBConverterStep {
                 rs.close();
                 lPreparedStatement.close();
 
-                // Ok, all new Validation objects have been made - now make a batch query!
-                StringBuffer lBuffer = new StringBuffer();
+                // any validtions in this interval?
+                if (lValidationList.size() > 0) {
 
-                lBuffer.append("INSERT INTO validation (validationid, l_identificationid, l_validationtypeid, auto_comment, manual_comment, username, creationdate, modificationdate) values ");
-                for (Validation lValidation : lValidationList) {
-                    lBuffer.append("( NULL, "
-                            + lValidation.getL_identificationid() + ", "
-                            + lValidation.getL_validationtypeid() + ", "
-                            + lValidation.getAuto_comment() + ", "
-                            + lValidation.getManual_comment() + ", "
-                            + "CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),");
+                    // Ok, all new Validation objects have been made - now make a batch query!
+                    StringBuffer lBuffer = new StringBuffer();
+                    lBuffer.append("INSERT INTO validation (validationid, l_identificationid, l_validationtypeid, auto_comment, manual_comment, username, creationdate, modificationdate) values ");
+                    for (Validation lValidation : lValidationList) {
+                        lBuffer.append("( NULL, "
+                                + lValidation.getL_identificationid() + ", "
+                                + lValidation.getL_validationtypeid() + ", "
+                                + lValidation.getAuto_comment() + ", "
+                                + lValidation.getManual_comment() + ", "
+                                + "CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),");
+                    }
+
+                    String lBatchInsertQuery = lBuffer.substring(0, lBuffer.length() - 1);
+
+                    lPreparedStatement = aConn.prepareStatement(lBatchInsertQuery);
+                    lPreparedStatement.executeUpdate();
+                    lPreparedStatement.close();
                 }
 
-                String lBatchInsertQuery = lBuffer.substring(0, lBuffer.length() - 1);
-
-                lPreparedStatement = aConn.prepareStatement(lBatchInsertQuery);
-                lPreparedStatement.executeUpdate();
                 logger.debug("persist counter update:\t" + lPersistCounter);
 
             }
