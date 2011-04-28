@@ -685,10 +685,9 @@ public class MS_LIMS extends JFrame implements Connectable {
         ConnectionManager.getInstance().setConnection(iConn);
         PeptizerGUI peptizer = new PeptizerGUI();
         peptizer.setsConnectedToMsLims(true);
+        peptizer.disposeOnExit(true);
         CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
         dialog.setMs_lims_project_selected();
-        throw new RuntimeException("Induced IllegalArgumentException uppon clicking Peptizer!!");
-        
     }
 
     public void genericQueryBtnActionPerformed(ActionEvent evt) {
