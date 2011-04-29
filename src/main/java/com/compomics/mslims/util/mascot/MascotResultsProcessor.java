@@ -513,8 +513,8 @@ public class MascotResultsProcessor {
 
                     // Create and persist Validation for the new Identification.
                     HashMap lValidationMap = new HashMap();
-                    lValidationMap.put(Validation.L_IDENTIFICATIONID, id.getGeneratedKeys()[0]);
-                    lValidationMap.put(Validation.L_VALIDATIONTYPEID, Validationtype.NOT_VALIDATED);
+                    lValidationMap.put(Validation.L_IDENTIFICATIONID, (Long) id.getGeneratedKeys()[0]);
+                    lValidationMap.put(Validation.L_VALIDATIONTYPEID, new Long(Validationtype.NOT_VALIDATED));
 
                     Validation lValidation = new Validation(lValidationMap);
                     lValidation.persist(iConn);
