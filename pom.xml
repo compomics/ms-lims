@@ -110,6 +110,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
                                 </resource>
                                 <resource>
                                     <directory>rdbms</directory>
+                                    <filtering>true</filtering>
                                     <includes>
                                         <include>*.sql</include>
                                     </includes>
