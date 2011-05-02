@@ -86,7 +86,7 @@ public class InstrumentFactory {
             case THERMO_FT_ICR:
                 lParams.put(Instrument.NAME, "Thermo-Finnigan FT-ICR");
                 lParams.put(Instrument.DESCRIPTION, "The Thermo-Finigan Fourier Transform mass spectrometer combined with a linear iontrap.");
-                lParams.put(Instrument.STORAGECLASSNAME, null);
+                lParams.put(Instrument.STORAGECLASSNAME, "com.compomics.mslims.util.fileio.FourierSpectrumStorageEngine");
                 lParams.put(Instrument.PROPERTIESFILENAME, null);
                 lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.14277715);
                 break;
@@ -94,7 +94,7 @@ public class InstrumentFactory {
             case THERMO_ORBITRAP:
                 lParams.put(Instrument.NAME, "Thermo-Finigan LTQ-Orbitrap");
                 lParams.put(Instrument.DESCRIPTION, "The Thermo-Finigan Orbitrap mass spectrometer combined with a linear iontrap");
-                lParams.put(Instrument.STORAGECLASSNAME, "com.compomics.mslims.util.fileio.EsquireSpectrumStorageEngine");
+                lParams.put(Instrument.STORAGECLASSNAME, "com.compomics.mslims.util.fileio.FourierSpectrumStorageEngine");
                 lParams.put(Instrument.PROPERTIESFILENAME, null);
                 lParams.put(Instrument.DIFFERENTIAL_CALIBRATION, 0.14277715);
                 break;
