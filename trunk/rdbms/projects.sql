@@ -602,3 +602,8 @@ INSERT INTO `validationtype` (`validationtypeid`, `name`) VALUES ( -2, "manual r
 INSERT INTO ionscoring (`ionscoringid`, `description`, `username`, `creationdate`, `modificationdate`) VALUES (0,"scoring-FALSE||significant-FALSE","default", CURDATE(), CURDATE());
 INSERT INTO ionscoring (`ionscoringid`, `description`, `username`, `creationdate`, `modificationdate`) VALUES (1,"scoring-FALSE||significant-TRUE","default", CURDATE(), CURDATE());
 INSERT INTO ionscoring (`ionscoringid`, `description`, `username`, `creationdate`, `modificationdate`) VALUES (2,"scoring-TRUE||significant-TRUE","default", CURDATE(), CURDATE());
+
+INSERT INTO `ms_lims_properties` VALUES (1,'version','7.6',CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO `ms_lims_properties` VALUES (2,'modification_conversion_version','1',CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO fragmentation (fragmentationid, description, username, creationdate, modificationdate) values (1, 'CID', CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),(2, 'ETD', CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
