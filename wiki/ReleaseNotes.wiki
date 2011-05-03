@@ -2,6 +2,15 @@
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
 ----
 
+*Changes in ms-lims 7.6.1 (May 3. 2011):*
+ * FEATURE: added new Thermo FT-IR storage engine
+----
+
+*Changes in ms-lims 7.6 (April 24. 2011):*
+ * SCHEMA CHANGE: updated Validation architecture and integration with Peptizer-1.8
+ * SCHEMA CHANGE: ms-lims properties and modification-conversion can now be managed in the database
+----
+
 *Changes in ms-lims 7.5.5 (March 24. 2011):*
  * DEPENDENCY CHANGE: updated Peptizer and MascotDatfile dependency to version 1.7.8 and 2.3.3 respectively.
 ----
