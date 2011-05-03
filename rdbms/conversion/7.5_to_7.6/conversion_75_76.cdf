@@ -76,8 +76,5 @@ INSERT INTO `validationtype` (`validationtypeid`, `name`) VALUES ( -2, "manual r
 # Step 11 - Drop the former "status" column
 ALTER TABLE `validation` DROP COLUMN `status`;
 
-# Step 11 - Drop the former "status" column
-ALTER TABLE `identification` DROP COLUMN `valid`;
-
 # Step 12 - Add index to the Validation table
 ALTER TABLE `validation` ADD INDEX index_identificationid(`l_identificationid`);
