@@ -1,11 +1,9 @@
 package com.compomics.mslims.util.fileio;
 
 
-import com.compomics.mslims.db.accessors.LCRun;
-import com.compomics.mslims.db.accessors.ScanTableAccessor;
-import com.compomics.mslims.db.accessors.Spectrum;
-import com.compomics.mslims.db.accessors.Spectrum_file;
+import com.compomics.mslims.db.accessors.*;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.util.fileio.interfaces.SpectrumStorageEngine;
 import com.compomics.mslims.util.workers.LoadFourierDTAWorker;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.util.io.FilenameExtensionFilter;
@@ -23,7 +21,7 @@ import java.util.Vector;
  * Date: 02/05/11
  * Time: 13:50
  */
-public class FourierSpectrumStorageEngine {
+public class FourierSpectrumStorageEngine implements SpectrumStorageEngine{
 
 
     /**
@@ -46,6 +44,7 @@ public class FourierSpectrumStorageEngine {
         aProgress.setVisible(true);
     }
 
+
     /**
      * This method actually takes care of finding all the spectrumfiles for the indiciated LCRun and
      * transforming these into Spectrumfile instances for storage in the database over the specified connection.
@@ -58,7 +57,7 @@ public class FourierSpectrumStorageEngine {
      * @throws java.io.IOException   when the filereading goes wrong.
      * @throws java.sql.SQLException when the DB storage goes wrong.
      */
-    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn) throws IOException, SQLException {
+    public int loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn, Fragmentation aFragmentation) throws IOException, SQLException {
         // Get a hanlde to the parent folder.
         File parent = new File(aLCRun.getPathname());
 
@@ -88,6 +87,7 @@ public class FourierSpectrumStorageEngine {
             data.put(Spectrum.L_INSTRUMENTID, new Long(aInstrumentid));
             // The links.
             data.put(Spectrum.L_LCRUNID, new Long(aLCRun.getLcrunid()));
+            data.put(Spectrum.L_FRAGMENTATIONID, aFragmentation.getFragmentationid());
             data.put(Spectrum.L_PROJECTID, new Long(aProjectid));
             // The flags.
             data.put(Spectrum.IDENTIFIED, new Long(0));
