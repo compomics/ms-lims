@@ -145,7 +145,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
         this.getContentPane().add($$$getRootComponent$$$());
 
-        super.setTitle("ConfigurationGUI (managing ms_lims database" + aDBName + ")");
+        super.setTitle(getDialogTitle(aDBName));
 
         this.pack();
         this.setLocation(100, 100);
@@ -160,6 +160,10 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
             passConnection(iConnection, aDBName);
             lblNoDbCdf.setVisible(false);
         }
+    }
+
+    private String getDialogTitle(String aDBName) {
+        return "ConfigurationGUI (managing ms_lims database" + aDBName + ")";
     }
 
     private boolean testConnection() {
@@ -227,12 +231,15 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                     btnSetSQLScheme.setEnabled(true);
                     updateCurrentTab();
                     status("Created database '" + aDatabaseName + "'");
+                    ConfigurationGUI.this.setTitle(getDialogTitle(iConnectionName));
 
                 } catch (SQLException e1) {
                     if (e1.getMessage().indexOf("database exists") > 0) {
                         try {
                             execute("use " + aDatabaseName);
                             status("Database '" + aDatabaseName + "' in use.");
+                            ConfigurationGUI.this.setTitle(getDialogTitle(iConnectionName));
+
                             iDatabaseReady = true;
                         } catch (SQLException e2) {
                             status("Failed to use database '" + aDatabaseName + "'!!");
@@ -262,9 +269,9 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             }
                             btnSetSQLScheme.setEnabled(false);
                             lblDatabaseScheme.setForeground(iColor_ok);
-                            status("Created database scheme in '" + txtDatabaseName.getText() + "'");
+                            status("Set database scheme in '" + txtDatabaseName.getText() + "'");
                         } catch (SQLException e1) {
-                            status("Failed to apply the database scheme!!");
+                            status("Failed to Set the database scheme!!");
                             logger.error("Failing!");
                             logger.error(e1.getMessage(), e1);
                         }
