@@ -1,5 +1,10 @@
 #labels Featured
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
+7.5)
+----
+
+*Changes in ms-lims 7.6.2 (June 20. 2011):*
+ * BUGFIX: fixed total ion intensity calculation for the Thermo FT-IR storage engine
 ----
 
 *Changes in ms-lims 7.6.1 (May 3. 2011):*
