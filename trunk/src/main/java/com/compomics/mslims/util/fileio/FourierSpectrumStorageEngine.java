@@ -21,7 +21,7 @@ import java.util.Vector;
  * Date: 02/05/11
  * Time: 13:50
  */
-public class FourierSpectrumStorageEngine implements SpectrumStorageEngine{
+public class FourierSpectrumStorageEngine implements SpectrumStorageEngine {
 
 
     /**
@@ -87,19 +87,29 @@ public class FourierSpectrumStorageEngine implements SpectrumStorageEngine{
             data.put(Spectrum.L_INSTRUMENTID, new Long(aInstrumentid));
             // The links.
             data.put(Spectrum.L_LCRUNID, new Long(aLCRun.getLcrunid()));
-            data.put(Spectrum.L_FRAGMENTATIONID, aFragmentation.getFragmentationid());
             data.put(Spectrum.L_PROJECTID, new Long(aProjectid));
+            data.put(Spectrum.L_FRAGMENTATIONID, aFragmentation.getFragmentationid());
             // The flags.
             data.put(Spectrum.IDENTIFIED, new Long(0));
             data.put(Spectrum.SEARCHED, new Long(0));
             // The filename.
             data.put(Spectrum.FILENAME, lMascotGenericFile.getFilename());
+            // The total intensity.
+            data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lMascotGenericFile.getTotalIntensity());
+            // The highest intensity.
+            data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMascotGenericFile.getHighestIntensity());
+            // The charge - as long for the database accessor.
+            Long lCharge = new Long(lMascotGenericFile.getCharge());
+            data.put(Spectrum.CHARGE, lCharge);
+            // The precursorMZ.
+            data.put(Spectrum.MASS_TO_CHARGE, lMascotGenericFile.getPrecursorMZ());
+
             // Create the database object.
             Spectrum lSpectrum = new Spectrum(data);
             lSpectrum.persist(aConn);
 
 
-// Get the spectrumid from the generated keys.
+            // Get the spectrumid from the generated keys.
             Long lSpectrumid = (Long) lSpectrum.getGeneratedKeys()[0];
             // Create the Spectrum_file instance.
             Spectrum_file lSpectrum_file = new Spectrum_file();
