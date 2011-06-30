@@ -793,7 +793,6 @@ public class MS_LIMS extends JFrame implements Connectable {
         }
     }
 
-    ;
 
     public static void main(String[] args) {
         PropertiesManager.getInstance().updateLog4jConfiguration(logger, CompomicsTools.MSLIMS);
