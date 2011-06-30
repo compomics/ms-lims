@@ -70,10 +70,11 @@ public class MsfStorer extends JFrame {
     private JLabel lbl2;
     private JLabel lbl3;
     private JButton previewMsfFilesButton;
+    private JCheckBox chbCombine;
 
 
     /**
-     * HashMap that will hold a datfile as key, and the collection of searched spectra found in that datfile, as
+     * HashMap that will hold a datfile as key, and the vector of searched spectra found in that datfile, as
      * values.
      */
     private HashMap iAllSpectraInDatfiles = new HashMap();
@@ -91,8 +92,11 @@ public class MsfStorer extends JFrame {
     private double iThreshold = 0.05;
     private Vector<ScoreType> iMajorScoreType = new Vector<ScoreType>();
     private Vector<Peptide> iPeptidesToStore = new Vector<Peptide>();
+    private Vector<String> iStoredRawFileNames = new Vector<String>();
     private HashMap<String, Long> iSpectrumIdMap = new HashMap<String, Long>();
-    private HashMap<String, Double> iSpectrumScoreMap = new HashMap<String, Double>();
+    private HashMap<String, Integer> iSpectrumScoreMap = new HashMap<String, Integer>();
+    private HashMap<String, Boolean> iSpectrumIdentificationStored = new HashMap<String, Boolean>();
+
 
     public MsfStorer(Connection lConn) {
         //set the connection
@@ -146,6 +150,7 @@ public class MsfStorer extends JFrame {
                     chbMediumConfident.setEnabled(false);
                     chbLowConfidence.setEnabled(false);
                     previewMsfFilesButton.setEnabled(false);
+                    chbCombine.setEnabled(false);
 
                     //open file chooser
                     JFileChooser fc = new JFileChooser();
@@ -174,15 +179,23 @@ public class MsfStorer extends JFrame {
                     Fragmentation lSelectedFragmentationMethod = (Fragmentation) cmbFragmentationMethods.getSelectedItem();
 
                     msfLabel.setVisible(true);
+
+                    Vector lDataToStore = new Vector();
+
                     for (int i = 0; i < iMsfFileLocations.size(); i++) {
                         System.gc();
-                        iPeptidesToStore.removeAllElements();
+                        if (!chbCombine.isSelected()) {
+                            iPeptidesToStore.removeAllElements();
+                        }
                         try {
                             msfLabel.setText("Msf file " + (i + 1) + "/" + iMsfFileLocations.size());
                             progressBar.setValue(i + 1);
                             progressBar.setString("Parsing: " + iMsfFileLocations.get(i));
                             //progressBar.updateUI();
                             Parser lParser = new Parser(iMsfFileLocations.get(i), true);
+                            if (chbCombine.isSelected()) {
+                                iParsedMsfs.add(lParser);
+                            }
                             progressBar.setString("Parsed: " + iMsfFileLocations.get(i));
 
 
@@ -213,33 +226,119 @@ public class MsfStorer extends JFrame {
 
                             for (int j = 0; j < lRawFiles.size(); j++) {
                                 RawFile lRaw = lRawFiles.get(j);
-                                Vector<com.compomics.thermo_msf_parser.msf.Spectrum> lLinkedSpectra = new Vector<com.compomics.thermo_msf_parser.msf.Spectrum>();
-                                for (int s = 0; s < lSpectra.size(); s++) {
-                                    if (lSpectra.get(s).getFileId() == lRaw.getFileId()) {
-                                        lLinkedSpectra.add(lSpectra.get(s));
+
+                                //check if we still need to store the spectra for this raw file
+                                //this only happens in complex scenarios where multiple msf files for the same raw data is stored
+                                boolean lAreadyStored = false;
+                                for (int r = 0; r < iStoredRawFileNames.size(); r++) {
+                                    if (lRaw.getFileName().equalsIgnoreCase(iStoredRawFileNames.get(r))) {
+                                        lAreadyStored = true;
                                     }
                                 }
+                                if (!lAreadyStored) {
+                                    iStoredRawFileNames.add(lRaw.getFileName());
+                                    Vector<com.compomics.thermo_msf_parser.msf.Spectrum> lLinkedSpectra = new Vector<com.compomics.thermo_msf_parser.msf.Spectrum>();
+                                    for (int s = 0; s < lSpectra.size(); s++) {
+                                        if (lSpectra.get(s).getFileId() == lRaw.getFileId()) {
+                                            lLinkedSpectra.add(lSpectra.get(s));
+                                        }
+                                    }
 
 
-                                LCRun run = new LCRun(lRaw.getFileName().substring(lRaw.getFileName().lastIndexOf("\\") + 1), 0, lLinkedSpectra.size());
-                                run.setL_projectid(lSelectedProject.getProjectid());
-                                run.persist(iConn);
-                                Long l = (Long) run.getGeneratedKeys()[0];
-                                run.setLcrunid(l.longValue());
+                                    LCRun run = new LCRun(lRaw.getFileName().substring(lRaw.getFileName().lastIndexOf("\\") + 1), 0, lLinkedSpectra.size());
+                                    run.setL_projectid(lSelectedProject.getProjectid());
+                                    run.persist(iConn);
+                                    Long l = (Long) run.getGeneratedKeys()[0];
+                                    run.setLcrunid(l.longValue());
 
-                                progressBar.setString("Storing spectra for: " + run.getName());
-                                progressBar.setMaximum(lLinkedSpectra.size());
+                                    progressBar.setString("Storing spectra for: " + run.getName());
+                                    progressBar.setMaximum(lLinkedSpectra.size());
 
 
-                                //store the spectra
-                                for (int k = 0; k < lLinkedSpectra.size(); k++) {
-                                    progressBar.setValue(k);
-                                    if (lUseMgf) {
-                                        MascotGenericFile lMgfSpectrum = lSpectraFromMgf.get(lLinkedSpectra.get(k).getSpectrumTitle());
-                                        if (lMgfSpectrum == null) {
-                                            //did not find this spectrum in the mgf file
-                                            JOptionPane.showMessageDialog(getFrame(), "Did not find the spectrum " + lLinkedSpectra.get(k).getSpectrumTitle() + " in the mgf file!", "Spectrum not stored!", JOptionPane.INFORMATION_MESSAGE);
+                                    //store the spectra
+                                    for (int k = 0; k < lLinkedSpectra.size(); k++) {
+                                        progressBar.setValue(k);
+                                        if (lUseMgf) {
+                                            MascotGenericFile lMgfSpectrum = lSpectraFromMgf.get(lLinkedSpectra.get(k).getSpectrumTitle());
+                                            lSpectraFromMgf.put(lLinkedSpectra.get(k).getSpectrumTitle(), null);
+                                            if (lMgfSpectrum == null) {
+                                                //did not find this spectrum in the mgf file
+                                                JOptionPane.showMessageDialog(getFrame(), "Did not find the spectrum " + lLinkedSpectra.get(k).getSpectrumTitle() + " in the mgf file!", "Spectrum not stored!", JOptionPane.INFORMATION_MESSAGE);
+                                            } else {
+
+                                                HashMap data = new HashMap(9);
+                                                data.put(Spectrum.L_INSTRUMENTID, lSelectedInstrument.getInstrumentid());
+                                                // The links.
+                                                data.put(Spectrum.L_LCRUNID, run.getLcrunid());
+                                                data.put(Spectrum.L_PROJECTID, lSelectedProject.getProjectid());
+                                                data.put(Spectrum.L_FRAGMENTATIONID, lSelectedFragmentationMethod.getFragmentationid());
+                                                // The flags.
+                                                data.put(Spectrum.IDENTIFIED, new Long(0));
+                                                data.put(Spectrum.SEARCHED, new Long(0));
+                                                // The filename.
+                                                data.put(Spectrum.FILENAME, lLinkedSpectra.get(k).getSpectrumTitle());
+                                                // The total intensity.
+                                                data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lMgfSpectrum.getTotalIntensity());
+                                                // The highest intensity.
+                                                data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMgfSpectrum.getHighestIntensity());
+                                                // The charge - as long for the database accessor.
+                                                Long lCharge = new Long(lMgfSpectrum.getCharge());
+                                                data.put(Spectrum.CHARGE, lCharge);
+                                                // The precursorMZ.
+                                                data.put(Spectrum.MASS_TO_CHARGE, lMgfSpectrum.getPrecursorMZ());
+
+                                                // Create the database object.
+                                                // logger.debug("Creating Spectrum instance for " + lMascotGenericFile.getFilename());
+                                                Spectrum lSpectrumDb = new Spectrum(data);
+                                                lSpectrumDb.persist(iConn);
+
+
+                                                // Get the spectrumid from the generated keys.
+                                                Long lSpectrumid = (Long) lSpectrumDb.getGeneratedKeys()[0];
+                                                // Create the Spectrum_file instance.
+                                                Spectrum_file lSpectrum_file = new Spectrum_file();
+                                                // Set spectrumid
+                                                lSpectrum_file.setL_spectrumid(lSpectrumid);
+                                                // Set the byte[].
+                                                lSpectrum_file.setUnzippedFile(lMgfSpectrum.toString().getBytes());
+                                                // Create the database object.
+                                                lSpectrum_file.persist(iConn);
+
+
+                                                ScanTableAccessor lScanTableAccessor = new ScanTableAccessor();
+                                                lScanTableAccessor.setL_spectrumid(lSpectrumid);
+                                                lScanTableAccessor.setRtsec((lMgfSpectrum.getRetentionInSeconds()[0]) / 60.0);
+                                                lScanTableAccessor.setNumber(lMgfSpectrum.getScanNumbers()[0]);
+                                                lScanTableAccessor.persist(iConn);
+                                            }
                                         } else {
+
+                                            com.compomics.thermo_msf_parser.msf.Spectrum lSpectrum = lLinkedSpectra.get(k);
+
+                                            // Read the contents for the file into a byte[].
+                                            String lSpectrumLine = "BEGIN IONS\nTITLE=" + lSpectrum.getSpectrumTitle() + "\n";
+                                            Peak lMono = lSpectrum.getFragmentedMsPeak();
+                                            lSpectrumLine = lSpectrumLine + "PEPMASS=" + lMono.getX() + "\t" + lMono.getY() + "\n";
+                                            lSpectrumLine = lSpectrumLine + "CHARGE=" + lSpectrum.getCharge() + "+\n";
+                                            lSpectrumLine = lSpectrumLine + "RTINSECONDS=" + (lSpectrum.getRetentionTime() / 60.0) + "\n";
+                                            if (lSpectrum.getFirstScan() != lSpectrum.getFirstScan()) {
+                                                lSpectrumLine = lSpectrumLine + "SCANS=" + lSpectrum.getFirstScan() + "." + lSpectrum.getLastScan() + "\n";
+                                            } else {
+                                                lSpectrumLine = lSpectrumLine + "SCANS=" + lSpectrum.getFirstScan() + "\n";
+                                            }
+                                            Vector<Peak> lMSMS = lSpectrum.getMSMSPeaks();
+                                            double lSum = 0.0;
+                                            double lMax = 0.0;
+                                            for (int s = 0; s < lMSMS.size(); s++) {
+                                                lSum = lSum + lMSMS.get(s).getY();
+                                                if (lMSMS.get(s).getY() > lMax) {
+                                                    lMax = lMSMS.get(s).getY();
+                                                }
+                                                lSpectrumLine = lSpectrumLine + lMSMS.get(s).getX() + "\t" + lMSMS.get(s).getY() + "\n";
+                                            }
+                                            lSpectrumLine = lSpectrumLine + "END IONS\n\n";
+
+                                            byte[] fileContents = lSpectrumLine.getBytes();
 
                                             HashMap data = new HashMap(9);
                                             data.put(Spectrum.L_INSTRUMENTID, lSelectedInstrument.getInstrumentid());
@@ -251,16 +350,16 @@ public class MsfStorer extends JFrame {
                                             data.put(Spectrum.IDENTIFIED, new Long(0));
                                             data.put(Spectrum.SEARCHED, new Long(0));
                                             // The filename.
-                                            data.put(Spectrum.FILENAME, lLinkedSpectra.get(k).getSpectrumTitle());
+                                            data.put(Spectrum.FILENAME, lSpectrum.getSpectrumTitle());
                                             // The total intensity.
-                                            data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lMgfSpectrum.getTotalIntensity());
+                                            data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lSum);
                                             // The highest intensity.
-                                            data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMgfSpectrum.getHighestIntensity());
+                                            data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMax);
                                             // The charge - as long for the database accessor.
-                                            Long lCharge = new Long(lMgfSpectrum.getCharge());
+                                            Long lCharge = new Long(lSpectrum.getCharge());
                                             data.put(Spectrum.CHARGE, lCharge);
                                             // The precursorMZ.
-                                            data.put(Spectrum.MASS_TO_CHARGE, lMgfSpectrum.getPrecursorMZ());
+                                            data.put(Spectrum.MASS_TO_CHARGE, lSpectrum.getMz());
 
                                             // Create the database object.
                                             // logger.debug("Creating Spectrum instance for " + lMascotGenericFile.getFilename());
@@ -275,94 +374,24 @@ public class MsfStorer extends JFrame {
                                             // Set spectrumid
                                             lSpectrum_file.setL_spectrumid(lSpectrumid);
                                             // Set the byte[].
-                                            lSpectrum_file.setUnzippedFile(lMgfSpectrum.toString().getBytes());
+                                            lSpectrum_file.setUnzippedFile(fileContents);
                                             // Create the database object.
                                             lSpectrum_file.persist(iConn);
 
 
                                             ScanTableAccessor lScanTableAccessor = new ScanTableAccessor();
                                             lScanTableAccessor.setL_spectrumid(lSpectrumid);
-                                            lScanTableAccessor.setRtsec((lMgfSpectrum.getRetentionInSeconds()[0]) / 60.0);
-                                            lScanTableAccessor.setNumber(lMgfSpectrum.getScanNumbers()[0]);
+                                            lScanTableAccessor.setRtsec(lSpectrum.getRetentionTime() / 60.0);
+                                            lScanTableAccessor.setNumber(lSpectrum.getFirstScan());
                                             lScanTableAccessor.persist(iConn);
                                         }
-                                    } else {
-
-                                        com.compomics.thermo_msf_parser.msf.Spectrum lSpectrum = lLinkedSpectra.get(k);
-
-                                        // Read the contents for the file into a byte[].
-                                        String lSpectrumLine = "BEGIN IONS\nTITLE=" + lSpectrum.getSpectrumTitle() + "\n";
-                                        Peak lMono = lSpectrum.getFragmentedMsPeak();
-                                        lSpectrumLine = lSpectrumLine + "PEPMASS=" + lMono.getX() + "\t" + lMono.getY() + "\n";
-                                        lSpectrumLine = lSpectrumLine + "CHARGE=" + lSpectrum.getCharge() + "+\n";
-                                        lSpectrumLine = lSpectrumLine + "RTINSECONDS=" + (lSpectrum.getRetentionTime() / 60.0) + "\n";
-                                        if (lSpectrum.getFirstScan() != lSpectrum.getFirstScan()) {
-                                            lSpectrumLine = lSpectrumLine + "SCANS=" + lSpectrum.getFirstScan() + "." + lSpectrum.getLastScan() + "\n";
-                                        } else {
-                                            lSpectrumLine = lSpectrumLine + "SCANS=" + lSpectrum.getFirstScan() + "\n";
-                                        }
-                                        Vector<Peak> lMSMS = lSpectrum.getMSMSPeaks();
-                                        double lSum = 0.0;
-                                        double lMax = 0.0;
-                                        for (int s = 0; s < lMSMS.size(); s++) {
-                                            lSum = lSum + lMSMS.get(s).getY();
-                                            if (lMSMS.get(s).getY() > lMax) {
-                                                lMax = lMSMS.get(s).getY();
-                                            }
-                                            lSpectrumLine = lSpectrumLine + lMSMS.get(s).getX() + "\t" + lMSMS.get(s).getY() + "\n";
-                                        }
-                                        lSpectrumLine = lSpectrumLine + "END IONS\n\n";
-
-                                        byte[] fileContents = lSpectrumLine.getBytes();
-
-                                        HashMap data = new HashMap(9);
-                                        data.put(Spectrum.L_INSTRUMENTID, lSelectedInstrument.getInstrumentid());
-                                        // The links.
-                                        data.put(Spectrum.L_LCRUNID, run.getLcrunid());
-                                        data.put(Spectrum.L_PROJECTID, lSelectedProject.getProjectid());
-                                        data.put(Spectrum.L_FRAGMENTATIONID, lSelectedFragmentationMethod.getFragmentationid());
-                                        // The flags.
-                                        data.put(Spectrum.IDENTIFIED, new Long(0));
-                                        data.put(Spectrum.SEARCHED, new Long(0));
-                                        // The filename.
-                                        data.put(Spectrum.FILENAME, lSpectrum.getSpectrumTitle());
-                                        // The total intensity.
-                                        data.put(Spectrum.TOTAL_SPECTRUM_INTENSITY, lSum);
-                                        // The highest intensity.
-                                        data.put(Spectrum.HIGHEST_PEAK_IN_SPECTRUM, lMax);
-                                        // The charge - as long for the database accessor.
-                                        Long lCharge = new Long(lSpectrum.getCharge());
-                                        data.put(Spectrum.CHARGE, lCharge);
-                                        // The precursorMZ.
-                                        data.put(Spectrum.MASS_TO_CHARGE, lSpectrum.getMz());
-
-                                        // Create the database object.
-                                        // logger.debug("Creating Spectrum instance for " + lMascotGenericFile.getFilename());
-                                        Spectrum lSpectrumDb = new Spectrum(data);
-                                        lSpectrumDb.persist(iConn);
-
-
-                                        // Get the spectrumid from the generated keys.
-                                        Long lSpectrumid = (Long) lSpectrumDb.getGeneratedKeys()[0];
-                                        // Create the Spectrum_file instance.
-                                        Spectrum_file lSpectrum_file = new Spectrum_file();
-                                        // Set spectrumid
-                                        lSpectrum_file.setL_spectrumid(lSpectrumid);
-                                        // Set the byte[].
-                                        lSpectrum_file.setUnzippedFile(fileContents);
-                                        // Create the database object.
-                                        lSpectrum_file.persist(iConn);
-
-
-                                        ScanTableAccessor lScanTableAccessor = new ScanTableAccessor();
-                                        lScanTableAccessor.setL_spectrumid(lSpectrumid);
-                                        lScanTableAccessor.setRtsec(lSpectrum.getRetentionTime() / 60.0);
-                                        lScanTableAccessor.setNumber(lSpectrum.getFirstScan());
-                                        lScanTableAccessor.persist(iConn);
                                     }
                                 }
-
                             }
+                            lSpectraFromMgf = new HashMap<String, MascotGenericFile>();
+                            System.gc();
+                            System.gc();
+
 
                             //get dat files
                             WorkflowInfo lInfo = lParser.getWorkFlowInfo();
@@ -379,19 +408,24 @@ public class MsfStorer extends JFrame {
                                 }
                             }
 
-                            //store peptide identifications
-                            Vector lDataToStore = new Vector();
+                            //collect the information off peptide identifications to store later on
                             for (int m = 0; m < lDatFiles.size(); m++) {
                                 String lUrl = lServer + "cgi/master_results_2.pl?file=../" + lDatFiles.get(m);
                                 Vector lResult = processIDs(lUrl, progressBar, lSpectraMap);
                                 for (int r = 0; r < lResult.size(); r++) {
                                     lDataToStore.add(lResult.get(r));
                                 }
-                            }
-                            storeData(lDataToStore, progressBar);
 
-                            if (lParser.getQuantificationMethod() != null) {
-                                storeQuantitation(lParser);
+                                //store the data if it is not combined
+                                if (!chbCombine.isSelected()) {
+                                    storeData(lDataToStore, progressBar);
+                                    if (lParser.getQuantificationMethod() != null) {
+                                        progressBar.setIndeterminate(false);
+                                        progressBar.setString("Storing quantifications");
+                                        storeQuantitation(lParser, progressBar);
+                                    }
+                                    lDataToStore = new Vector();
+                                }
                             }
 
                         } catch (SQLException e) {
@@ -402,6 +436,34 @@ public class MsfStorer extends JFrame {
                         System.gc();
                     }
 
+                    //now store the data
+                    if (chbCombine.isSelected()) {
+                        storeData(lDataToStore, progressBar);
+                        progressBar.setMaximum(iParsedMsfs.size());
+                        for (int p = 0; p < iParsedMsfs.size(); p++) {
+                            Parser lParser = iParsedMsfs.get(p);
+                            if (lParser.getQuantificationMethod() != null) {
+                                progressBar.setIndeterminate(false);
+                                progressBar.setValue(p);
+                                progressBar.setString("Storing quantifications");
+                                storeQuantitation(lParser, progressBar);
+                            }
+                        }
+                    }
+
+                    // Now do all the updates for the spectrumfiles.
+                    // Add the information about having been searched to the PKLfiles in the DB.
+                    if (progressBar != null) {
+                        progressBar.setString("Updating 'searched' flag on all spectra in the datfiles...");
+                    }
+                    Iterator iter = iAllSpectraInDatfiles.values().iterator();
+                    while (iter.hasNext()) {
+                        Vector<String> names = (Vector<String>) iter.next();
+                        String[] filenames = new String[names.size()];
+
+                        names.toArray(filenames);
+                        Spectrum.addOneToSearchedFlag(filenames, iConn);
+                    }
 
                     progressBar.setIndeterminate(false);
                     progressBar.setVisible(false);
@@ -427,6 +489,7 @@ public class MsfStorer extends JFrame {
                 chbMediumConfident.setEnabled(true);
                 chbLowConfidence.setEnabled(true);
                 previewMsfFilesButton.setEnabled(true);
+                chbCombine.setEnabled(true);
 
                 if (lLoaded) {
                     //give a message to the user that everything is loaded
@@ -507,7 +570,7 @@ public class MsfStorer extends JFrame {
         return lSpectra;
     }
 
-    public boolean storeQuantitation(Parser lParsedMsfFile) throws IOException, SQLException {
+    public boolean storeQuantitation(Parser lParsedMsfFile, JProgressBar progressBar) throws IOException, SQLException {
         //only if ratioSoureType is distiller store Distiller output xml files
         long lMsfFileId = 0;
 
@@ -516,7 +579,7 @@ public class MsfStorer extends JFrame {
         // 1. Store the quantitation file;
 
         // Return without storage if the msf file is allready in the database!
-        if (Quantitation_file.isStoredInDatabase(lParsedMsfFile.getFileName(), iConn)) {
+        if (Quantitation_file.isStoredInDatabase(lParsedMsfFile.getFileName() + "_" + lParsedMsfFile.getQuantificationMethodName(), iConn)) {
             //this msf file is already stored in the database, ask the user if they want to store it again
             int answer = JOptionPane.showConfirmDialog(new JFrame(), "The msf file ( " + lParsedMsfFile.getFileName() + " ) was already stored in the database.\n Do you want to store it again?", "Problem storing rov file", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (answer == JOptionPane.YES_OPTION) {
@@ -529,14 +592,14 @@ public class MsfStorer extends JFrame {
 
 
         HashMap lQuantitation_Accessor_Map = new HashMap(4);
-        lQuantitation_Accessor_Map.put(Quantitation_file.FILENAME, lParsedMsfFile.getFileName());
+        lQuantitation_Accessor_Map.put(Quantitation_file.FILENAME, lParsedMsfFile.getFileName() + "_" + lParsedMsfFile.getQuantificationMethodName());
         lQuantitation_Accessor_Map.put(Quantitation_file.TYPE, "msf");
 
         Quantitation_file lQuantitation_file = new Quantitation_file(lQuantitation_Accessor_Map);
 
         //create for every quantspectrum a spectrum
         String lQuanFile = "";
-        lQuanFile = lQuanFile + "FILE=" + lParsedMsfFile.getFileName();
+        lQuanFile = lQuanFile + "FILE=" + lParsedMsfFile.getFileName() + "_" + lParsedMsfFile.getQuantificationMethodName();
         lQuanFile = lQuanFile + "\nRATIO=";
         for (int r = 0; r < lParsedMsfFile.getRatioTypes().size(); r++) {
             lQuanFile = lQuanFile + lParsedMsfFile.getRatioTypes().get(r).getRatioType() + "\t";
@@ -545,6 +608,8 @@ public class MsfStorer extends JFrame {
         for (int r = 0; r < lParsedMsfFile.getComponents().size(); r++) {
             lQuanFile = lQuanFile + lParsedMsfFile.getComponents().get(r) + "\t";
         }
+
+        //filter only the wanted quan results (only for the peptides stored in ms_lims)
         Vector<QuanResult> lQuanResults = new Vector<QuanResult>();
         Vector<Integer> lFileIds = new Vector<Integer>();
         for (int i = 0; i < iPeptidesToStore.size(); i++) {
@@ -559,8 +624,10 @@ public class MsfStorer extends JFrame {
                 }
             }
         }
-
+        progressBar.setMaximum(lQuanResults.size() + 1);
         for (int i = 0; i < lQuanResults.size(); i++) {
+
+            progressBar.setValue(i);
             QuanResult lQuan = lQuanResults.get(i);
             int lFileId = lFileIds.get(i);
 
@@ -657,6 +724,7 @@ public class MsfStorer extends JFrame {
             lQuanFile = lQuanFile + "END IONS\n";
         }
 
+        progressBar.setIndeterminate(true);
 
         ArrayList subset = null;
         // Since for big files (and correspondingly big Strings),
@@ -672,7 +740,7 @@ public class MsfStorer extends JFrame {
         // Now to process everything using a ByteArrayOutputStream.
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         if (subset != null) {
-            for (Iterator lIterator = subset.iterator(); lIterator.hasNext();) {
+            for (Iterator lIterator = subset.iterator(); lIterator.hasNext(); ) {
                 String s = (String) lIterator.next();
                 baos.write(s.getBytes());
             }
@@ -704,16 +772,19 @@ public class MsfStorer extends JFrame {
             hmQuantitationGroup.put(Quantitation_group.L_QUANTITATION_FILEID, lMsfFileId);
             hmQuantitationGroup.put(Quantitation_group.FILE_REF, String.valueOf(lQuan.getQuanResultId()));
             Quantitation_group quant_group = new Quantitation_group(hmQuantitationGroup);
-            quant_group.persist(iConn);
+            boolean lQuanGroupPersisted = false;
 
-            long lL_quantitationGroupid = quant_group.getQuantitation_groupid();
-
+            boolean lRatioAdded = false;
             for (int r = 0; r < lRatioTypes.size(); r++) {
                 Double lRatio = lQuan.getRatioByRatioType(lRatioTypes.get(r));
 
                 if (lRatio != null) {
                     HashMap hm = new HashMap();
                     hm.put(Quantitation.TYPE, lRatioTypes.get(r).getRatioType());
+                    if (!lQuanGroupPersisted) {
+                        quant_group.persist(iConn);
+                    }
+                    long lL_quantitationGroupid = quant_group.getQuantitation_groupid();
                     hm.put(Quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
                     BigDecimal lBigDecimal = new BigDecimal(lRatio);
                     lBigDecimal = lBigDecimal.setScale(5, BigDecimal.ROUND_HALF_DOWN);
@@ -721,30 +792,35 @@ public class MsfStorer extends JFrame {
                     hm.put(Quantitation.VALID, true);
                     Quantitation quant = new Quantitation(hm);
                     quant.persist(iConn);
+                    lRatioAdded = true;
                 }
             }
 
-            for (int p = 0; p < iPeptidesToStore.size(); p++) {
-                if (iPeptidesToStore.get(p).getParentSpectrum().getQuanResult() != null && iPeptidesToStore.get(p).getParentSpectrum().getQuanResult().getQuanResultId() == lQuan.getQuanResultId()) {
-                    if (iSpectrumIdMap.get(iPeptidesToStore.get(p).getParentSpectrum().getSpectrumTitle()) != null) {
+            if (lRatioAdded) {
+                for (int p = 0; p < iPeptidesToStore.size(); p++) {
+                    if (iPeptidesToStore.get(p).getParentSpectrum().getQuanResult() != null && iPeptidesToStore.get(p).getParentSpectrum().getQuanResult().getQuanResultId() == lQuan.getQuanResultId()) {
+                        if (iSpectrumIdMap.get(iPeptidesToStore.get(p).getParentSpectrum().getSpectrumTitle()) != null) {
 
-                        HashMap hm = new HashMap();
-                        if (iPeptidesToStore.get(p).getChannelId() == 0) {
-                            hm.put(Identification_to_quantitation.TYPE, "Not defined");
+                            HashMap hm = new HashMap();
+                            if (iPeptidesToStore.get(p).getChannelId() == 0) {
+                                hm.put(Identification_to_quantitation.TYPE, "Not defined");
+                            } else {
+                                hm.put(Identification_to_quantitation.TYPE, lParsedMsfFile.getQuanChannelNameById(iPeptidesToStore.get(p).getChannelId()));
+                            }
+                            long lL_quantitationGroupid = quant_group.getQuantitation_groupid();
+                            hm.put(Identification_to_quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
+                            Long lIdentificationId = iSpectrumIdMap.get(iPeptidesToStore.get(p).getParentSpectrum().getSpectrumTitle());
+                            hm.put(Identification_to_quantitation.L_IDENTIFICATIONID, lIdentificationId);
+                            Identification_to_quantitation aItQ = new Identification_to_quantitation(hm);
+                            aItQ.persist(iConn);
                         } else {
-                            hm.put(Identification_to_quantitation.TYPE, lParsedMsfFile.getQuanChannelNameById(iPeptidesToStore.get(p).getChannelId()));
+                            //System.out.println("fsdf");
                         }
-                        hm.put(Identification_to_quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
-                        Long lIdentificationId = iSpectrumIdMap.get(iPeptidesToStore.get(p).getParentSpectrum().getSpectrumTitle());
-                        hm.put(Identification_to_quantitation.L_IDENTIFICATIONID, lIdentificationId);
-                        Identification_to_quantitation aItQ = new Identification_to_quantitation(hm);
-                        aItQ.persist(iConn);
-                    } else {
-                        //System.out.println("fsdf");
                     }
                 }
             }
         }
+        progressBar.setIndeterminate(false);
         return true;
     }
 
@@ -829,7 +905,7 @@ public class MsfStorer extends JFrame {
         int startLoc = aDatfile.lastIndexOf("/") + 1;
         int endLoc = aDatfile.indexOf(".dat") + 4;
         if (aProgress != null) {
-            aProgress.setString("Downloading datfile '" + aDatfile.substring(startLoc, endLoc) + "'...");
+            aProgress.setString("Downloading datfile '" + filename + "'...");
         }
         // Okay, first we need to retrieve a stream to the Mascot
         // '.dat' file, then we need to feed that stream to the rawparser.
@@ -874,6 +950,10 @@ public class MsfStorer extends JFrame {
             // Stream read, closing.
             input.close();
             String datContent = all.toString();
+
+
+            System.gc();
+
             HashMap lDatFile = new HashMap(4);
             if (useLegacy) {
                 filename = aDatfile.substring(startLoc, endLoc);
@@ -901,7 +981,7 @@ public class MsfStorer extends JFrame {
             // Now to process everything using a ByteArrayOutputStream.
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             if (subset != null) {
-                for (Iterator lIterator = subset.iterator(); lIterator.hasNext();) {
+                for (Iterator lIterator = subset.iterator(); lIterator.hasNext(); ) {
                     String s = (String) lIterator.next();
                     baos.write(s.getBytes());
                 }
@@ -913,7 +993,17 @@ public class MsfStorer extends JFrame {
             baos.flush();
             baos.close();
             System.gc();
+            System.gc();
+            System.gc();
             lDf.setUnzippedFile(datfileBytes);
+            System.gc();
+            System.gc();
+            lDf.persist(iConn);
+            iDatfilenameToDatfileid.put(lDf.getFilename(), lDf.getGeneratedKeys()[0]);
+            lDf = null;
+            temp = null;
+            datfileBytes = new byte[0];
+
 
             if (aProgress != null) {
                 aProgress.setValue(aProgress.getValue() + 1);
@@ -921,28 +1011,44 @@ public class MsfStorer extends JFrame {
             }
 
             // Parsing the results.
-            String[] lLines = datContent.split("\n");
+            //String[] lLines = datContent.split("\n");
             /*for (int k = 0; k < 1000; k++) {
                System.out.println(lLines[k]);
            } */
             //System.out.println(datContent);
-            BufferedReader br = new BufferedReader(new StringReader(datContent));
+
+            // Create temp file.
+            File tempDatFile = File.createTempFile("datFileTempMsfStore", ".dat");
+
+            // Delete temp file when program exits.
+            tempDatFile.deleteOnExit();
+
+            // Write to temp file
+            BufferedWriter out = new BufferedWriter(new FileWriter(tempDatFile));
+            out.write(datContent);
+            out.close();
+            datContent = null;
+            System.gc();
+
+            BufferedReader br = new BufferedReader(new FileReader(tempDatFile));
+
             MascotDatfileInf mdf = new MascotDatfile_Index(br, filename);
             Vector v = this.extractIDs(mdf, lSpectra);
-            this.addSearchedSpectra(mdf);
 
             // Store the datfile in the results Vector.
-            result.add(lDf);
+            //result.add(lDf);
 
             // First cycle all to retrieve accession numbers from unique identifications.
             int liSize = v.size();
             for (int i = 0; i < liSize; i++) {
                 // Get the identified spectrum.
-                MascotIdentifiedSpectrum lSpectrum = (MascotIdentifiedSpectrum) v.elementAt(i);
-                if (lSpectrum.getIsoformCount() == 1) {
-                    String lAccession = lSpectrum.getAccession(null);
-                    if (!tempAccessions.contains(lAccession)) {
-                        tempAccessions.add(lAccession);
+                if (v.get(i) instanceof MascotIdentifiedSpectrum) {
+                    MascotIdentifiedSpectrum lSpectrum = (MascotIdentifiedSpectrum) v.elementAt(i);
+                    if (lSpectrum.getIsoformCount() == 1) {
+                        String lAccession = lSpectrum.getAccession(null);
+                        if (!tempAccessions.contains(lAccession)) {
+                            tempAccessions.add(lAccession);
+                        }
                     }
                 }
             }
@@ -959,92 +1065,102 @@ public class MsfStorer extends JFrame {
 
             // Cycle all and store them.
             for (int i = 0; i < liSize; i++) {
-                // Get the identified spectrum.
-                MascotIdentifiedSpectrum mis = (MascotIdentifiedSpectrum) v.elementAt(i);
+                if (v.get(i) instanceof MascotIdentifiedSpectrum) {
 
-                // We have to check the file stuff!
-                String specFile = mis.getFile().trim();
+                    // Get the identified spectrum.
+                    MascotIdentifiedSpectrum mis = (MascotIdentifiedSpectrum) v.elementAt(i);
 
-                // Get the accession number.
-                String accession = mis.getAccession(accessionsInv);
+                    // We have to check the file stuff!
+                    String specFile = mis.getFile().trim();
 
-                // Isolate the enzymatic part.
-                String descr = mis.getDescription(accession);
-                if (descr == null) {
-                    descr = "No description found.";
-                    mis.setDescription(descr, accession);
-                } else if (descr.indexOf(";") >= 0) {
-                    descr = descr.replace(';', '*');
-                    mis.setDescription(descr, accession);
-                }
+                    // Get the accession number.
+                    String accession = mis.getAccession(accessionsInv);
 
-                int start = descr.indexOf("(*") + 2;
-                int end = descr.indexOf("*)");
-                if (start < 0 || end < 0) {
-                    descr = "FE";
-                } else {
-                    mis.setDescription(descr.substring(end + 2), accession);
-                    descr = descr.substring(start, end);
-                }
-
-                // See if there are any isoforms in the description.
-                String tempDesc = mis.getDescription(accession);
-                String isoforms = mis.getIsoformAccessions(accession);
-                int startIsoforms = -1;
-                if ((startIsoforms = tempDesc.indexOf("^A")) >= 0) {
-                    String tempDesc2 = tempDesc.substring(0, startIsoforms);
-                    mis.setDescription(tempDesc2, accession);
-                    if (isoforms == null) {
-                        isoforms = tempDesc.substring(startIsoforms + 2);
-                    } else {
-                        isoforms += tempDesc.substring(startIsoforms);
+                    // Isolate the enzymatic part.
+                    String descr = mis.getDescription(accession);
+                    if (descr == null) {
+                        descr = "No description found.";
+                        mis.setDescription(descr, accession);
+                    } else if (descr.indexOf(";") >= 0) {
+                        descr = descr.replace(';', '*');
+                        mis.setDescription(descr, accession);
                     }
-                }
-                // Remove all 'xx|' or 'xxx|' (for IPI) Strings from the isoforms.
-                int startPipe = -1;
-                while (isoforms != null && (startPipe = isoforms.indexOf("|")) > 0) {
-                    if (startPipe >= 3 && isoforms.substring(startPipe - 3, startPipe).equalsIgnoreCase("ipi")) {
-                        isoforms = isoforms.substring(0, startPipe - 3) + isoforms.substring(startPipe + 1);
+
+                    int start = descr.indexOf("(*") + 2;
+                    int end = descr.indexOf("*)");
+                    if (start < 0 || end < 0) {
+                        descr = "FE";
                     } else {
-                        isoforms = isoforms.substring(0, startPipe - 2) + isoforms.substring(startPipe + 1);
+                        mis.setDescription(descr.substring(end + 2), accession);
+                        descr = descr.substring(start, end);
                     }
+
+                    // See if there are any isoforms in the description.
+                    String tempDesc = mis.getDescription(accession);
+                    String isoforms = mis.getIsoformAccessions(accession);
+                    int startIsoforms = -1;
+                    if ((startIsoforms = tempDesc.indexOf("^A")) >= 0) {
+                        String tempDesc2 = tempDesc.substring(0, startIsoforms);
+                        mis.setDescription(tempDesc2, accession);
+                        if (isoforms == null) {
+                            isoforms = tempDesc.substring(startIsoforms + 2);
+                        } else {
+                            isoforms += tempDesc.substring(startIsoforms);
+                        }
+                    }
+                    // Remove all 'xx|' or 'xxx|' (for IPI) Strings from the isoforms.
+                    int startPipe = -1;
+                    while (isoforms != null && (startPipe = isoforms.indexOf("|")) > 0) {
+                        if (startPipe >= 3 && isoforms.substring(startPipe - 3, startPipe).equalsIgnoreCase("ipi")) {
+                            isoforms = isoforms.substring(0, startPipe - 3) + isoforms.substring(startPipe + 1);
+                        } else {
+                            isoforms = isoforms.substring(0, startPipe - 2) + isoforms.substring(startPipe + 1);
+                        }
+                    }
+                    // Put all params in a HashMap with the correct keys.
+                    HashMap hm = new HashMap();
+                    hm.put(IdentificationTableAccessor.ACCESSION, accession);
+                    hm.put(IdentificationTableAccessor.CAL_MASS, new BigDecimal(mis.getTheoreticalMass()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue());
+                    hm.put(IdentificationTableAccessor.END, new Long(mis.getEnd(accession)));
+                    hm.put(IdentificationTableAccessor.ENZYMATIC, descr);
+                    hm.put(IdentificationTableAccessor.EXP_MASS, new Double(mis.getMeasuredMass()));
+                    hm.put(IdentificationTableAccessor.MODIFIED_SEQUENCE, mis.getModifiedSequence());
+                    hm.put(IdentificationTableAccessor.ION_COVERAGE, mis.getIon_coverage());
+                    hm.put(IdentificationTableAccessor.SCORE, new Long(mis.getScore()));
+                    hm.put(IdentificationTableAccessor.HOMOLOGY, new Double(mis.getHomologyTreshold()));
+                    hm.put(IdentificationTableAccessor.SEQUENCE, mis.getSequence());
+                    hm.put(IdentificationTableAccessor.START, new Long(mis.getStart(accession)));
+                    hm.put(IdentificationTableAccessor.VALID, new Integer(1));
+                    hm.put(IdentificationTableAccessor.IDENTITYTHRESHOLD, new Long(mis.getIdentityTreshold()));
+                    hm.put(IdentificationTableAccessor.CONFIDENCE, new Double(this.iThreshold));
+                    hm.put(IdentificationTableAccessor.DESCRIPTION, mis.getDescription(accession));
+                    hm.put(IdentificationTableAccessor.DB, mis.getDBName());
+                    hm.put(IdentificationTableAccessor.PRECURSOR, new Double(mis.getPrecursorMZ()));
+                    hm.put(IdentificationTableAccessor.CHARGE, new Integer(mis.getChargeState()));
+                    hm.put(IdentificationTableAccessor.TITLE, mis.getSearchTitle());
+                    hm.put(IdentificationTableAccessor.ISOFORMS, isoforms);
+                    hm.put(IdentificationTableAccessor.DB_FILENAME, mis.getDBFilename());
+                    hm.put(IdentificationTableAccessor.MASCOT_VERSION, mis.getMascotVersion());
+                    hm.put(IdentificationTableAccessor.DATFILE_QUERY, mis.getQueryNr());
+
+                    // Temporary storage of future dependent rows.
+                    Identification mo = new Identification(hm);
+                    mo.setTemporaryDatfilename(filename);
+                    mo.setTemporarySpectrumfilename(specFile);
+                    mo.setFragmentions(mis.getFragmentIons());
+                    mo.setFragmentMassTolerance(mis.getFragmentMassError());
+
+                    // Adding it to the result Vector.
+                    result.add(mo);
                 }
-                // Put all params in a HashMap with the correct keys.
-                HashMap hm = new HashMap();
-                hm.put(IdentificationTableAccessor.ACCESSION, accession);
-                hm.put(IdentificationTableAccessor.CAL_MASS, new BigDecimal(mis.getTheoreticalMass()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue());
-                hm.put(IdentificationTableAccessor.END, new Long(mis.getEnd(accession)));
-                hm.put(IdentificationTableAccessor.ENZYMATIC, descr);
-                hm.put(IdentificationTableAccessor.EXP_MASS, new Double(mis.getMeasuredMass()));
-                hm.put(IdentificationTableAccessor.MODIFIED_SEQUENCE, mis.getModifiedSequence());
-                hm.put(IdentificationTableAccessor.ION_COVERAGE, mis.getIon_coverage());
-                hm.put(IdentificationTableAccessor.SCORE, new Long(mis.getScore()));
-                hm.put(IdentificationTableAccessor.HOMOLOGY, new Double(mis.getHomologyTreshold()));
-                hm.put(IdentificationTableAccessor.SEQUENCE, mis.getSequence());
-                hm.put(IdentificationTableAccessor.START, new Long(mis.getStart(accession)));
-                hm.put(IdentificationTableAccessor.VALID, new Integer(1));
-                hm.put(IdentificationTableAccessor.IDENTITYTHRESHOLD, new Long(mis.getIdentityTreshold()));
-                hm.put(IdentificationTableAccessor.CONFIDENCE, new Double(this.iThreshold));
-                hm.put(IdentificationTableAccessor.DESCRIPTION, mis.getDescription(accession));
-                hm.put(IdentificationTableAccessor.DB, mis.getDBName());
-                hm.put(IdentificationTableAccessor.PRECURSOR, new Double(mis.getPrecursorMZ()));
-                hm.put(IdentificationTableAccessor.CHARGE, new Integer(mis.getChargeState()));
-                hm.put(IdentificationTableAccessor.TITLE, mis.getSearchTitle());
-                hm.put(IdentificationTableAccessor.ISOFORMS, isoforms);
-                hm.put(IdentificationTableAccessor.DB_FILENAME, mis.getDBFilename());
-                hm.put(IdentificationTableAccessor.MASCOT_VERSION, mis.getMascotVersion());
-                hm.put(IdentificationTableAccessor.DATFILE_QUERY, mis.getQueryNr());
-
-                // Temporary storage of future dependent rows.
-                Identification mo = new Identification(hm);
-                mo.setTemporaryDatfilename(filename);
-                mo.setTemporarySpectrumfilename(specFile);
-                mo.setFragmentions(mis.getFragmentIons());
-                mo.setFragmentMassTolerance(mis.getFragmentMassError());
-
-                // Adding it to the result Vector.
-                result.add(mo);
             }
+            Vector<String> lSpectraSearchedForThisDatFile = new Vector<String>();
+            for (int i = 0; i < liSize; i++) {
+                if (v.get(i) instanceof String) {
+                    lSpectraSearchedForThisDatFile.add((String) v.get(i));
+                }
+            }
+            iAllSpectraInDatfiles.put(filename, lSpectraSearchedForThisDatFile);
 
             if (aProgress != null) {
                 aProgress.setValue(aProgress.getValue() + 1);
@@ -1064,7 +1180,7 @@ public class MsfStorer extends JFrame {
      * @param aPersistables Vector with the persistables to store.
      * @param aProgress     DefaultProgressBar with the progressbar to use; can be 'null' for no progressbar.
      */
-    public void storeData(Vector aPersistables, JProgressBar aProgress) {
+    public void storeData(Vector aPersistables, JProgressBar aProgress) throws SQLException {
         if (aProgress != null) {
             aProgress.setString("Filtering data...");
         }
@@ -1088,20 +1204,23 @@ public class MsfStorer extends JFrame {
         liSize = persistable.size();
         if (aProgress != null) {
             aProgress.setString("Processing identified spectra...");
+            aProgress.setMaximum(liSize);
+            aProgress.setValue(0);
         }
         // We'll need to store the changed stuff later in case a rollback becomes necessary.
-        try {
-            for (int i = 0; i < liSize; i++) {
-                Persistable ps = (Persistable) persistable.get(i);
-                // See if we have:
-                //  - identification: update spectrumfile + l_spectrumid + l_datfileid.
-                if (ps instanceof Identification) {
-                    Identification ita = (Identification) ps;
-                    if (iSpectrumScoreMap.get(ita.getTemporarySpectrumfilename()) == ita.getScore()) {
+        for (int i = 0; i < liSize; i++) {
+            Persistable ps = (Persistable) persistable.get(i);
+            // See if we have:
+            //  - identification: update spectrumfile + l_spectrumid + l_datfileid.
+            if (ps instanceof Identification) {
+                Identification id = (Identification) ps;
+                if (iSpectrumScoreMap.get(id.getTemporarySpectrumfilename()) == id.getScore()) {
+                    //check in no identification with the same score is already stored
+                    if (!iSpectrumIdentificationStored.get(id.getTemporarySpectrumfilename())) {
+
                         //we need to store this identification
-                        logger.debug("Start persisting identification of spectrumid " + ita.getL_spectrumid());
                         // We need to update the spectrumfile as well.
-                        Spectrum lSpectrum = Spectrum.findFromName(ita.getTemporarySpectrumfilename(), iConn);
+                        Spectrum lSpectrum = Spectrum.findFromName(id.getTemporarySpectrumfilename(), iConn);
                         if (lSpectrum != null) {
                             if (lSpectrum.getIdentified() > 0) {
                                 lSpectrum.setIdentified(lSpectrum.getIdentified() + 1);
@@ -1110,102 +1229,72 @@ public class MsfStorer extends JFrame {
                             }
                             // Update it.
                             lSpectrum.update(iConn);
-                            logger.debug("Persisted identification of spectrumid " + ita.getL_spectrumid());
-                            ita.setL_spectrumid(lSpectrum.getSpectrumid());
+                            id.setL_spectrumid(lSpectrum.getSpectrumid());
                             // Now to find the datfile ID.
-                            Object l_datfileid = iDatfilenameToDatfileid.get(ita.getTemporaryDatfilename());
+                            Object l_datfileid = iDatfilenameToDatfileid.get(id.getTemporaryDatfilename());
                             if (l_datfileid == null) {
-                                throw new SQLException("No datfile link found for datfile with filename '" + ita.getTemporaryDatfilename() + "'!");
+                                throw new SQLException("No datfile link found for datfile with filename '" + id.getTemporaryDatfilename() + "'!");
                             }
-                            ita.setL_datfileid(((Number) l_datfileid).longValue());
-                            ps.persist(iConn);
+                            id.setL_datfileid(((Number) l_datfileid).longValue());
+                            id.persist(iConn);
+                            iSpectrumIdentificationStored.put(id.getTemporarySpectrumfilename(), true);
+
+                            //  - Identification: in this case, we still need to store the fragment ions.
+                            if (id.getGeneratedKeys()[0] != null) {
+                                iSpectrumIdMap.put(new String(id.getTemporarySpectrumfilename()), (Long) id.getGeneratedKeys()[0]);
+                                double tol = id.getFragmentMassTolerance();
+                                Iterator iter = id.getFragmentions().iterator();
+                                while (iter.hasNext()) {
+                                    FragmentIonImpl fi = (FragmentIonImpl) iter.next();
+
+                                    HashMap hm = new HashMap();
+                                    hm.put(Fragmention.FRAGMENTIONNUMBER, new Long(fi.getNumber()));
+                                    hm.put(Fragmention.INTENSITY, new Long(new Double(fi.getIntensity()).longValue()));
+                                    hm.put(Fragmention.IONNAME, fi.getType());
+                                    hm.put(Fragmention.IONTYPE, new Long(fi.getID()));
+                                    hm.put(Fragmention.L_IDENTIFICATIONID, id.getGeneratedKeys()[0]);
+                                    hm.put(Fragmention.L_IONSCORINGID, new Long(fi.getImportance()));
+                                    hm.put(Fragmention.MASSDELTA, new Double(new BigDecimal(fi.getTheoreticalExperimantalMassError()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
+                                    hm.put(Fragmention.MASSERRORMARGIN, new Double(id.getFragmentMassTolerance()));
+                                    hm.put(Fragmention.MZ, new Double(new BigDecimal(fi.getMZ()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
+
+                                    Fragmention fi_db = new Fragmention(hm);
+                                    fi_db.persist(iConn);
+                                }
+
+                                // Create and persist Validation for the new Identification.
+                                HashMap lValidationMap = new HashMap();
+                                lValidationMap.put(Validation.L_IDENTIFICATIONID, (Long) id.getGeneratedKeys()[0]);
+                                lValidationMap.put(Validation.L_VALIDATIONTYPEID, new Long(Validationtype.NOT_VALIDATED));
+
+                                Validation lValidation = new Validation(lValidationMap);
+                                lValidation.persist(iConn);
+
+                            }
                         }
                     }
                 }
-
-
-                // See if we have:
-                //  - Datfile: in this case, we need to retrieve the generated key and store it in
-                //             a mapping.
-                if (ps instanceof Datfile) {
-                    ps.persist(iConn);
-                    Datfile datfile = (Datfile) ps;
-                    iDatfilenameToDatfileid.put(datfile.getFilename(), ps.getGeneratedKeys()[0]);
-                }
-                //  - Identification: in this case, we still need to store the fragment ions.
-                else if (ps instanceof Identification) {
-                    Identification id = (Identification) ps;
-                    if (id.getGeneratedKeys()[0] != null) {
-
-                        iSpectrumIdMap.put(new String(id.getTemporarySpectrumfilename()), (Long) id.getGeneratedKeys()[0]);
-                        double tol = id.getFragmentMassTolerance();
-                        Iterator iter = id.getFragmentions().iterator();
-                        while (iter.hasNext()) {
-                            FragmentIonImpl fi = (FragmentIonImpl) iter.next();
-
-                            HashMap hm = new HashMap();
-                            hm.put(Fragmention.FRAGMENTIONNUMBER, new Long(fi.getNumber()));
-                            hm.put(Fragmention.INTENSITY, new Long(new Double(fi.getIntensity()).longValue()));
-                            hm.put(Fragmention.IONNAME, fi.getType());
-                            hm.put(Fragmention.IONTYPE, new Long(fi.getID()));
-                            hm.put(Fragmention.L_IDENTIFICATIONID, id.getGeneratedKeys()[0]);
-                            hm.put(Fragmention.L_IONSCORINGID, new Long(fi.getImportance()));
-                            hm.put(Fragmention.MASSDELTA, new Double(new BigDecimal(fi.getTheoreticalExperimantalMassError()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
-                            hm.put(Fragmention.MASSERRORMARGIN, new Double(id.getFragmentMassTolerance()));
-                            hm.put(Fragmention.MZ, new Double(new BigDecimal(fi.getMZ()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
-
-                            Fragmention fi_db = new Fragmention(hm);
-                            fi_db.persist(iConn);
-                        }
-                    }
-                }
-                if (aProgress != null) {
-                    aProgress.setValue(aProgress.getValue() + 1);
-                }
             }
-            // Now do all the updates for the spectrumfiles.
-            // Add the information about having been searched to the PKLfiles in the DB.
-            if (aProgress != null) {
-                aProgress.setString("Updating 'searched' flag on all spectra in the datfiles...");
-            }
-            Iterator iter = iAllSpectraInDatfiles.values().iterator();
-            while (iter.hasNext()) {
-                Set names = (Set) iter.next();
-                String[] filenames = new String[names.size()];
-                names.toArray(filenames);
-                Spectrum.addOneToSearchedFlag(filenames, iConn);
+
+
+            // See if we have:
+            //  - Datfile: in this case, we need to retrieve the generated key and store it in
+            //             a mapping.
+            if (ps instanceof Datfile) {
+                ps.persist(iConn);
+                Datfile datfile = (Datfile) ps;
+                iDatfilenameToDatfileid.put(datfile.getFilename(), ps.getGeneratedKeys()[0]);
             }
             if (aProgress != null) {
                 aProgress.setValue(aProgress.getValue() + 1);
             }
-        } catch (Exception e) {
-            // Do a rollback if possible.
-            String message = "Encountered an error while trying to insert data: " + e.getMessage();
-            String rollbackStatus = "Rollback not yet implemented!";
+        }
+
+        if (aProgress != null) {
+            aProgress.setValue(aProgress.getValue() + 1);
         }
     }
 
-
-    /**
-     * This method adds all the searched spectra from this datfile to the 'iAllSpectraInDatfiles' map, if the spectra
-     * are already present, it will update their count.
-     *
-     * @param aMDF MascotDatfile from which the spectra are read.
-     */
-    private void addSearchedSpectra(MascotDatfileInf aMDF) {
-        Iterator iter = aMDF.getQueryIterator();
-        HashSet filenames = new HashSet(aMDF.getNumberOfQueries());
-        // check if the mdf is from a multifile
-        while (iter.hasNext()) {
-            Query lQuery = (Query) iter.next();
-            String title = lQuery.getTitle();
-            filenames.add(title);
-        }
-        Object result = iAllSpectraInDatfiles.put(aMDF.getFileName(), filenames);
-        if (result != null) {
-            logger.error("\n\nFound duplicate processed datfilename: '" + aMDF.getFileName() + "'!");
-        }
-    }
 
     private Vector extractIDs(MascotDatfileInf aMDF, HashMap<String, com.compomics.thermo_msf_parser.msf.Spectrum> lSpectra) throws IllegalArgumentException {
         // Vector that will contain the MascotIdentifiedSpectrum instances.
@@ -1218,7 +1307,7 @@ public class MsfStorer extends JFrame {
         String dbfilename = header.getRelease();
         Parameters parameters = aMDF.getParametersSection();
         String lRawName = parameters.getFile();
-        lRawName = lRawName.substring(lRawName.indexOf(":") + 2, lRawName.lastIndexOf(".raw"));
+        lRawName = lRawName.substring(lRawName.indexOf(":") + 2, lRawName.toLowerCase().lastIndexOf(".raw"));
         String searchTitle = parameters.getCom();
         if (searchTitle == null) {
             searchTitle = "!No title specified";
@@ -1263,6 +1352,8 @@ public class MsfStorer extends JFrame {
                 charge = -charge;
             }
             lTitle = lRawName + "_" + lTitle.substring(lTitle.indexOf("Spectrum") + 8, lTitle.indexOf(" ")).trim() + "_" + lTitle.substring(lTitle.indexOf(":") + 1, lTitle.indexOf(",")).trim() + "_" + charge;
+            //add the title to show that it was searched
+            result.add(lTitle);
             //process title
             com.compomics.thermo_msf_parser.msf.Spectrum lSpectrum = lSpectra.get(lTitle);
             if (lSpectrum != null) {
@@ -1290,16 +1381,32 @@ public class MsfStorer extends JFrame {
                         // Get the first ranking peptide hit, if any.
                         PeptideHit ph = queryToPepMap.getPeptideHitOfOneQuery(query.getQueryNumber(), rank);
                         if (ph != null && ph.getSequence().equalsIgnoreCase(lPeptide.getSequence())) {
+
                             //check if this is the highest scoring peptide for this spectrum
                             boolean lHighest = true;
                             if (iSpectrumScoreMap.get(lTitle) != null) {
-                                if (iSpectrumScoreMap.get(lTitle) >= ph.getIonsScore()) {
+                                // we found already an identification for this spectrum
+                                if (iSpectrumScoreMap.get(lTitle) > ph.getIonsScore()) {
+                                    //the old one is the highest scoring one
+                                    //this one will not be added
                                     lHighest = false;
+                                } else {
+                                    //the current peptide identification has the highest score
+                                    //delete the old peptide from the iPeptidesToStore vector
+                                    Peptide lPeptideToDelete = null;
+                                    for (int p = 0; p < iPeptidesToStore.size(); p++) {
+                                        if (iPeptidesToStore.get(p).getParentSpectrum().getSpectrumTitle().equalsIgnoreCase(lTitle)) {
+                                            lPeptideToDelete = iPeptidesToStore.get(p);
+                                            p = iPeptidesToStore.size();
+                                        }
+                                    }
+                                    iPeptidesToStore.remove(lPeptideToDelete);
                                 }
                             }
 
                             if (lHighest) {
-                                iSpectrumScoreMap.put(lTitle, ph.getIonsScore());
+                                iSpectrumScoreMap.put(lTitle, (int) ph.getIonsScore());
+                                iSpectrumIdentificationStored.put(lTitle, false);
                                 iPeptidesToStore.add(lPeptide);
 
                                 // We have a peptide hit for this query that scores equal
@@ -1354,7 +1461,7 @@ public class MsfStorer extends JFrame {
                                     throw new IllegalArgumentException("\n\nModificationConversion.txt does not contain enough information to parse the following identification:\n\t" + lModifiedSequence + "\nPlease add the modification into modificationcoverions.txt. ");
                                 }
                                 mis.setModifiedSequence(lModifiedSequence);
-                                mis.setScore(ph.getIonsScore());
+                                mis.setScore((int) ph.getIonsScore());
 
                                 // Protein stuff.
                                 MascotIsoforms mifs = new MascotIsoforms();
@@ -1592,7 +1699,7 @@ public class MsfStorer extends JFrame {
         selectMsfFilesButton.setText("Select and store .msf files");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -1600,7 +1707,7 @@ public class MsfStorer extends JFrame {
         progressBar = new JProgressBar();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridwidth = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -1613,6 +1720,14 @@ public class MsfStorer extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
         jpanContent.add(label4, gbc);
+        final JLabel label5 = new JLabel();
+        label5.setText("Combine identifications from different msf files ?");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        jpanContent.add(label5, gbc);
         chbHighConfident = new JCheckBox();
         chbHighConfident.setMaximumSize(new Dimension(130, 22));
         chbHighConfident.setMinimumSize(new Dimension(130, 22));
@@ -1653,14 +1768,14 @@ public class MsfStorer extends JFrame {
         msfLabel.setText("Label");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         gbc.gridwidth = 4;
         jpanContent.add(msfLabel, gbc);
         previewMsfFilesButton = new JButton();
         previewMsfFilesButton.setText("Preview .msf files");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 4;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -1671,7 +1786,7 @@ public class MsfStorer extends JFrame {
         lbl3.setText("This only works for .msf files with a filename equal to the raw file name");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 5;
         jpanContent.add(lbl3, gbc);
         lbl2 = new JLabel();
@@ -1680,7 +1795,7 @@ public class MsfStorer extends JFrame {
         lbl2.setText("This only works for .msf created for one run");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 5;
         jpanContent.add(lbl2, gbc);
         lbl1 = new JLabel();
@@ -1689,9 +1804,17 @@ public class MsfStorer extends JFrame {
         lbl1.setText("This only works for .msf files identified by Mascot");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 5;
         jpanContent.add(lbl1, gbc);
+        chbCombine = new JCheckBox();
+        chbCombine.setText("(This will load everything in memory, so don't store to many files in one time)");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.WEST;
+        jpanContent.add(chbCombine, gbc);
     }
 
     /**

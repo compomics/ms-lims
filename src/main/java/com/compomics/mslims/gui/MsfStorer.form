@@ -57,7 +57,7 @@
       </component>
       <component id="2d871" class="javax.swing.JButton" binding="selectMsfFilesButton" default-binding="true">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="9" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -66,7 +66,7 @@
       </component>
       <component id="a95dd" class="javax.swing.JProgressBar" binding="progressBar">
         <constraints>
-          <grid row="9" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="10" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties/>
@@ -78,6 +78,15 @@
         </constraints>
         <properties>
           <text value="Peptide Confidence Level: "/>
+        </properties>
+      </component>
+      <component id="3943" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="Combine identifications from different msf files ?"/>
         </properties>
       </component>
       <component id="6a57a" class="javax.swing.JCheckBox" binding="chbHighConfident">
@@ -120,7 +129,7 @@
       </component>
       <component id="c5ab4" class="javax.swing.JLabel" binding="msfLabel">
         <constraints>
-          <grid row="10" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="11" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -130,7 +139,7 @@
       </component>
       <component id="9696d" class="javax.swing.JButton" binding="previewMsfFilesButton" default-binding="true">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -139,7 +148,7 @@
       </component>
       <component id="9160" class="javax.swing.JLabel" binding="lbl3">
         <constraints>
-          <grid row="7" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -150,7 +159,7 @@
       </component>
       <component id="53b7f" class="javax.swing.JLabel" binding="lbl2">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -161,13 +170,22 @@
       </component>
       <component id="91735" class="javax.swing.JLabel" binding="lbl1">
         <constraints>
-          <grid row="5" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="0" row-span="1" col-span="5" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <font style="2"/>
           <foreground color="-65536"/>
           <text value="This only works for .msf files identified by Mascot"/>
+        </properties>
+      </component>
+      <component id="5bac" class="javax.swing.JCheckBox" binding="chbCombine">
+        <constraints>
+          <grid row="4" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <text value="(This will load everything in memory, so don't store to many files in one time)"/>
         </properties>
       </component>
     </children>

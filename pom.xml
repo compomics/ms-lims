@@ -12,7 +12,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.6.2</version.number>
+        <version.number>7.6.3</version.number>
         <logging.level.default>ALL</logging.level.default>
         <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
         <logging.file.max.size>5000KB</logging.file.max.size>
@@ -416,7 +416,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>rover</artifactId>
-            <version>2.3.1</version>
+            <version>2.3.4</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
@@ -438,7 +438,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>thermo_msf_parser</artifactId>
-            <version>0.4</version>
+            <version>1.0.2</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.
@@ -447,6 +447,13 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <groupId>lennart</groupId>
             <artifactId>statlib</artifactId>
             <version>0.3</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>niklaas</groupId>
+            <artifactId>jmol</artifactId>
+            <version>12.0.43</version>
             <type>jar</type>
         </dependency>
 
