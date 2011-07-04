@@ -2,6 +2,9 @@
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
 7.5)
 ----
+*Changes in ms-lims 7.6.4 (July 4. 2011):*
+ * DEPENDENCY CHANGE: updated Mascotdatfile dependency to version 3.2.4 which has a dedicated tmp folder that is automatically cleaned.
+----
 
 *Changes in ms-lims 7.6.3 (July 1. 2011):*
  * FEATURE: added the msf-storer that integrates the Thermo Proteome Discoverer in ms-lims
