@@ -3,6 +3,10 @@
 7.5)
 ----
 
+*Changes in ms-lims 7.6.3 (July 1. 2011):*
+ * FEATURE: added the msf-storer that integrates the Thermo Proteome Discoverer in ms-lims
+----
+
 *Changes in ms-lims 7.6.2 (June 20. 2011):*
  * BUGFIX: fixed total ion intensity calculation for the Thermo FT-IR storage engine
 ----
