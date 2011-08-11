@@ -1,5 +1,6 @@
 package com.compomics.mslims;
 
+import com.compomics.mascotdatfile.util.mascot.index.*;
 import com.compomics.util.io.StartBrowser;
 
 import com.compomics.util.enumeration.CompomicsTools;
@@ -37,6 +38,7 @@ public class MsLimsStarter {
         try {
             PlasticLookAndFeel.setPlasticTheme(new SkyKrupp());
             UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
+            com.compomics.mascotdatfile.util.mascot.index.Reader.cleanOldFiles();
         } catch (UnsupportedLookAndFeelException e) {
             // ignore exception
         }
