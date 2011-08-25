@@ -73,7 +73,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         try {
             // Sum of scans.
             // Returns the first retention time, track its summed status, and retain all retention times in the embedded properties.
-            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestRetentionEsquire.mgf")));
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("testRetentionEsquire.mgf")));
             Assert.assertEquals(1608.0, mgf.getRetentionInSeconds()[0]);
         } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
