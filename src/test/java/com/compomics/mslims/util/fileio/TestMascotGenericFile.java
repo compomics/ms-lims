@@ -47,7 +47,7 @@ public class TestMascotGenericFile extends TestCaseLM {
     public void testRetention() {
         try {
             // No retention time, return 0.
-            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_1.mgf")));
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("testMascotGenericFile_1.mgf")));
             Assert.assertEquals(1, mgf.getRetentionInSeconds().length);
             Assert.assertEquals(6.0, mgf.getRetentionInSeconds()[0]);
         } catch (IOException ioe) {
@@ -57,7 +57,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         try {
             // Sum of scans.
             // Returns the first retention time, track its summed status, and retain all retention times in the embedded properties.
-            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_5.mgf")));
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("testMascotGenericFile_5.mgf")));
             Assert.assertEquals(1207.5892, mgf.getRetentionInSeconds()[0]);
             Assert.assertEquals(1208.5323, mgf.getRetentionInSeconds()[1]);
             Assert.assertEquals(2, mgf.getRetentionInSeconds().length);
@@ -85,22 +85,22 @@ public class TestMascotGenericFile extends TestCaseLM {
      */
     public void testCreation() {
         try {
-            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_1.mgf")));
-            Assert.assertEquals("TestMascotGenericFile_1.mgf", mgf.getFilename());
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("testMascotGenericFile_1.mgf")));
+            Assert.assertEquals("testMascotGenericFile_1.mgf", mgf.getFilename());
         } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
 
         try {
-            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_2.mgf")));
-            Assert.assertEquals("TestMascotGenericFile_2.mgf", mgf.getFilename());
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("testMascotGenericFile_2.mgf")));
+            Assert.assertEquals("testMascotGenericFile_2.mgf", mgf.getFilename());
         } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
 
         try {
-            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("TestMascotGenericFile_3.mgf")));
-            Assert.assertEquals("TestMascotGenericFile_3.mgf", mgf.getFilename());
+            MascotGenericFile mgf = new MascotGenericFile(new File(super.getFullFilePath("testMascotGenericFile_3.mgf")));
+            Assert.assertEquals("testMascotGenericFile_3.mgf", mgf.getFilename());
         } catch (IOException ioe) {
             fail("IOException thrown when attempting to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
@@ -114,7 +114,7 @@ public class TestMascotGenericFile extends TestCaseLM {
 
 
         try {
-            new MascotGenericFile(new File("TestMascotGenericFile_IDONOTEXIST.mgf"));
+            new MascotGenericFile(new File("testMascotGenericFile_IDONOTEXIST.mgf"));
             fail("No IOException thrown when attempting to test the creation of a MascotGenericFile with a non-existant file!");
         } catch (IOException ioe) {
             // This is OK.
@@ -123,16 +123,16 @@ public class TestMascotGenericFile extends TestCaseLM {
         // Now first read the file contents.
         StringBuffer contents = new StringBuffer();
         try {
-            BufferedReader br = new BufferedReader(new FileReader(super.getFullFilePath("TestMascotGenericFile_1.mgf")));
+            BufferedReader br = new BufferedReader(new FileReader(super.getFullFilePath("testMascotGenericFile_1.mgf")));
             String line = null;
             while ((line = br.readLine()) != null) {
                 contents.append(line + "\n");
             }
         } catch (IOException ioe) {
-            fail("IOException thrown when attempting to read the file 'TestMascotGenericFile_1.mgf' to test the creation of a MascotGenericFile: " + ioe.getMessage());
+            fail("IOException thrown when attempting to read the file 'testMascotGenericFile_1.mgf' to test the creation of a MascotGenericFile: " + ioe.getMessage());
         }
-        MascotGenericFile mgf = new MascotGenericFile("TestMascotGenericFile_1.mgf", contents.toString());
-        Assert.assertEquals("TestMascotGenericFile_1.mgf", mgf.getFilename());
+        MascotGenericFile mgf = new MascotGenericFile("testMascotGenericFile_1.mgf", contents.toString());
+        Assert.assertEquals("testMascotGenericFile_1.mgf", mgf.getFilename());
     }
 
     /**
@@ -141,7 +141,7 @@ public class TestMascotGenericFile extends TestCaseLM {
      */
     public void testReadingAndWritingBack() {
         try {
-            File input = new File(super.getFullFilePath("TestMascotGenericFile_1.mgf"));
+            File input = new File(super.getFullFilePath("testMascotGenericFile_1.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.
             File output = new File(input.getParentFile(), "temp" + mgf.getFilename());
@@ -168,7 +168,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         }
 
         try {
-            File input = new File(super.getFullFilePath("TestMascotGenericFile_2.mgf"));
+            File input = new File(super.getFullFilePath("testMascotGenericFile_2.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.
             File output = new File(input.getParentFile(), "temp" + mgf.getFilename());
@@ -195,7 +195,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         }
 
         try {
-            File input = new File(super.getFullFilePath("TestMascotGenericFile_3.mgf"));
+            File input = new File(super.getFullFilePath("testMascotGenericFile_3.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.
             File output = new File(input.getParentFile(), "temp" + mgf.getFilename());
@@ -222,7 +222,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         }
 
         try {
-            File input = new File(super.getFullFilePath("TestMascotGenericFile_4.mgf"));
+            File input = new File(super.getFullFilePath("testMascotGenericFile_4.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.
             File output = new File(input.getParentFile(), "temp" + mgf.getFilename());
@@ -249,7 +249,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         }
         // Test 5, this mgf file contains Extra additional paramaters (ex: SCANS, RTINSECONDS, ..)
         try {
-            File input = new File(super.getFullFilePath("TestMascotGenericFile_5.mgf"));
+            File input = new File(super.getFullFilePath("testMascotGenericFile_5.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.
             File output = new File(input.getParentFile(), "temp" + mgf.getFilename());
@@ -284,7 +284,7 @@ public class TestMascotGenericFile extends TestCaseLM {
         // Test 6, this mgf file lacks the + sign folowing the charge state (cfr. proteowizard output!)
         try {
 
-            File input = new File(super.getFullFilePath("TestMascotGenericFile_6.mgf"));
+            File input = new File(super.getFullFilePath("testMascotGenericFile_6.mgf"));
             MascotGenericFile mgf = new MascotGenericFile(input);
             // Writing to temporary file.
             Assert.assertEquals(2, mgf.getCharge());
