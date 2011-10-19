@@ -2,6 +2,15 @@
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
 7.5)
 ----
+
+*Changes in ms-lims 7.6.6 (July 4. 2011):*
+ * DEPENDENCY CHANGE: Updated dependency to Peptizer version 1.8.1.
+----
+
+*Changes in ms-lims 7.6.5 (August 11. 2011):*
+ * BUGFIX: added static call to cleanUp MascotDatfile tmp files at startup.
+----
+
 *Changes in ms-lims 7.6.4 (July 4. 2011):*
  * DEPENDENCY CHANGE: updated Mascotdatfile dependency to version 3.2.4 which has a dedicated tmp folder that is automatically cleaned.
 ----
