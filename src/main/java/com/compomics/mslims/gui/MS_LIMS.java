@@ -21,13 +21,7 @@ import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.io.PropertiesManager;
 import com.compomics.util.io.StartBrowser;
-import com.jgoodies.looks.FontPolicies;
-import com.jgoodies.looks.FontPolicy;
-import com.jgoodies.looks.FontSet;
-import com.jgoodies.looks.FontSets;
-import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
-import com.jgoodies.looks.plastic.theme.Silver;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -157,14 +151,14 @@ public class MS_LIMS extends JFrame implements Connectable {
 
         // Look n feel.
         try {
-            FontSet fontSet = FontSets.createDefaultFontSet(
-                    new Font("Tahoma", Font.PLAIN, 11),    // control font
-                    new Font("Tahoma", Font.PLAIN, 11),    // menu font
-                    new Font("Tahoma", Font.BOLD, 11)     // title font
-            );
-            FontPolicy fixedPolicy = FontPolicies.createFixedPolicy(fontSet);
-            PlasticLookAndFeel.setFontPolicy(fixedPolicy);
-            PlasticLookAndFeel.setPlasticTheme(new Silver());
+//            FontSet fontSet = FontSets.createDefaultFontSet(
+//                    new Font("Tahoma", Font.PLAIN, 11),    // control font
+//                    new Font("Tahoma", Font.PLAIN, 11),    // menu font
+//                    new Font("Tahoma", Font.BOLD, 11)     // title font
+//            );
+//            FontPolicy fixedPolicy = FontPolicies.createFixedPolicy(fontSet);
+//            PlasticLookAndFeel.setFontPolicy(fixedPolicy);
+//            PlasticLookAndFeel.setPlasticTheme(new Silver());
             UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
         } catch (UnsupportedLookAndFeelException e) {
             logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
