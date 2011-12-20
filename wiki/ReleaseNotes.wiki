@@ -3,7 +3,11 @@
 7.5)
 ----
 
-*Changes in ms-lims 7.6.6 (July 4. 2011):*
+*Changes in ms-lims 7.6.7 (December 20. 2011):*
+ * DEPENDENCY CHANGE: Updated dependency to MascotDatfile version 3.2.8.
+----
+
+*Changes in ms-lims 7.6.6 (August 25. 2011):*
  * DEPENDENCY CHANGE: Updated dependency to Peptizer version 1.8.1.
 ----
 
