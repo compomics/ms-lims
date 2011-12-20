@@ -633,7 +633,12 @@ Change log
 
 - Version 7.4.1
           The 7.4.1 version of ms_lims fixes a bug that was introduced in the storage of spectrum files, where a memory leak occurred that could result in instability of ms_lims.
+
 - Version 7.5.2
           The 7.5.2 version of ms_lims adds storage engine for Bruker MicroTOFQ and update the storage engine of the bruker Ultraflex mass spectrometers.
+
 - Version 7.6
-          The 7.6 version of ms_lims adds fragmentation to the spectrum table. The fragmentation type can be selected during the spectrum storage process. The modificationConversion.txt file (that can be found in the resources folder) will be kept in sync with the database with this release. New modifications can be added by using the ConfigurationGui. 
+          The 7.6 version of ms_lims adds fragmentation to the spectrum table. The fragmentation type can be selected during the spectrum storage process. The modificationConversion.txt file (that can be found in the resources folder) will be kept in sync with the database with this release. New modifications can be added by using the ConfigurationGui.
+
+- Version 7.6.7.
+          The 7.6.6 version of ms_lims updates to MascotDatfile 3.2.8 which solves a bug in Distiller-based query title parsing, and indexing of files requiring temp storage.
