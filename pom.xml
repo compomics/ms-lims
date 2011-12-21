@@ -12,7 +12,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.6.7</version.number>
+        <version.number>7.6.8</version.number>
         <logging.level.default>WARN</logging.level.default>
         <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
         <logging.file.max.size>5000KB</logging.file.max.size>
@@ -416,7 +416,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>rover</artifactId>
-            <version>2.3.4</version>
+            <version>2.3.5</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
