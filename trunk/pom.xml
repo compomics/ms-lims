@@ -462,7 +462,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>peptizer</artifactId>
-            <version>1.8</version>
+            <version>1.8.1</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
