@@ -3,6 +3,10 @@
 7.5)
 ----
 
+*Changes in ms-lims 7.6.9 (February 1. 2012):*
+ * DEPENDENCY CHANGE: Updated dependency to MascotDatfile version 3.2.9.
+----
+
 *Changes in ms-lims 7.6.8 (December 21. 2011):*
  * DEPENDENCY CHANGE: Updated dependency to Rover version 2.3.5.
 ----
