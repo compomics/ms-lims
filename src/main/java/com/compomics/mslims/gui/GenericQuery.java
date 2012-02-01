@@ -6,24 +6,25 @@
  */
 package com.compomics.mslims.gui;
 
+import com.compomics.mascotdatfile.util.gui.SequenceFragmentationPanel;
+import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
+import com.compomics.mslims.db.accessors.Fragmention;
 import com.compomics.mslims.db.accessors.Spectrum;
 import com.compomics.mslims.db.accessors.Spectrum_file;
-import org.apache.log4j.Logger;
-
-import com.compomics.mslims.db.accessors.Fragmention;
-import com.compomics.util.enumeration.CompomicsTools;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.mslims.gui.dialogs.ExportDialog;
 import com.compomics.mslims.gui.dialogs.QueryCacheDialog;
 import com.compomics.mslims.gui.interfaces.Informable;
+import com.compomics.mslims.util.config.MslimsConfiguration;
 import com.compomics.mslims.util.fileio.MascotGenericFile;
-import com.compomics.mascotdatfile.util.gui.SequenceFragmentationPanel;
-import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
 import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;
 import com.compomics.peptizer.util.fileio.ConnectionManager;
+import com.compomics.util.Export;
 import com.compomics.util.db.DBResultSet;
+import com.compomics.util.enumeration.CompomicsTools;
+import com.compomics.util.enumeration.ImageType;
 import com.compomics.util.gui.JTableForDB;
+import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.gui.renderers.ByteArrayRenderer;
 import com.compomics.util.gui.spectrum.SpectrumPanel;
 import com.compomics.util.interfaces.Connectable;
@@ -31,6 +32,8 @@ import com.compomics.util.io.PropertiesManager;
 import com.compomics.util.io.StartBrowser;
 import com.compomics.util.sun.SwingWorker;
 import com.compomics.util.sun.TableSorter;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -438,7 +441,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                                 if (temp.size() == 0) {
                                     JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                                 }
-                                for (Iterator lIterator = temp.iterator(); lIterator.hasNext();) {
+                                for (Iterator lIterator = temp.iterator(); lIterator.hasNext(); ) {
                                     FragmentIon lIon = (FragmentIon) lIterator.next();
                                     if (lIon.getID() == FragmentIon.Y_ION || lIon.getID() == FragmentIon.B_ION ||
                                             lIon.getID() == FragmentIon.PRECURSOR ||
@@ -472,6 +475,120 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                     } catch (IOException ioe) {
                         logger.error(ioe.getMessage(), ioe);
                     }
+
+                } else if ((e.getModifiersEx() == MouseEvent.SHIFT_DOWN_MASK && e.getButton() == MouseEvent.BUTTON1 && tblResult.getColumnName(col).trim().endsWith("spectrumid"))) {
+                    byte[] result = null;
+                    String filename = "Spectrum";
+                    try {
+                        if (tblResult.getColumnName(col).trim().endsWith("spectrumid")) {
+                            try {
+                                Spectrum lSpectrum = Spectrum.findFromID(((Number) tblResult.getValueAt(row, col)).longValue(), iConn);
+                                Spectrum_file lSpectrum_file = Spectrum_file.findFromID(lSpectrum.getSpectrumid(), iConn);
+                                result = lSpectrum_file.getUnzippedFile();
+                                filename = lSpectrum.getFilename();
+                            } catch (SQLException sqle) {
+                                logger.error(sqle.getMessage(), sqle);
+                                JOptionPane.showMessageDialog((Component) comp, "Unable to load data for selected spectrum (ID=" + tblResult.getValueAt(row, col) + "): " + sqle.getMessage() + ".", "Unable to load spectrum data!", JOptionPane.ERROR_MESSAGE);
+                                return;
+                            }
+                        } else {
+                            // Creating the frame with the data from the model.
+                            int modelCol = tblResult.convertColumnIndexToModel(col);
+                            byte[] spectrumZipped = (byte[]) tblResult.getModel().getValueAt(row, modelCol);
+                            result = Spectrum_file.getUnzippedFile(spectrumZipped);
+                        }
+                        MascotGenericFile mgf = new MascotGenericFile(filename, new String(result));
+                        if (mgf.getPeaks() == null || mgf.getPeaks().size() == 0) {
+                            JOptionPane.showMessageDialog(GenericQuery.this, "This spectrum contains no peaks and can not be visualized!", "No peaks found in spectrum!", JOptionPane.WARNING_MESSAGE);
+                            return;
+                        }
+                        // See if we have a sensible filename, else try the title.
+                        if (mgf.getFilename() == null || mgf.getFilename().indexOf(".") < 0) {
+                            String title = mgf.getTitle();
+                            if (title != null && title.indexOf(".") > 0) {
+                                mgf.setFilename(title);
+                            }
+                        }
+                        // Get all the fragment ions for this identification.
+                        long idid = -1;
+                        Vector fragments = new Vector();
+                        try {
+                            int idColumn = -1;
+                            for (int i = 0; i < tblResult.getModel().getColumnCount(); i++) {
+                                if (tblResult.getModel().getColumnName(i).trim().toLowerCase().equals("identificationid")) {
+                                    idColumn = i;
+                                }
+                            }
+                            if (idColumn > -1) {
+                                idid = ((Number) tblResult.getModel().getValueAt(row, idColumn)).longValue();
+
+                                Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConn, idid);
+                                if (temp.size() == 0) {
+                                    JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
+                                }
+                                for (Iterator lIterator = temp.iterator(); lIterator.hasNext(); ) {
+                                    FragmentIon lIon = (FragmentIon) lIterator.next();
+                                    if (lIon.getID() == FragmentIon.Y_ION || lIon.getID() == FragmentIon.B_ION ||
+                                            lIon.getID() == FragmentIon.PRECURSOR ||
+                                            lIon.getID() == FragmentIon.IMMONIUM) {
+                                        fragments.add(lIon);
+                                    }
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(GenericQuery.this, new String[]{"Unable to locate identification id in the current result set.", "Could not locate fragment ions."}, "Identification id not found!", JOptionPane.WARNING_MESSAGE);
+                            }
+                        } catch (SQLException sqle) {
+                            logger.error(sqle.getMessage(), sqle);
+                            JOptionPane.showMessageDialog((Component) comp, "Unable to load fragment ions for selected identification (ID=" + idid + "): " + sqle.getMessage() + ".", "Unable to load fragment ions!", JOptionPane.ERROR_MESSAGE);
+                        }
+                        mgf.getPeaks().put(MslimsConfiguration.getPDFOutputMaxY(), 0.1);
+                        SpectrumPanel specPanel = new SpectrumPanel(mgf);
+                        specPanel.setXAxisStartAtZero(true);
+                        // Add fake point with intensity 0.01 at maxY
+                        specPanel.setAnnotations(fragments);
+                        JFrame frame = new JFrame("Spectrum for " + mgf.getTitle());
+                        frame.getContentPane().add(specPanel);
+                        frame.addWindowListener(new WindowAdapter() {
+                            /**
+                             * Invoked when a window is in the process of being closed.
+                             * The close operation can be overridden at this point.
+                             */
+                            public void windowClosing(WindowEvent e) {
+                                e.getWindow().dispose();
+                            }
+                        });
+
+                        Rectangle r = MslimsConfiguration.getPDFOutputDimensions();
+                        frame.setBounds(r);
+                        frame.validate();
+
+
+                        // Export the SpectrumPanel component.
+
+                        FileDialog fd = new FileDialog(GenericQuery.this, "Save spectrum as PDF to disk...", FileDialog.SAVE);
+                        fd.setVisible(true);
+                        String select = fd.getFile();
+                        if (select == null) {
+                            return;
+                        } else {
+                            select = fd.getDirectory() + select;
+                            File output = new File(select);
+                            if (!output.exists()) {
+                                output.createNewFile();
+                            }
+                            frame.setVisible(true);
+                            Export.exportComponent(frame.getRootPane(), r, output, ImageType.PDF);
+                            frame.setVisible(false);
+
+                            JOptionPane.showMessageDialog(GenericQuery.this, "PDF created in " + select + ".", "Output written!", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+
+                    } catch (IOException ioe) {
+                        logger.error(ioe.getMessage(), ioe);
+                    } catch (TranscoderException e1) {
+                        logger.error(e1.getMessage(), e1);
+                    }
                 } else if (e.getModifiersEx() == MouseEvent.CTRL_DOWN_MASK && comp instanceof ByteArrayRenderer) {
                     // Creating the frame with the data from the model.
                     int modelCol = tblResult.convertColumnIndexToModel(col);
@@ -499,7 +616,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         logger.error(ioe.getMessage(), ioe);
                         JOptionPane.showMessageDialog(GenericQuery.this, "Unable to save data to file: " + ioe.getMessage(), "Unable to write data to file!", JOptionPane.ERROR_MESSAGE);
                     }
-                }else if (e.getClickCount() >= 2 && (tblResult.getColumnName(col) != null) && tblResult.getColumnName(col).trim().equalsIgnoreCase("ion_coverage")) {
+                } else if (e.getClickCount() >= 2 && (tblResult.getColumnName(col) != null) && tblResult.getColumnName(col).trim().equalsIgnoreCase("ion_coverage")) {
                     // Get all the fragment ions for this identification.
                     long idid = -1;
                     String modSeq = null;
@@ -521,7 +638,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                             if (temp.size() == 0) {
                                 JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                             }
-                            for (Iterator lIterator = temp.iterator(); lIterator.hasNext();) {
+                            for (Iterator lIterator = temp.iterator(); lIterator.hasNext(); ) {
                                 FragmentIon lIon = (FragmentIon) lIterator.next();
                                 if (lIon.getID() == FragmentIon.Y_ION || lIon.getID() == FragmentIon.B_ION ||
                                         lIon.getID() == FragmentIon.PRECURSOR ||
@@ -1065,7 +1182,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
             File output = new File(PropertiesManager.getInstance().getApplicationFolder(CompomicsTools.MSLIMS), "queries.txt.gz");
             // Just start outputting to the 'queries.txt' file. Silent overwrite!
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(output))));
-            for (Iterator lIterator = iQueryCache.iterator(); lIterator.hasNext();) {
+            for (Iterator lIterator = iQueryCache.iterator(); lIterator.hasNext(); ) {
                 String query = (String) lIterator.next();
                 bw.write(query + "\n");
                 bw.write("\n" + QUERY_SEPARATOR + "\n\n");
