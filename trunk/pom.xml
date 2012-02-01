@@ -12,7 +12,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.6.8</version.number>
+        <version.number>7.6.9</version.number>
         <logging.level.default>WARN</logging.level.default>
         <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
         <logging.file.max.size>5000KB</logging.file.max.size>
@@ -431,7 +431,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.2.4</version>
+            <version>3.2.9</version>
             <type>jar</type>
         </dependency>
 
