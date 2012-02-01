@@ -13,10 +13,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
     <!-- Set the version number for the whole project -->
     <properties>
         <version.number>7.6.9</version.number>
-        <logging.level.default>WARN</logging.level.default>
-        <logging.file.path.name>ms-lims-log4j.log</logging.file.path.name>
-        <logging.file.max.size>5000KB</logging.file.max.size>
-        <logging.pattern>[%d{dd-MMM-yyyy HH:mm:ss} - %p] "%m" (%C:%L)%n</logging.pattern>
     </properties>
 
     <!-- Licence -->
@@ -272,31 +268,31 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
             <!--&lt;!&ndash; google code upload plugin &ndash;&gt;-->
             <!--<plugin>-->
-                <!--<groupId>org.riedelcastro</groupId>-->
-                <!--<artifactId>gcupload-maven-plugin</artifactId>-->
-                <!--<version>0.9</version>-->
-                <!--<configuration>-->
-                    <!--<projectName>ms-lims</projectName>-->
-                    <!--<uploads>-->
-                        <!--<upload>-->
-                            <!--<extensions>zip</extensions>-->
-                            <!--<labels>Type-Library,Featured</labels>-->
-                            <!--<summary>Release package of ${project.artifactId} version ${project.version}</summary>-->
-                        <!--</upload>-->
-                    <!--</uploads>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>upload-gc</id>-->
-                        <!--&lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
-                        <!--<phase>deploy</phase>-->
-                        <!--&lt;!&ndash; append to the packaging phase. &ndash;&gt;-->
-                        <!--<goals>-->
-                            <!--<goal>gcupload</goal>-->
-                            <!--&lt;!&ndash; goals == mojos &ndash;&gt;-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
+            <!--<groupId>org.riedelcastro</groupId>-->
+            <!--<artifactId>gcupload-maven-plugin</artifactId>-->
+            <!--<version>0.9</version>-->
+            <!--<configuration>-->
+            <!--<projectName>ms-lims</projectName>-->
+            <!--<uploads>-->
+            <!--<upload>-->
+            <!--<extensions>zip</extensions>-->
+            <!--<labels>Type-Library,Featured</labels>-->
+            <!--<summary>Release package of ${project.artifactId} version ${project.version}</summary>-->
+            <!--</upload>-->
+            <!--</uploads>-->
+            <!--</configuration>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>upload-gc</id>-->
+            <!--&lt;!&ndash; this is used for inheritance merges &ndash;&gt;-->
+            <!--<phase>deploy</phase>-->
+            <!--&lt;!&ndash; append to the packaging phase. &ndash;&gt;-->
+            <!--<goals>-->
+            <!--<goal>gcupload</goal>-->
+            <!--&lt;!&ndash; goals == mojos &ndash;&gt;-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--</executions>-->
             <!--</plugin>-->
 
 
@@ -340,8 +336,8 @@ http://www.w3.org/2001/XMLSchema-instance ">
         </pluginRepository>
 
         <!--<pluginRepository>-->
-            <!--<id>repository.riedelcastro.org</id>-->
-            <!--<url>http://repository.riedelcastro.org</url>-->
+        <!--<id>repository.riedelcastro.org</id>-->
+        <!--<url>http://repository.riedelcastro.org</url>-->
         <!--</pluginRepository>-->
     </pluginRepositories>
 
@@ -357,9 +353,16 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <scope>test</scope>
         </dependency>
 
+        <!--Apache commons configuration-->
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.4</version>
+        </dependency>
+
         <!-- This project depends on the JAR file "lmjunit-1.1.jar" (TestCaseLM)
-             the remote repository root of which is 'http://genesis.UGent.be/maven'.
-          -->
+           the remote repository root of which is 'http://genesis.UGent.be/maven'.
+        -->
         <dependency>
             <groupId>lennart</groupId>
             <artifactId>lmjunit</artifactId>
@@ -392,7 +395,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>utilities</artifactId>
-            <version>3.1.21</version>
+            <version>3.3.5</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>
