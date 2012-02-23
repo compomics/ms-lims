@@ -1,5 +1,8 @@
 package com.compomics.mslims.util.quantitation.fileio;
 
+import com.compomics.util.enumeration.CompomicsTools;
+import com.compomics.util.io.PropertiesManager;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.compomics.mslims.db.accessors.Datfile;
@@ -12,9 +15,12 @@ import com.compomics.rover.general.enumeration.QuantitationMetaType;
 import com.compomics.rover.general.db.accessors.IdentificationExtension;
 import com.compomics.rover.general.fileio.readers.QuantitationXmlReader;
 
+import javax.swing.*;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -143,7 +149,6 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
             if (lTempRovFolder.exists() == false) {
                 lTempRovFolder.mkdir();
             }
-
             File lTempTaskFolder = new File(lTempRovFolder, String.valueOf(aMascotSearch.getParentTaskId()));
 
             if (lTempTaskFolder.exists() == false) {
@@ -165,43 +170,71 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
                     // If temporary dir could not be created, return null to stop the process.
                     return null;
                 }
-
-                // Unzip the files in the new temp folder
-
-                BufferedOutputStream out = null;
-                ZipInputStream in = new ZipInputStream(
-                        new BufferedInputStream(
-                                new FileInputStream(aRovFile)));
-                ZipEntry entry;
-                while ((entry = in.getNextEntry()) != null) {
-                    //System.out.println("Extracting: " + entry);
-                    int count;
-                    byte data[] = new byte[1000];
-
-                    // write the files to the disk
-                    out = new BufferedOutputStream(
-                            new FileOutputStream(lTempUnzippedRovFileFolder.getPath() + "/" + entry.getName()), 1000);
-
-                    while ((count = in.read(data, 0, 1000)) != -1) {
-                        out.write(data, 0, count);
-                    }
-                    out.flush();
-                    out.close();
-                }
-                in.close();
+                //copy original rov file to temporary file
             }
+            File copiedRovFile = new File(aRovFile.getParent()+"/"+ aRovFile.getName()+"_copy");
+            FileUtils.copyFile(aRovFile,copiedRovFile);
+
+
+            // Unzip the files in the new temp folder
+
+            BufferedOutputStream out = null;
+            ZipInputStream in = new ZipInputStream(
+                        new BufferedInputStream(
+                            new FileInputStream(aRovFile)));
+            ZipEntry entry;
+            while ((entry = in.getNextEntry()) != null) {
+                //System.out.println("Extracting: " + entry);
+                int count;
+                byte data[] = new byte[1000];
+
+                // write the files to the disk
+                out = new BufferedOutputStream(
+                        new FileOutputStream(lTempUnzippedRovFileFolder.getPath() + "/" + entry.getName()), 1000);
+
+                while ((count = in.read(data, 0, 1000)) != -1) {
+                    out.write(data, 0, count);
+                }
+                out.flush();
+                out.close();
+            }
+            in.close();
 
             // Ok, all files should have been unzipped  in the lTempUnzippedRovFileFolder by now.
             // Try to find the distiller xml file..
 
             File[] lUnzippedRovFiles = lTempUnzippedRovFileFolder.listFiles();
-            for (int i = 0; i < lUnzippedRovFiles.length; i++) {
-                File lUnzippedRovFile = lUnzippedRovFiles[i];
-                if (lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb8") != -1) {
-                    return lUnzippedRovFile;
+            boolean twoDotFour = false;
+            for (int i = 0; lUnzippedRovFiles.length > i; i++) {
+                if ((lUnzippedRovFiles[i].getName()).contains("1f40")) {
+                    //check if new version if old just continue
+                    twoDotFour = true;
                 }
-                if (lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb9") != -1) {
-                    return lUnzippedRovFile;
+            }
+        if (twoDotFour) {
+                    //after unzipping we launch mascot distiller to change binary to xml
+            String mascotLocation = mcdChecker();
+            int exitval = editRovFile(lTempUnzippedRovFileFolder.getAbsoluteFile(),aRovFile.getAbsoluteFile(),mascotLocation);
+                    //if editing succeeds rezip the archive and add token file announcing it has been edited
+                    if (exitval == 0) {
+                        return new File(lTempUnzippedRovFileFolder.getAbsoluteFile()+"/rover_data+bb8_edited");
+                    }
+            else { logger.error("there was a problem with mascot distiller processing the rov files");}
+        } else {
+
+            // Potential buggy!!
+            // We assume this file is always named 'rover_data+bb8'.
+            for (int i = 0; lUnzippedRovFiles.length > i; i++) {
+                File lUnzippedRovFile = lUnzippedRovFiles[i];
+                    if (lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb8") != -1) {
+                        //distiller xml file found!
+                        return lUnzippedRovFile;
+                    }
+                        // or this file is always named 'rover_data+bb8'.
+                    if (lUnzippedRovFile.getName().toLowerCase().indexOf("rover_data+bb9") != -1) {
+                        //distiller xml file found!
+                        return lUnzippedRovFile;
+                    }
                 }
             }
 
@@ -283,8 +316,6 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
         return lFile;
     }
 
-    // TODO throw error when there is no data in the file
-
     /**
      * This method will extracted all the information from the distiller xml file. The hits will be stored in the hits
      * Vector.
@@ -320,5 +351,96 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
      */
     public void setIdentifications(final IdentificationExtension[] aIdentificationsForDatfile) {
         iIdentificationsForDatfile = aIdentificationsForDatfile;
+    }
+
+    private int editRovFile(File lTempUnzippedRovFileFolder, File aRovFile, String distillerlocation) {
+        int exitval = -1;
+        try{
+            Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec("\"" + distillerlocation + "\" \"" + aRovFile.getAbsolutePath() + "\" -batch -saveQuantXml -quantout " + lTempUnzippedRovFileFolder.getAbsolutePath() + "\\rover_data+bb8_edited");
+            streamGobbler errorGobbler = new streamGobbler(proc.getErrorStream(), "ERROR");
+
+            // any output
+            streamGobbler outputGobbler = new streamGobbler(proc.getInputStream(), "OUTPUT");
+
+            // kick them off
+            errorGobbler.start();
+            outputGobbler.start();
+
+            // any error
+            exitval = proc.waitFor();
+        } catch (Throwable t) {
+         java.util.logging.Logger.getLogger(MascotQuantitationProcessor.class.getName()).log(Level.SEVERE, null, t);
+        }
+    return exitval;
+    }
+
+    private String mcdChecker(){
+        Properties props = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS,"ms-lims.properties");
+        boolean checkChosen = false;
+        JFileChooser fc = new JFileChooser("C:\\Program Files\\Matrix Science\\Mascot Distiller");
+        mcdFileFilter mcdfilter = new mcdFileFilter();
+        fc.setFileFilter(mcdfilter);
+        if(props.getProperty("distillerlocation") == null) {
+                while (!checkChosen) {
+                    JOptionPane.showMessageDialog(null, "It seems you are using Mascot Distiller 2.4. \n To work with the new files, please select the location of the Mascot Distiller executable");
+                    fc.showOpenDialog(new JFrame());
+                        if (fc.getSelectedFile().exists()) {
+                            props.put("distillerlocation", fc.getSelectedFile().getAbsolutePath());
+                            PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS,"ms-lims.properties",props);
+                            checkChosen = true;
+                            return fc.getSelectedFile().getAbsolutePath();
+                        } else {
+                            int ClosePane = JOptionPane.showConfirmDialog(null, "Do you want to stop selecting Mascot Distiller?", "warning", JOptionPane.QUESTION_MESSAGE, JOptionPane.YES_NO_OPTION);
+                            if (ClosePane == JOptionPane.NO_OPTION) {
+                            } else if (ClosePane == JOptionPane.YES_OPTION) {
+                                return null;
+                            }
+                        }
+                    }
+                } else {
+                String value = props.getProperty("distillerlocation");
+                if (!(new File(value)).exists()) {
+                    JOptionPane.showMessageDialog(null,"the location of Mascot Distiller does not seem to exist anymore, please select the new location of Mascot Distiller");
+                    if (fc.getSelectedFile().exists()) {
+                        props.put("distillerlocation",fc.getSelectedFile().getAbsolutePath());
+                        PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS,"ms-lims.properties",props);
+                        return fc.getSelectedFile().getAbsolutePath();
+                    }
+                }
+            }
+        return props.getProperty("distillerlocation");
+    }
+
+
+
+    //inner class designed to gobble up the errors and output of the system call for mascot distiller
+    private class streamGobbler extends Thread {
+
+       private InputStream is;
+       private String type;
+       private OutputStream os;
+
+        streamGobbler(InputStream is, String type) {
+            this(is, type, null);
+        }
+
+        streamGobbler(InputStream is, String type, OutputStream redirect) {
+            this.is = is;
+            this.type = type;
+            this.os = redirect;
+        }
+    }
+    private class mcdFileFilter extends javax.swing.filechooser.FileFilter {
+
+        @Override
+        public boolean accept(File f) {
+            return f.isDirectory() || f.getName().toLowerCase().endsWith(".exe");
+        }
+
+        @Override
+        public String getDescription() {
+            return ".exe files";
+        }
     }
 }

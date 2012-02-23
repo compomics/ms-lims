@@ -65,6 +65,13 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
 
 
     /**
+     * This variable represents the contents for the 'binary' column.
+     */
+    protected byte[] iBinary = null;
+
+    protected String iVersionNumber;
+
+    /**
      * This variable represents the contents for the 'username' column.
      */
     protected String iUsername = null;
@@ -102,6 +109,13 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
      */
     public static final String FILE = "FILE";
 
+    /**
+     * This variable represents the key for the 'binary' column.
+     */
+    public static final String BINARY_FILE = "BINARY_FILE";
+
+
+    public static final  String VERSION_NUMBER = "VERSION_NUMBER";
     /**
      * This variable represents the key for the 'username' column.
      */
@@ -144,6 +158,13 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
         if (aParams.containsKey(FILE)) {
             this.iFile = (byte[]) aParams.get(FILE);
         }
+        if (aParams.containsKey(BINARY_FILE)){
+            this.iBinary = (byte[]) aParams.get(BINARY_FILE);
+        }
+        if (aParams.containsKey(VERSION_NUMBER)){
+            this.iVersionNumber = (String) aParams.get(VERSION_NUMBER);
+        }
+
         if (aParams.containsKey(USERNAME)) {
             this.iUsername = (String) aParams.get(USERNAME);
         }
@@ -184,6 +205,23 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
         for (int i = 0; i < reading; i++) {
             this.iFile[i] = ((Byte) bytes4.get(i)).byteValue();
         }
+        InputStream is5 = aResultSet.getBinaryStream("binary_file");
+        Vector bytes5 = new Vector();
+        reading = -1;
+        try {
+            while ((reading = is5.read()) != -1) {
+                bytes4.add(new Byte((byte) reading));
+            }
+            is5.close();
+        } catch (IOException ioe) {
+            bytes5 = new Vector();
+        }
+        reading = bytes5.size();
+        this.iBinary = new byte[reading];
+        for (int i = 0; i < reading; i++) {
+            this.iBinary[i] = (Byte) bytes5.get(i);
+        }
+        this.iVersionNumber = (String) aResultSet.getObject("version_number");
         this.iUsername = (String) aResultSet.getObject("username");
         this.iCreationdate = (java.sql.Timestamp) aResultSet.getObject("creationdate");
         this.iModificationdate = (java.sql.Timestamp) aResultSet.getObject("modificationdate");
@@ -226,6 +264,19 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
      */
     public byte[] getFile() {
         return this.iFile;
+    }
+
+    /**
+     * This method returns the value for the 'binary' column
+     *
+     * @return byte[]    with the value for the binary column.
+     */
+    public byte[] getBinary() {
+        return  this.iBinary;
+    }
+
+    public String getVersionNumber() {
+        return this.iVersionNumber;
     }
 
     /**
@@ -292,6 +343,22 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
      */
     public void setFile(byte[] aFile) {
         this.iFile = aFile;
+        this.iUpdated = true;
+    }
+
+    /**
+     * This method sets the value for the 'binary' column
+     *
+     * @param aBinary byte[] with the value for the binary column.
+     */
+    public void setBinary(byte[] aBinary){
+        this.iBinary = aBinary;
+        logger.info(iBinary.length);
+        this.iUpdated = true;
+    }
+
+    public void setVersionNumber(String aVersionNumber){
+        this.iVersionNumber = aVersionNumber;
         this.iUpdated = true;
     }
 
@@ -379,6 +446,22 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
             for (int i = 0; i < reading; i++) {
                 iFile[i] = ((Byte) bytes4.get(i)).byteValue();
             }
+             InputStream is5 = lRS.getBinaryStream("binary_file");
+            Vector bytes5 = new Vector();
+            reading = -1;
+            try {
+                while ((reading = is5.read()) != -1) {
+                    bytes5.add((byte) reading);
+                }
+                is5.close();
+            } catch (IOException ioe) {
+                bytes4 = new Vector();
+            }
+            reading = bytes5.size();
+            iBinary = new byte[reading];
+            for (int i = 0; i < reading; i++) {
+                iBinary[i] = (Byte) bytes5.get(i);
+            }
             iUsername = (String) lRS.getObject("username");
             iCreationdate = (java.sql.Timestamp) lRS.getObject("creationdate");
             iModificationdate = (java.sql.Timestamp) lRS.getObject("modificationdate");
@@ -402,15 +485,18 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
         if (!this.iUpdated) {
             return 0;
         }
-        PreparedStatement lStat = aConn.prepareStatement("UPDATE quantitation_file SET quantitation_fileid = ?, filename = ?, type = ?, file = ?, username = ?, creationdate = ?, modificationdate = CURRENT_TIMESTAMP WHERE quantitation_fileid = ?");
+        PreparedStatement lStat = aConn.prepareStatement("UPDATE quantitation_file SET quantitation_fileid = ?, filename = ?, type = ?, file = ?, binary_file = ?, version_number = ? ,username = ?, creationdate = ?, modificationdate = CURRENT_TIMESTAMP WHERE quantitation_fileid = ?");
         lStat.setLong(1, iQuantitation_fileid);
         lStat.setObject(2, iFilename);
         lStat.setObject(3, iType);
         ByteArrayInputStream bais4 = new ByteArrayInputStream(iFile);
         lStat.setBinaryStream(4, bais4, iFile.length);
-        lStat.setObject(5, iUsername);
-        lStat.setObject(6, iCreationdate);
-        lStat.setLong(7, iQuantitation_fileid);
+        ByteArrayInputStream bais5 = new ByteArrayInputStream(iBinary);
+        lStat.setBinaryStream(5, bais5, iBinary.length);
+        lStat.setObject(6,iVersionNumber);
+        lStat.setObject(7, iUsername);
+        lStat.setObject(8, iCreationdate);
+        lStat.setLong(9, iQuantitation_fileid);
         int result = lStat.executeUpdate();
         lStat.close();
         this.iUpdated = false;
@@ -424,7 +510,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO quantitation_file (quantitation_fileid, filename, type, file, username, creationdate, modificationdate) values(?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO quantitation_file (quantitation_fileid,filename,type,file,binary_file,version_number,username,creationdate,modificationdate) values(?,?,?,?,?,?,CURRENT_USER,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)");
         if (iQuantitation_fileid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {
@@ -446,6 +532,19 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
             ByteArrayInputStream bais4 = new ByteArrayInputStream(iFile);
             lStat.setBinaryStream(4, bais4, iFile.length);
         }
+        if(iBinary == null){
+            lStat.setNull(5,-4);
+        }
+        else {
+            ByteArrayInputStream bais5 = new ByteArrayInputStream(iBinary);
+            lStat.setBinaryStream(5, bais5, iBinary.length);
+        }
+        if (iVersionNumber == null){
+            lStat.setNull(6,12);
+        } else {
+            lStat.setObject(6,iVersionNumber);
+        }
+
         int result = lStat.executeUpdate();
 
         // Retrieving the generated keys (if any).
