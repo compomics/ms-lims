@@ -47,7 +47,7 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
      * This constructor reads the quantitation file from a resultset. The ResultSet should be positioned such that a
      * single row can be read directly (i.e., without calling the 'next()' method on the ResultSet). The columns should
      * be in this order: <br /> Column 1: distiller_output_fileid <br /> Column 2: filename  <br /> Column 3: type  <br
-     * /> Column 4: GZIPped bytes for thefile <br /> Column 5: username <br /> Column 6: creationdate <br /> Column 7:
+     * /> Column 4: GZIPped bytes for the file <br /> Column 5: binary <br /> Column 6: username <br /> Column 7: creationdate <br /> Column 8:
      * modificationdate <br />
      *
      * @param aRS ResultSet to read the data from.
@@ -115,6 +115,30 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
         return result;
     }
 
+    public byte[] getBinaryFile () throws IOException{
+        byte[] result = null;
+
+        byte[] binary = super.getBinary();
+        ByteArrayInputStream bais = new ByteArrayInputStream(binary);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BufferedInputStream bis = new BufferedInputStream(bais);
+        BufferedOutputStream bos = new BufferedOutputStream(baos);
+        int read = -1;
+                while ((read = bis.read()) != -1) {
+                    bos.write(read);
+                }
+                bos.flush();
+                baos.flush();
+                result = baos.toByteArray();
+                bos.close();
+                bis.close();
+                bais.close();
+                baos.close();
+
+
+        return result;
+    }
+
     /**
      * This method returns a BufferedReader into the unzipped DAT file. It is up to the caller to close the reader.
      *
@@ -125,6 +149,14 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
         byte[] zipped = super.getFile();
         ByteArrayInputStream bais = new ByteArrayInputStream(zipped);
         BufferedInputStream bis = new BufferedInputStream(new GZIPInputStream(bais));
+        BufferedReader br = new BufferedReader(new InputStreamReader(bis));
+        return br;
+    }
+
+    public BufferedReader getBinaryBufferedReader(){
+           byte[] zipped = super.getBinary();
+        ByteArrayInputStream bais = new ByteArrayInputStream(zipped);
+        BufferedInputStream bis = new BufferedInputStream(bais);
         BufferedReader br = new BufferedReader(new InputStreamReader(bis));
         return br;
     }
@@ -150,6 +182,27 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
         baos.flush();
         gos.finish();
         super.setFile(baos.toByteArray());
+        bis.close();
+        bos.close();
+        gos.close();
+        bais.close();
+        baos.close();
+    }
+
+    public void setBinaryFile(byte[] aBytes) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        GZIPOutputStream gos = new GZIPOutputStream(baos);
+        BufferedOutputStream bos = new BufferedOutputStream(gos);
+        ByteArrayInputStream bais = new ByteArrayInputStream(aBytes);
+        BufferedInputStream bis = new BufferedInputStream(bais);
+        int read = -1;
+        while ((read = bis.read()) != -1) {
+            bos.write(read);
+        }
+        bos.flush();
+        baos.flush();
+        gos.finish();
+        super.setBinary(baos.toByteArray());
         bis.close();
         bos.close();
         gos.close();

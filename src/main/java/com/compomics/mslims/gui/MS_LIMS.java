@@ -12,6 +12,7 @@ import com.compomics.mslims.gui.dialogs.AboutDialog;
 import com.compomics.mslims.gui.dialogs.CustomLauncherDialog;
 import com.compomics.mslims.gui.quantitation.QuantitationTypeChooser;
 import com.compomics.mslims.util.fileio.ModificationConversionIO;
+import com.compomics.mslims.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;
 import com.compomics.peptizer.util.fileio.ConnectionManager;
@@ -76,7 +77,6 @@ public class MS_LIMS extends JFrame implements Connectable {
     private JButton quantitationValidationBtn = new JButton();
     private JButton msfStorerBtn = new JButton();
     private JButton customBtn = new JButton();
-
     private JButton exitBtn = new JButton();
     private JLabel projectManagerLbl = new JLabel();
     private JLabel spectrumStorageLbl = new JLabel();
@@ -148,6 +148,24 @@ public class MS_LIMS extends JFrame implements Connectable {
         Container cp = getContentPane();
         cp.setLayout(null);
         curDir = System.getProperty("user.dir") + File.separator;
+
+        //log into the mascot web server if needed
+        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
+        if(lConnectionProperties.containsKey("usemascotauthentication")){
+            if (lConnectionProperties.getProperty("usemascotauthentication").equals("1")) {
+                MascotAuthenticatedConnection mscConnector = new MascotAuthenticatedConnection();
+                if(!mscConnector.areCredentialsPresent()){
+                    try {
+                        mscConnector.login();
+                    } catch (IOException e) {
+                        JOptionPane.showMessageDialog(this,"there has been a problem with logging into the mascot server");
+                        logger.error(e);
+                    }
+                }
+            }
+        }
+
+
 
         // Look n feel.
         try {
@@ -258,7 +276,25 @@ public class MS_LIMS extends JFrame implements Connectable {
             }
         });
         submenu.add(menuItem);
+       /*
+        menuItem = new JMenuItem("Copy a project ...", KeyEvent.VK_C);
+        menuItem.getAccessibleContext().setAccessibleDescription("Copy a project from this ms_lims database to another");
+        menuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                copyMenuActionPerformed(evt);
+            }
+        });*/
+        menu.add(menuItem);
 
+        menuItem = new JMenuItem("Clean or delete project...", KeyEvent.VK_C);
+        menuItem.getAccessibleContext().setAccessibleDescription(
+                "Clean up or delete (parts of) a project");
+        menuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                deleteMenuActionPerformed(evt);
+            }
+        });
+        menu.add(menuItem);
 
         menuItem = new JMenuItem("Database Configuration", KeyEvent.VK_C);
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
@@ -524,7 +560,7 @@ public class MS_LIMS extends JFrame implements Connectable {
         int lOldVersion = lLocalMC.getLocalModificationConversionVersion();
         logger.error("Old version= " + lOldVersion);
         logger.error("New version= " + lNewVersion);
-        if(lOldVersion != lNewVersion){
+        if (lOldVersion != lNewVersion) {
             try {
                 logger.error("Writting new version");
                 lLocalMC.writeModificationConversionFile(lNewVersion, Modification_conversion.getAllModificationConversions(iConn));
@@ -535,85 +571,18 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     private void configurationMenuActionPerformed() {
-        // Try to verify permissions!
-        // Perform a query on the current database connection and
-        // try to find 'delete' or 'grant all' permissions on the selected database.
-
-        // Note this is only very basic dummy-protection.
-        boolean boolIsAllowed = false;
-        String lUser = "NA";
-
-        if (iConn != null) {
-            try {
-                // Username.
-                lUser = iConn.getMetaData().getUserName();
-                String lCatalog = iConn.getCatalog();
-
-
-                int index = -1;
-                if ((index = lUser.indexOf('@')) != -1) {
-                    lUser = lUser.substring(0, index).toLowerCase();
-                }
-
-
-                if (lUser.equals("root")) {
-                    boolIsAllowed = true;
-                } else {
-
-                    PreparedStatement lStatement = iConn.prepareStatement("show grants for " + lUser);
-                    ResultSet rs = lStatement.executeQuery();
-                    while (rs.next()) {
-                        boolean boolGrant = false;
-                        boolean boolUser = false;
-                        boolean boolCatalog = false;
-
-                        // Get the current grant.
-                        String grant = rs.getString(1).toLowerCase();
-
-                        // Verify the user.
-                        int userIndex = grant.indexOf("to '" + lUser + "'");
-                        if (userIndex > -1) {
-                            boolUser = true;
-                        } else {
-                            continue;
-                        }
-
-                        // Verify the grant.
-                        int grantIndex1 = grant.indexOf("delete");
-                        int grantIndex2 = grant.indexOf("all");
-                        if (grantIndex1 > -1 || grantIndex2 > -1) {
-                            boolGrant = true;
-                        } else {
-                            continue;
-                        }
-
-                        // Verify the catalog.
-                        int indexCatalog1 = grant.indexOf("on '" + lCatalog + "'");
-                        int indexCatalog2 = grant.indexOf("on *.*");
-                        if (indexCatalog1 > -1 || indexCatalog2 > -1) {
-                            boolCatalog = true;
-                        } else {
-                            continue;
-                        }
-
-                        if (boolGrant & boolCatalog & boolUser) {
-                            boolIsAllowed = true;
-                            break;
-                        }
-
-                    }
-                }
-            } catch (SQLException e) {
-                logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
-            }
-        }
-
+        try {
+        String lUser;
+        lUser = iConn.getMetaData().getUserName();
+        boolean boolIsAllowed = checkUser(lUser);
         if (boolIsAllowed) {
             new ConfigurationGUI("ConfigurationGUI", iConn, iDBName);
         } else {
             JOptionPane.showMessageDialog(this.getRootPane(), "User '" + lUser + "' is not allowed to configure the ms_lims database system. \nPlease contact the system administrator.");
         }
-
+        } catch (SQLException e) {
+            logger.error(e);
+        }
     }
 
     /**
@@ -708,6 +677,35 @@ public class MS_LIMS extends JFrame implements Connectable {
         cd.setVisible(true);
     }
 
+    public void copyMenuActionPerformed(ActionEvent evt)
+    {
+        ProjectExtractor.setNotStandAlone();
+        ProjectExtractor pe = null;
+        try {
+            pe = new ProjectExtractor(iConn);
+             pe.setVisible(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void deleteMenuActionPerformed(ActionEvent evt) {
+        try {
+            String lUser;
+            lUser = iConn.getMetaData().getUserName();
+            boolean boolIsAllowed = checkUser(lUser);
+            if(boolIsAllowed){
+                deleteGUI.setNotStandAlone();
+                deleteGUI df = new deleteGUI(iConn, iDBName);
+                df.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this.getRootPane(), "User '" + lUser + "' does not have the permission to delete on the database. \nPlease contact the system administrator.");
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+    }
 
     /**
      * This method accepts an incoming connection to perform all database queries on.
@@ -723,6 +721,85 @@ public class MS_LIMS extends JFrame implements Connectable {
         this.iDBName = aDB;
     }
 
+    /**
+     * This method checks if the user has delete privileges
+     */
+    private boolean checkUser(String lUser){
+    // Try to verify permissions!
+    // Perform a query on the current database connection and
+    // try to find 'delete' or 'grant all' permissions on the selected database.
+
+    // Note this is only very basic dummy-protection.
+    boolean boolIsAllowed = false;
+
+    if (iConn != null) {
+        try {
+            // Username.
+            
+            String lCatalog = iConn.getCatalog();
+
+
+            int index = -1;
+            if ((index = lUser.indexOf('@')) != -1) {
+                lUser = lUser.substring(0, index).toLowerCase();
+            }
+
+
+            if (lUser.equals("root")) {
+                boolIsAllowed = true;
+            } else {
+
+                PreparedStatement lStatement = iConn.prepareStatement("show grants for " + lUser);
+                ResultSet rs = lStatement.executeQuery();
+                while (rs.next()) {
+                    boolean boolGrant = false;
+                    boolean boolUser = false;
+                    boolean boolCatalog = false;
+
+                    // Get the current grant.
+                    String grant = rs.getString(1).toLowerCase();
+
+                    // Verify the user.
+                    int userIndex = grant.indexOf("to '" + lUser + "'");
+                    if (userIndex > -1) {
+                        boolUser = true;
+                    } else {
+                        continue;
+                    }
+
+                    // Verify the grant.
+                    int grantIndex1 = grant.indexOf("delete");
+                    int grantIndex2 = grant.indexOf("all");
+                    if (grantIndex1 > -1 || grantIndex2 > -1) {
+                        boolGrant = true;
+                    } else {
+                        continue;
+                    }
+
+                    // Verify the catalog.
+                    int indexCatalog1 = grant.indexOf("on '" + lCatalog + "'");
+                    int indexCatalog2 = grant.indexOf("on *.*");
+                    if (indexCatalog1 > -1 || indexCatalog2 > -1) {
+                        boolCatalog = true;
+                    } else {
+                        continue;
+                    }
+
+                    if (boolGrant & boolCatalog & boolUser) {
+                        boolIsAllowed = true;
+                        
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+        return boolIsAllowed;
+    }
+    
+    
     /**
      * This method is called when the frame is closed. It shuts down the JVM.
      */

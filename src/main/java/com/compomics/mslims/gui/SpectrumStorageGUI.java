@@ -28,6 +28,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -1230,6 +1231,8 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
             if (choice == JFileChooser.APPROVE_OPTION) {
                 File f = jfc.getSelectedFile();
                 this.iParentString = f.getCanonicalPath();
+                iProps.put("spectrumfilepath",f.getAbsolutePath());
+                iProps.store(new FileOutputStream("mascotdistiller.properties"), null);
                 if (aUpdateGUI) {
                     this.findLCrunNames();
                     this.fillLCrunList();

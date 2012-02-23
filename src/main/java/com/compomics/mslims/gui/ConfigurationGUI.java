@@ -3,6 +3,7 @@ package com.compomics.mslims.gui;
 import com.compomics.mascotdatfile.util.mascot.ModificationConversion;
 import com.compomics.mslims.db.accessors.*;
 import com.compomics.mslims.util.fileio.ModificationConversionIO;
+import com.compomics.mslims.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import org.apache.log4j.Logger;
 
 import com.compomics.mslims.db.conversiontool.DbConversionToolGuiEdition;
@@ -94,6 +95,21 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
     private JTextField txtConversion;
     private JButton storeNewModificationButton;
     private JButton loadModificationsButton;
+    private JPanel jpanMascot;
+    private JCheckBox chkboxUseMascotHTTPDServer;
+    private JTextField txtfieldMascotLoginName;
+    private JPasswordField pwdfieldMascotServerPassword;
+    private JTextField txtfieldMascotServerLocation;
+    private JLabel lblUsername;
+    private JLabel lblMascotServerTabDescriptor;
+    private JLabel lblPassword;
+    private JLabel lblMascotLocation;
+    private JTextField txtfieldMascotServerPort;
+    private JLabel lblMascotServerPort;
+    private JTextField txtfieldMascotLocalLocation;
+    private JLabel lblServerFilePath;
+    private JButton btnSaveMascotServerSettings;
+    private Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
 
     private JFrame iFrame;
     private Connection iConnection;
@@ -145,6 +161,18 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 
         this.getContentPane().add($$$getRootComponent$$$());
 
+        if(lConnectionProperties.getProperty("usemascotauthentication").equals("1")){
+            chkboxUseMascotHTTPDServer.setSelected(true);
+            txtfieldMascotLoginName.setEnabled(true);
+            txtfieldMascotServerLocation.setEnabled(true);
+            pwdfieldMascotServerPassword.setEnabled(true);
+            txtfieldMascotServerPort.setEnabled(true);
+            txtfieldMascotLocalLocation.setEnabled(true);
+            txtfieldMascotLocalLocation.setText(lConnectionProperties.getProperty("mascotserverlocallocation"));
+            txtfieldMascotLoginName.setText(lConnectionProperties.getProperty("mascotloginname"));
+            txtfieldMascotServerLocation.setText(lConnectionProperties.getProperty("mascotserverlocation"));
+            txtfieldMascotServerPort.setText(lConnectionProperties.getProperty("mascotserverport"));
+        }
         super.setTitle(getDialogTitle(aDBName));
 
         this.pack();
@@ -680,6 +708,62 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                     } else {
                         //do nothing
                     }
+                }
+            }
+        });
+        chkboxUseMascotHTTPDServer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (chkboxUseMascotHTTPDServer.isSelected()){
+                    txtfieldMascotLoginName.setEnabled(true);
+                    txtfieldMascotServerLocation.setEnabled(true);
+                    pwdfieldMascotServerPassword.setEnabled(true);
+                    txtfieldMascotServerPort.setEnabled(true);
+                    txtfieldMascotLocalLocation.setEnabled(true);
+                }
+                else if (!chkboxUseMascotHTTPDServer.isSelected()){
+                    txtfieldMascotLoginName.setEnabled(false);
+                    txtfieldMascotServerLocation.setEnabled(false);
+                    pwdfieldMascotServerPassword.setEnabled(false);
+                    txtfieldMascotServerPort.setEnabled(false);
+                    txtfieldMascotLocalLocation.setEnabled(false);
+                    lConnectionProperties.put("usemascotauthentication","0");
+                    PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS,"IdentificationGUI.properties",lConnectionProperties);
+                }
+            }
+        });
+
+        btnSaveMascotServerSettings.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (chkboxUseMascotHTTPDServer.isSelected()) {
+                    if (txtfieldMascotLoginName.getText() != "" && txtfieldMascotServerLocation.getText() != "" && txtfieldMascotLocalLocation.getText() != ""){
+                        lConnectionProperties.put("mascotloginname",txtfieldMascotLoginName.getText());
+                        lConnectionProperties.put("mascotserverlocation",txtfieldMascotServerLocation.getText());
+                        lConnectionProperties.put("mascotserverpassword", pwdfieldMascotServerPassword.getText());
+                        lConnectionProperties.put("mascotserverport",txtfieldMascotServerPort.getText());
+                        lConnectionProperties.put("mascotserverlocallocation",txtfieldMascotLocalLocation.getText());
+                        lConnectionProperties.put("usemascotauthentication","1");
+                        PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS,"IdentificationGUI.properties",lConnectionProperties);
+                        Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
+                        if(lConnectionProperties.containsKey("usemascotauthentication")){
+                            if (lConnectionProperties.getProperty("usemascotauthentication").equals("1")) {
+                                MascotAuthenticatedConnection mscConnector = new MascotAuthenticatedConnection();
+                                if(!mscConnector.areCredentialsPresent()){
+                                    try {
+                                        mscConnector.login();
+                                    } catch (IOException e) {
+                                        JOptionPane.showMessageDialog(null,"there has been a problem with logging into the mascot server");
+                                        logger.error(e);
+                                    }
+                                    JOptionPane.showMessageDialog(null,"your settings have been saved and connection has been made to the mascot server");
+                                }
+                            }
+                        }
+                        } else {
+                        JOptionPane.showMessageDialog(null,"please enter all the needed data.");
+                    }
+                } else {
+                    lConnectionProperties.put("usemascotauthentication","0");
+                    PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS,"IdentificationGUI.properties",lConnectionProperties);
                 }
             }
         });
