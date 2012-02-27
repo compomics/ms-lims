@@ -74,9 +74,28 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
         for (int i = 0; i < reading; i++) {
             iFile[i] = ((Byte) bytes1.get(i)).byteValue();
         }
-        iUsername = aRS.getString(5);
-        iCreationdate = (java.sql.Timestamp) aRS.getObject(6);
-        iModificationdate = (java.sql.Timestamp) aRS.getObject(7);
+        is1 = aRS.getBinaryStream(5);
+        bytes1 = new Vector();
+        reading = -1;
+
+        try {
+            while ((reading = is1.read()) != -1) {
+                bytes1.add(new Byte((byte) reading));
+            }
+            is1.close();
+        } catch (IOException ioe) {
+            bytes1 = new Vector();
+        }
+        reading = bytes1.size();
+        iBinary = new byte[reading];
+        for (int i = 0; i < reading; i++) {
+            iBinary[i] = ((Byte) bytes1.get(i)).byteValue();
+        }
+
+        iVersionNumber = aRS.getString(6);
+        iUsername = aRS.getString(7);
+        iCreationdate = (java.sql.Timestamp) aRS.getObject(8);
+        iModificationdate = (java.sql.Timestamp) aRS.getObject(9);
     }
 
     /**

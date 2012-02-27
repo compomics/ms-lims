@@ -215,7 +215,7 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
                     //after unzipping we launch mascot distiller to change binary to xml
             String mascotLocation = mcdChecker();
             int exitval = editRovFile(lTempUnzippedRovFileFolder.getAbsoluteFile(),aRovFile.getAbsoluteFile(),mascotLocation);
-                    //if editing succeeds rezip the archive and add token file announcing it has been edited
+                    //if editing succeeds rezip the archive and add file
                     if (exitval == 0) {
                         return new File(lTempUnzippedRovFileFolder.getAbsoluteFile()+"/rover_data+bb8_edited");
                     }
@@ -357,7 +357,7 @@ public class MascotQuantitationProcessor implements QuantitationProcessor {
         int exitval = -1;
         try{
             Runtime rt = Runtime.getRuntime();
-            Process proc = rt.exec("\"" + distillerlocation + "\" \"" + aRovFile.getAbsolutePath() + "\" -batch -saveQuantXml -quantout " + lTempUnzippedRovFileFolder.getAbsolutePath() + "\\rover_data+bb8_edited");
+            Process proc = rt.exec("\"" + distillerlocation + "\" \"" + aRovFile.getAbsolutePath() + "\" -batch -saveQuantXml -quantout \""  + lTempUnzippedRovFileFolder.getAbsolutePath() + "\\rover_data+bb8_edited\"");
             streamGobbler errorGobbler = new streamGobbler(proc.getErrorStream(), "ERROR");
 
             // any output
