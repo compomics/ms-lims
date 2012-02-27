@@ -272,7 +272,7 @@ public class Quantitation_fileTableAccessor implements Deleteable, Retrievable, 
      * @return byte[]    with the value for the binary column.
      */
     public byte[] getBinary() {
-        return  this.iBinary;
+        return this.iBinary;
     }
 
     public String getVersionNumber() {
