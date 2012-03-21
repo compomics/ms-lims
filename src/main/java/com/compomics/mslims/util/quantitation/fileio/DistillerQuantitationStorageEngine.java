@@ -307,7 +307,7 @@ public class DistillerQuantitationStorageEngine implements QuantitationStorageEn
 
             ByteArrayInputStream bais = new ByteArrayInputStream(lQuantitationFileBytes);
             baos = new ByteArrayOutputStream();
-            BufferedInputStream bis = new BufferedInputStream(new GZIPInputStream(bais));
+            BufferedInputStream bis = new BufferedInputStream(bais);
             int read = -1;
             while ((read = bis.read()) != -1){
                 baos.write(read);

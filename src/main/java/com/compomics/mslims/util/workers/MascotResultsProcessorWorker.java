@@ -8,7 +8,6 @@ package com.compomics.mslims.util.workers;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.IdentificationTableAccessor;
 import com.compomics.mslims.db.accessors.Identification;
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
 import com.compomics.mslims.gui.tree.MascotSearch;

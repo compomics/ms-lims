@@ -12,7 +12,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.7.1</version.number>
+        <version.number>7.7.2</version.number>
     </properties>
 
     <!-- Licence -->
@@ -434,14 +434,14 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>mascotdatfile</artifactId>
-            <version>3.2.9</version>
+            <version>3.2.11</version>
             <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>thermo_msf_parser</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.5</version>
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.

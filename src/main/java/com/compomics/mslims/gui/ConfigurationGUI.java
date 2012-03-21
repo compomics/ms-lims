@@ -2,6 +2,7 @@ package com.compomics.mslims.gui;
 
 import com.compomics.mascotdatfile.util.mascot.ModificationConversion;
 import com.compomics.mslims.db.accessors.*;
+import com.compomics.mslims.db.conversiontool.MS_LIMS_7_7_Data_Updater;
 import com.compomics.mslims.util.fileio.ModificationConversionIO;
 import com.compomics.mslims.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import org.apache.log4j.Logger;
@@ -160,19 +161,19 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         updateLists();
 
         this.getContentPane().add($$$getRootComponent$$$());
-
-        if(lConnectionProperties.getProperty("usemascotauthentication").equals("1")){
-            chkboxUseMascotHTTPDServer.setSelected(true);
-            txtfieldMascotLoginName.setEnabled(true);
-            txtfieldMascotServerLocation.setEnabled(true);
-            pwdfieldMascotServerPassword.setEnabled(true);
-            txtfieldMascotServerPort.setEnabled(true);
-            txtfieldMascotLocalLocation.setEnabled(true);
-            txtfieldMascotLocalLocation.setText(lConnectionProperties.getProperty("mascotserverlocallocation"));
-            txtfieldMascotLoginName.setText(lConnectionProperties.getProperty("mascotloginname"));
-            txtfieldMascotServerLocation.setText(lConnectionProperties.getProperty("mascotserverlocation"));
-            txtfieldMascotServerPort.setText(lConnectionProperties.getProperty("mascotserverport"));
-        }
+        if (lConnectionProperties.containsKey("usemascotauthentication")){
+            if(lConnectionProperties.getProperty("usemascotauthentication").equals("1")){
+                chkboxUseMascotHTTPDServer.setSelected(true);
+                txtfieldMascotLoginName.setEnabled(true);
+                txtfieldMascotServerLocation.setEnabled(true);
+                pwdfieldMascotServerPassword.setEnabled(true);
+                txtfieldMascotServerPort.setEnabled(true);
+                txtfieldMascotLocalLocation.setEnabled(true);
+                txtfieldMascotLocalLocation.setText(lConnectionProperties.getProperty("mascotserverlocallocation"));
+                txtfieldMascotLoginName.setText(lConnectionProperties.getProperty("mascotloginname"));
+                txtfieldMascotServerLocation.setText(lConnectionProperties.getProperty("mascotserverlocation"));
+                txtfieldMascotServerPort.setText(lConnectionProperties.getProperty("mascotserverport"));
+        }}
         super.setTitle(getDialogTitle(aDBName));
 
         this.pack();
@@ -588,6 +589,21 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                     MS_LIMS_6_Data_Updater lUpdater = new MS_LIMS_6_Data_Updater(iConnection, iDBName);
                 } else if (lSelectedTitle.equalsIgnoreCase("MS_LIMS_7_Data_Updater")) {
                     MS_LIMS_7_Data_Updater lUpdater = new MS_LIMS_7_Data_Updater(iConnection, iDBName);
+                }  else if (lSelectedTitle.equalsIgnoreCase("MS_LIMS_7_7_Data_Updater")){
+                    try{
+                    MS_LIMS_7_7_Data_Updater lUpdater = new MS_LIMS_7_7_Data_Updater(iDBName,iConnection);
+                    } catch (SQLException sqle){
+                        logger.error(sqle);
+                    } catch (ClassNotFoundException e1) {
+                        logger.error(e1);
+                    } catch (InstantiationException e1) {
+                        logger.error(e1);
+                    } catch (InterruptedException e1) {
+                        logger.error(e1);
+                    } catch (IllegalAccessException e1) {
+                        logger.error(e1);
+                    }
+
                 }
             }
         });
@@ -1891,7 +1907,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
     private void createUIComponents() {
 
         //A string array with the different data update options
-        String[] lDataUpdaters = new String[]{"MS_LIMS_6_Data_Updater", "MS_LIMS_7_Data_Updater"};
+        String[] lDataUpdaters = new String[]{"MS_LIMS_6_Data_Updater", "MS_LIMS_7_Data_Updater","MS_LIMS_7_7_Data_Updater"};
         cmbDataUpdateTools = new JComboBox(lDataUpdaters);
     }
 

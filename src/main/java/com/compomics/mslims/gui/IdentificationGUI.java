@@ -261,11 +261,11 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
         // Threshold parameter.
         txtThreshold = new JTextField(15);
         txtThreshold.setMaximumSize(txtThreshold.getPreferredSize());
-        txtThreshold.setText("0.05");
+        txtThreshold.setText("0.01");
 
         JPanel jpanThreshold = new JPanel();
         jpanThreshold.setLayout(new BoxLayout(jpanThreshold, BoxLayout.X_AXIS));
-        jpanThreshold.add(new JLabel("Identity threshold (0-1; default is 0.05 for 95% confidence): "));
+        jpanThreshold.add(new JLabel("Identity threshold (0-1; default is 0.01 for 99% confidence): "));
         jpanThreshold.add(Box.createHorizontalStrut(5));
         jpanThreshold.add(txtThreshold);
         jpanThreshold.add(Box.createHorizontalGlue());

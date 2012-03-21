@@ -77,12 +77,15 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
         is1 = aRS.getBinaryStream(5);
         bytes1 = new Vector();
         reading = -1;
-
         try {
-            while ((reading = is1.read()) != -1) {
+            if (is1 == null){
+            iBinary = null;
+            } else {
+                while ((reading = is1.read()) != -1) {
                 bytes1.add(new Byte((byte) reading));
-            }
+                }
             is1.close();
+            }
         } catch (IOException ioe) {
             bytes1 = new Vector();
         }
@@ -138,6 +141,7 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
         byte[] result = null;
 
         byte[] binary = super.getBinary();
+        if (binary != null){
         ByteArrayInputStream bais = new ByteArrayInputStream(binary);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BufferedInputStream bis = new BufferedInputStream(bais);
@@ -156,6 +160,9 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
 
 
         return result;
+    } else {
+            return result;
+        }
     }
 
     /**
