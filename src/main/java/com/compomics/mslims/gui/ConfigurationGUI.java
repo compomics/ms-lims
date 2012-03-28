@@ -727,6 +727,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                 }
             }
         });
+
         chkboxUseMascotHTTPDServer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 if (chkboxUseMascotHTTPDServer.isSelected()){
@@ -738,10 +739,18 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                 }
                 else if (!chkboxUseMascotHTTPDServer.isSelected()){
                     txtfieldMascotLoginName.setEnabled(false);
+                    txtfieldMascotLoginName.setText("");
                     txtfieldMascotServerLocation.setEnabled(false);
+                    txtfieldMascotServerLocation.setText("");
                     pwdfieldMascotServerPassword.setEnabled(false);
+                    pwdfieldMascotServerPassword.setText("");
                     txtfieldMascotServerPort.setEnabled(false);
                     txtfieldMascotLocalLocation.setEnabled(false);
+                    lConnectionProperties.put("mascotloginname","");
+                    lConnectionProperties.put("mascotserverlocation","");
+                    lConnectionProperties.put("mascotserverpassword", "");
+                    lConnectionProperties.put("mascotserverport","");
+                    lConnectionProperties.put("mascotserverlocallocation","");
                     lConnectionProperties.put("usemascotauthentication","0");
                     PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS,"IdentificationGUI.properties",lConnectionProperties);
                 }
@@ -1720,6 +1729,98 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         gbc.weightx = 0.5;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         jpanStatus.add(spacer24, gbc);
+        jpanMascot = new JPanel();
+        jpanMascot.setLayout(new GridBagLayout());
+        tabMain.addTab("Mascot Server Configuration",jpanMascot);
+        lblMascotServerTabDescriptor = new JLabel("Mascot Sever Configuration Tab");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        jpanMascot.add(lblMascotServerTabDescriptor,gbc);
+        chkboxUseMascotHTTPDServer = new JCheckBox("Use Mascot HTTPD Server Connection");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weighty = 19;
+        gbc.anchor = GridBagConstraints.LAST_LINE_START;
+        jpanMascot.add(chkboxUseMascotHTTPDServer, gbc);
+        lblUsername = new JLabel("Mascot Server login name");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        jpanMascot.add(lblUsername, gbc);
+        lblPassword = new JLabel("Mascot Server password");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        jpanMascot.add(lblPassword, gbc);
+        lblMascotLocation = new JLabel("Mascot Server location");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        jpanMascot.add(lblMascotLocation, gbc);
+        lblServerFilePath = new JLabel("File Path on server");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        jpanMascot.add(lblServerFilePath, gbc);
+        txtfieldMascotLoginName = new JTextField();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        txtfieldMascotLoginName.setEnabled(false);
+        jpanMascot.add(txtfieldMascotLoginName, gbc);
+        pwdfieldMascotServerPassword = new JPasswordField();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        txtfieldMascotLoginName.setEnabled(false);
+        jpanMascot.add(pwdfieldMascotServerPassword, gbc);
+        txtfieldMascotServerLocation = new JTextField();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        txtfieldMascotServerLocation.setEnabled(false);
+        jpanMascot.add(txtfieldMascotServerLocation, gbc);
+        txtfieldMascotLocalLocation = new JTextField("/home/mascot/mascot_data/");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        txtfieldMascotLocalLocation.setEnabled(false);
+        jpanMascot.add(txtfieldMascotLocalLocation, gbc);
+        btnSaveMascotServerSettings = new JButton("Save Settings");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.fill = GridBagConstraints.BOTH;
+        jpanMascot.add(btnSaveMascotServerSettings, gbc);
+        lblMascotServerPort = new JLabel("port");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 4;
+        gbc.insets = new Insets(3, 3, 3, 3);
+        jpanMascot.add(lblMascotServerPort, gbc);
+        txtfieldMascotServerPort = new JTextField("8080");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 4;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.BOTH;
+        txtfieldMascotServerPort.setEnabled(false);
+        jpanMascot.add(txtfieldMascotServerPort, gbc);
     }
 
     /**

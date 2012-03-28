@@ -237,7 +237,7 @@ public class MS_LIMS extends JFrame implements Connectable {
         });
         submenu.add(menuItem);
 
-        menuItem = new JMenuItem("QuantitatinGUI");
+        menuItem = new JMenuItem("QuantitationGUI");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(
                 KeyEvent.VK_5, ActionEvent.ALT_MASK));
         menuItem.addActionListener(new ActionListener() {
