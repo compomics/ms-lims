@@ -2,7 +2,7 @@
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
 7.5)
 
-*Changes in ms-lims 7.7.2.1 (March 28 03):*
+*Changes in ms-lims 7.7.3 (March 28 03):*
  * BUGFIX: fixed a nullpointer exception in configurationGUI
 ----
 
