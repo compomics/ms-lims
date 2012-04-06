@@ -47,7 +47,7 @@ public class deleteGUI extends FlamableJFrame {
 
 
     public deleteGUI(Connection aConn, String aDBName) {
-        super("Project clearing or deletion tool (connected to " + aDBName + ")");
+        this.setTitle("Project clearing or deletion tool (connected to " + aDBName + ")");
         this.iConn = aConn;
         this.iDBName = aDBName;
         // Window closing.
@@ -139,10 +139,6 @@ public class deleteGUI extends FlamableJFrame {
                     dbDeleteQueryGenerator sqlexecute = new dbDeleteQueryGenerator(iConn, iDBName, currentProject, sqlSelection,doneSignal);
                     new Thread(sqlexecute).start();
                     doneSignal.await();
-                    findProjects();
-                    fillProjectPulldown();
-                } catch (SQLException e) {
-                    logger.error(e);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }

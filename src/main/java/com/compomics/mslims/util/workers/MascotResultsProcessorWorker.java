@@ -15,6 +15,7 @@ import com.compomics.mslims.util.mascot.MascotResultsProcessor;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.util.sun.SwingWorker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -56,6 +57,11 @@ public class MascotResultsProcessorWorker extends SwingWorker {
     private Flamable iFlamable = null;
 
     /**
+     * This is the reference to the Vector that will hold all the results that scored equal
+     */
+    private Vector iAllAlternativeResults;
+
+    /**
      * Th progress bar.
      */
     private DefaultProgressBar iProgress = null;
@@ -71,12 +77,13 @@ public class MascotResultsProcessorWorker extends SwingWorker {
      * @param aParent      Flamable instance that called this worker.
      * @param aProgress    DefaultProgressBar to show the progress on.
      */
-    public MascotResultsProcessorWorker(MascotResultsProcessor aProcessor, MascotSearch[] aAllSearches, Vector aAllResults, Flamable aParent, DefaultProgressBar aProgress) {
+    public MascotResultsProcessorWorker(MascotResultsProcessor aProcessor, MascotSearch[] aAllSearches, Vector aAllResults,Vector aAllAlternativeResults, Flamable aParent, DefaultProgressBar aProgress) {
         iProcessor = aProcessor;
         iAllSearches = aAllSearches;
         iAllResults = aAllResults;
         iFlamable = aParent;
         iProgress = aProgress;
+        iAllAlternativeResults = aAllAlternativeResults;
     }
 
     /**
@@ -97,7 +104,7 @@ public class MascotResultsProcessorWorker extends SwingWorker {
         }
         // This HashMap will hold filename - IdentificationTableAccessor combinations.
         // Whenever a spectrum is identified twice, we can pick it out thanks to this HashMap.
-        HashMap uniquenessChecker = new HashMap(resultSize);
+        HashMap<String, Identification> uniquenessChecker = new HashMap<String, Identification>(resultSize);
         // At this point we should try to compensate for multiple occurrences of a single
         // spectrum. This is possible due to the buggy way that Mascot handles multiple
         // charge states. In particular, a non-charge assigned query is split in 'n' new queries,
@@ -115,13 +122,9 @@ public class MascotResultsProcessorWorker extends SwingWorker {
                     if (oldScore < ita.getScore()) {
                         uniquenessChecker.put(name, ita);
                     } else if (oldScore == ita.getScore()) {
-                        // If one spectrum scores likewise in two identifications, store the most confident identification.
+                        // If one spectrum scores likewise in two identifications, keep the others for processing into the alternative identification table
                         // ex: When a spectrum is searched twice against a normal swissprot and a truncated swissprot database)
-                        long oldDeltaThreshold = oldScore - oldID.getIdentitythreshold();
-                        long itaDeltaThreshold = ita.getScore() - ita.getIdentitythreshold();
-                        if (oldDeltaThreshold < itaDeltaThreshold) {
-                            uniquenessChecker.put(name, ita);
-                        }
+                        iAllAlternativeResults.add(ita);
                     }
                 } else {
                     uniquenessChecker.put(name, ita);

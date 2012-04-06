@@ -7,6 +7,7 @@
 package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.kraken.interfaces.uniprot.dbx.hamap.HamapHitNumber;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -361,5 +362,47 @@ public class Identification extends IdentificationTableAccessor {
      */
     public String toString() {
         return "" + iIdentificationid;
+    }
+
+    /**
+     * Returns an array of all the objects contained in the Identification
+     *
+     * @return Array containing all variables
+     */
+
+    public HashMap identificationToHashMap() {
+        HashMap tempMap = new HashMap();
+        tempMap.put("IDENTIFICATIONID",this.iIdentificationid);
+        tempMap.put("L_SPECTRUMFILEID",this.iL_spectrumid);
+        tempMap.put("L_DATFILEID",this.iL_datfileid);
+        tempMap.put("DATFILE_QUERY",(int)this.iDatfile_query);
+        tempMap.put("ACCESSION",this.iAccession);
+        tempMap.put("START",this.iStart);
+        tempMap.put("END",this.iEnd);
+        tempMap.put("ENZYMATIC",this.iEnzymatic);
+        tempMap.put("SEQUENCE",this.iSequence);
+        tempMap.put("MODIFIED_SEQUENCE",this.iModified_sequence);
+        tempMap.put("ION_COVERAGE",this.iIon_coverage);
+        tempMap.put("SCORE",this.iScore);
+        tempMap.put("HOMOLOGY",this.iHomology);
+        tempMap.put("EXP_MASS",this.iExp_mass);
+        tempMap.put("CALL_MASS",this.iCal_mass);
+        tempMap.put("LIGHT_ISOTOPE",this.iLight_isotope);
+        tempMap.put("HEAVY_ISOTOPE",this.iHeavy_isotope);
+        tempMap.put("VALID",this.iValid);
+        tempMap.put("DESCRIPTION",this.iDescription);
+        tempMap.put("IDENTITYTRESHOLD",this.iIdentitythreshold);
+        tempMap.put("CONFIDENCE",this.iConfidence);
+        tempMap.put("DB",this.iDb);
+        tempMap.put("TITLE",this.iTitle);
+        tempMap.put("PRECURSOR",this.iPrecursor);
+        tempMap.put("CHARGE",this.iCharge);
+        tempMap.put("ISOFORMS",this.iIsoforms);
+        tempMap.put("DB_FILENAME",this.iDb_filename);
+        tempMap.put("MASCOT_VERSION",this.iMascot_version);
+        tempMap.put("USERNAME",this.iUsername);
+        tempMap.put("CREATIONDATE",this.iCreationdate);
+        tempMap.put("MODIFICATIONDATE",this.iModificationdate);
+       return tempMap;
     }
 }

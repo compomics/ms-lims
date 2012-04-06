@@ -97,6 +97,11 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
     private Vector iTasks = null;
 
     /**
+     * This Vector holds all the alternative MascotTasks with the same score
+     */
+    private Vector iAltTasks = null;
+
+    /**
      * This constructor takes a single argument with the title for the frame.
      *
      * @param aName String with the title for the frame.
@@ -570,6 +575,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
                 dpb.setSize(350, 100);
                 dpb.setMessage("Connecting...");
                 iTasks = new Vector();
+                iAltTasks = new Vector();
                 ReadMascotTaskDBWorker worker = new ReadMascotTaskDBWorker(taskDB, iTasks, this, dpb);
                 worker.start();
                 dpb.setVisible(true);

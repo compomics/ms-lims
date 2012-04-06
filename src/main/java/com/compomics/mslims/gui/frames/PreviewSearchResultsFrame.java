@@ -6,6 +6,8 @@
  */
 package com.compomics.mslims.gui.frames;
 
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.gui.IdentificationSwitcherGUI;
 import org.apache.log4j.Logger;
 
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
@@ -24,6 +26,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 /*
@@ -60,6 +64,10 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
 
 
     JTableForDB tblResults = null;
+    /**
+     * This Vector will hold all the results from the parsing that score equal
+     */
+    private Vector<Identification> iAlternativeResults;
 
     /**
      * This constructor shows a preview of the search results.
@@ -181,6 +189,25 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
                 }
             }
         });
+/*
+        JButton btnChangeMaster = new JButton("Change master ...");
+        if (iAlternativeResults != null) {
+            btnChangeMaster.setMnemonic(KeyEvent.VK_M);
+            btnChangeMaster.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    editMasterTriggered();
+                }
+            });
+            btnChangeMaster.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                 editMasterTriggered();
+            }
+            });
+        } else {
+            btnChangeMaster.setEnabled(false);
+        }
+        */
         // The column-selection checkbox.
         // Create the checkbox.
         final JCheckBox chkSelection = new JCheckBox("Column selection mode", false);
@@ -201,6 +228,8 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
         jpanButtons.add(Box.createHorizontalStrut(10));
         jpanButtons.add(chkSelection);
         jpanButtons.add(Box.createHorizontalGlue());
+        //jpanButtons.add(btnChangeMaster);
+        //jpanButtons.add(Box.createHorizontalStrut(5));
         jpanButtons.add(btnSaveCSV);
         jpanButtons.add(Box.createHorizontalStrut(5));
         jpanButtons.add(btnCancel);
@@ -210,7 +239,12 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
 
         return jpanButtons;
     }
-
+    /*
+    private void editMasterTriggered() {
+        IdentificationSwitcherGUI identificationSwitcher = new IdentificationSwitcherGUI("master and alternative peptide identification overview",iResults,iAlternativeResults);
+        iAlternativeResults = identificationSwitcher.getAlternativesToStore();
+    }
+    */
     /**
      * This method is called when the user presses 'store'.
      */
@@ -223,10 +257,14 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
                 new MascotResultsStorageWorker(this.iMRP, iResults, iSearches, this, progress);
         worker.start();
         progress.setVisible(true);
+        /*if(iAlternativeResults != null){
+            worker =
+                    new MascotResultsStorageWorker(this.iMRP, iAlternativeResults, iSearches, this, progress);
+            worker.start();
+        }*/
         JOptionPane.showMessageDialog(this, "Storage of identifications complete!", "Storage complete", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
     }
-
     /**
      * This method is called when the user presses 'cancel'.
      */
@@ -296,13 +334,14 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
      */
     private void acquireData() {
         iResults = new Vector(3000, 750);
+        iAlternativeResults = new Vector<Identification>();
 
         DefaultProgressBar progress =
                 new DefaultProgressBar(this, "Processing search results...", 0, (iSearches.length * 2) + 3);
         progress.setSize(350, 100);
         progress.setMessage("Starting up...");
         MascotResultsProcessorWorker worker =
-                new MascotResultsProcessorWorker(iMRP, iSearches, iResults, this, progress);
+                new MascotResultsProcessorWorker(iMRP, iSearches, iResults,iAlternativeResults, this, progress);
         worker.start();
         progress.setVisible(true);
     }

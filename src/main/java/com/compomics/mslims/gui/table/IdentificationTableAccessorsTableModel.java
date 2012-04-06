@@ -356,4 +356,7 @@ public class IdentificationTableAccessorsTableModel extends AbstractTableModel {
         }
         return result;
     }
+    public void reloadTable(){
+        fireTableStructureChanged();
+    }
 }

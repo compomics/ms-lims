@@ -12,7 +12,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.7.2.1</version.number>
+        <version.number>7.7.4</version.number>
     </properties>
 
     <!-- Licence -->
@@ -419,7 +419,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>rover</artifactId>
-            <version>2.3.5</version>
+            <version>2.3.6</version>
             <type>jar</type>
             <exclusions>
                 <exclusion>

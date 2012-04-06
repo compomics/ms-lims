@@ -191,10 +191,10 @@ public class CopyProject extends JFrame {
             //for each row we create the values part of the insert
             for (int i = 0; i < insertInt; i++) {
                 rowResult = rs.getObject(i + 1);
+                if(rowResult instanceof String){rowResult = ((String) rowResult).replaceAll("'","");}
                 rowInsertString = rowInsertString + ",'" + rowResult + "'";
             }
             rowInsertString = rowInsertString.replaceFirst(",", "");
-
             //add to the batch
             stmtout.addBatch("insert into project (" + projectInsertstring + ") values (" + rowInsertString + ");");
             batchCounter++;
@@ -208,6 +208,7 @@ public class CopyProject extends JFrame {
         temp.next();
         projectInsertstring = null;
         projectMetadata = null;
+        statement.close();
         return temp.getInt(1);
     }
 
@@ -255,20 +256,22 @@ public class CopyProject extends JFrame {
         lcrunResultset.close();
         lcrunInsertstring = null;
         lcrunMetadata = null;
+        lcrunstatement.close();
         return stmtout.executeQuery("select lcrunid from lcrun where l_projectid =" + newProjectNumber + " order by lcrunid");
     }
 
 
-    private ArrayList<Integer> copySpectrum(ResultSet lcrunKeyResultset, int newProjectNumber) throws SQLException, FileNotFoundException {
+    private ArrayList<Integer> copySpectrum(ResultSet lcrunKeyResultset, int newProjectNumber) throws SQLException, IOException {
         txtAreaCopyOutput.append("copying spectrum \n");
         PreparedStatement spectrumfileInsertStatement = outconn.prepareStatement("insert into spectrum_file (l_spectrumid,file) values (?,?)");
 
+        Blob spfBlob;
         ArrayList<Integer> lcrunkeys = new ArrayList<Integer>();
         ArrayList<Integer> spectrumInsertedkeysList = new ArrayList<Integer>();
         Iterator<Integer> spectrumInsertedkeysIter;
         int spectrumInstertedKey;
 
-        //add all the lcrun keys to a list because mysql statements can only hold one resultset
+        //add all the lcrun keys to a list because mysql statements can only hold one resultset TODO move to other worker to close statement/resultset
         while (lcrunKeyResultset.next()) {
             lcrunkeys.add(lcrunKeyResultset.getInt(1));
         }
@@ -280,6 +283,20 @@ public class CopyProject extends JFrame {
         String spectrumInsertString;
         String spectrumTableString;
 
+        //get everything from scan
+        PreparedStatement scanStatement = inconn.prepareStatement("select scan.number,scan.rtsec from scan,spectrum where scan.l_spectrumid = spectrum.spectrumid and spectrum.l_projectid = " + projectNumber + " order by l_spectrumid");
+        scanResultset = scanStatement.executeQuery();
+        ResultSetMetaData scanmetadata = scanResultset.getMetaData();
+        int scanrowint = scanmetadata.getColumnCount();
+        boolean emptyResultSet = false;
+        if(!scanResultset.isBeforeFirst()){
+            emptyResultSet = true;
+        }
+
+        //get everything from spectrum_file
+        PreparedStatement spectrum_fileStatement = inconn.prepareStatement("select file from spectrum_file,spectrum where spectrum_file.l_spectrumid = spectrum.spectrumid and spectrum.l_projectid = " + projectNumber + "  order by l_spectrumid ");
+        spectrum_fileResultset = spectrum_fileStatement.executeQuery();
+
         // first we fetch all the lcrun keys that are associated with a project
         PreparedStatement lcrunkeyStatement = inconn.prepareStatement("select lcrunid from lcrun where l_projectid = " + projectNumber + " order by lcrunid");
         ResultSet lcrunFetchedKeySet = lcrunkeyStatement.executeQuery();
@@ -289,7 +306,7 @@ public class CopyProject extends JFrame {
         ResultSet spectrumInsertedKeysResultSet;
         while (lcrunFetchedKeySet.next()) {
 
-            //fetch all the spectrums to be inserted per lcrun
+            //fetch all the spectra to be inserted per lcrun
             lcrunFetchedKey = lcrunFetchedKeySet.getInt(1);
             PreparedStatement spectrumStatement = inconn.prepareStatement("select l_fragmentationid,l_instrumentid,searched,identified,filename,charge,mass_to_charge,total_spectrum_intensity,highest_peak_in_spectrum,username,creationdate,modificationdate from spectrum where l_projectid  = " + projectNumber + " and l_lcrunid = " + lcrunFetchedKey + " order by spectrumid ");
             spectrumResultset = spectrumStatement.executeQuery();
@@ -326,20 +343,12 @@ public class CopyProject extends JFrame {
                 //execute leftover which is less than buffer
                 stmtout.executeBatch();
             }
-            txtAreaCopyOutput.append("coyping scans and spectrum files \n");
+            txtAreaCopyOutput.append("copying scans and spectrum files \n");
             //after inserting the spectra we insert the files and scans associated with it
-            spectrumInsertedKeysResultSet = stmtout.executeQuery("select spectrumid from spectrum where l_projectid = " + newProjectNumber + " and l_projectid = " + lcrunGeneratedKey + " order by spectrumid");
+            spectrumInsertedKeysResultSet = stmtout.executeQuery("select spectrumid from spectrum where l_projectid = " + newProjectNumber + " and l_lcrunid = " + lcrunGeneratedKey + " order by spectrumid");
             batchCounter = 0;
 
             //get everything from scan
-            PreparedStatement scanStatement = inconn.prepareStatement("select scan.number,scan.rtsec from scan,spectrum where scan.l_spectrumid = spectrum.spectrumid and spectrum.l_projectid = " + projectNumber + " order by l_spectrumid");
-            scanResultset = scanStatement.executeQuery();
-            ResultSetMetaData scanmetadata = scanResultset.getMetaData();
-            int scanrowint = scanmetadata.getColumnCount();
-
-            //get everything from spectrum_file
-            PreparedStatement spectrum_fileStatement = inconn.prepareStatement("select file from spectrum_file,spectrum where spectrum_file.l_spectrumid = spectrum.spectrumid and spectrum.l_projectid = " + projectNumber + "  order by l_spectrumid ");
-            spectrum_fileResultset = spectrum_fileStatement.executeQuery();
             spectrumInsertedkeysList.clear();
             while (spectrumInsertedKeysResultSet.next()) {
 
@@ -357,31 +366,56 @@ public class CopyProject extends JFrame {
                 }
                 spectrumInstertedKey = spectrumInsertedkeysIter.next();
                 scanResultset.next();
+                    rowInsertString = "";
                 //batch for scan
-                for (int j = 0; j < scanrowint; j++) {
-                    rowResult = scanResultset.getObject(j + 1);
-                    rowInsertString = rowInsertString + ",'" + rowResult + "'";
+                if(!emptyResultSet){
+                    for (int j = 0; j < scanrowint; j++) {
+                        rowResult = scanResultset.getObject(j + 1);
+                        if (rowResult != null){
+                            rowInsertString = rowInsertString + ",'" + rowResult + "'";
+                        } else {
+                            rowInsertString = rowInsertString + ",NULL";
+                        }
+                    }
+                    stmtout.addBatch("insert into scan (l_spectrumid,number,rtsec,creationdate,modificationdate) values (" + spectrumInstertedKey + rowInsertString + ",CURRENT_TIMESTAMP,CURRENT_TIMESTAMP ) ");
                 }
-                this.stmtout.addBatch("insert into scan (l_spectrumid,number,rtsec,creationdate,modificationdate) values (" + spectrumInstertedKey + rowInsertString + ",CURRENT_TIMESTAMP,CURRENT_TIMESTAMP ) ");
-
                 //next we insert into spectrum_file
                 //create inserts for every spectrum id we generated
                 spectrum_fileResultset.next();
+                spfBlob = spectrum_fileResultset.getBlob(1);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buf = new byte[1024];
+
+                InputStream in = spfBlob.getBinaryStream();
+
+                int n;
+                while ((n = in.read(buf)) >= 0) {
+                    baos.write(buf, 0, n);
+                }
+
+                in.close();
+                byte[] bytes = baos.toByteArray();
+                ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                 spectrumfileInsertStatement.setInt(1, spectrumInstertedKey);
-                spectrumfileInsertStatement.setBlob(2, spectrum_fileResultset.getBlob(1));
+                spectrumfileInsertStatement.setBinaryStream(2,bais,bytes.length);
                 spectrumfileInsertStatement.addBatch();
                 batchCounter++;
+                bais.close();
+                baos.close();
             }
             if (batchCounter != 0) {
-                this.stmtout.executeBatch();
+                stmtout.executeBatch();
                 spectrumfileInsertStatement.executeBatch();
             }
-        spectrum_fileResultset.close();
         }
-        scanResultset.close();
+        spectrum_fileResultset.close();
+        scanStatement.close();
+        spectrum_fileStatement.close();
         spectrumResultset.close();
         spectrumMetadata = null;
         spectrumInsertedkeysList.clear();
+        spfBlob = null;
 
         spectrumResultset = stmtout.executeQuery("select spectrumid from spectrum where l_projectid = " + newProjectNumber + " order by spectrumid");
 
@@ -390,6 +424,7 @@ public class CopyProject extends JFrame {
         }
         spectrumfileInsertStatement.close();
         lcrunFetchedKeySet.close();
+        lcrunkeyStatement.close();
         spectrumResultset.close();
         return spectrumInsertedkeysList;
     }
@@ -401,37 +436,41 @@ public class CopyProject extends JFrame {
         ResultSet datfileResultset = datfilestatement.executeQuery();
         PreparedStatement preparedDatcopyStatement = outconn.prepareStatement("insert into datfile (filename,file,server,folder,username,creationdate,modificationdate) values (?,?,?,?,?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", Statement.RETURN_GENERATED_KEYS);
         try{
-        while (datfileResultset.next()) {
-            txtAreaCopyOutput.append("copying dat file \n");
-            //impossible to do this in batch because of the huge size of datfiles
-            Blob tempblob = datfileResultset.getBlob(2);
+            while (datfileResultset.next()) {
+                txtAreaCopyOutput.append("copying dat file \n");
+                //impossible to do this in batch because of the size of datfiles
+                Blob tempblob = datfileResultset.getBlob(2);
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buf = new byte[1024];
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buf = new byte[1024];
 
-            InputStream in = tempblob.getBinaryStream();
+                InputStream in = tempblob.getBinaryStream();
 
-            int n;
-            while ((n = in.read(buf)) >= 0) {
-                baos.write(buf, 0, n);
+                int n;
+                while ((n = in.read(buf)) >= 0) {
+                    baos.write(buf, 0, n);
+                }
+
+                in.close();
+                byte[] bytes = baos.toByteArray();
+                bais = new ByteArrayInputStream(bytes);
+
+                preparedDatcopyStatement.setString(1, datfileResultset.getString(1));
+                preparedDatcopyStatement.setBinaryStream(2, bais, bytes.length);
+                preparedDatcopyStatement.setString(3, datfileResultset.getString(3));
+                preparedDatcopyStatement.setString(4, datfileResultset.getString(4));
+                preparedDatcopyStatement.setString(5, datfileResultset.getString(5));
+                preparedDatcopyStatement.executeUpdate();
+                bais.close();
+                datfileGeneratedKey = preparedDatcopyStatement.getGeneratedKeys();
+                datfileGeneratedKey.next();
+                datfileKeys.add(datfileGeneratedKey.getInt(1));
             }
-
-            in.close();
-            byte[] bytes = baos.toByteArray();
-            bais = new ByteArrayInputStream(bytes);
-
-            preparedDatcopyStatement.setString(1, datfileResultset.getString(1));
-            preparedDatcopyStatement.setBinaryStream(2, bais, bytes.length);
-            preparedDatcopyStatement.setString(3, datfileResultset.getString(3));
-            preparedDatcopyStatement.setString(4, datfileResultset.getString(4));
-            preparedDatcopyStatement.setString(5, datfileResultset.getString(5));
-            preparedDatcopyStatement.executeUpdate();
-            bais.close();
-            datfileGeneratedKey = preparedDatcopyStatement.getGeneratedKeys();
-            datfileGeneratedKey.next();
-            datfileKeys.add(datfileGeneratedKey.getInt(1));
-        }}catch (SQLException sqle){sqle.printStackTrace();}
+        } catch (SQLException sqle){
+            sqle.printStackTrace();
+        }
         datfileResultset.close();
+        datfilestatement.close();
         return datfileKeys;
     }
 
@@ -468,9 +507,8 @@ public class CopyProject extends JFrame {
                 identificationInsertStatement.setObject(i + 1, identificationResultset.getObject(i + 1));
             }
             try {
-            identificationInsertStatement.executeUpdate();}
-            catch(SQLException sqle)
-            {
+                identificationInsertStatement.executeUpdate();
+            } catch(SQLException sqle) {
                sqle.printStackTrace();
             }
             newidentificationkey = identificationInsertStatement.getGeneratedKeys();
@@ -478,6 +516,7 @@ public class CopyProject extends JFrame {
             oldnewidentificationkeys.put(identificationResultset.getInt(1), newidentificationkey.getInt(1));
         }
         spectrumKeysIter = null;
+        identificationstatement.close();
         identificationInsertStatement.close();
         identificationResultset.close();
     }
@@ -513,8 +552,9 @@ public class CopyProject extends JFrame {
             validationInsertStatement.executeBatch();
         }
         identificationKeysIter = null;
-     validationInsertStatement.close();
-     validationResultset.close();
+        validationstatement.close();
+        validationInsertStatement.close();
+        validationResultset.close();
     }
 
 
@@ -572,12 +612,12 @@ public class CopyProject extends JFrame {
             while (quantitationfileResultset.next()){
                 selectids.add(quantitationfileResultset.getInt(1));
             }
-            PreparedStatement quantitationfilePreparedStatement = outconn.prepareStatement("insert into quantitation_file (filename,type,file,username,creationdate,modificationdate) values (?,?,?,?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+            PreparedStatement quantitationfilePreparedStatement = outconn.prepareStatement("insert into quantitation_file (filename,type,file,binary_file,version_number,username,creationdate,modificationdate) values (?,?,?,?,?,?,CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
             Iterator<Integer> selectidsiter = selectids.iterator();
             while (selectidsiter.hasNext()) {
                 selectid = selectidsiter.next();
                 txtAreaCopyOutput.append("copying quantitation file \n");
-                PreparedStatement quantitationfilefetcher = inconn.prepareStatement("select f.filename,f.type,f.file,f.username from quantitation_file as f where f.quantitation_fileid = "+selectid );
+                PreparedStatement quantitationfilefetcher = inconn.prepareStatement("select f.filename,f.type,f.file,f.binary_file,f.version_number,f.username from quantitation_file as f where f.quantitation_fileid = "+selectid );
                 quantitationfileResultset = quantitationfilefetcher.executeQuery();
                 quantitationfileResultset.next();
                 quantitationfilePreparedStatement.setString(1, quantitationfileResultset.getString(1));
@@ -598,17 +638,31 @@ public class CopyProject extends JFrame {
                 byte[] bytes = baos.toByteArray();
                 bais = new ByteArrayInputStream(bytes);
                 quantitationfilePreparedStatement.setBinaryStream(3,bais,bytes.length);
-                quantitationfilePreparedStatement.setString(4, quantitationfileResultset.getString(4));
+                baos = new ByteArrayOutputStream();
+                buf = new byte[1024];
+
+                in = tempblob.getBinaryStream();
+
+
+                while ((n = in.read(buf)) >= 0) {
+                    baos.write(buf, 0, n);
+                }
+
+                in.close();
+                bytes = baos.toByteArray();
+                bais = new ByteArrayInputStream(bytes);
+                quantitationfilePreparedStatement.setBinaryStream(4, bais,bytes.length);
+                quantitationfilePreparedStatement.setString(5, quantitationfileResultset.getString(5));
+                quantitationfilePreparedStatement.setString(6, quantitationfileResultset.getString(6));
                 quantitationfilePreparedStatement.executeUpdate();
                 quantitationFileIdResultset = quantitationfilePreparedStatement.getGeneratedKeys();
                 quantitationFileIdResultset.next();
                 quantitationFileIds.add(quantitationFileIdResultset.getInt(1));
             }
-            }catch(SQLException sqle)
-            {
+            }catch(SQLException sqle) {
             sqle.printStackTrace();
             } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         quantitationfilestatement.close();
         return quantitationFileIds;
@@ -627,28 +681,29 @@ public class CopyProject extends JFrame {
 
         ArrayList<Integer> quantitationgroupInsertedIdsList = new ArrayList<Integer>();
         try{
-        while (quantitationgroupResultset.next()) {
-            rowInsertString = "";
-            for (int i = 1; i < insertInt; i++) {
-                rowResult = quantitationgroupResultset.getObject(i + 1);
-                rowInsertString = rowInsertString + ",'" + rowResult + "'";
-            }
+            while (quantitationgroupResultset.next()) {
+                rowInsertString = "";
+                for (int i = 1; i < insertInt; i++) {
+                    rowResult = quantitationgroupResultset.getObject(i + 1);
+                    rowInsertString = rowInsertString + ",'" + rowResult + "'";
+                }
 
-            if (quantitationgroupResultset.getInt(1) == quantitationfileChecker) {
-                rowInsertString = quantitationfileIdInserter + rowInsertString;
-            } else {
-                quantitationfileChecker = quantitationgroupResultset.getInt(1);
-                quantitationfileIdInserter = quantitationfileIter.next();
-                rowInsertString = quantitationfileIdInserter + rowInsertString;
-            }
-            stmtout.executeUpdate("insert into quantitation_group (l_quantitation_fileid,file_ref,username,creationdate,modificationdate) values (" + rowInsertString + ",CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)");
+                if (quantitationgroupResultset.getInt(1) == quantitationfileChecker) {
+                    rowInsertString = quantitationfileIdInserter + rowInsertString;
+                } else {
+                    quantitationfileChecker = quantitationgroupResultset.getInt(1);
+                    quantitationfileIdInserter = quantitationfileIter.next();
+                    rowInsertString = quantitationfileIdInserter + rowInsertString;
+                }
+                stmtout.executeUpdate("insert into quantitation_group (l_quantitation_fileid,file_ref,username,creationdate,modificationdate) values (" + rowInsertString + ",CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)");
                 quantitationgroupInsertedIds = stmtout.getGeneratedKeys();
-            while (quantitationgroupInsertedIds.next()) {
-                quantitationgroupInsertedIdsList.add(quantitationgroupInsertedIds.getInt(1));
+                while (quantitationgroupInsertedIds.next()) {
+                    quantitationgroupInsertedIdsList.add(quantitationgroupInsertedIds.getInt(1));
+                }
             }
-        }} catch (SQLException sqle){
+        } catch (SQLException sqle) {
                 sqle.printStackTrace();
-            }
+        }
         quantitationfileIter = null;
         quantitationgroupResultset.close();
         quantitationgroupstatement.close();
@@ -664,35 +719,35 @@ public class CopyProject extends JFrame {
         int identificationtoquantitationChecker = -1;
         int identificationtoquantitationIdInserter = -1;
         try{
-        while (identificationToQuantitationResultset.next()) {
-            if (batchCounter == 500) {
-                stmtout.executeBatch();
-                batchCounter = 0;
-            }
-            rowInsertString = "";
-            for (int i = 2; i < 4; i++) {
-                rowResult = identificationToQuantitationResultset.getObject(i + 1);
-                rowInsertString = rowInsertString + ",'" + rowResult + "'";
-            }
-            if (identificationToQuantitationResultset.getInt(2) == identificationtoquantitationChecker) {
-                rowInsertString = identificationtoquantitationIdInserter + rowInsertString;
-            } else {
-                identificationtoquantitationChecker = identificationToQuantitationResultset.getInt(2);
-                identificationtoquantitationIdInserter = quantitationgroupKeysIter.next();
-                rowInsertString = identificationtoquantitationIdInserter + rowInsertString;
-            }
+            while (identificationToQuantitationResultset.next()) {
+                if (batchCounter == 500) {
+                    stmtout.executeBatch();
+                    batchCounter = 0;
+                }
+                rowInsertString = "";
+                for (int i = 2; i < 4; i++) {
+                    rowResult = identificationToQuantitationResultset.getObject(i + 1);
+                    rowInsertString = rowInsertString + ",'" + rowResult + "'";
+                }
+                if (identificationToQuantitationResultset.getInt(2) == identificationtoquantitationChecker) {
+                    rowInsertString = identificationtoquantitationIdInserter + rowInsertString;
+                } else {
+                    identificationtoquantitationChecker = identificationToQuantitationResultset.getInt(2);
+                    identificationtoquantitationIdInserter = quantitationgroupKeysIter.next();
+                    rowInsertString = identificationtoquantitationIdInserter + rowInsertString;
+                }
 
-            rowInsertString = identificationkeys.get(identificationToQuantitationResultset.getInt(1)) + "," + rowInsertString;
-            stmtout.addBatch("insert into identification_to_quantitation (l_identificationid,l_quantitation_groupid,type,username,creationdate,modificationdate) values (" + rowInsertString + ",CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)");
-            batchCounter++;
-        }
-        if (batchCounter != 0) {
-            stmtout.executeBatch();
-        }
-        identificationtoquantitation.close();
-        identificationToQuantitationResultset.close();
-        quantitationgroupKeysIter = null;
-    } catch (Exception e ) {
+                rowInsertString = identificationkeys.get(identificationToQuantitationResultset.getInt(1)) + "," + rowInsertString;
+                stmtout.addBatch("insert into identification_to_quantitation (l_identificationid,l_quantitation_groupid,type,username,creationdate,modificationdate) values (" + rowInsertString + ",CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)");
+                batchCounter++;
+            }
+            if (batchCounter != 0) {
+                stmtout.executeBatch();
+            }
+            identificationtoquantitation.close();
+            identificationToQuantitationResultset.close();
+            quantitationgroupKeysIter = null;
+        } catch (Exception e ) {
             e.printStackTrace();
         }
     }
@@ -733,8 +788,9 @@ public class CopyProject extends JFrame {
             quantitationPreparedStatement.executeBatch();
         }
         quantitationgroupKeysIter = null;
-       quantitationPreparedStatement.close();
-       quantitationResultset.close();
+        quantitationPreparedStatement.close();
+        quantitationstatement.close();
+        quantitationResultset.close();
     }
 
 private SwingWorker copyWorker = new SwingWorker<Void, Void>() {
@@ -742,6 +798,7 @@ private SwingWorker copyWorker = new SwingWorker<Void, Void>() {
 
             @Override
             protected Void doInBackground() throws SQLException, IOException {
+                try{
                        int newProjectNumber = copyProject(inprep1);
 
         ResultSet lcrunInsertedKeysResultSet = copyLcrun(inprep2, newProjectNumber);
@@ -751,11 +808,10 @@ private SwingWorker copyWorker = new SwingWorker<Void, Void>() {
                 lcrunInsertedKeysResultSet = null;
 
         ArrayList<Integer> returnedDatfileKeys = copyDatfile(inprep3);
-        copyIdentification(inprep4, spectrumkeys, returnedDatfileKeys);
+                    copyIdentification(inprep4, spectrumkeys, returnedDatfileKeys);
 
         spectrumkeys = null;
         returnedDatfileKeys = null;
-        try{
         ResultSet identificationidResultSet = stmtout.executeQuery("select identificationid from identification,spectrum where spectrumid = l_spectrumid and l_projectid = " + newProjectNumber);
 
         ArrayList<Integer> identitykeyList = new ArrayList<Integer>();
@@ -787,7 +843,7 @@ private SwingWorker copyWorker = new SwingWorker<Void, Void>() {
                 copyProgressBar.setMaximum(1);
                 copyProgressBar.setValue(1);
                 copyProgressBar.setIndeterminate(false);
-
+                System.gc();
             } catch(SQLException sqle)
         {
            sqle.printStackTrace();
