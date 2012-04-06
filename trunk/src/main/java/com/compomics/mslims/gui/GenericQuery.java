@@ -86,6 +86,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     private JButton btnClearQueryCache = null;
     private JButton btnExport = null;
     private JButton btnPeptizer = null;
+    //private JButton btnMasterAlternativeSwitcher = null;
     private JButton btnCopy = null;
     private JTextArea txtQuery = null;
     private JProgressBar progress = null;
@@ -736,10 +737,20 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                 peptizerTriggered();
             }
         });
-
+        /*
+        btnMasterAlternativeSwitcher = new JButton("Alternative peptide switcher");
+        btnMasterAlternativeSwitcher.setMnemonic(KeyEvent.VK_M);
+        btnMasterAlternativeSwitcher.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                masterAlternativeSwitcherTriggered();
+            }
+        });
+        */
         JPanel jpanButtons = new JPanel();
         jpanButtons.setLayout(new BoxLayout(jpanButtons, BoxLayout.X_AXIS));
         jpanButtons.add(Box.createHorizontalGlue());
+        //jpanButtons.add(btnMasterAlternativeSwitcher);
+        //jpanButtons.add(Box.createRigidArea(new Dimension(5, btnCopy.getHeight())));
         jpanButtons.add(btnPeptizer);
         jpanButtons.add(Box.createRigidArea(new Dimension(5, btnCopy.getHeight())));
         jpanButtons.add(btnCopy);
@@ -758,6 +769,11 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
 
         this.getContentPane().add(split, BorderLayout.CENTER);
         this.getContentPane().add(jpanStatus, BorderLayout.SOUTH);
+    }
+
+    private void masterAlternativeSwitcherTriggered() {
+        IdentificationSwitcherGUI identificationSwitcher = new IdentificationSwitcherGUI("master and alternative peptide identification overview",iConn);
+
     }
 
     private void peptizerTriggered() {

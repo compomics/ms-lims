@@ -221,14 +221,9 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
                    txtareaDelete.append("fetching the entries \n");
 
                    for (int i = 0; i < iSelection; i++) {
-                   levelExecute = previewDeletes(i + 1);
+                   levelExecute = previewDeletes(i);
                    }
-                   if (iSelection == 4){
-                       levelExecute = 4;
-                       deleteString = deleteString + "project: 1 row \n";
-                       summedRows.put("project", 1);
-                   }
-                   txtareaDelete.append("done \n");
+
                    int finalChoice = JOptionPane.showConfirmDialog(dbDeleteQueryGenerator.this, deleteString);
                    if (finalChoice == JOptionPane.YES_OPTION) {
                        executeDeletes();
@@ -248,7 +243,7 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
 
                 //check if level has values if lazy or unsure user
 
-                if (levelcheck == 1) {
+                if (levelcheck == 0) {
                     returnedResult = stmt.executeQuery("select t.l_quantitation_groupid from  identification_to_quantitation as t , identification as i, spectrum as s where" +
                         " i.l_spectrumid = s.spectrumid and t.l_identificationid = i.identificationid and s.l_projectid = " + iProjectid);
 
@@ -266,12 +261,12 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
                     } else {
                         levelExecute = 2;
                     }
-                } else if (levelcheck == 2) {
+                } else if (levelcheck == 1) {
                     returnedResult = stmt.executeQuery("select i.identificationid from identification as i,spectrum as s where l_spectrumid = spectrumid and l_projectid = " + iProjectid);
                     if (returnedResult.isBeforeFirst()) {
                         mapper.put(returnedResult, resultsetMap, "identification");
 
-                        returnedResult = stmt.executeQuery("select i.l_datfileid from identification as i,spectrum as s where l_spectrumid = spectrumid and l_projectid =" + iProjectid);
+                        returnedResult = stmt.executeQuery("select i.l_datfileid from identification as i,spectrum as s where l_spectrumid = spectrumid and l_projectid =" + iProjectid + " group by l_datfileid");
                         mapper.put(returnedResult, resultsetMap, "datfile");
 
                         returnedResult = stmt.executeQuery("select v.validationid from validation as v, identification as i,spectrum as s where v.l_identificationid =i.identificationid and i.l_spectrumid = s.spectrumid and s.l_projectid =  " + iProjectid);
@@ -283,7 +278,7 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
                     } else {
                         levelExecute = 3;
                     }
-                } else if (levelcheck == 3) {
+                } else if (levelcheck == 2) {
                     returnedResult = stmt.executeQuery("select spectrumid from spectrum where l_projectid = " + iProjectid);
                     if (returnedResult.isBeforeFirst()) {
                         mapper.put(returnedResult, resultsetMap, "spectrum");
@@ -292,12 +287,12 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
                         returnedResult = stmt.executeQuery("select s.scanid from scan as s, spectrum as sp where s.l_spectrumid = sp.spectrumid and sp.l_projectid =" + iProjectid);
                         mapper.put(returnedResult, resultsetMap, "scan");
 
-                    returnedResult = stmt.executeQuery("select lcrunid from lcrun where l_projectid = " + iProjectid);
-                        mapper.put(returnedResult, resultsetMap, "lcrun");
                         levelExecute = 3;
-                    } else {
-                        levelExecute = 4;
                     }
+                } else if (levelcheck == 3) {
+                    returnedResult = stmt.executeQuery("select lcrunid from lcrun where l_projectid = " + iProjectid);
+                    mapper.put(returnedResult, resultsetMap, "lcrun");
+                    levelExecute = 4;
                 }
                 if (returnedResult != null) {
                     returnedResult.close();
@@ -317,27 +312,18 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
                 progressBar.setMaximum(sum + 1);
                 progressBar.setValue(1);
                 progressBar.setIndeterminate(false);
+                Statement stmt;
+                stmt = iConn.createStatement();
                 for (int i = 0; i < levelExecute; i++) {
 
-                    Statement stmt;
-                    stmt = iConn.createStatement();
-
                     if (i == 3) {
-                        try {
-                            txtareaDelete.append("deleting project \n");
-                            stmt.executeUpdate("delete p.* from project as p where projectid =" + iProjectid);
-                            updateProgressBar("project");
-                            txtareaDelete.append("deleted project \n");
+                        try{
+                            txtareaDelete.append("deleting lcrun \n");
+                            stmt.executeUpdate("delete l.* from lcrun as l where l.lcrunid in (" + resultsetMap.get("lcrun") + ")");
+                            updateProgressBar("lcrun");
+                            txtareaDelete.append("deleted lcrun \n");
                         } catch (SQLException e) {
-                            logger.error(e);
-                            /*if (iConnection != null) {
-                                try {
-                                    iConnection.rollback();
-                                } catch (SQLException ex1) {
-                                    System.out.println(ex1.getMessage());
-                                }
-                            }*/
-                        }
+                            logger.error(e);}
                     }
                     if (i == 2) {
                         try{
@@ -356,13 +342,6 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
                         } catch (SQLException e) {
                             logger.error(e);}
 
-                        try{
-                            txtareaDelete.append("deleting lcrun \n");
-                            stmt.executeUpdate("delete l.* from lcrun as l where l.lcrunid in (" + resultsetMap.get("lcrun") + ")");
-                            updateProgressBar("lcrun");
-                            txtareaDelete.append("deleted lcrun \n");
-                        } catch (SQLException e) {
-                            logger.error(e);}
                         try{
                             txtareaDelete.append("deleting spectrum \n");
                             stmt.executeUpdate("delete s.* from spectrum as s where s.spectrumid in (" + resultsetMap.get("spectrum") + ")");
@@ -454,6 +433,8 @@ public class dbDeleteQueryGenerator extends JFrame implements Runnable {
                     }
                 }
             //iConn.commit();
+                stmt.executeUpdate("update project set modificationdate = CURRENT_TIMESTAMP where projectid ="+iProjectid);
+                JOptionPane.showMessageDialog(null,"done deleting project " +iProjectid);
                 btnContinue.setEnabled(true);
             }
     private void updateProgressBar(String key)

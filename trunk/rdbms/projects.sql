@@ -431,7 +431,7 @@ CREATE TABLE `quantitation_file` (
   `filename` varchar(100) NOT NULL DEFAULT '',
   `type` varchar(15) NOT NULL DEFAULT '',
   `file` longblob NOT NULL,
-  `binary_file` longblob NOT NULL,
+  `binary_file` longblob,
   `version_number` varchar(15) NOT NULL,
   `username` varchar(45) NOT NULL DEFAULT '',
   `creationdate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
