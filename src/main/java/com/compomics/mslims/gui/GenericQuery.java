@@ -770,12 +770,12 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
         this.getContentPane().add(split, BorderLayout.CENTER);
         this.getContentPane().add(jpanStatus, BorderLayout.SOUTH);
     }
-
+    /*
     private void masterAlternativeSwitcherTriggered() {
         IdentificationSwitcherGUI identificationSwitcher = new IdentificationSwitcherGUI("master and alternative peptide identification overview",iConn);
 
     }
-
+    */
     private void peptizerTriggered() {
         DBResultSet rs = (DBResultSet) ((TableSorter) tblResult.getModel()).getModel();
         int lColumnIndex = rs.findColumn("identificationid");

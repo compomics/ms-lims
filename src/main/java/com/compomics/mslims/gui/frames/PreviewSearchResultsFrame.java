@@ -7,7 +7,6 @@
 package com.compomics.mslims.gui.frames;
 
 import com.compomics.mslims.db.accessors.Identification;
-import com.compomics.mslims.gui.IdentificationSwitcherGUI;
 import org.apache.log4j.Logger;
 
 import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
