@@ -2,6 +2,10 @@
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
 7.5)
 
+*Changes in ms-lims 7.7.5 (may 23 2012):*
+ * DEPENDENCY CHANGE: Updated dependency to peptizer version 1.8.2.
+----
+
 *Changes in ms-lims 7.7.4 (April 6 2012):*
  * DEPENDENCY CHANGE: Updated dependency to Rover version 2.3.6.
  * BUGFIX: Deleter tool only empties projects now, doesn't delete the project table anymore, also updates when the project was last modified
