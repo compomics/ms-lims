@@ -131,7 +131,7 @@ public class GetAllPKLFiles {
 
             // Retrieve the data form the db.
             Statement stat = lConn.createStatement();
-            PreparedStatement ps = lConn.prepareStatement("select * from spectrumwhere spectrumid=?");
+            PreparedStatement ps = lConn.prepareStatement("select * from spectrum where spectrumid=?");
             ResultSet rs = stat.executeQuery(query.toString());
             File parentDir = new File(aFolder);
             int counter = 0;
