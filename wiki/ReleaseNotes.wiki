@@ -2,6 +2,10 @@
 # Short summary of changes for each version of ms-lims. (starting from version 7.5)
 7.5)
 
+*Changes in ms-lims 7.7.7 (oct 18 2012):*
+ * check the modification conversion table in the database first for conversion definitions
+ * changed the error logging to only log warnings and above
+----
 
 *Changes in ms-lims 7.7.6 (may 23 2012):*
  * DEPENDENCY CHANGE: Updated dependency to mascotdatfile version 3.3
