@@ -4,17 +4,19 @@
  * Date: 22-jun-2004
  * Time: 15:03:11
  */
-package com.compomics.mslims.gui.frames;
+package com.compomics.mslimscore.gui.frames;
 
 import com.compomics.mslims.db.accessors.Identification;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.gui.table.IdentificationTableAccessorsTableModel;
-import com.compomics.mslims.gui.tree.MascotSearch;
-import com.compomics.mslims.util.mascot.MascotResultsProcessor;
-import com.compomics.mslims.util.workers.MascotResultsProcessorWorker;
-import com.compomics.mslims.util.workers.MascotResultsStorageWorker;
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.gui.projectanalyzertools.IdentificationSwitcherGUI;
+import com.compomics.mslimscore.gui.table.IdentificationTableAccessorsTableModel;
+import com.compomics.mslimscore.gui.tree.MascotSearch;
+import com.compomics.mslimscore.util.mascot.MascotResultsProcessor;
+import com.compomics.mslimscore.util.workers.MascotResultsProcessorWorker;
+import com.compomics.mslimscore.util.workers.MascotResultsStorageWorker;
+import com.compomics.mslimsdb.accessors.AlternativeIdentification;
 import com.compomics.util.gui.JTableForDB;
 import com.compomics.util.interfaces.Flamable;
 
@@ -46,6 +48,8 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
     // Class specific log4j logger for PreviewSearchResultsFrame instances.
     private static Logger logger = Logger.getLogger(PreviewSearchResultsFrame.class);
 
+    IdentificationSwitcherGUI identificationSwitcher;
+    
     /**
      * The searches to process.
      */
@@ -63,10 +67,9 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
 
 
     JTableForDB tblResults = null;
-    /**
-     * This Vector will hold all the results from the parsing that score equal
-     */
-    private Vector<Identification> iAlternativeResults;
+    
+    private Vector<AlternativeIdentification> iAlternativeResults;
+    private boolean identificationSwitcherUsed;
 
     /**
      * This constructor shows a preview of the search results.
@@ -238,12 +241,11 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
 
         return jpanButtons;
     }
-    /*
-    private void editMasterTriggered() {
-        IdentificationSwitcherGUI identificationSwitcher = new IdentificationSwitcherGUI("master and alternative peptide identification overview",iResults,iAlternativeResults);
-        iAlternativeResults = identificationSwitcher.getAlternativesToStore();
+        private void editMasterTriggered() {
+        identificationSwitcher = new IdentificationSwitcherGUI("master and alternative peptide identification overview",iResults,iAlternativeResults);
+        identificationSwitcherUsed = true;
     }
-    */
+
     /**
      * This method is called when the user presses 'store'.
      */
@@ -252,17 +254,28 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
                 new DefaultProgressBar(this, "Processing search results...", 0, iResults.size() + 2);
         progress.setSize(350, 100);
         progress.setMessage("Starting up...");
-        MascotResultsStorageWorker worker =
-                new MascotResultsStorageWorker(this.iMRP, iResults, iSearches, this, progress);
-        worker.start();
-        progress.setVisible(true);
-        /*if(iAlternativeResults != null){
-            worker =
-                    new MascotResultsStorageWorker(this.iMRP, iAlternativeResults, iSearches, this, progress);
+        if(identificationSwitcherUsed){
+            iResults = identificationSwitcher.getMastersToStore();
+            Vector<AlternativeIdentification> iAlternativeResultsToStore = identificationSwitcher.getAlternativesToStore();
+            if(iAlternativeResultsToStore == null){
+                iResults.addAll(iAlternativeResults);
+             } else {
+                iResults.addAll(iAlternativeResultsToStore);
+            }
+            MascotResultsStorageWorker worker =
+                    new MascotResultsStorageWorker(this.iMRP, iResults, iSearches, this, progress);
             worker.start();
-        }*/
-        JOptionPane.showMessageDialog(this, "Storage of identifications complete!", "Storage complete", JOptionPane.INFORMATION_MESSAGE);
-        this.dispose();
+            progress.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Storage of identifications complete!", "Storage complete", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } else {
+            MascotResultsStorageWorker worker =
+                    new MascotResultsStorageWorker(this.iMRP, iResults, iSearches, this, progress);
+            worker.start();
+            progress.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Storage of identifications complete!", "Storage complete", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        }
     }
     /**
      * This method is called when the user presses 'cancel'.
@@ -333,14 +346,13 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
      */
     private void acquireData() {
         iResults = new Vector(3000, 750);
-        iAlternativeResults = new Vector<Identification>();
-
+        iAlternativeResults = new Vector<AlternativeIdentification>();
         DefaultProgressBar progress =
                 new DefaultProgressBar(this, "Processing search results...", 0, (iSearches.length * 2) + 3);
         progress.setSize(350, 100);
         progress.setMessage("Starting up...");
         MascotResultsProcessorWorker worker =
-                new MascotResultsProcessorWorker(iMRP, iSearches, iResults,iAlternativeResults, this, progress);
+                new MascotResultsProcessorWorker(iMRP, iSearches,iAlternativeResults, iResults, this, progress);
         worker.start();
         progress.setVisible(true);
     }

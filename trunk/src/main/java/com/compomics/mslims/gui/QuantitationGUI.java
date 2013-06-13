@@ -4,26 +4,25 @@
  * Date: 18-jun-2004
  * Time: 17:58:34
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
-import com.compomics.util.io.FilenameExtensionFilter;
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.io.PropertiesManager;
 import com.healthmarketscience.jackcess.Database;
 import org.apache.log4j.Logger;
 
-import com.compomics.util.gui.dialogs.ConnectionDialog;
-import com.compomics.mslims.gui.frames.PreviewQuantitationResultsFrame;
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.gui.table.MascotQuantitationSearchTableModel;
-import com.compomics.mslims.gui.table.renderers.ErrorCellRenderer;
-import com.compomics.mslims.gui.table.renderers.ErrorObject;
-import com.compomics.mslims.gui.tree.MascotSearch;
-import com.compomics.mslims.gui.tree.MascotTask;
-import com.compomics.mslims.gui.tree.MascotTasksTreeModel;
-import com.compomics.mslims.gui.tree.renderers.MascotTasksTreeCellRenderer;
-import com.compomics.mslims.util.workers.ReadMascotTaskDBWorker;
-import com.compomics.mslims.util.enumeration.RatioSourceType;
+import com.compomics.mslimscore.gui.frames.PreviewQuantitationResultsFrame;
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.gui.table.MascotQuantitationSearchTableModel;
+import com.compomics.mslimscore.gui.table.renderers.ErrorCellRenderer;
+import com.compomics.mslimscore.gui.table.renderers.ErrorObject;
+import com.compomics.mslimscore.gui.tree.MascotSearch;
+import com.compomics.mslimscore.gui.tree.MascotTask;
+import com.compomics.mslimscore.gui.tree.MascotTasksTreeModel;
+import com.compomics.mslimscore.gui.tree.renderers.MascotTasksTreeCellRenderer;
+import com.compomics.mslimscore.util.workers.ReadMascotTaskDBWorker;
+import com.compomics.mslimscore.util.enumeration.RatioSourceType;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.interfaces.Flamable;
 

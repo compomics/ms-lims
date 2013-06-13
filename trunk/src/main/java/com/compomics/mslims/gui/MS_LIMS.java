@@ -1,26 +1,24 @@
 /**
- * Created by IntelliJ IDEA.
- * User: martlenn
- * Date: 08-Mar-2007
- * Time: 09:27:03
+ * Created by IntelliJ IDEA. User: martlenn Date: 08-Mar-2007 Time: 09:27:03
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
-import com.compomics.mslims.db.accessors.Modification_conversion;
-import com.compomics.mslims.db.accessors.Ms_lims_properties;
-import com.compomics.mslims.gui.dialogs.AboutDialog;
-import com.compomics.mslims.gui.dialogs.CustomLauncherDialog;
-import com.compomics.mslims.gui.quantitation.QuantitationTypeChooser;
-import com.compomics.mslims.util.fileio.ModificationConversionIO;
-import com.compomics.mslims.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
+import com.compomics.mslimsdb.accessors.Modification_conversion;
+import com.compomics.mslimsdb.accessors.Ms_lims_properties;
+import com.compomics.mslimscore.gui.dialogs.AboutDialog;
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
+import com.compomics.mslimscore.gui.dialogs.CustomLauncherDialog;
+import com.compomics.mslimscore.gui.quantitation.QuantitationTypeChooser;
+import com.compomics.mslimscore.util.config.PropertiesManager;
+import com.compomics.mslimscore.util.fileio.ModificationConversionIO;
+import com.compomics.mslimscore.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;
 import com.compomics.peptizer.util.fileio.ConnectionManager;
 import com.compomics.rover.gui.wizard.WizardFrameHolder;
 import com.compomics.util.enumeration.CompomicsTools;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
-import com.compomics.util.io.PropertiesManager;
+//import com.compomics.util.io.PropertiesManager;
 import com.compomics.util.io.StartBrowser;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
 import org.apache.log4j.Logger;
@@ -51,18 +49,16 @@ import java.util.Properties;
  */
 public class MS_LIMS extends JFrame implements Connectable {
     // Class specific log4j logger for MS_LIMS instances.
-    private static Logger logger = Logger.getLogger(MS_LIMS.class);
 
+    private static Logger logger = Logger.getLogger(MS_LIMS.class);
     /**
      * The Database connection to forward to launched components.
      */
     private Connection iConn = null;
-
     /**
      * The name of the DB connection.
      */
     private String iDBName = null;
-
     // GUI variables.
     private JButton projectManagerBtn = new JButton();
     private JButton spectrumStorageBtn = new JButton();
@@ -106,7 +102,6 @@ public class MS_LIMS extends JFrame implements Connectable {
     private JTextField sourceField = new JTextField(12);
     String sourceName;
 
-
     /**
      * This constructor takes the title of the frame.
      *
@@ -120,7 +115,6 @@ public class MS_LIMS extends JFrame implements Connectable {
                 close();
             }
         });
-
         logger.info("Starting mslims");
 
         int frameWidth = 640;
@@ -151,14 +145,14 @@ public class MS_LIMS extends JFrame implements Connectable {
 
         //log into the mascot web server if needed
         Properties lConnectionProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
-        if(lConnectionProperties.containsKey("usemascotauthentication")){
+        if (lConnectionProperties.containsKey("usemascotauthentication")) {
             if (lConnectionProperties.getProperty("usemascotauthentication").equals("1")) {
                 MascotAuthenticatedConnection mscConnector = new MascotAuthenticatedConnection();
-                if(!mscConnector.areCredentialsPresent()){
+                if (!mscConnector.areCredentialsPresent()) {
                     try {
                         mscConnector.login();
                     } catch (IOException e) {
-                        JOptionPane.showMessageDialog(this,"there has been a problem with logging into the mascot server");
+                        JOptionPane.showMessageDialog(null, "there has been a problem with logging into the mascot server");
                         logger.error(e);
                     }
                 }
@@ -276,14 +270,14 @@ public class MS_LIMS extends JFrame implements Connectable {
             }
         });
         submenu.add(menuItem);
-       /*
+
         menuItem = new JMenuItem("Copy a project ...", KeyEvent.VK_C);
         menuItem.getAccessibleContext().setAccessibleDescription("Copy a project from this ms_lims database to another");
         menuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 copyMenuActionPerformed(evt);
             }
-        });*/
+        });
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Clean or delete project...", KeyEvent.VK_C);
@@ -572,14 +566,14 @@ public class MS_LIMS extends JFrame implements Connectable {
 
     private void configurationMenuActionPerformed() {
         try {
-        String lUser;
-        lUser = iConn.getMetaData().getUserName();
-        boolean boolIsAllowed = checkUser(lUser);
-        if (boolIsAllowed) {
-            new ConfigurationGUI("ConfigurationGUI", iConn, iDBName);
-        } else {
-            JOptionPane.showMessageDialog(this.getRootPane(), "User '" + lUser + "' is not allowed to configure the ms_lims database system. \nPlease contact the system administrator.");
-        }
+            String lUser;
+            lUser = iConn.getMetaData().getUserName();
+            boolean boolIsAllowed = checkUser(lUser);
+            if (boolIsAllowed) {
+                new ConfigurationGUI("ConfigurationGUI", iConn, iDBName);
+            } else {
+                JOptionPane.showMessageDialog(this.getRootPane(), "User '" + lUser + "' is not allowed to configure the ms_lims database system. \nPlease contact the system administrator.");
+            }
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -595,7 +589,6 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     // Event procedures
-
     public void projectManagerBtnActionPerformed(ActionEvent evt) {
         SpectrumStorageGUI.setNotStandAlone();
         SpectrumStorageGUI specStore = new SpectrumStorageGUI("Project manager", true, iConn, iDBName);
@@ -645,12 +638,16 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     private void peptizerBtnActionPerformed(final ActionEvent aEvt) {
-        ConnectionManager.getInstance().setConnection(iConn);
-        PeptizerGUI peptizer = new PeptizerGUI();
-        peptizer.setsConnectedToMsLims(true);
-        peptizer.disposeOnExit(true);
-        CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
-        dialog.setMs_lims_project_selected();
+        try {
+            ConnectionManager.getInstance().setConnection(iConn);
+            PeptizerGUI peptizer = new PeptizerGUI();
+            peptizer.setsConnectedToMsLims(true);
+            peptizer.disposeOnExit(true);
+            CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
+            dialog.setMs_lims_project_selected();
+        } catch (Exception ex) {
+            logger.error(ex);
+        }
     }
 
     public void genericQueryBtnActionPerformed(ActionEvent evt) {
@@ -677,13 +674,12 @@ public class MS_LIMS extends JFrame implements Connectable {
         cd.setVisible(true);
     }
 
-    public void copyMenuActionPerformed(ActionEvent evt)
-    {
+    public void copyMenuActionPerformed(ActionEvent evt) {
         ProjectExtractor.setNotStandAlone();
         ProjectExtractor pe = null;
         try {
             pe = new ProjectExtractor(iConn);
-             pe.setVisible(true);
+            pe.setVisible(true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -695,7 +691,7 @@ public class MS_LIMS extends JFrame implements Connectable {
             String lUser;
             lUser = iConn.getMetaData().getUserName();
             boolean boolIsAllowed = checkUser(lUser);
-            if(boolIsAllowed){
+            if (boolIsAllowed) {
                 deleteGUI.setNotStandAlone();
                 deleteGUI df = new deleteGUI(iConn, iDBName);
                 df.setVisible(true);
@@ -708,10 +704,11 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     /**
-     * This method accepts an incoming connection to perform all database queries on.
+     * This method accepts an incoming connection to perform all database
+     * queries on.
      *
      * @param aConn Connection on which to perform the queries.
-     * @param aDB   String with the name of the DB (for display purposes).
+     * @param aDB String with the name of the DB (for display purposes).
      */
     public void passConnection(Connection aConn, String aDB) {
         if (aConn == null) {
@@ -724,82 +721,81 @@ public class MS_LIMS extends JFrame implements Connectable {
     /**
      * This method checks if the user has delete privileges
      */
-    private boolean checkUser(String lUser){
-    // Try to verify permissions!
-    // Perform a query on the current database connection and
-    // try to find 'delete' or 'grant all' permissions on the selected database.
+    private boolean checkUser(String lUser) {
+        // Try to verify permissions!
+        // Perform a query on the current database connection and
+        // try to find 'delete' or 'grant all' permissions on the selected database.
 
-    // Note this is only very basic dummy-protection.
-    boolean boolIsAllowed = false;
+        // Note this is only very basic dummy-protection.
+        boolean boolIsAllowed = false;
 
-    if (iConn != null) {
-        try {
-            // Username.
-            
-            String lCatalog = iConn.getCatalog();
+        if (iConn != null) {
+            try {
+                // Username.
 
-
-            int index = -1;
-            if ((index = lUser.indexOf('@')) != -1) {
-                lUser = lUser.substring(0, index).toLowerCase();
-            }
+                String lCatalog = iConn.getCatalog();
 
 
-            if (lUser.equals("root")) {
-                boolIsAllowed = true;
-            } else {
-
-                PreparedStatement lStatement = iConn.prepareStatement("show grants for " + lUser);
-                ResultSet rs = lStatement.executeQuery();
-                while (rs.next()) {
-                    boolean boolGrant = false;
-                    boolean boolUser = false;
-                    boolean boolCatalog = false;
-
-                    // Get the current grant.
-                    String grant = rs.getString(1).toLowerCase();
-
-                    // Verify the user.
-                    int userIndex = grant.indexOf("to '" + lUser + "'");
-                    if (userIndex > -1) {
-                        boolUser = true;
-                    } else {
-                        continue;
-                    }
-
-                    // Verify the grant.
-                    int grantIndex1 = grant.indexOf("delete");
-                    int grantIndex2 = grant.indexOf("all");
-                    if (grantIndex1 > -1 || grantIndex2 > -1) {
-                        boolGrant = true;
-                    } else {
-                        continue;
-                    }
-
-                    // Verify the catalog.
-                    int indexCatalog1 = grant.indexOf("on '" + lCatalog + "'");
-                    int indexCatalog2 = grant.indexOf("on *.*");
-                    if (indexCatalog1 > -1 || indexCatalog2 > -1) {
-                        boolCatalog = true;
-                    } else {
-                        continue;
-                    }
-
-                    if (boolGrant & boolCatalog & boolUser) {
-                        boolIsAllowed = true;
-                        
-                    }
-
+                int index = -1;
+                if ((index = lUser.indexOf('@')) != -1) {
+                    lUser = lUser.substring(0, index).toLowerCase();
                 }
+
+
+                if (lUser.equals("root")) {
+                    boolIsAllowed = true;
+                } else {
+
+                    PreparedStatement lStatement = iConn.prepareStatement("show grants for " + lUser);
+                    ResultSet rs = lStatement.executeQuery();
+                    while (rs.next()) {
+                        boolean boolGrant = false;
+                        boolean boolUser = false;
+                        boolean boolCatalog = false;
+
+                        // Get the current grant.
+                        String grant = rs.getString(1).toLowerCase();
+
+                        // Verify the user.
+                        int userIndex = grant.indexOf("to '" + lUser + "'");
+                        if (userIndex > -1) {
+                            boolUser = true;
+                        } else {
+                            continue;
+                        }
+
+                        // Verify the grant.
+                        int grantIndex1 = grant.indexOf("delete");
+                        int grantIndex2 = grant.indexOf("all");
+                        if (grantIndex1 > -1 || grantIndex2 > -1) {
+                            boolGrant = true;
+                        } else {
+                            continue;
+                        }
+
+                        // Verify the catalog.
+                        int indexCatalog1 = grant.indexOf("on '" + lCatalog + "'");
+                        int indexCatalog2 = grant.indexOf("on *.*");
+                        if (indexCatalog1 > -1 || indexCatalog2 > -1) {
+                            boolCatalog = true;
+                        } else {
+                            continue;
+                        }
+
+                        if (boolGrant & boolCatalog & boolUser) {
+                            boolIsAllowed = true;
+
+                        }
+
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
             }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);  //To change body of catch statement use File | Settings | File Templates.
         }
-    }
         return boolIsAllowed;
     }
-    
-    
+
     /**
      * This method is called when the frame is closed. It shuts down the JVM.
      */
@@ -816,7 +812,8 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     /**
-     * This method reads the location of the Mascot Daemon file from a property-file
+     * This method reads the location of the Mascot Daemon file from a
+     * property-file
      */
     private void getMascotDaemonFile() {
         try {
@@ -831,7 +828,6 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     // This action creates and shows an open-file dialog.
-
     public class OpenFileAction extends AbstractAction {
 
         JFrame frame;
@@ -859,11 +855,13 @@ public class MS_LIMS extends JFrame implements Connectable {
                 sourceField.setText(name);
                 sourceField.setEnabled(true);
                 sourceField.setEditable(false);
+                Properties lMascotDaemonProperties = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "mascotdaemon.properties");
+                lMascotDaemonProperties.setProperty("MASCOTDAEMONFILE", name);
+                com.compomics.util.io.PropertiesManager.getInstance().updateProperties(CompomicsTools.MSLIMS, "mascotdaemon.properties", lMascotDaemonProperties);
 
             }
         }
     }
-
 
     public static void main(String[] args) {
         PropertiesManager.getInstance().updateLog4jConfiguration(logger, CompomicsTools.MSLIMS);
@@ -873,7 +871,7 @@ public class MS_LIMS extends JFrame implements Connectable {
             new MS_LIMS("ms_lims (version " + getVersion() + ")");
         } catch (Throwable e) {
             logger.error(e.getMessage(), e);
-             int lResult = javax.swing.JOptionPane.showOptionDialog(null,
+            int lResult = javax.swing.JOptionPane.showOptionDialog(null,
                     e.getMessage(),
                     "ms-lims: unexpected failure",
                     JOptionPane.YES_NO_OPTION,
@@ -922,9 +920,11 @@ public class MS_LIMS extends JFrame implements Connectable {
     }
 
     /**
-     * This class represents a file filter that looks specifically for the mascot daemon executable ('daemon.exe').
+     * This class represents a file filter that looks specifically for the
+     * mascot daemon executable ('daemon.exe').
      */
     private static class InnerDaemonFileFilter extends javax.swing.filechooser.FileFilter {
+
         public boolean accept(File f) {
             return f.isDirectory() || f.getName().toLowerCase().endsWith("daemon.exe");
         }

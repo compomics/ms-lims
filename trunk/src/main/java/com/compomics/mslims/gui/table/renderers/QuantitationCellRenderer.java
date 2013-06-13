@@ -1,11 +1,11 @@
-package com.compomics.mslims.gui.table.renderers;
+package com.compomics.mslimscore.gui.table.renderers;
 
 import org.apache.log4j.Logger;
 
 
-import com.compomics.mslims.gui.interfaces.TableColor;
-import com.compomics.rover.general.quantitation.source.distiller.DistillerRatio;
-import com.compomics.rover.general.interfaces.Ratio;
+import com.compomics.mslimscore.gui.interfaces.TableColor;
+import com.compomics.mslimscore.util.quantitation.ratios.DistillerRatio;
+import com.compomics.mslimscore.util.interfaces.Ratio;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

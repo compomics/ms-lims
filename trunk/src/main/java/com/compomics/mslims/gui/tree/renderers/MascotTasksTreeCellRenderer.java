@@ -4,11 +4,11 @@
  * Date: 23-jun-2004
  * Time: 13:23:30
  */
-package com.compomics.mslims.gui.tree.renderers;
+package com.compomics.mslimscore.gui.tree.renderers;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.gui.tree.MascotTask;
+import com.compomics.mslimscore.gui.tree.MascotTask;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;

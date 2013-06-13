@@ -4,27 +4,27 @@
  * Date: 22-jun-2004
  * Time: 15:03:11
  */
-package com.compomics.mslims.gui.frames;
+package com.compomics.mslimscore.gui.frames;
 
-import com.compomics.rover.general.quantitation.RatioGroup;
+import com.compomics.mslimscore.util.quantitation.ratios.RatioGroup;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.gui.table.DistillerQuantitationTableModel;
-import com.compomics.mslims.gui.table.ITraqQuantitationTableModel;
-import com.compomics.mslims.gui.table.renderers.QuantitationCellRenderer;
-import com.compomics.mslims.gui.tree.MascotSearch;
-import com.compomics.mslims.util.enumeration.RatioSourceType;
-import com.compomics.mslims.util.interfaces.QuantitationProcessor;
-import com.compomics.mslims.util.interfaces.QuantitationStorageEngine;
-import com.compomics.mslims.util.quantitation.fileio.DistillerQuantitationStorageEngine;
-import com.compomics.mslims.util.quantitation.fileio.MascotQuantitationProcessor;
-import com.compomics.mslims.util.quantitation.fileio.Ms_limsiTraqQuantitationProcessor;
-import com.compomics.mslims.util.quantitation.fileio.Ms_limsiTraqStorageEngine;
-import com.compomics.mslims.util.workers.QuantitationStorageWorker;
-import com.compomics.mslims.util.workers.QuantitationWorker;
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.gui.table.DistillerQuantitationTableModel;
+import com.compomics.mslimscore.gui.table.ITraqQuantitationTableModel;
+import com.compomics.mslimscore.gui.table.renderers.QuantitationCellRenderer;
+import com.compomics.mslimscore.gui.tree.MascotSearch;
+import com.compomics.mslimscore.util.enumeration.RatioSourceType;
+import com.compomics.mslimscore.util.interfaces.QuantitationProcessor;
+import com.compomics.mslimscore.util.interfaces.QuantitationStorageEngine;
+import com.compomics.mslimscore.util.quantitation.fileio.DistillerQuantitationStorageEngine;
+import com.compomics.mslimscore.util.quantitation.fileio.MascotQuantitationProcessor;
+import com.compomics.mslimscore.util.quantitation.fileio.Ms_limsiTraqQuantitationProcessor;
+import com.compomics.mslimscore.util.quantitation.fileio.Ms_limsiTraqStorageEngine;
+import com.compomics.mslimscore.util.workers.QuantitationStorageWorker;
+import com.compomics.mslimscore.util.workers.QuantitationWorker;
 import com.compomics.util.interfaces.Flamable;
-import com.compomics.rover.general.quantitation.RatioGroupCollection;
+import com.compomics.mslimscore.util.quantitation.ratios.RatioGroupCollection;
 
 import javax.swing.*;
 import java.awt.*;

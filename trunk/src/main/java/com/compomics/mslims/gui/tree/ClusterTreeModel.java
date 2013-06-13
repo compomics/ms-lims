@@ -1,4 +1,4 @@
-package com.compomics.mslims.gui.tree;
+package com.compomics.mslimscore.gui.tree;
 
 import org.apache.log4j.Logger;
 

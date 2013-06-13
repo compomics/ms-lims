@@ -4,9 +4,7 @@
  * Date: 12-feb-2004
  * Time: 12:19:36
  */
-package com.compomics.mslims.gui.interfaces;
-
-import org.apache.log4j.Logger;
+package com.compomics.mslimscore.gui.interfaces;
 
 /*
  * CVS information:

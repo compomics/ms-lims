@@ -1,9 +1,9 @@
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
-import com.compomics.mslims.db.accessors.Project;
-import com.compomics.mslims.db.utils.CopyProject;
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
+import com.compomics.mslimsdb.accessors.Project;
+import com.compomics.mslimsdb.utils.CopyProject;
 import com.compomics.util.enumeration.CompomicsTools;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.io.PropertiesManager;
 

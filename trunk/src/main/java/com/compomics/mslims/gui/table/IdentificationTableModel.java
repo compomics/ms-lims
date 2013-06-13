@@ -1,4 +1,4 @@
-package com.compomics.mslims.gui.table;
+package com.compomics.mslimscore.gui.table;
 
 import org.apache.log4j.Logger;
 
@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  * $Date: 2005/12/31 10:22:52 $
  */
 
-import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslimsdb.accessors.Identification;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Collections;

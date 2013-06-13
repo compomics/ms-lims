@@ -4,18 +4,20 @@
  * Date: 17-dec-02
  * Time: 15:56:21
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
 import com.compomics.mascotdatfile.util.gui.SequenceFragmentationPanel;
-import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
-import com.compomics.mslims.db.accessors.Fragmention;
-import com.compomics.mslims.db.accessors.Spectrum;
-import com.compomics.mslims.db.accessors.Spectrum_file;
-import com.compomics.mslims.gui.dialogs.ExportDialog;
-import com.compomics.mslims.gui.dialogs.QueryCacheDialog;
-import com.compomics.mslims.gui.interfaces.Informable;
-import com.compomics.mslims.util.config.MslimsConfiguration;
-import com.compomics.mslims.util.fileio.MascotGenericFile;
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
+import com.compomics.mslimscore.util.interfaces.FragmentIon;
+import com.compomics.mslimsdb.accessors.Spectrum;
+import com.compomics.mslimsdb.accessors.Spectrum_file;
+import com.compomics.mslimscore.gui.dialogs.ExportDialog;
+import com.compomics.mslimscore.gui.dialogs.QueryCacheDialog;
+import com.compomics.mslimscore.gui.interfaces.Informable;
+import com.compomics.mslimscore.util.FragmentionMiddleMan;
+import com.compomics.mslimscore.util.config.MslimsConfiguration;
+import com.compomics.mslimscore.util.fileio.MascotGenericFile;
+//TODO change to call with reflection
 import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;
 import com.compomics.peptizer.util.fileio.ConnectionManager;
@@ -24,7 +26,6 @@ import com.compomics.util.db.DBResultSet;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.enumeration.ImageType;
 import com.compomics.util.gui.JTableForDB;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.gui.renderers.ByteArrayRenderer;
 import com.compomics.util.gui.spectrum.SpectrumPanel;
 import com.compomics.util.interfaces.Connectable;
@@ -50,6 +51,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -438,7 +440,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                             if (idColumn > -1) {
                                 idid = ((Number) tblResult.getModel().getValueAt(row, idColumn)).longValue();
 
-                                Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConn, idid);
+                                Vector temp = FragmentionMiddleMan.getAllMascotDatfileFragmentIonImpl(iConn, idid);
                                 if (temp.size() == 0) {
                                     JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                                 }
@@ -523,7 +525,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                             if (idColumn > -1) {
                                 idid = ((Number) tblResult.getModel().getValueAt(row, idColumn)).longValue();
 
-                                Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConn, idid);
+                                Vector temp = FragmentionMiddleMan.getAllMascotDatfileFragmentIonImpl(iConn, idid);
                                 if (temp.size() == 0) {
                                     JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                                 }
@@ -635,7 +637,7 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
                         if (idColumn > -1 && modSeq != null) {
                             idid = ((Number) tblResult.getModel().getValueAt(row, idColumn)).longValue();
 
-                            Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConn, idid);
+                            Vector temp = FragmentionMiddleMan.getAllMascotDatfileFragmentIonImpl(iConn, idid);
                             if (temp.size() == 0) {
                                 JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                             }
@@ -777,21 +779,25 @@ public class GenericQuery extends JFrame implements Connectable, Informable {
     }
     */
     private void peptizerTriggered() {
-        DBResultSet rs = (DBResultSet) ((TableSorter) tblResult.getModel()).getModel();
-        int lColumnIndex = rs.findColumn("identificationid");
-        int lRowCount = rs.getRowCount();
-        ArrayList<Long> list = new ArrayList<Long>();
+        try {
+            DBResultSet rs = (DBResultSet) ((TableSorter) tblResult.getModel()).getModel();
+            int lColumnIndex = rs.findColumn("identificationid");
+            int lRowCount = rs.getRowCount();
+            ArrayList<Long> list = new ArrayList<Long>();
 
-        for (int i = 0; i < lRowCount; i++) {
-            Long identificationid = (Long) rs.getValueAt(i, lColumnIndex);
-            list.add(identificationid);
+            for (int i = 0; i < lRowCount; i++) {
+                Long identificationid = (Long) rs.getValueAt(i, lColumnIndex);
+                list.add(identificationid);
+            }
+
+            ConnectionManager.getInstance().setConnection(iConn);
+            PeptizerGUI peptizer = new PeptizerGUI();
+            peptizer.setsConnectedToMsLims(true);
+            CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
+            dialog.setMs_lims_identification_id_selected(list);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(GenericQuery.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        ConnectionManager.getInstance().setConnection(iConn);
-        PeptizerGUI peptizer = new PeptizerGUI();
-        peptizer.setsConnectedToMsLims(true);
-        CreateTaskDialog dialog = new CreateTaskDialog(peptizer);
-        dialog.setMs_lims_identification_id_selected(list);
 
     }
 

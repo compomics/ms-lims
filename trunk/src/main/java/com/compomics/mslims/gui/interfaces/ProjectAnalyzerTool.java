@@ -4,12 +4,11 @@
  * Date: 7-mrt-2005
  * Time: 7:39:58
  */
-package com.compomics.mslims.gui.interfaces;
+package com.compomics.mslimscore.gui.interfaces;
 
-import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Project;
-import com.compomics.mslims.gui.ProjectAnalyzer;
+import com.compomics.mslimsdb.accessors.Project;
+import com.compomics.mslimscore.gui.ProjectAnalyzer;
 
 import java.sql.Connection;
 

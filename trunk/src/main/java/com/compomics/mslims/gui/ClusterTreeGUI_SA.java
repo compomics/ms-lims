@@ -1,4 +1,4 @@
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
 import org.apache.log4j.Logger;
 
@@ -16,8 +16,8 @@ import org.apache.log4j.Logger;
  * $Date: 2009/08/04 22:31:51 $
  */
 
-import com.compomics.mslims.gui.tree.ClusterTreeModel;
-import com.compomics.mslims.util.fileio.MascotGenericFile;
+import com.compomics.mslimscore.gui.tree.ClusterTreeModel;
+import com.compomics.mslimscore.util.fileio.MascotGenericFile;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.gui.events.RescalingEvent;
 import com.compomics.util.gui.interfaces.SpectrumPanelListener;

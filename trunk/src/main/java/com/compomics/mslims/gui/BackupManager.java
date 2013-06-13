@@ -4,13 +4,13 @@
  * Date: 23-jun-2003
  * Time: 18:12:46
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.LCRun;
+import com.compomics.mslimsdb.accessors.LCRun;
 import com.compomics.util.enumeration.CompomicsTools;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.util.io.PropertiesManager;

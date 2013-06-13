@@ -4,13 +4,13 @@
  * Date: 8-okt-2004
  * Time: 11:51:23
  */
-package com.compomics.mslims.gui.dialogs;
+package com.compomics.mslimscore.gui.dialogs;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Project;
-import com.compomics.mslims.gui.DiffAnalysisGUI;
-import com.compomics.mslims.util.diff.DifferentialProject;
+import com.compomics.mslimsdb.accessors.Project;
+import com.compomics.mslimscore.gui.DiffAnalysisGUI;
+import com.compomics.mslimscore.util.diff.DifferentialProject;
 
 import javax.swing.*;
 import java.awt.*;

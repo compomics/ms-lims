@@ -4,7 +4,7 @@
  * Date: 21-jun-2004
  * Time: 7:44:49
  */
-package com.compomics.mslims.gui.tree;
+package com.compomics.mslimscore.gui.tree;
 
 import org.apache.log4j.Logger;
 
@@ -185,6 +185,7 @@ public class MascotSearch {
      * @param another Object to which this instance should be compared.
      * @return boolean that indicates whether this instance is equal to the one presented.
      */
+    @Override
     public boolean equals(Object another) {
         boolean result = false;
 

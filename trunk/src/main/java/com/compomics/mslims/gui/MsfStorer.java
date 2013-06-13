@@ -1,38 +1,34 @@
-package com.compomics.mslims.gui;
-
-import antlr.collections.impl.*;
-import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
+package com.compomics.mslimscore.gui;
+//TODO move this to thermo-msf parser and add it to storage options just call it from there
+import com.compomics.mslimscore.util.interfaces.FragmentIon;
 import com.compomics.mascotdatfile.util.interfaces.MascotDatfileInf;
 import com.compomics.mascotdatfile.util.interfaces.QueryToPeptideMapInf;
 import com.compomics.mascotdatfile.util.mascot.*;
 import com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl;
-import com.compomics.mslims.db.accessors.*;
-import com.compomics.mslims.db.accessors.Quantitation;
-import com.compomics.mslims.db.accessors.Spectrum;
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.util.fileio.MascotGenericFile;
-import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
-import com.compomics.mslims.util.mascot.MascotIsoforms;
-import com.compomics.rover.general.db.accessors.IdentificationExtension;
-import com.compomics.rover.general.enumeration.QuantitationMetaType;
-import com.compomics.rover.general.quantitation.RatioGroup;
-import com.compomics.rover.general.quantitation.RatioGroupCollection;
-import com.compomics.rover.general.quantitation.source.distiller.DistillerRatio;
-import com.compomics.rover.general.quantitation.source.distiller.DistillerRatioGroup;
-import com.compomics.thermo_msf_parser.Parser;
-import com.compomics.thermo_msf_parser.gui.Thermo_msf_parserGUI;
-import com.compomics.thermo_msf_parser.msf.*;
-import com.compomics.thermo_msf_parser.msf.Event;
-import com.compomics.thermo_msf_parser.msf.Peak;
+import com.compomics.mslimsdb.accessors.*;
+import com.compomics.mslimscore.util.fileio.MascotGenericFile;
+import com.compomics.mslimscore.util.mascot.MascotIdentifiedSpectrum;
+import com.compomics.mslimscore.util.mascot.MascotIsoforms;
+import com.compomics.thermo_msf_parser_API.highmeminstance.Event;
+import com.compomics.thermo_msf_parser_API.highmeminstance.Parser;
+import com.compomics.thermo_msf_parser_API.highmeminstance.Peptide;
+import com.compomics.thermo_msf_parser_API.highmeminstance.QuanResult;
+import com.compomics.thermo_msf_parser_API.highmeminstance.RatioType;
+import com.compomics.thermo_msf_parser_API.highmeminstance.RawFile;
+import com.compomics.thermo_msf_parser_API.highmeminstance.ScoreType;
+import com.compomics.thermo_msf_parser_API.highmeminstance.WorkflowInfo;
+import com.compomics.thermo_msf_parser_GUI.Thermo_msf_parserGUI;
 import com.compomics.util.db.interfaces.Persistable;
-import com.compomics.util.gui.spectrum.DefaultSpectrumAnnotation;
-import com.compomics.util.interfaces.Flamable;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -88,7 +84,7 @@ public class MsfStorer extends JFrame {
     private Instrument[] iInstruments;
     private Fragmentation[] iFragmentations;
     private Vector<Parser> iParsedMsfs = new Vector<Parser>();
-    private Vector<String> iMsfFileLocations = new Vector<String>();
+    private List<String> iMsfFileLocations = new ArrayList<String>();
     private double iThreshold = 0.05;
     private Vector<ScoreType> iMajorScoreType = new Vector<ScoreType>();
     private Vector<Peptide> iPeptidesToStore = new Vector<Peptide>();
@@ -130,7 +126,7 @@ public class MsfStorer extends JFrame {
         });
         previewMsfFilesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new Thermo_msf_parserGUI(false);
+                new Thermo_msf_parserGUI(false,iMsfFileLocations);
             }
         });
     }
@@ -206,9 +202,9 @@ public class MsfStorer extends JFrame {
                                 }
                             }
 
-                            Vector<RawFile> lRawFiles = lParser.getRawFiles();
-                            Vector<com.compomics.thermo_msf_parser.msf.Spectrum> lSpectra = lParser.getSpectra();
-                            HashMap<String, com.compomics.thermo_msf_parser.msf.Spectrum> lSpectraMap = new HashMap<String, com.compomics.thermo_msf_parser.msf.Spectrum>();
+                            List<RawFile> lRawFiles = lParser.getRawFiles();
+                            List<com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum> lSpectra = lParser.getSpectra();
+                            HashMap<String, com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum> lSpectraMap = new HashMap<String, com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum>();
                             for (int s = 0; s < lSpectra.size(); s++) {
                                 lSpectraMap.put(lSpectra.get(s).getSpectrumTitle(), lSpectra.get(s));
                             }
@@ -237,7 +233,7 @@ public class MsfStorer extends JFrame {
                                 }
                                 if (!lAreadyStored) {
                                     iStoredRawFileNames.add(lRaw.getFileName());
-                                    Vector<com.compomics.thermo_msf_parser.msf.Spectrum> lLinkedSpectra = new Vector<com.compomics.thermo_msf_parser.msf.Spectrum>();
+                                    Vector<com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum> lLinkedSpectra = new Vector<com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum>();
                                     for (int s = 0; s < lSpectra.size(); s++) {
                                         if (lSpectra.get(s).getFileId() == lRaw.getFileId()) {
                                             lLinkedSpectra.add(lSpectra.get(s));
@@ -313,11 +309,11 @@ public class MsfStorer extends JFrame {
                                             }
                                         } else {
 
-                                            com.compomics.thermo_msf_parser.msf.Spectrum lSpectrum = lLinkedSpectra.get(k);
+                                            com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum lSpectrum = lLinkedSpectra.get(k);
 
                                             // Read the contents for the file into a byte[].
                                             String lSpectrumLine = "BEGIN IONS\nTITLE=" + lSpectrum.getSpectrumTitle() + "\n";
-                                            Peak lMono = lSpectrum.getFragmentedMsPeak();
+                                            com.compomics.thermo_msf_parser_API.highmeminstance.Peak lMono = lSpectrum.getFragmentedMsPeak();
                                             lSpectrumLine = lSpectrumLine + "PEPMASS=" + lMono.getX() + "\t" + lMono.getY() + "\n";
                                             lSpectrumLine = lSpectrumLine + "CHARGE=" + lSpectrum.getCharge() + "+\n";
                                             lSpectrumLine = lSpectrumLine + "RTINSECONDS=" + (lSpectrum.getRetentionTime() / 60.0) + "\n";
@@ -326,7 +322,7 @@ public class MsfStorer extends JFrame {
                                             } else {
                                                 lSpectrumLine = lSpectrumLine + "SCANS=" + lSpectrum.getFirstScan() + "\n";
                                             }
-                                            Vector<Peak> lMSMS = lSpectrum.getMSMSPeaks();
+                                            List<com.compomics.thermo_msf_parser_API.highmeminstance.Peak> lMSMS = lSpectrum.getMSMSPeaks();
                                             double lSum = 0.0;
                                             double lMax = 0.0;
                                             for (int s = 0; s < lMSMS.size(); s++) {
@@ -490,7 +486,8 @@ public class MsfStorer extends JFrame {
                 chbLowConfidence.setEnabled(true);
                 previewMsfFilesButton.setEnabled(true);
                 chbCombine.setEnabled(true);
-
+                iMsfFileLocations.clear();
+                
                 if (lLoaded) {
                     //give a message to the user that everything is loaded
                     JOptionPane.showMessageDialog(new JFrame(), "All data was stored", "Info", JOptionPane.INFORMATION_MESSAGE);
@@ -574,7 +571,7 @@ public class MsfStorer extends JFrame {
         //only if ratioSoureType is distiller store Distiller output xml files
         long lMsfFileId = 0;
 
-        HashMap<Integer, com.compomics.thermo_msf_parser.msf.Spectrum> lSpectrumMap = lParsedMsfFile.getSpectraMapByUniqueSpectrumId();
+        Map<Integer,com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum> lSpectrumMap = lParsedMsfFile.getSpectraMapByUniqueSpectrumId();
 
         // 1. Store the quantitation file;
 
@@ -634,9 +631,9 @@ public class MsfStorer extends JFrame {
             //get the quan events
             Vector<Event> lQuanEvents = new Vector<Event>();
             Vector<Integer> lQuanEventsIds = new Vector<Integer>();
-            Vector<Vector<Event>> lQuanEventsByPattern = new Vector<Vector<Event>>();
+            List<List<Event>> lQuanEventsByPattern = new ArrayList<List<Event>>();
             for (int l = 0; l < lQuan.getIsotopePatterns().size(); l++) {
-                Vector<Event> lIsotopePatternEvents = lQuan.getIsotopePatterns().get(l).getEventsWithQuanResult(lParsedMsfFile.getConnection());
+                List<Event> lIsotopePatternEvents = lQuan.getIsotopePatterns().get(l).getEventsWithQuanResult(lParsedMsfFile.getConnection());
                 lQuanEventsByPattern.add(lIsotopePatternEvents);
                 for (int j = 0; j < lIsotopePatternEvents.size(); j++) {
                     lQuanEvents.add(lIsotopePatternEvents.get(j));
@@ -645,9 +642,9 @@ public class MsfStorer extends JFrame {
             }
 
             //get the quan events
-            Vector<Vector<Event>> lQuanEventsByPatternWithoutQuanChannel = new Vector<Vector<Event>>();
+            List<List<Event>> lQuanEventsByPatternWithoutQuanChannel = new ArrayList<List<Event>>();
             for (int j = 0; j < lQuan.getIsotopePatterns().size(); j++) {
-                Vector<Event> lIsotopePatternEvents = lQuan.getIsotopePatterns().get(j).getEventsWithoutQuanResult(lParsedMsfFile.getConnection());
+                List<Event> lIsotopePatternEvents = lQuan.getIsotopePatterns().get(j).getEventsWithoutQuanResult(lParsedMsfFile.getConnection());
                 lQuanEventsByPatternWithoutQuanChannel.add(lIsotopePatternEvents);
                 for (int l = 0; l < lIsotopePatternEvents.size(); l++) {
                     lQuanEvents.add(lIsotopePatternEvents.get(l));
@@ -685,7 +682,7 @@ public class MsfStorer extends JFrame {
             lMinRT = lMinRT - 0.5;
             lMaxRT = lMaxRT + 0.5;
 
-            Vector<Event> lBackgroundEvents = Event.getEventByRetentionTimeLimitMassLimitAndFileIdExcludingIds(lMinRT, lMaxRT, lMinMass, lMaxMass, lQuanEventsIds, lFileId, lParsedMsfFile.getConnection());
+            List<Event> lBackgroundEvents = Event.getEventByRetentionTimeLimitMassLimitAndFileIdExcludingIds(lMinRT, lMaxRT, lMinMass, lMaxMass, lQuanEventsIds, lFileId, lParsedMsfFile.getConnection());
 
             lQuanFile = lQuanFile + "\nBEGIN IONS\nQuanResultId=" + lQuan.getQuanResultId() + "\n";
             for (int e = 0; e < lBackgroundEvents.size(); e++) {
@@ -761,7 +758,7 @@ public class MsfStorer extends JFrame {
         Object[] lGeneratedKeys = lQuantitation_file.getGeneratedKeys();
         lMsfFileId = Long.valueOf(lGeneratedKeys[0].toString());
 
-        Vector<RatioType> lRatioTypes = lParsedMsfFile.getRatioTypes();
+        List<RatioType> lRatioTypes = lParsedMsfFile.getRatioTypes();
 
         //Store the ratios
         int lNumberOfHits = lQuanResults.size();
@@ -780,17 +777,17 @@ public class MsfStorer extends JFrame {
 
                 if (lRatio != null) {
                     HashMap hm = new HashMap();
-                    hm.put(Quantitation.TYPE, lRatioTypes.get(r).getRatioType());
+                    hm.put(com.compomics.mslimsdb.accessors.Quantitation.TYPE, lRatioTypes.get(r).getRatioType());
                     if (!lQuanGroupPersisted) {
                         quant_group.persist(iConn);
                     }
                     long lL_quantitationGroupid = quant_group.getQuantitation_groupid();
-                    hm.put(Quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
+                    hm.put(com.compomics.mslimsdb.accessors.Quantitation.L_QUANTITATION_GROUPID, lL_quantitationGroupid);
                     BigDecimal lBigDecimal = new BigDecimal(lRatio);
                     lBigDecimal = lBigDecimal.setScale(5, BigDecimal.ROUND_HALF_DOWN);
-                    hm.put(Quantitation.RATIO, lBigDecimal.doubleValue());
-                    hm.put(Quantitation.VALID, true);
-                    Quantitation quant = new Quantitation(hm);
+                    hm.put(com.compomics.mslimsdb.accessors.Quantitation.RATIO, lBigDecimal.doubleValue());
+                    hm.put(com.compomics.mslimsdb.accessors.Quantitation.VALID, true);
+                    com.compomics.mslimsdb.accessors.Quantitation quant = new com.compomics.mslimsdb.accessors.Quantitation(hm);
                     quant.persist(iConn);
                     lRatioAdded = true;
                 }
@@ -831,7 +828,7 @@ public class MsfStorer extends JFrame {
      *
      * @param aDatfile String with the URL for the datfile.
      */
-    public Vector processIDs(String aDatfile, JProgressBar aProgress, HashMap<String, com.compomics.thermo_msf_parser.msf.Spectrum> lSpectra) {
+    public Vector processIDs(String aDatfile, JProgressBar aProgress, HashMap<String, com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum> lSpectra) {
 
         // The Vector that will hold all identifications.
         Vector result = new Vector(1000, 250);
@@ -1296,7 +1293,7 @@ public class MsfStorer extends JFrame {
     }
 
 
-    private Vector extractIDs(MascotDatfileInf aMDF, HashMap<String, com.compomics.thermo_msf_parser.msf.Spectrum> lSpectra) throws IllegalArgumentException {
+    private Vector extractIDs(MascotDatfileInf aMDF, HashMap<String, com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum> lSpectra) throws IllegalArgumentException {
         // Vector that will contain the MascotIdentifiedSpectrum instances.
         Vector result = new Vector();
 
@@ -1355,10 +1352,10 @@ public class MsfStorer extends JFrame {
             //add the title to show that it was searched
             result.add(lTitle);
             //process title
-            com.compomics.thermo_msf_parser.msf.Spectrum lSpectrum = lSpectra.get(lTitle);
+            com.compomics.thermo_msf_parser_API.highmeminstance.Spectrum lSpectrum = lSpectra.get(lTitle);
             if (lSpectrum != null) {
 
-                Vector<Peptide> lPeptides = lSpectrum.getPeptides();
+                List<Peptide> lPeptides = lSpectrum.getPeptides();
                 for (int i = 0; i < lPeptides.size(); i++) {
                     Peptide lPeptide = lPeptides.get(i);
                     int lConfidenceLevel = lPeptide.getConfidenceLevel();

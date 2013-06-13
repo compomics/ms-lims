@@ -4,12 +4,12 @@
  * Date: 05-mar-2005
  * Time: 15:01:36
  */
-package com.compomics.mslims.gui.dialogs;
+package com.compomics.mslimscore.gui.dialogs;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Filedescriptor;
-import com.compomics.mslims.gui.StoreBinaryFileGUI;
+import com.compomics.mslimsdb.accessors.Filedescriptor;
+import com.compomics.mslimscore.gui.StoreBinaryFileGUI;
 
 import javax.swing.*;
 import java.awt.*;
