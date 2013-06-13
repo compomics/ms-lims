@@ -10,13 +10,11 @@ http://www.w3.org/2001/XMLSchema-instance ">
     <name>ms-lims</name>
     <url>http://ms-lims.googlecode.com</url>
 
-<<<<<<< .mine
-=======
+
     <!-- Set the version number for the whole project -->
     <properties>
         <version.number>7.7.5</version.number>
     </properties>
->>>>>>> .r150
 
     <!-- Licence -->
     <licenses>
@@ -127,7 +125,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
                 <type>jar</type>
             </dependency>
 
-<<<<<<< .mine
             <!-- This project depends on the commons-logging JAR file.
             -->
             <dependency>
@@ -144,9 +141,9 @@ http://www.w3.org/2001/XMLSchema-instance ">
             </dependency>
         </dependencies>
     </dependencyManagement>
-=======
-        <!-- This project depends on the rover JAR file.
-        -->
+    <!-- This project depends on the rover JAR file.
+    -->
+    <dependencies>
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>rover</artifactId>
@@ -176,7 +173,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <type>jar</type>
         </dependency>
         <!-- This project depends on the statlib JAR file.
-          -->
+        -->
         <dependency>
             <groupId>lennart</groupId>
             <artifactId>statlib</artifactId>
@@ -199,7 +196,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         </dependency>
 
         <!-- This project depends on the peptizer JAR file.
-          -->
+        -->
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>peptizer</artifactId>
@@ -228,7 +225,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
 
         <!-- This project depends on the apache log4j framework.
-          -->
+        -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -237,7 +234,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         </dependency>
 
         <!-- This project depends on the commons-logging JAR file.
-          -->
+        -->
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
@@ -255,7 +252,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         </dependency>
 
         <!-- This project depends on the xxindex JAR file.
-          -->
+        -->
         <dependency>
             <groupId>lennart</groupId>
             <artifactId>cpdetector</artifactId>
@@ -281,7 +278,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
     </dependencies>
 
->>>>>>> .r150
     <distributionManagement>
         <repository>
             <id>genesis-maven2-repo</id>
