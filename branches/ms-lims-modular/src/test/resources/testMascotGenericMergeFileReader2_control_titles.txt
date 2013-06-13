@@ -1,0 +1,15 @@
+ Cmpd 1, +MSn(391.47) 0.1 min
+ Cmpd 2, +MSn(519.34) 0.2 min
+ Cmpd 3, +MSn(611.59) 0.5 min
+ Cmpd 4, +MSn(419.28) 0.7 min
+ Cmpd 5, +MSn(354.37) 0.9 min
+ Cmpd 6, +MSn(446.27) 1.0 min
+ Cmpd 7, +MSn(594.31) 1.1 min
+ Cmpd 8, +MSn(369.28) 1.2 min
+ Cmpd 9, +MSn(593.06) 1.3 min
+ Cmpd 12, +MSn(356.45) 1.8 min
+ Cmpd 13, +MSn(610.13) 1.9 min
+ Cmpd 14, +MSn(519.98) 2.0 min
+ Cmpd 16, +MSn(355.51) 2.2 min
+ Cmpd 17, +MSn(370.46) 2.3 min
+ Cmpd 19, +MSn(445.02) 2.6 min
