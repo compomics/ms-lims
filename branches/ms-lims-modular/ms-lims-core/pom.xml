@@ -1,0 +1,460 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd
+http://www.w3.org/2001/XMLSchema-instance ">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <version>7.7.8</version>    
+        <groupId>com.compomics.ms-lims</groupId>
+        <artifactId>ms-lims</artifactId>
+    </parent>
+    <artifactId>ms-lims-core</artifactId>
+    <packaging>jar</packaging>
+    <version>7.7.8</version>
+    <name>ms-lims-core</name>
+    <url>http://ms-lims.googlecode.com</url>
+
+    <!-- Licence -->
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+	
+	
+    <!-- Build -->
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/</directory>
+                <includes>
+                    <include>test.txt</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>            
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            
+            <!-- Jar plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.compomics.mslimscore.gui.MS_LIMS</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                        </manifest>
+                    </archive>
+                    <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
+                </configuration>
+            </plugin>
+                
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>copy-compile-resources</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>target/classes</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>rdbms</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>*.sql</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- Resources plugin - copy modification conversion. -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>copy-package-resources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/resources
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>modificationConversion.txt</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-package-license</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>LICENSE-2.0.txt</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- Resources plugin -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <!-- Copy resources into appropriate folder upon packaging -->
+                <executions>
+                    <!-- Copy main resources into test classpath when running the tests -->
+                    <execution>
+                        <id>copy-test-resources</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>src/test/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Assembly plugin -->
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/lib</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <excludeTransitive>false</excludeTransitive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.6.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Pack sources on build -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2-beta-2</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/zip.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- this is used for inheritance merges -->
+                        <phase>package</phase>
+                        <!-- append to the packaging phase. -->
+                        <goals>
+                            <goal>single</goal>
+                            <!-- goals == mojos -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        
+
+    </build>
+
+    <!-- Repositores -->
+    <repositories>
+
+        <!-- UGent Genesis Maven 2 repository -->
+        <repository>
+            <id>genesis-maven2-repository</id>
+            <name>Genesis maven2 repository</name>
+            <url>http://genesis.UGent.be/maven2</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>ebi-repo</id>
+            <name>The EBI Maven2 repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+            <releases>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
+    <!-- Plugin repositories-->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Plugin Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+
+    </pluginRepositories>
+
+
+    <!-- Dependencies -->
+    <dependencies>
+        
+        <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3</artifactId>
+            <version>1.1.3.4-RC3</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.compomics</groupId>
+            <artifactId>rover</artifactId>
+            <version>2.3.12</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.compomics.ms-lims</groupId>
+                    <artifactId>ms-lims-db</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>utilities</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- This project depends on the Mascot Datfile JAR file.
+        -->
+        <dependency>
+            <groupId>com.compomics</groupId>
+            <artifactId>mascotdatfile</artifactId>
+            <version>3.4.11</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>utilities</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.compomics.thermo_msf_parser</groupId>
+            <artifactId>thermo_msf_parser_API</artifactId>
+            <version>2.0.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>utilities</artifactId>
+                </exclusion>
+            </exclusions>
+            <type>jar</type>
+        </dependency>
+        <!-- This project depends on the statlib JAR file.
+        -->
+        <dependency>
+            <groupId>com.compomics</groupId>
+            <artifactId>statlib</artifactId>
+            <version>0.3</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>niklaas</groupId>
+            <artifactId>jmol</artifactId>
+            <version>12.0.43</version>
+            <type>jar</type>
+        </dependency>
+
+
+        <!-- This project depends on the peptizer JAR file. - to be removed and replaced
+        -->
+        <dependency>
+            <groupId>com.compomics</groupId>
+            <artifactId>peptizer</artifactId>
+            <version>1.8.4</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>ms-lims</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>uk.ac.ebi.pride.jaxb</groupId>
+                    <artifactId>pride-jaxb</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.compomics</groupId>
+                    <artifactId>utilities</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>psidev.psi.tools</groupId>
+            <artifactId>xxindex</artifactId>
+            <version>0.11</version>
+            <type>jar</type>
+        </dependency>
+
+        <!-- This project depends on the xxindex JAR file.
+        -->
+        <dependency>
+            <groupId>lennart</groupId>
+            <artifactId>cpdetector</artifactId>
+            <version>1.0.4</version>
+            <type>jar</type>
+        </dependency>
+
+        <!-- This project depends on the jgoodies JAR file.
+        -->
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>looks</artifactId>
+            <version>2.2.2</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>jackcess</groupId>
+            <artifactId>jackcess</artifactId>
+            <version>1.1.9</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-all</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.compomics.ms-lims</groupId>
+            <artifactId>ms-lims-db</artifactId>
+            <version>7.7.8</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>pdf-transcoder</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.9</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.compomics</groupId>
+            <artifactId>utilities</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.compomics.thermo_msf_parser</groupId>
+            <artifactId>thermo_msf_parser_GUI</artifactId>
+            <version>2.0.4</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+	
+    <distributionManagement>
+        <repository>
+            <id>genesis-maven2-repo</id>
+            <name>Genesis Maven Repository</name>
+            <url>scp://genesis.ugent.be/home/maven/public_html/maven2</url>
+        </repository>
+    </distributionManagement>
+</project>
