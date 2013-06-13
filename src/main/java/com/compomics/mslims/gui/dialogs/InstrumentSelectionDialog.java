@@ -4,12 +4,12 @@
  * Date: 12-feb-2004
  * Time: 11:51:35
  */
-package com.compomics.mslims.gui.dialogs;
+package com.compomics.mslimscore.gui.dialogs;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Instrument;
-import com.compomics.mslims.gui.interfaces.Informable;
+import com.compomics.mslimsdb.accessors.Instrument;
+import com.compomics.mslimscore.gui.interfaces.Informable;
 
 import javax.swing.*;
 import java.awt.*;

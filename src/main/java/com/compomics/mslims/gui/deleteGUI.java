@@ -1,9 +1,8 @@
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
-import com.compomics.mslims.db.accessors.Project;
-import com.compomics.mslims.db.utils.dbDeleteQueryGenerator;
+import com.compomics.mslimsdb.accessors.Project;
+import com.compomics.mslimsdb.utils.dbDeleteQueryGenerator;
 import com.compomics.util.gui.FlamableJFrame;
-import org.jdesktop.swingx.JXTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +38,7 @@ public class deleteGUI extends FlamableJFrame {
     private JTextField txtID;
     private Project[] iProjects = null;
     private String iCurrentTitle;
-    private JXTextField txtTitle;
+    private JTextField txtTitle;
     private String iDBName;
     private int sqlSelection;
     private long currentProject;
@@ -101,7 +100,7 @@ public class deleteGUI extends FlamableJFrame {
         chkDeleteQuantification = new javax.swing.JCheckBox();
         btnExecute = new javax.swing.JButton();
         txtID = new JTextField();
-        txtTitle = new JXTextField();
+        txtTitle = new JTextField();
 
         if (isStandAlone()) {
             setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

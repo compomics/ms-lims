@@ -4,20 +4,20 @@
  * Date: 18-jun-2003
  * Time: 6:58:54
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.*;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
-import com.compomics.mslims.gui.dialogs.DescriptionDialog;
-import com.compomics.mslims.gui.dialogs.InstrumentSelectionDialog;
-import com.compomics.mslims.gui.dialogs.ProjectDialog;
-import com.compomics.mslims.gui.interfaces.Informable;
-import com.compomics.mslims.gui.interfaces.ProjectManager;
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.util.fileio.FileExtensionFilter;
-import com.compomics.mslims.util.fileio.interfaces.SpectrumStorageEngine;
+import com.compomics.mslimsdb.accessors.*;
+import com.compomics.mslimscore.gui.dialogs.DescriptionDialog;
+import com.compomics.mslimscore.gui.dialogs.InstrumentSelectionDialog;
+import com.compomics.mslimscore.gui.dialogs.ProjectDialog;
+import com.compomics.mslimscore.gui.interfaces.Informable;
+import com.compomics.mslimscore.gui.interfaces.ProjectManager;
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.util.fileio.FileExtensionFilter;
+import com.compomics.mslimscore.util.fileio.interfaces.SpectrumStorageEngine;
 import com.compomics.util.general.CommandLineParser;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Connectable;
@@ -1334,7 +1334,7 @@ public class SpectrumStorageGUI extends FlamableJFrame implements Connectable, P
         if (iMascotDistillerProcessing) {
             // Hard coded class reference in case of Mascot Distiller processing.
             // Independent from instrument selection!
-            converterClassName = "com.compomics.mslims.util.fileio.MascotDistillerStorageEngine";
+            converterClassName = "com.compomics.mslimscore.util.fileio.MascotDistillerStorageEngine";
         } else {
             converterClassName = iSelectedInstrument.getStorageclassname();
         }

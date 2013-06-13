@@ -4,21 +4,21 @@
  * Date: 8-okt-2004
  * Time: 7:27:57
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Instrument;
-import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslimsdb.accessors.Instrument;
+import com.compomics.mslimsdb.accessors.Project;
 import com.compomics.util.enumeration.CompomicsTools;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
-import com.compomics.mslims.gui.dialogs.DifferentialProjectDialog;
-import com.compomics.mslims.gui.frames.DifferentialAnalysisResultsFrame;
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.gui.table.DifferentialProjectTableModel;
-import com.compomics.mslims.util.diff.DiffAnalysisCore;
-import com.compomics.mslims.util.diff.DifferentialProject;
-import com.compomics.mslims.util.workers.DiffAnalysisWorker;
+import com.compomics.mslimscore.gui.dialogs.DifferentialProjectDialog;
+import com.compomics.mslimscore.gui.frames.DifferentialAnalysisResultsFrame;
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.gui.table.DifferentialProjectTableModel;
+import com.compomics.mslimscore.util.diff.DiffAnalysisCore;
+import com.compomics.mslimscore.util.diff.DifferentialProject;
+import com.compomics.mslimscore.util.workers.DiffAnalysisWorker;
 import com.compomics.util.general.CommandLineParser;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.interfaces.Flamable;

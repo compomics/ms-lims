@@ -4,15 +4,15 @@
  * Date: 4-okt-2005
  * Time: 10:27:41
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
 import org.apache.log4j.Logger;
 
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Flamable;
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.gui.dialogs.MALDIStatisticsResultsDialog;
-import com.compomics.mslims.util.workers.MALDIDiffAnalysisWorker;
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.gui.dialogs.MALDIStatisticsResultsDialog;
+import com.compomics.mslimscore.util.workers.MALDIDiffAnalysisWorker;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.Iterator;
-import java.util.ArrayList;
 /*
  * CVS information:
  *

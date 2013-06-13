@@ -4,17 +4,18 @@
  * Date: 7-mrt-2005
  * Time: 7:47:11
  */
-package com.compomics.mslims.gui.projectanalyzertools;
+package com.compomics.mslimscore.gui.projectanalyzertools;
 
-import com.compomics.mslims.db.accessors.*;
+import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
+import com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl;
+import com.compomics.mslimsdb.accessors.*;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.gui.ProjectAnalyzer;
-import com.compomics.mslims.gui.dialogs.ExportDialog;
-import com.compomics.mslims.gui.interfaces.ProjectAnalyzerTool;
-import com.compomics.mslims.util.fileio.MascotGenericFile;
-import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
-import com.compomics.mascotdatfile.util.gui.SequenceFragmentationPanel;
+import com.compomics.mslimscore.gui.ProjectAnalyzer;
+import com.compomics.mslimscore.gui.dialogs.ExportDialog;
+import com.compomics.mslimscore.gui.interfaces.ProjectAnalyzerTool;
+import com.compomics.mslimscore.util.fileio.MascotGenericFile;
+import com.compomics.mslimscore.gui.panels.SequenceFragmentationPanel;
 import com.compomics.util.db.DBResultSet;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.gui.JTableForDB;
@@ -23,6 +24,7 @@ import com.compomics.util.gui.spectrum.SpectrumPanel;
 import com.compomics.util.io.StartBrowser;
 import com.compomics.util.sun.SwingWorker;
 import com.compomics.util.sun.TableSorter;
+import com.compomics.mslimscore.util.FragmentionMiddleMan;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -43,6 +45,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
@@ -710,7 +713,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                             if (idColumn > -1) {
                                 idid = ((Number) tblResults.getModel().getValueAt(row, idColumn)).longValue();
 
-                                Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConnection, idid);
+                                Vector temp = FragmentionMiddleMan.getAllMascotDatfileFragmentIonImpl(iConnection, idid);
                                 if (temp.size() == 0) {
                                     JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                                 }
@@ -816,7 +819,7 @@ public class ProjectSQLTool extends FlamableJFrame implements ProjectAnalyzerToo
                         if (idColumn > -1 && modSeq != null) {
                             idid = ((Number) tblResults.getModel().getValueAt(row, idColumn)).longValue();
 
-                            Vector temp = Fragmention.getAllMascotDatfileFragmentIonImpl(iConnection, idid);
+                            Vector temp = FragmentionMiddleMan.getAllMascotDatfileFragmentIonImpl(iConnection, idid);
                             if (temp.size() == 0) {
                                 JOptionPane.showMessageDialog((Component) comp, "No fragment ions were stored for the selected identification (ID=" + idid + ").", "No fragment ions found!", JOptionPane.WARNING_MESSAGE);
                             }

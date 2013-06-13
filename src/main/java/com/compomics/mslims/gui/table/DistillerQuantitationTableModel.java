@@ -1,12 +1,12 @@
-package com.compomics.mslims.gui.table;
+package com.compomics.mslimscore.gui.table;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Identification;
-import com.compomics.rover.general.quantitation.RatioGroupCollection;
-import com.compomics.rover.general.quantitation.source.distiller.DistillerRatioGroup;
-import com.compomics.rover.general.quantitation.source.distiller.DistillerRatio;
-import com.compomics.rover.general.enumeration.QuantitationMetaType;
+import com.compomics.mslimsdb.accessors.Identification;
+import com.compomics.mslimscore.util.quantitation.ratios.RatioGroupCollection;
+import com.compomics.mslimscore.util.quantitation.ratios.DistillerRatioGroup;
+import com.compomics.mslimscore.util.quantitation.ratios.DistillerRatio;
+import com.compomics.mslimscore.util.enumeration.QuantitationMetaType;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;

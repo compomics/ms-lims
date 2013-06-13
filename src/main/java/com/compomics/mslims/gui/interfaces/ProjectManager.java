@@ -4,9 +4,8 @@
  * Date: 26-jan-2004
  * Time: 11:22:40
  */
-package com.compomics.mslims.gui.interfaces;
+package com.compomics.mslimscore.gui.interfaces;
 
-import org.apache.log4j.Logger;
 
 import com.compomics.util.interfaces.Flamable;
 

@@ -4,11 +4,11 @@
  * Date: 8-okt-2004
  * Time: 17:53:22
  */
-package com.compomics.mslims.gui.table;
+package com.compomics.mslimscore.gui.table;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.util.diff.DifferentialProject;
+import com.compomics.mslimscore.util.diff.DifferentialProject;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;

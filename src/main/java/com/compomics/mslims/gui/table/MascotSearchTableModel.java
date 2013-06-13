@@ -4,12 +4,12 @@
  * Date: 22-jun-2004
  * Time: 7:55:22
  */
-package com.compomics.mslims.gui.table;
+package com.compomics.mslimscore.gui.table;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.gui.table.renderers.ErrorObject;
-import com.compomics.mslims.gui.tree.MascotSearch;
+import com.compomics.mslimscore.gui.table.renderers.ErrorObject;
+import com.compomics.mslimscore.gui.tree.MascotSearch;
 
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;

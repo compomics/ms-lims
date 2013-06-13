@@ -1,19 +1,19 @@
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
-import com.compomics.mascotdatfile.util.mascot.ModificationConversion;
-import com.compomics.mslims.db.accessors.*;
-import com.compomics.mslims.db.conversiontool.MS_LIMS_7_7_Data_Updater;
-import com.compomics.mslims.util.fileio.ModificationConversionIO;
-import com.compomics.mslims.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
+import com.compomics.mslimscore.util.modificationconversion.ModificationConversion;
+import com.compomics.mslimsdb.accessors.*;
+import com.compomics.mslimscore.util.conversiontool.MS_LIMS_7_7_Data_Updater;
+import com.compomics.mslimscore.util.fileio.ModificationConversionIO;
+import com.compomics.mslimscore.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.conversiontool.DbConversionToolGuiEdition;
-import com.compomics.mslims.db.conversiontool.MS_LIMS_6_Data_Updater;
-import com.compomics.mslims.db.conversiontool.MS_LIMS_7_Data_Updater;
-import com.compomics.mslims.db.factory.InstrumentFactory;
+import com.compomics.mslimscore.util.conversiontool.DbConversionToolGuiEdition;
+import com.compomics.mslimscore.util.conversiontool.MS_LIMS_6_Data_Updater;
+import com.compomics.mslimscore.util.conversiontool.MS_LIMS_7_Data_Updater;
+import com.compomics.mslimsdb.factory.InstrumentFactory;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.FlamableJFrame;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.io.PropertiesManager;
 import com.compomics.util.sun.SwingWorker;
@@ -131,7 +131,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
 // --------------------------- CONSTRUCTORS ---------------------------
 
     /**
-     * Constructs a new ConfigurationGUI instancen,
+     * Constructs a new ConfigurationGUI instance,
      */
     public ConfigurationGUI(String aName) {
         this(aName, null, null);
@@ -426,7 +426,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                         executeQuery("select * from protocol where description = '" + lProtocolDescription + "'");
                 try {
                     if (rs.next() == true) {
-                        status("Protocol '" + lProtocolDescription + "' is allready in the database!");
+                        status("Protocol '" + lProtocolDescription + "' is already in the database!");
                     } else {
                         Protocol lProtocolEntry = new Protocol();
                         lProtocolEntry.setDescription(txtProtocolDescription.getText());
@@ -670,7 +670,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         loadModificationsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (iConnection != null) {
-                    int answer = JOptionPane.showConfirmDialog(new JFrame(), "This will delete all existing modification conversions from the database.\nAll the modification conversions in the modificationConverstion.txt file will be stored in the db.\nAre you sure that you want to continue?", "Load modification conversions from file ", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    int answer = JOptionPane.showConfirmDialog(new JFrame(), "This will delete all existing modification conversions from the database.\nA standard set we provide will be stored in the db.\nAre you sure that you want to continue?", "Load modification conversions from file ", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
                     if (answer == JOptionPane.YES_OPTION) {
 
                         try {
@@ -678,7 +678,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
                             PreparedStatement lPreparedStatement = iConnection.prepareStatement("truncate table modification_conversion");
                             lPreparedStatement.execute();
                             //2.store new data
-                            ModificationConversion lmc = ModificationConversion.getInstance();
+                            ModificationConversion lmc = ModificationConversion.getInstance(iConnection);
                             HashMap lMap = lmc.getConversionMap();
                             Iterator iterator = lMap.keySet().iterator();
                             int lCounterOk = 0;
@@ -1509,7 +1509,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         gbc.insets = new Insets(5, 5, 5, 5);
         cdfUpdatePanel.add(label9, gbc);
         loadCdfButton = new JButton();
-        loadCdfButton.setText("Load");
+        loadCdfButton.setText("clean and load");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -1690,7 +1690,7 @@ public class ConfigurationGUI extends FlamableJFrame implements Connectable {
         panel7.add(panel9, gbc);
         panel9.setBorder(BorderFactory.createTitledBorder(null, "Load modification conversions", TitledBorder.CENTER, TitledBorder.ABOVE_TOP, new Font("Tahoma", panel9.getFont().getStyle(), 16)));
         loadModificationsButton = new JButton();
-        loadModificationsButton.setText("Load");
+        loadModificationsButton.setText("remove the old modification set and load a standard set into ms-lims");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;

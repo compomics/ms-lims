@@ -4,7 +4,7 @@
  * Date: 27-Jun-2008
  * Time: 10:35:34
  */
-package com.compomics.mslims.gui.dialogs;
+package com.compomics.mslimscore.gui.dialogs;
 
 import org.apache.log4j.Logger;
 

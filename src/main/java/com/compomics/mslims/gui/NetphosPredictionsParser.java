@@ -4,19 +4,19 @@
  * Date: 30-jul-2003
  * Time: 12:29:44
  */
-package com.compomics.mslims.gui;
+package com.compomics.mslimscore.gui;
 
+import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Id_to_phosphoTableAccessor;
-import com.compomics.mslims.db.accessors.Identification;
-import com.compomics.mslims.db.accessors.Phosphorylation;
-import com.compomics.mslims.db.accessors.Project;
-import com.compomics.util.gui.dialogs.ConnectionDialog;
-import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslims.util.netphos.NetphosOutputReader;
-import com.compomics.mslims.util.netphos.NetphosPrediction;
-import com.compomics.mslims.util.netphos.PredictedLocation;
+import com.compomics.mslimsdb.accessors.Id_to_phosphoTableAccessor;
+import com.compomics.mslimsdb.accessors.Identification;
+import com.compomics.mslimsdb.accessors.Phosphorylation;
+import com.compomics.mslimsdb.accessors.Project;
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.util.netphos.NetphosOutputReader;
+import com.compomics.mslimscore.util.netphos.NetphosPrediction;
+import com.compomics.mslimscore.util.netphos.PredictedLocation;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Connectable;
 

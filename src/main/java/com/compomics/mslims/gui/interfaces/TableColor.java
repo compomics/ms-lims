@@ -1,6 +1,5 @@
-package com.compomics.mslims.gui.interfaces;
+package com.compomics.mslimscore.gui.interfaces;
 
-import org.apache.log4j.Logger;
 
 import java.awt.*;
 /**

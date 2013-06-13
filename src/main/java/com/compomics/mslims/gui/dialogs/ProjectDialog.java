@@ -4,14 +4,14 @@
  * Date: 20-jun-2003
  * Time: 15:01:36
  */
-package com.compomics.mslims.gui.dialogs;
+package com.compomics.mslimscore.gui.dialogs;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Protocol;
-import com.compomics.mslims.db.accessors.Project;
-import com.compomics.mslims.db.accessors.User;
-import com.compomics.mslims.gui.interfaces.ProjectManager;
+import com.compomics.mslimsdb.accessors.Protocol;
+import com.compomics.mslimsdb.accessors.Project;
+import com.compomics.mslimsdb.accessors.User;
+import com.compomics.mslimscore.gui.interfaces.ProjectManager;
 
 import javax.swing.*;
 import java.awt.*;

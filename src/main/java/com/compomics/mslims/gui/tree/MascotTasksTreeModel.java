@@ -4,7 +4,7 @@
  * Date: 18-jun-2004
  * Time: 18:19:37
  */
-package com.compomics.mslims.gui.tree;
+package com.compomics.mslimscore.gui.tree;
 
 import org.apache.log4j.Logger;
 
