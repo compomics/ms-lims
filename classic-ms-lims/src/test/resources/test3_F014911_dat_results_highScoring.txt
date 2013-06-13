@@ -1,0 +1,493 @@
+
+Spectrum with: 
+	- sequence: ELGTVMR	Modified sequence: NH2-ELGTVM<Mox>R-COOH
+	- matching: P27482(31-37)
+			(*FE*) CALL_HUMAN Calmodulin-related protein NB-1 (Calmodulin-like protein) (CLP).^Asw|P02593 (31-3
+	- score: 47
+	- Mr(cal): 820.411255
+	- Mr(exp): 820.261144
+	- ID treshold: 42
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 411.1384 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1073.36, 0.034, 1312.6047)
+	- this was query number 30
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: DSMFGIAVK	Modified sequence: NH2-DSM<Mox>FGIAVK-COOH
+	- matching: P23229(413-421)
+			(*FE*) ITA6_HUMAN Integrin alpha-6 precursor (VLA-6) (CD49f).
+	- score: 57
+	- Mr(cal): 982.479324
+	- Mr(exp): 982.295568
+	- ID treshold: 41
+	- homology treshold: 35
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 492.1556 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (84.09, 1100.53, 0.0091, 1670.22)
+	- this was query number 54
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: YDDMAAAMK	Modified sequence: NH2-YDDM<Mox>AAAMK-COOH
+	- matching: P31946(20-28)
+			(*FE*) 143B_HUMAN 14-3-3 protein beta/alpha (Protein kinase C inhibitor protein-1)(KCIP-1) (Protein
+	- score: 52
+	- Mr(cal): 1030.409958
+	- Mr(exp): 1030.249976
+	- ID treshold: 41
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 516.1328 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (51.87, 1007.27, 1.0181, 634.558)
+	- this was query number 66
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: DQVLAMLEK	Modified sequence: NH2-DQVLAM<Mox>LEK-COOH
+	- matching: Q14008(1067-1075)
+			(*FE*) CTOG_HUMAN CH-TOG protein (Colonic and hepatic tumor over-expressed protein).
+	- score: 52
+	- Mr(cal): 1061.542664
+	- Mr(exp): 1061.354712
+	- ID treshold: 43
+	- homology treshold: 41
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 531.6852 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 959.58, 0.0091, 858.404)
+	- this was query number 77
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: ILMVGLDAAGK	Modified sequence: NH2-ILM<Mox>VGLDAAGK-COOH
+	- matching: P32889(19-29)
+			(*FE*) ARF1_HUMAN ADP-ribosylation factor 1.^Asw|P16587 (19-29)^Asw|P18085 (19-29)^Asw|P26437 (19-2
+	- score: 66
+	- Mr(cal): 1102.605576
+	- Mr(exp): 1102.406714
+	- ID treshold: 43
+	- homology treshold: 40
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 552.2112 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (56.07, 1000.4369, 0.9116, 1143.73)
+	- this was query number 93
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: MDKNELVQK	Modified sequence: Ace-M<Mox>DKNELVQK-COOH
+	- matching: P29312(1-9)
+			(*FE*) 143Z_HUMAN 14-3-3 protein zeta/delta (Protein kinase C inhibitor protein-1)(KCIP-1) (Factor 
+	- score: 58
+	- Mr(cal): 1161.569946
+	- Mr(exp): 1161.340308
+	- ID treshold: 43
+	- homology treshold: 43
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 581.678 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.09, 1618.77, 0.6667, 2064.028)
+	- this was query number 105
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: LNYLDILMR	Modified sequence: NH2-LNYLDILM<Mox>R-COOH
+	- matching: P23229(1007-1015)
+			(*FE*) ITA6_HUMAN Integrin alpha-6 precursor (VLA-6) (CD49f).
+	- score: 46
+	- Mr(cal): 1165.616501
+	- Mr(exp): 1165.410376
+	- ID treshold: 43
+	- homology treshold: 30
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 583.713 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1081.39, 0.9751, 2881.22)
+	- this was query number 108
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: LNYLDILMR	Modified sequence: NH2-LNYLDILM<Mox>R-COOH
+	- matching: P23229(1007-1015)
+			(*FE*) ITA6_HUMAN Integrin alpha-6 precursor (VLA-6) (CD49f).
+	- score: 51
+	- Mr(cal): 1165.616501
+	- Mr(exp): 1165.411352
+	- ID treshold: 43
+	- homology treshold: 31
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 583.7135 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1066.35, 0.9751, 860.544)
+	- this was query number 109
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: EFLKEASVMK	Modified sequence: NH2-EFLKEASVMK-COOH
+	- matching: P14616(1026-1035)
+			(*CE*) IRR_HUMAN Insulin receptor-related protein precursor (EC 2.7.1.112) (IRR)(IR-related recepto
+	- score: 45
+	- Mr(cal): 1180.616135
+	- Mr(exp): 1180.321386
+	- ID treshold: 42
+	- homology treshold: 0
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 591.1685 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1047.31, 0.0091, 330.6575)
+	- this was query number 111
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: EFLKEAAVMK	Modified sequence: NH2-EFLKEAAVM<Mox>K-COOH
+	- matching: P00519(282-291)
+			null
+	- score: 45
+	- Mr(cal): 1180.616135
+	- Mr(exp): 1180.321386
+	- ID treshold: 42
+	- homology treshold: 0
+	- rank: 2
+	- from file: *
+	- precursor mass and charge: 591.1685 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1047.31, 0.0091, 330.6575)
+	- this was query number 111
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: HQGVMVGMGQK	Modified sequence: NH2-HQGVM<Mox>VGMGQK-COOH
+	- matching: P03996(42-52)
+			(*FE*) ACTA_HUMAN Actin, aortic smooth muscle (Alpha-actin 2).^Asw|P02570 (40-50)^Asw|P04270 (42-52
+	- score: 52
+	- Mr(cal): 1186.558655
+	- Mr(exp): 1186.274286
+	- ID treshold: 40
+	- homology treshold: 30
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 396.4326 3
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (56.07, 1293.57, 0.966, 18833.12)
+	- this was query number 112
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: HQGVMVGMGQK	Modified sequence: NH2-HQGVMVGM<Mox>GQK-COOH
+	- matching: P03996(42-52)
+			(*FE*) ACTA_HUMAN Actin, aortic smooth muscle (Alpha-actin 2).^Asw|P02570 (40-50)^Asw|P04270 (42-52
+	- score: 42
+	- Mr(cal): 1186.558655
+	- Mr(exp): 1186.3329820000001
+	- ID treshold: 42
+	- homology treshold: 31
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 594.1743 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.09, 1062.35, 0.0091, 979.9841)
+	- this was query number 114
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: VFAMSPEEFGK	Modified sequence: NH2-VFAM<Mox>SPEEFGK-COOH
+	- matching: Q08495(379-389)
+			(*FE*) DEMA_HUMAN Dematin (Erythrocyte membrane protein band 4.9).
+	- score: 58
+	- Mr(cal): 1256.574661
+	- Mr(exp): 1256.3823000000002
+	- ID treshold: 42
+	- homology treshold: 33
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 629.199 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.09, 1168.64, 0.0091, 1373.7499)
+	- this was query number 135
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: EMEAELEDER	Modified sequence: NH2-EM<Mox>EAELEDER-COOH
+	- matching: P35579(1593-1602)
+			(*FE*) MYH9_HUMAN Myosin heavy chain, nonmuscle type A (Cellular myosin heavy chain,type A) (Nonmus
+	- score: 54
+	- Mr(cal): 1265.508118
+	- Mr(exp): 1265.258398
+	- ID treshold: 37
+	- homology treshold: 31
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 633.637 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.13, 1140.52, 0.8866, 1477.1436)
+	- this was query number 137
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: NIVLSGGSTMFR	Modified sequence: NH2-NIVLSGGSTM<Mox>FR-COOH
+	- matching: P32391(318-329)
+			(*FE*) ARP3_HUMAN Actin-like protein 3 (Actin-related protein 3) (Actin-2).
+	- score: 49
+	- Mr(cal): 1296.649567
+	- Mr(exp): 1296.3567859999998
+	- ID treshold: 42
+	- homology treshold: 26
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 649.1862 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (70.0992, 1200.89, 0.8594, 7024.6487)
+	- this was query number 141
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: PMIHELLTEGR	Modified sequence: NH2-PM<Mox>IHELLTEGR-COOH
+	- matching: Q14974(841-851)
+			(*CE*) IMB1_HUMAN Importin beta-1 subunit (Karyopherin beta-1 subunit) (Nuclear factorP97) (Importi
+	- score: 59
+	- Mr(cal): 1310.665237
+	- Mr(exp): 1310.4053279999998
+	- ID treshold: 43
+	- homology treshold: 31
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 437.8096 3
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (56.05, 983.33, 0.0091, 641.1702)
+	- this was query number 149
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: DYTQMNELQR	Modified sequence: NH2-DYTQM<Mox>NELQR-COOH
+	- matching: P07203(53-62)
+			(*FE*) GSHC_HUMAN Glutathione peroxidase (EC 1.11.1.9) (GSHPx-1) (Cellular glutathioneperoxidase).
+	- score: 48
+	- Mr(cal): 1312.571747
+	- Mr(exp): 1312.323584
+	- ID treshold: 40
+	- homology treshold: 30
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 657.1696 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (74.07, 1208.48, 0.9206, 282.229)
+	- this was query number 151
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: DYTQMNELQR	Modified sequence: NH2-DYTQM<Mox>NELQR-COOH
+	- matching: P07203(53-62)
+			(*FE*) GSHC_HUMAN Glutathione peroxidase (EC 1.11.1.9) (GSHPx-1) (Cellular glutathioneperoxidase).
+	- score: 46
+	- Mr(cal): 1312.571747
+	- Mr(exp): 1312.332982
+	- ID treshold: 40
+	- homology treshold: 27
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 657.1743 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (74.07, 1398.83, 0.0091, 1399.8861)
+	- this was query number 152
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: KPDTIEVQQMK	Modified sequence: NH2-KPDTIEVQQM<Mox>K-COOH
+	- matching: P15311(295-305)
+			(*FE*) EZRI_HUMAN Ezrin (p81) (Cytovillin) (Villin 2).^Asw|P26038 (295-305)
+	- score: 66
+	- Mr(cal): 1331.675476
+	- Mr(exp): 1331.429784
+	- ID treshold: 43
+	- homology treshold: 32
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 666.7227 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.09, 1207.49, 0.0091, 215.1793)
+	- this was query number 165
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: TLTLVDTGIGMTK	Modified sequence: NH2-TLTLVDTGIGM<Mox>TK-COOH
+	- matching: P08238(82-94)
+			(*FE*) HS9B_HUMAN Heat shock protein HSP 90-beta (HSP 84) (HSP 90).
+	- score: 53
+	- Mr(cal): 1364.722092
+	- Mr(exp): 1364.46372
+	- ID treshold: 43
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 683.2397 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.1, 1404.4, 0.0091, 923.426)
+	- this was query number 171
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: TLTIVDTGIGMTK	Modified sequence: NH2-TLTIVDTGIGM<Mox>TK-COOH
+	- matching: P07900(87-99)
+			null
+	- score: 53
+	- Mr(cal): 1364.722092
+	- Mr(exp): 1364.46372
+	- ID treshold: 43
+	- homology treshold: 28
+	- rank: 2
+	- from file: *
+	- precursor mass and charge: 683.2397 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.1, 1404.4, 0.0091, 923.426)
+	- this was query number 171
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: MAGTAFDFENMK	Modified sequence: NH2-MAGTAFDFENM<Mox>K-COOH
+	- matching: P31150(424-435)
+			(*FE*) GDIA_HUMAN Rab GDP dissociation inhibitor alpha (Rab GDI alpha) (GDI-1) (XAP-4)(Oligophrenin
+	- score: 55
+	- Mr(cal): 1376.574036
+	- Mr(exp): 1376.331518
+	- ID treshold: 39
+	- homology treshold: 28
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 689.1736 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.109, 1286.41, 0.9841, 58.3719)
+	- this was query number 178
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: MAGTAFDFENMK	Modified sequence: NH2-M<Mox>AGTAFDFENM<Mox>K-COOH
+	- matching: P31150(424-435)
+			(*FE*) GDIA_HUMAN Rab GDP dissociation inhibitor alpha (Rab GDI alpha) (GDI-1) (XAP-4)(Oligophrenin
+	- score: 69
+	- Mr(cal): 1392.568954
+	- Mr(exp): 1392.323096
+	- ID treshold: 37
+	- homology treshold: 32
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 697.1694 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (74.07, 1256.4735, 0.0091, 566.887)
+	- this was query number 183
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: MAGTAFDFENMK	Modified sequence: NH2-M<Mox>AGTAFDFENM<Mox>K-COOH
+	- matching: P31150(424-435)
+			(*FE*) GDIA_HUMAN Rab GDP dissociation inhibitor alpha (Rab GDI alpha) (GDI-1) (XAP-4)(Oligophrenin
+	- score: 84
+	- Mr(cal): 1392.568954
+	- Mr(exp): 1392.357152
+	- ID treshold: 40
+	- homology treshold: 30
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 697.1864 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (84.08, 1257.38, 0.9932, 307.4785)
+	- this was query number 184
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: TTGIVMDSGDGVTH	Modified sequence: NH2-TTGIVM<Mox>DSGDGVTH-COOH
+	- matching: P02570(148-161)
+			(*NE*) ACTB_HUMAN Actin, cytoplasmic 1 (Beta-actin).^Asw|P02571 (148-161)
+	- score: 78
+	- Mr(cal): 1404.61908
+	- Mr(exp): 1404.3457999999998
+	- ID treshold: 39
+	- homology treshold: 31
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 703.1807 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.0973, 1314.36, 0.0091, 1238.64)
+	- this was query number 191
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: PGDVEFEDFSQPM	Modified sequence: NH2-PGDVEFEDFSQPM<Mox>-COOH
+	- matching: Q15642(279-291)
+			(*EE*) CIP4_HUMAN Cdc42-interacting protein 4 (Thyroid receptor interacting protein 10)(TRIP-10).
+	- score: 86
+	- Mr(cal): 1512.607834
+	- Mr(exp): 1512.3179679999998
+	- ID treshold: 32
+	- homology treshold: 29
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 757.1668 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (86.1, 1253.39, 0.0091, 243.7804)
+	- this was query number 204
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: DNTTLLTQVQTTMR	Modified sequence: NH2-DNTTLLTQVQTTM<Mox>R-COOH
+	- matching: Q13561(366-379)
+			(*FE*) DCT2_HUMAN Dynactin complex 50 kDa subunit (50 kDa dynein-associated polypeptide)(Dynamitin)
+	- score: 82
+	- Mr(cal): 1636.809036
+	- Mr(exp): 1636.5455080000002
+	- ID treshold: 43
+	- homology treshold: 36
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 819.2806 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (74.07, 1308.59, 0.0091, 233.113)
+	- this was query number 221
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: QIGGDGMMDITDTYK	Modified sequence: NH2-Q<Pyr>IGGDGM<Mox>MDITDTYK-COOH
+	- matching: P00488(468-482)
+			(*FE*) F13A_HUMAN Coagulation factor XIII A chain precursor (EC 2.3.2.13) (Protein-glutamine gamma-
+	- score: 93
+	- Mr(cal): 1642.685471
+	- Mr(exp): 1642.396948
+	- ID treshold: 34
+	- homology treshold: 22
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 822.2063 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (52.74, 1481.04, 0.0091, 636.653)
+	- this was query number 224
+	- Search title: blok 12
+
+Spectrum with: 
+	- sequence: IFQNDMQETVAQLFK	Modified sequence: NH2-IFQNDM<Mox>QETVAQLFK-COOH
+	- matching: Q13201(397-411)
+			(*FE*) ECM_HUMAN Endothelial cell multimerin precursor.
+	- score: 76
+	- Mr(cal): 1826.887238
+	- Mr(exp): 1826.606542
+	- ID treshold: 42
+	- homology treshold: 29
+	- rank: 1
+	- from file: *
+	- precursor mass and charge: 914.3111 2
+	- identified in: SP_NoEnzyme_M.
+	- In this spectrum (lowMass, highMass, lowIntensity, highIntensity): (72.09, 1727.62, 0.7732, 1088.9)
+	- this was query number 239
+	- Search title: blok 12
