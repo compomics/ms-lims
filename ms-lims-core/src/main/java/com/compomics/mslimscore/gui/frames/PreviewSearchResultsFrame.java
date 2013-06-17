@@ -6,7 +6,6 @@
  */
 package com.compomics.mslimscore.gui.frames;
 
-import com.compomics.mslims.db.accessors.Identification;
 import org.apache.log4j.Logger;
 
 import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;

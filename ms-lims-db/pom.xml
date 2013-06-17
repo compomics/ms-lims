@@ -28,6 +28,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
@@ -74,29 +75,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
                     <outputDirectory>${project.build.directory}/ms-lims-${project.version}</outputDirectory>
                 </configuration>
             </plugin>
-                        <!-- Assembly plugin -->
-<!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2-beta-2</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/zip.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                         this is used for inheritance merges
-                        <phase>package</phase>
-                        append to the packaging phase.
-                        <goals>
-                            <goal>single</goal>
-                             goals == mojos 
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
+            <!-- Assembly plugin -->
         </plugins>
         <!-- Copy the resources required during building -->
         <resources>
@@ -157,7 +136,6 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics</groupId>
             <artifactId>utilities</artifactId>
-            <version>3.13.24</version>
             <type>jar</type>
         </dependency>
     </dependencies>
