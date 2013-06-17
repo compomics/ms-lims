@@ -9,12 +9,12 @@ package com.compomics.mslimscore.gui;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
+import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimscore.util.mascot.MascotSequenceRetriever;
 import com.compomics.mslimsdb.accessors.Id_to_phosphoTableAccessor;
 import com.compomics.mslimsdb.accessors.Identification;
 import com.compomics.mslimsdb.accessors.Phosphorylation;
 import com.compomics.mslimsdb.accessors.Project;
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslimscore.util.mascot.MascotSequenceRetriever;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Connectable;
 
