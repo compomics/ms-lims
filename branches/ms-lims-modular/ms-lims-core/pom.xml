@@ -366,8 +366,8 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <type>jar</type>
             <exclusions>
                 <exclusion>
-                    <groupId>com.compomics</groupId>
-                    <artifactId>ms-lims</artifactId>
+                    <groupId>com.compomics.ms-lims</groupId>
+                    <artifactId>ms-lims-core</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>uk.ac.ebi.pride.jaxb</groupId>
