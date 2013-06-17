@@ -4,12 +4,12 @@
  * Date: 23-mrt-2005
  * Time: 12:10:46
  */
-package com.compomics.mslims.db.utils;
+package com.compomics.mslimsdb.utils;
 
 import org.apache.log4j.Logger;
 
-import com.compomics.mslims.db.accessors.Protocol;
-import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslimsdb.accessors.Protocol;
+import com.compomics.mslimsdb.accessors.Project;
 
 import javax.swing.*;
 import java.math.BigDecimal;
@@ -310,8 +310,8 @@ public class ProjectReporter {
                     String percentAceTotal = new BigDecimal((((double) numProAce) / ((double) numIdedSpectra)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
                     String percentAcD3Total = new BigDecimal((((double) numProAcD3) / ((double) numIdedSpectra)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
                     report.append("\t\t+ " + numPro + " proline-starting peptides (" + percent + "%), containing a total (tri-deutero + normal) of " + (numProAcD3 + numProAce) + " acetylated peptides, of which:\n");
-                    report.append("\t\t\t° " + numProAce + " were acetylated (" + percentAceTotal + "% of total, " + percentAce + "% of proline-starting peptides.)\n");
-                    report.append("\t\t\t° " + numProAcD3 + " were tri-deutero acetylated (" + percentAcD3Total + "% of total, " + percentAcD3 + "% of proline-starting peptides.)\n");
+                    report.append("\t\t\t " + numProAce + " were acetylated (" + percentAceTotal + "% of total, " + percentAce + "% of proline-starting peptides.)\n");
+                    report.append("\t\t\t " + numProAcD3 + " were tri-deutero acetylated (" + percentAcD3Total + "% of total, " + percentAcD3 + "% of proline-starting peptides.)\n");
                 } else {
                     report.append("\t\t+ 0 proline-starting peptides found (0.0%)\n");
                 }
@@ -364,10 +364,10 @@ public class ProjectReporter {
                     // Bugfix 100602 (mslims-7.3.4)
                     // If no acetylated peptides where found, then skip this part of the report.
                     String detailPercent = new BigDecimal((((double) numNtermAce) / ((double) sum)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                    report.append("\t\t\t° " + numNtermAce + " were N-terminal (starting at position 1 or 2) (" + percentNtermAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
+                    report.append("\t\t\t " + numNtermAce + " were N-terminal (starting at position 1 or 2) (" + percentNtermAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
                     // Report part for internal acetylated.
                     detailPercent = new BigDecimal((((double) numInternalAce) / ((double) sum)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                    report.append("\t\t\t° " + numInternalAce + " were internal (starting at position > 2) (" + percentInternalAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
+                    report.append("\t\t\t " + numInternalAce + " were internal (starting at position > 2) (" + percentInternalAce + "% of total, " + detailPercent + "% of acetylated peptides)\n");
                     if (aProgress != null) {
                         advanceProgressBar(aProgress);
                     }
@@ -402,10 +402,10 @@ public class ProjectReporter {
                     report.append("\t\t+ " + sumD3 + " tri-deutero acetylated peptides (" + percent + "%), of which:\n");
                     // Report part for N-term D3 acetylated.
                     String detailPercentD3 = new BigDecimal((((double) numNtermAcD3) / ((double) sumD3)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                    report.append("\t\t\t° " + numNtermAcD3 + " were N-terminal (starting at position 1 or 2) (" + percentNtermAcD3 + "% of total, " + detailPercentD3 + "% of tri-deutero acetylated peptides)\n");
+                    report.append("\t\t\t " + numNtermAcD3 + " were N-terminal (starting at position 1 or 2) (" + percentNtermAcD3 + "% of total, " + detailPercentD3 + "% of tri-deutero acetylated peptides)\n");
                     // Report part for internal acetylated.
                     detailPercentD3 = new BigDecimal((((double) numInternalAcD3) / ((double) sumD3)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                    report.append("\t\t\t° " + numInternalAcD3 + " were internal (starting at position > 2) (" + percentInternalAcD3 + "% of total, " + detailPercentD3 + "% of tri-deutero acetylated peptides)\n");
+                    report.append("\t\t\t " + numInternalAcD3 + " were internal (starting at position > 2) (" + percentInternalAcD3 + "% of total, " + detailPercentD3 + "% of tri-deutero acetylated peptides)\n");
                 } else {
                     report.append("\t\t+ 0 tri-deutero acetylated peptides (0%)\n");
                 }
@@ -433,7 +433,7 @@ public class ProjectReporter {
                     String key = (String) iter.next();
                     int value = ((Integer) ntermModsTable.get(key)).intValue();
                     percent = new BigDecimal((((double) value) / ((double) numIdedSpectra)) * 100).setScale(1, BigDecimal.ROUND_HALF_UP).toString();
-                    report.append("\t\t\t° " + key + "\t" + value + "\t" + percent + "%\n");
+                    report.append("\t\t\t " + key + "\t" + value + "\t" + percent + "%\n");
                 }
                 if (aProgress != null) {
                     advanceProgressBar(aProgress);

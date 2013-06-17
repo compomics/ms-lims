@@ -1,4 +1,4 @@
-package com.compomics.mslims.db.utils;
+package com.compomics.mslimsdb.utils;
 
 import java.sql.*;
 
