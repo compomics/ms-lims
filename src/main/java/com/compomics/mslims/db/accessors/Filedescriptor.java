@@ -4,7 +4,7 @@
  * Date: 04-mar-2005
  * Time: 18:48:10
  */
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -41,7 +41,7 @@ public class Filedescriptor extends FiledescriptorTableAccessor {
      * This constructor maps directly to the equivalent parent precursor.
      *
      * @param aHm HashMap with the parameters.
-     * @see com.compomics.mslims.db.accessors.FiledescriptorTableAccessor
+     * @see com.compomics.mslimsdb.accessors.FiledescriptorTableAccessor
      */
     public Filedescriptor(HashMap aHm) {
         super(aHm);

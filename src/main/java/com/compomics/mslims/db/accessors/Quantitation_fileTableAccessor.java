@@ -4,7 +4,7 @@
  * Date: 20/01/2009
  * Time: 15:15:30
  */
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
 

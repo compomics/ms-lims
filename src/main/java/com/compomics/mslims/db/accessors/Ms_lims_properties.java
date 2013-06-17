@@ -1,4 +1,4 @@
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -75,7 +75,6 @@ public class Ms_lims_properties extends Ms_lims_propertiesTableAccessor {
     /**
      * This method will set the new modification conversion version number.
      * @param iConn
-     * @return Double with the version
      * @throws SQLException
      */
     public static void setModificationConversionVersion(Connection iConn, int aNewVersion) throws SQLException {

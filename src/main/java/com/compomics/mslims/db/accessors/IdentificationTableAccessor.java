@@ -4,7 +4,7 @@
  * Date: 16/10/2008
  * Time: 16:01:33
  */
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -15,6 +15,7 @@ import com.compomics.util.db.interfaces.Updateable;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /*
  * CVS information:
@@ -397,7 +398,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
      * @param aParams HashMap with the parameters to initialize this object with. <i>Please use only constants defined
      *                on this class as keys in the HashMap!</i>
      */
-    public IdentificationTableAccessor(HashMap aParams) {
+    public IdentificationTableAccessor(Map aParams) {
         if (aParams.containsKey(IDENTIFICATIONID)) {
             this.iIdentificationid = ((Long) aParams.get(IDENTIFICATIONID)).longValue();
         }
