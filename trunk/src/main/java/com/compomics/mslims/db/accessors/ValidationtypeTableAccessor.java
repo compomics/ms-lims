@@ -1,4 +1,4 @@
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import com.compomics.util.db.interfaces.Deleteable;
 import com.compomics.util.db.interfaces.Persistable;

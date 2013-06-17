@@ -1,4 +1,4 @@
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 /*
  * Created by the DBAccessor generator.
  * Programmer: Lennart Martens

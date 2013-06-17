@@ -4,7 +4,7 @@
  * Date: 18-jun-2003
  * Time: 16:15:36
  */
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -12,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 /*
@@ -141,8 +143,8 @@ public class Quantitation extends QuantitationTableAccessor {
      * @return Vector with the matches (can be empty when no matches were found).
      * @throws SQLException when the retrieve failed.
      */
-    public static Vector getQuantitationForProject(long aProjectid, Connection aConn) throws SQLException {
-        Vector temp = new Vector();
+    public static List<Quantitation> getQuantitationForProject(long aProjectid, Connection aConn) throws SQLException {
+        List<Quantitation> temp = new ArrayList<Quantitation>();
 
         PreparedStatement ps = aConn.prepareStatement("select q.*, e.filename from identification as i, spectrum as f , identification_to_quantitation as t, quantitation_group as q, quantitation_file as e, quantitation as u where e.quantitation_fileid = q.l_quantitation_fileid and i.l_spectrumid = f.spectrumid and f.l_projectid=? and i.identificationid = t.l_identificationid and t.l_quantitation_groupid = q.quantitation_groupid and u.l_quantitation_groupid = q.quantitation_groupid group by u.quantitationid");
         ps.setLong(1, aProjectid);
@@ -165,8 +167,8 @@ public class Quantitation extends QuantitationTableAccessor {
      * @return Vector with the matches (can be empty when no matches were found).
      * @throws SQLException when the retrieve failed.
      */
-    public static Vector getQuantitationForIdentifications(String aIds, Connection aConn) throws SQLException {
-        Vector temp = new Vector();
+    public static List<Quantitation> getQuantitationForIdentifications(String aIds, Connection aConn) throws SQLException {
+        List<Quantitation> temp = new ArrayList<Quantitation>();
         String query = "select q.*, e.filename from identification_to_quantitation as t, quantitation as q, quantitation_file as e, quantitation_group as g where t.l_identificationid in (" + aIds + ") and t.l_quantitation_groupid = q.l_quantitation_groupid and g.quantitation_groupid = q.l_quantitation_groupid and e.quantitation_fileid = g.l_quantitation_fileid group by q.quantitationid";
 
         PreparedStatement ps = aConn.prepareStatement(query);
@@ -185,6 +187,7 @@ public class Quantitation extends QuantitationTableAccessor {
      *
      * @return String  with the String representation for this Project.
      */
+    @Override
     public String toString() {
         return "Quantitation: id-ratio{ " + iQuantitationid + "-" + iRatio + "}";
     }
@@ -205,7 +208,23 @@ public class Quantitation extends QuantitationTableAccessor {
      *
      * @return int with the hashcode
      */
+    @Override
     public int hashCode() {
         return (int) this.iQuantitationid;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Quantitation other = (Quantitation) obj;
+        if ((this.iQuantitatioFileName == null) ? (other.iQuantitatioFileName != null) : !this.iQuantitatioFileName.equals(other.iQuantitatioFileName)) {
+            return false;
+        }
+        return true;
     }
 }

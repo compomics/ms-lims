@@ -4,12 +4,11 @@
  * Date: 15/01/2010
  * Time: 13:39:05
  */
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
 
 import java.sql.*;
-import java.io.*;
 import java.util.*;
 
 import com.compomics.util.db.interfaces.*;

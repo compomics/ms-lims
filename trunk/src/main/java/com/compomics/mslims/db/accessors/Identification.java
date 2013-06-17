@@ -4,10 +4,9 @@
  * Date: 31-jul-03
  * Time: 14:01
  */
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.kraken.interfaces.uniprot.dbx.hamap.HamapHitNumber;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +15,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 /*
@@ -53,6 +53,8 @@ public class Identification extends IdentificationTableAccessor {
      * Temporary storage of the fragment mass tolerance for this ID.
      */
     private double iFragmentMassTolerance = -1.0;
+    
+    private boolean hasAlternative = false;
 
     /**
      * Default constructor.
@@ -61,7 +63,7 @@ public class Identification extends IdentificationTableAccessor {
         super();
     }
 
-    public Identification(HashMap aHM) {
+    public Identification(Map aHM) {
         super(aHM);
 
     }
@@ -353,6 +355,14 @@ public class Identification extends IdentificationTableAccessor {
 
         return lIDs;
     }
+    
+        public void setAlternative(boolean hasAnAlternative){
+        hasAlternative = hasAnAlternative;
+    }
+
+    public boolean getAlternative () {
+        return hasAlternative;
+    }
 
 
     /**
@@ -363,16 +373,12 @@ public class Identification extends IdentificationTableAccessor {
     public String toString() {
         return "" + iIdentificationid;
     }
-
-    /**
-     * Returns an array of all the objects contained in the Identification
-     *
-     * @return Array containing all variables
-     */
-
-    public HashMap identificationToHashMap() {
+    
+    public HashMap getHashMap() {
         HashMap tempMap = new HashMap();
         tempMap.put("IDENTIFICATIONID",this.iIdentificationid);
+        tempMap.put("SPECTRUMFILENAME",this.iSpectrumfilename);
+        tempMap.put("DATFILENAME",iDatfilename);
         tempMap.put("L_SPECTRUMFILEID",this.iL_spectrumid);
         tempMap.put("L_DATFILEID",this.iL_datfileid);
         tempMap.put("DATFILE_QUERY",(int)this.iDatfile_query);
@@ -386,12 +392,12 @@ public class Identification extends IdentificationTableAccessor {
         tempMap.put("SCORE",this.iScore);
         tempMap.put("HOMOLOGY",this.iHomology);
         tempMap.put("EXP_MASS",this.iExp_mass);
-        tempMap.put("CALL_MASS",this.iCal_mass);
+        tempMap.put("CAL_MASS",this.iCal_mass);
         tempMap.put("LIGHT_ISOTOPE",this.iLight_isotope);
         tempMap.put("HEAVY_ISOTOPE",this.iHeavy_isotope);
         tempMap.put("VALID",this.iValid);
         tempMap.put("DESCRIPTION",this.iDescription);
-        tempMap.put("IDENTITYTRESHOLD",this.iIdentitythreshold);
+        tempMap.put("IDENTITYTHRESHOLD",this.iIdentitythreshold);
         tempMap.put("CONFIDENCE",this.iConfidence);
         tempMap.put("DB",this.iDb);
         tempMap.put("TITLE",this.iTitle);

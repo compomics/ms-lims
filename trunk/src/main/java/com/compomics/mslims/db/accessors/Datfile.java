@@ -4,12 +4,9 @@
  * Date: 31-mrt-03
  * Time: 17:09:23
  */
-package com.compomics.mslims.db.accessors;
+package com.compomics.mslimsdb.accessors;
 
 import org.apache.log4j.Logger;
-
-
-import com.compomics.rover.general.db.accessors.IdentificationExtension;
 
 import java.io.*;
 import java.sql.Connection;
@@ -271,8 +268,7 @@ public class Datfile extends DatfileTableAccessor {
      * @throws SQLException when the retrieve failed.
      */
 
-    public static IdentificationExtension[] getIdentificationExtensionsForDatfile(String aFilename, String aServer, String aFolder, Connection aConn) throws SQLException {
-        Vector temp = new Vector();
+    public static ResultSet getIdentificationExtensionsForDatfile(String aFilename, String aServer, String aFolder, Connection aConn) throws SQLException {
 
         PreparedStatement ps =
                 aConn.prepareStatement("select i.*, s.filename from identification as i, datfile as d, spectrum as s where d.filename = ? and d.server = ? and d.folder = ? and i.l_datfileid = d.datfileid and i.l_spectrumid = s.spectrumid");
@@ -280,15 +276,7 @@ public class Datfile extends DatfileTableAccessor {
         ps.setString(2, aServer);
         ps.setString(3, aFolder);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            temp.add(new IdentificationExtension(rs));
-        }
-
-        rs.close();
-        ps.close();
-        IdentificationExtension[] lIdentifications = new IdentificationExtension[temp.size()];
-        temp.toArray(lIdentifications);
-        return lIdentifications;
+        return rs;
 
     }
 
