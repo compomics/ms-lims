@@ -57,9 +57,9 @@ public class DiffCouple {
     private double iHeavyIntensity = 0.0;
 
     /**
-     * After statistical analysis, this field will hold the result of '(µ-mean)/stdev'. It can therefore be readily
-     * compared to a normal significance interval, since the statistical analysis should yield a µ and stdev such that
-     * N~(µ, stdev).
+     * After statistical analysis, this field will hold the result of '(Mu-mean)/stdev'. It can therefore be readily
+     * compared to a normal significance interval, since the statistical analysis should yield a Mu and stdev such that
+     * N~(Mu, stdev).
      */
     private double iSignificance = 0.0;
 
