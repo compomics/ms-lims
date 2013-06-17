@@ -90,17 +90,17 @@ public class PeptideSequenceRegionRetriever {
                         int count = ((Integer) check).intValue();
                         // Add it to the end.
                         count++;
-                        all.put(s.getAccession() + "§" + count, s);
+                        all.put(s.getAccession() + "\u00A7" + count, s);
                         // Update the counter.
                         all.put(s.getAccession(), new Integer(count));
                     } else {
                         // First one, split it out.
                         int count = 1;
                         // Original one gets index '1'.
-                        all.put(s.getAccession() + "§" + count, check);
+                        all.put(s.getAccession() + "\u00A7" + count, check);
                         // Current one gets one more.
                         count++;
-                        all.put(s.getAccession() + "§" + count, s);
+                        all.put(s.getAccession() + "\u00A7" + count, s);
                         // Store a counter as a flag.
                         all.put(s.getAccession(), new Integer(count));
                     }
@@ -115,7 +115,7 @@ public class PeptideSequenceRegionRetriever {
         Iterator iter = all.keySet().iterator();
         while (iter.hasNext()) {
             String accession = (String) iter.next();
-            int start = accession.indexOf("§");
+            int start = accession.indexOf("\u00A7");
             if (start >= 0) {
                 continue;
             }
@@ -153,7 +153,7 @@ public class PeptideSequenceRegionRetriever {
                 int count = ((Integer) stored).intValue();
                 // Simply cycle them all.
                 for (int i = 1; i <= count; i++) {
-                    this.processRegionInProtein((SequenceRegion) all.get(accession + "§" + i), sequence);
+                    this.processRegionInProtein((SequenceRegion) all.get(accession + "\u00A7" + i), sequence);
                 }
             }
         }

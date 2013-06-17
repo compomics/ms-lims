@@ -92,7 +92,7 @@ public class DiffAnalysisCore {
     public static final String COUNT = "COUNT";
 
     /**
-     * The key in the results HashMap for the number of iterations used to achhieve convergence.
+     * The key in the results HashMap for the number of iterations used to achieve convergence.
      */
     public static final String ITERATIONS = "ITERATIONS";
 
@@ -276,7 +276,7 @@ public class DiffAnalysisCore {
         double stdev = 0.0;
         int iterations = 0;
         if (iStatType == ROBUST_STATISTICS) {
-            // Calculate µ[hat] and sigma[hat].
+            // Calculate delta[hat] and sigma[hat].
             double[] estimators = BasicStats.hubers(log2Ratios, 1e-06, false);
             mean = estimators[0];
             stdev = estimators[1];

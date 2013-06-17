@@ -345,10 +345,10 @@ public class MascotIdentifiedSpectrum {
 
     /**
      * This method returns the sequence, 'tagged' with all variable modifications. <br /> The formatting of this String
-     * is the brainchild of Dr. Grégoire Thomas.
+     * is the brainchild of Dr. Gregoire Thomas.
      *
      * @return String  with the sequence for this identification, annotated with modification tags, as concocted by Dr.
-     *         Grégoire Thomas.
+     *         Gregoire Thomas.
      */
     public String getModifiedSequence() {
         return modified_sequence;
