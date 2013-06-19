@@ -231,7 +231,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <dependency>
                 <groupId>com.compomics</groupId>
                 <artifactId>mascotdatfile</artifactId>
-                <version>3.4.8</version>
+                <version>3.4.11</version>
                 <type>jar</type>
                 <exclusions>
                     <exclusion>
