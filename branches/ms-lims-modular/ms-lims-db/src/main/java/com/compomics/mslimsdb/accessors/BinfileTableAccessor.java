@@ -564,7 +564,7 @@ public class BinfileTableAccessor implements Deleteable, Retrievable, Updateable
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO binfile (binfileid, l_projectid, l_filedescriptionid, file, filename, comments, originalpath, originalhost, originaluser, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO binfile (binfileid, l_projectid, l_filedescriptionid, file, filename, comments, originalpath, originalhost, originaluser, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iBinfileid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

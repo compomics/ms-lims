@@ -527,7 +527,7 @@ public class QuantitationTableAccessor implements Deleteable, Retrievable, Updat
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO quantitation (quantitationid, l_quantitation_groupid, ratio, standard_error, type, valid, comment, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO quantitation (quantitationid, l_quantitation_groupid, ratio, standard_error, type, valid, comment, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iQuantitationid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

@@ -583,7 +583,7 @@ public class FragmentionTableAccessor implements Deleteable, Retrievable, Update
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO fragmention (fragmentionid, l_identificationid, iontype, ionname, l_ionscoringid, mz, intensity, fragmentionnumber, massdelta, masserrormargin, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO fragmention (fragmentionid, l_identificationid, iontype, ionname, l_ionscoringid, mz, intensity, fragmentionnumber, massdelta, masserrormargin, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iFragmentionid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

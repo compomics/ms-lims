@@ -201,7 +201,7 @@ public class StatusTableAccessor implements Deleteable, Retrievable, Updateable,
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO status (statusid, name) values(?, ?)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO status (statusid, name) values(?, ?)",Statement.RETURN_GENERATED_KEYS);
         if (iStatusid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

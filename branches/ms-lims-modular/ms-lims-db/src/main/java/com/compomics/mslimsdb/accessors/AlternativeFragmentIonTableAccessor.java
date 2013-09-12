@@ -589,7 +589,7 @@ public class AlternativeFragmentIonTableAccessor  implements Deleteable, Retriev
     public int persist(Connection aConn) throws SQLException {
         int result = 0;
         try {
-            PreparedStatement lStat = aConn.prepareStatement("INSERT INTO alternativefragmention (alternativefragmentionid, l_alternativeidentificationid, iontype, ionname, l_ionscoringid, mz, intensity, fragmentionnumber, massdelta, masserrormargin, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+            PreparedStatement lStat = aConn.prepareStatement("INSERT INTO alternativefragmention (alternativefragmentionid, l_alternativeidentificationid, iontype, ionname, l_ionscoringid, mz, intensity, fragmentionnumber, massdelta, masserrormargin, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
             if (iAlternativeFragmentionid == Long.MIN_VALUE) {
                 lStat.setNull(1, 4);
             } else {

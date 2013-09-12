@@ -384,7 +384,7 @@ public class Modification_conversionTableAccessor implements Deleteable, Retriev
 	 * @param   aConn Connection to the persitent store.
 	 */
 	public int persist(Connection aConn) throws SQLException {
-		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO modification_conversion (modification_conversionid, modification, conversion, username, creationdate, modificationdate) values(?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO modification_conversion (modification_conversionid, modification, conversion, username, creationdate, modificationdate) values(?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
 		if(iModification_conversionid == Long.MIN_VALUE) {
 			lStat.setNull(1, 4);
 		} else {

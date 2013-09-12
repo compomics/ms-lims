@@ -408,7 +408,7 @@ public class ProjectTableAccessor implements Deleteable, Retrievable, Updateable
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO project (projectid, l_userid, l_protocolid, title, description, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO project (projectid, l_userid, l_protocolid, title, description, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iProjectid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

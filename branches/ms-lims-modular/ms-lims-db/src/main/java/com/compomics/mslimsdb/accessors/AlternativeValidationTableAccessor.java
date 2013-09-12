@@ -470,7 +470,7 @@ public class AlternativeValidationTableAccessor implements Deleteable, Retrievab
     public int persist(Connection aConn) throws SQLException {
         int result = 0;
         try {
-            PreparedStatement lStat = aConn.prepareStatement("INSERT INTO alternativevalidation (alternativevalidationid, l_alternativeidentificationid, l_validationtypeid, auto_comment, manual_comment, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+            PreparedStatement lStat = aConn.prepareStatement("INSERT INTO alternativevalidation (alternativevalidationid, l_alternativeidentificationid, l_validationtypeid, auto_comment, manual_comment, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
             if (iAlternativeValidationid == Long.MIN_VALUE) {
                 lStat.setNull(1, 4);
             } else {

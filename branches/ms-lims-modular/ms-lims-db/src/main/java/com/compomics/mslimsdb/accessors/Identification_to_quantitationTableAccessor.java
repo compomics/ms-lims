@@ -418,7 +418,7 @@ public class Identification_to_quantitationTableAccessor implements Deleteable, 
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO identification_to_quantitation (itqid, l_identificationid, l_quantitation_groupid, type, username, creationdate, modificationdate) values(?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO identification_to_quantitation (itqid, l_identificationid, l_quantitation_groupid, type, username, creationdate, modificationdate) values(?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iItqid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

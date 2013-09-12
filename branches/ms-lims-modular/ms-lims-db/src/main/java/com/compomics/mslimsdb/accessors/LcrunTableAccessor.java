@@ -512,7 +512,7 @@ public class LcrunTableAccessor implements Deleteable, Retrievable, Updateable, 
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO lcrun (lcrunid, l_projectid, description, filecount, name, dvd_master_number, dvd_secondary_number, primary_fraction, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO lcrun (lcrunid, l_projectid, description, filecount, name, dvd_master_number, dvd_secondary_number, primary_fraction, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iLcrunid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

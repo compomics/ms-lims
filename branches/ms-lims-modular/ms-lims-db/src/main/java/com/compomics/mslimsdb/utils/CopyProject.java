@@ -301,7 +301,7 @@ public class CopyProject extends JFrame {
 
             txtAreaCopyOutput.append("coyping scans and spectrum files \n");
             //after inserting the spectra we insert the files and scans associated with it
-            spectrumInsertedKeysResultSet = stmtout.executeQuery("select spectrumid from spectrum where l_projectid = " + newProjectNumber + " and l_projectid = " + lcrunGeneratedKey + " order by spectrumid");
+            spectrumInsertedKeysResultSet = stmtout.executeQuery("select spectrumid from spectrum where l_projectid = " + newProjectNumber + " and l_lcrunid = " + lcrunGeneratedKey + " order by spectrumid");
             batchCounter = 0;
 
             //get everything from scan

@@ -290,7 +290,7 @@ public class PklfilesTableAccessor implements Deleteable, Retrievable, Updateabl
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO pklfiles (filename, file, identified, creationdate) values(?, ?, ?, ?)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO pklfiles (filename, file, identified, creationdate) values(?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
         if (iFilename == null) {
             lStat.setNull(1, 12);
         } else {

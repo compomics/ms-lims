@@ -709,7 +709,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 	 * @param   aConn Connection to the persitent store.
 	 */
 	public int persist(Connection aConn) throws SQLException {
-		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO spectrum (spectrumid, l_lcrunid, l_projectid, l_fragmentationid, l_instrumentid, searched, identified, filename, charge, mass_to_charge, total_spectrum_intensity, highest_peak_in_spectrum, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO spectrum (spectrumid, l_lcrunid, l_projectid, l_fragmentationid, l_instrumentid, searched, identified, filename, charge, mass_to_charge, total_spectrum_intensity, highest_peak_in_spectrum, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
 		if(iSpectrumid == Long.MIN_VALUE) {
 			lStat.setNull(1, 4);
 		} else {

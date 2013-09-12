@@ -481,7 +481,7 @@ public class PhosphorylationTableAccessor implements Deleteable, Retrievable, Up
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO phosphorylation (phosphorylationid, l_status, residue, location, accession, context, score, threshold, creationdate, description) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO phosphorylation (phosphorylationid, l_status, residue, location, accession, context, score, threshold, creationdate, description) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
         if (iPhosphorylationid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

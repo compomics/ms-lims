@@ -303,7 +303,7 @@ public class IonscoringTableAccessor implements Deleteable, Retrievable, Updatea
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO ionscoring (ionscoringid, description, username, creationdate, modificationdate) values(?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO ionscoring (ionscoringid, description, username, creationdate, modificationdate) values(?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iIonscoringid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {
