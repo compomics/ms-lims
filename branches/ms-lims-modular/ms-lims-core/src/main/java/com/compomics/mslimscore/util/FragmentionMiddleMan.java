@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.compomics.mslimscore.util;
 
 import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
@@ -20,10 +16,10 @@ import java.util.Vector;
 public class FragmentionMiddleMan {
     
         public static Vector getAllMascotDatfileFragmentIonImpl(Connection aConn, long aIdentificationID, long aIonType) throws SQLException {
-        Collection temp = Fragmention.getAllFragmentions(aConn, aIdentificationID);
+        Collection<Fragmention> temp = Fragmention.getAllFragmentions(aConn, aIdentificationID);
         Vector<FragmentIon> result = new Vector(temp.size());
-        for (Iterator lIterator = temp.iterator(); lIterator.hasNext();) {
-            Fragmention fi = (Fragmention) lIterator.next();
+        for (Iterator<Fragmention> lIterator = temp.iterator(); lIterator.hasNext();) {
+            Fragmention fi = lIterator.next();
              result.add(asFragmentIonImpl(fi));
         }
 

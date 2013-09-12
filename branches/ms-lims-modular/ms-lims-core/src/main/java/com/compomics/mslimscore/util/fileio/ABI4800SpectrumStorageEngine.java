@@ -19,6 +19,7 @@ import java.util.Vector;
 import java.util.HashMap;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 /**
  * Created by IntelliJ IDEA.
  * User: kenny
@@ -85,11 +86,11 @@ public class ABI4800SpectrumStorageEngine implements SpectrumStorageEngine {
         // links (L_LCRUNID and L_PROJECTID). The SEARCHED and IDENTIFIED flags default to '0'.
         // Filename and data are provided through the MascotGenericFile class, but note that we
         // convert the file contents from a String into a byte[] using the platforms default encoding.
-        Vector spectra = mfr.getSpectrumFiles();
+        List spectra = mfr.getSpectrumFiles();
         int liSize = spectra.size();
         int counter = 0;
         for (int i = 0; i < liSize; i++) {
-            MascotGenericFile lMascotGenericFile = (MascotGenericFile) spectra.elementAt(i);
+            MascotGenericFile lMascotGenericFile = (MascotGenericFile) spectra.get(i);
             HashMap data = new HashMap(9);
             data.put(Spectrum.L_INSTRUMENTID, new Long(aInstrumentid));
             // The links.
