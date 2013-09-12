@@ -13,7 +13,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
 
     <!-- Set the version number for the whole project -->
     <properties>
-        <version.number>7.7.5</version.number>
+        <version.number>7.7.8</version.number>
     </properties>
 
     <!-- Licence -->
@@ -145,7 +145,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <dependency>
                 <groupId>com.compomics</groupId>
                 <artifactId>utilities</artifactId>
-                <version>3.13.35</version>
+                <version>3.14.41</version>
                 <type>jar</type>
                 <exclusions>
                     <exclusion>
