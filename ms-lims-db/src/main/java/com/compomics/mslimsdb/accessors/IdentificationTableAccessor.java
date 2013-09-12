@@ -1218,7 +1218,7 @@ public class IdentificationTableAccessor implements Deleteable, Retrievable, Upd
      */
     public int persist(Connection aConn) throws SQLException {
         PreparedStatement lStat =
-                aConn.prepareStatement("INSERT INTO identification (identificationid, l_spectrumid, l_datfileid, datfile_query, accession, start, end, enzymatic, sequence, modified_sequence, ion_coverage, score, homology, exp_mass, cal_mass, light_isotope, heavy_isotope, valid, Description, identitythreshold, confidence, DB, title, precursor, charge, isoforms, db_filename, mascot_version, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+                aConn.prepareStatement("INSERT INTO identification (identificationid, l_spectrumid, l_datfileid, datfile_query, accession, start, end, enzymatic, sequence, modified_sequence, ion_coverage, score, homology, exp_mass, cal_mass, light_isotope, heavy_isotope, valid, Description, identitythreshold, confidence, DB, title, precursor, charge, isoforms, db_filename, mascot_version, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iIdentificationid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

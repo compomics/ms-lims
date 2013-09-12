@@ -971,7 +971,7 @@ public class MetoxidTableAccessor implements Deleteable, Retrievable, Updateable
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO metoxid (ID, filename, accession, start, end, enzymatic, sequence, modified_sequence, score, exp_mass, cal_mass, valid, Description, creationdate, datfile, server, identitythreshold, DB, title, precursor, charge, isoforms, db_filename, mascot_version) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO metoxid (ID, filename, accession, start, end, enzymatic, sequence, modified_sequence, score, exp_mass, cal_mass, valid, Description, creationdate, datfile, server, identitythreshold, DB, title, precursor, charge, isoforms, db_filename, mascot_version) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
         if (iId == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

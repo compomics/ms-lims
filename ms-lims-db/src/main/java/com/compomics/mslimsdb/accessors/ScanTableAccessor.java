@@ -385,7 +385,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 	 * @param   aConn Connection to the persitent store.
 	 */
 	public int persist(Connection aConn) throws SQLException {
-		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO scan (scanid, l_spectrumid, number, rtsec, creationdate, modificationdate) values(?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO scan (scanid, l_spectrumid, number, rtsec, creationdate, modificationdate) values(?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
 		if(iScanid == Long.MIN_VALUE) {
 			lStat.setNull(1, 4);
 		} else {

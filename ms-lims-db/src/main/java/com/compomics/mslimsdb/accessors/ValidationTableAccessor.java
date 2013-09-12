@@ -456,7 +456,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 	 * @param   aConn Connection to the persitent store.
 	 */
 	public int persist(Connection aConn) throws SQLException {
-		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO validation (validationid, l_identificationid, l_validationtypeid, auto_comment, manual_comment, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+		PreparedStatement lStat = aConn.prepareStatement("INSERT INTO validation (validationid, l_identificationid, l_validationtypeid, auto_comment, manual_comment, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
 		if(iValidationid == Long.MIN_VALUE) {
 			lStat.setNull(1, 4);
 		} else {

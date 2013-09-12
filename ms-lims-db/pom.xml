@@ -10,7 +10,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
     </parent>
     <artifactId>ms-lims-db</artifactId>
     <packaging>jar</packaging>
-    <version>7.7.8</version>
+    <version>7.7.9</version>
     <name>ms-lims-db</name>
     <url>http://ms-lims.googlecode.com</url>
     

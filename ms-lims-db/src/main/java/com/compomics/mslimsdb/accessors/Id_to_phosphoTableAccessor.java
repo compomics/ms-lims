@@ -236,7 +236,7 @@ public class Id_to_phosphoTableAccessor implements Deleteable, Retrievable, Upda
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO id_to_phospho (l_id, l_phosphorylationid, conversionid) values(?, ?, ?)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO id_to_phospho (l_id, l_phosphorylationid, conversionid) values(?, ?, ?)",Statement.RETURN_GENERATED_KEYS);
         if (iL_id == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

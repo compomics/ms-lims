@@ -424,7 +424,7 @@ public class DatfileTableAccessor implements Deleteable, Retrievable, Updateable
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO datfile (datfileid, filename, file, server, folder, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO datfile (datfileid, filename, file, server, folder, username, creationdate, modificationdate) values(?, ?, ?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iDatfileid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

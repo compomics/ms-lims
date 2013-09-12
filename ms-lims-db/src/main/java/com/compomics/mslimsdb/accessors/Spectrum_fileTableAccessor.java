@@ -267,7 +267,7 @@ public class Spectrum_fileTableAccessor implements Deleteable, Retrievable, Upda
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO spectrum_file (l_spectrumid, file) values(?, ?)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO spectrum_file (l_spectrumid, file) values(?, ?)",Statement.RETURN_GENERATED_KEYS);
         if (iL_spectrumid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {

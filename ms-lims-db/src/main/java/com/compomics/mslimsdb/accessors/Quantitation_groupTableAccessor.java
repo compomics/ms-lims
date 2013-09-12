@@ -383,7 +383,7 @@ public class Quantitation_groupTableAccessor implements Deleteable, Retrievable,
      * @param aConn Connection to the persitent store.
      */
     public int persist(Connection aConn) throws SQLException {
-        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO quantitation_group (quantitation_groupid, l_quantitation_fileid, file_ref, username, creationdate, modificationdate) values(?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+        PreparedStatement lStat = aConn.prepareStatement("INSERT INTO quantitation_group (quantitation_groupid, l_quantitation_fileid, file_ref, username, creationdate, modificationdate) values(?, ?, ?, CURRENT_USER, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",Statement.RETURN_GENERATED_KEYS);
         if (iQuantitation_groupid == Long.MIN_VALUE) {
             lStat.setNull(1, 4);
         } else {
