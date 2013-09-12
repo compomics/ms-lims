@@ -93,7 +93,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
     /**
      * This Vector holds all the MascotTasks.
      */
-    private Vector iTasks = null;
+    private Vector iTasks = new Vector();
 
     /**
      * This Vector holds all the alternative MascotTasks with the same score
@@ -474,7 +474,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
      */
     private void readTaskDB() {
         Properties props = PropertiesManager.getInstance().getProperties(CompomicsTools.MSLIMS, "IdentificationGUI.properties");
-        Boolean useAccess = new Boolean(props.getProperty("USE_ACCESS"));
+        Boolean useAccess = Boolean.valueOf(props.getProperty("USE_ACCESS"));
         if (!useAccess) {
             try {
                 // Retrieve from DB.
@@ -565,7 +565,7 @@ public class IdentificationGUI extends JFrame implements Connectable, Flamable {
 
 
                 // Should have a file now!
-                Database taskDB = taskDB = Database.open(taskDBFile, true);
+                Database taskDB = Database.open(taskDBFile, true);
                 int rowCount = taskDB.getTable("Mascot_Daemon_Results").getRowCount();
                 rowCount += taskDB.getTable("Mascot_Daemon_Tasks").getRowCount();
 

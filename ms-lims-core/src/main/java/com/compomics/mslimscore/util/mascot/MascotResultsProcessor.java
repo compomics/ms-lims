@@ -1,8 +1,5 @@
 /**
- * Created by IntelliJ IDEA.
- * User: Lennart
- * Date: 22-jun-2004
- * Time: 15:36:56
+ * Created by IntelliJ IDEA. User: Lennart Date: 22-jun-2004 Time: 15:36:56
  */
 package com.compomics.mslimscore.util.mascot;
 
@@ -23,7 +20,6 @@ import com.compomics.mascotdatfile.util.mascot.ProteinHit;
 import com.compomics.mascotdatfile.util.mascot.ProteinMap;
 import com.compomics.mascotdatfile.util.mascot.Query;
 import com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl;
-import com.compomics.mslimscore.util.FragmentionMiddleMan;
 import com.compomics.util.db.interfaces.Persistable;
 import com.compomics.util.interfaces.Flamable;
 
@@ -36,51 +32,47 @@ import java.sql.SQLException;
 import java.util.*;
 
 /*
-* CVS information:
-*
-* $Revision: 1.33 $
-* $Date: 2009/12/17 14:08:39 $
-*/
-
+ * CVS information:
+ *
+ * $Revision: 1.33 $
+ * $Date: 2009/12/17 14:08:39 $
+ */
 /**
  * This class will process Mascot results.
  *
  * @author Lennart Martens
- * @version $Id: MascotResultsProcessor.java,v 1.33 2009/12/17 14:08:39 kenny Exp $
+ * @version $Id: MascotResultsProcessor.java,v 1.33 2009/12/17 14:08:39 kenny
+ * Exp $
  */
 public class MascotResultsProcessor {
     // Class specific log4j logger for MascotResultsProcessor instances.
-    private static Logger logger = Logger.getLogger(MascotResultsProcessor.class);
 
+    private static Logger logger = Logger.getLogger(MascotResultsProcessor.class);
     /**
      * The database connection from which to retrieve the accessions.
      */
     private Connection iConn = null;
-
     /**
      * The confidence interval.
      */
     private double iThreshold = 0.0;
-
     /**
-     * This HashMap will cache the datfilenames to datfileids for this MascotResultsProcessor.
+     * This HashMap will cache the datfilenames to datfileids for this
+     * MascotResultsProcessor.
      */
     private HashMap iDatfilenameToDatfileid = new HashMap();
-
     /**
-     * HashMap that will hold a datfile as key, and the collection of searched spectra found in that datfile, as
-     * values.
+     * HashMap that will hold a datfile as key, and the collection of searched
+     * spectra found in that datfile, as values.
      */
     private HashMap iAllSpectraInDatfiles = new HashMap();
-    
-        private HashMap<String, Object> iMasterIdentificationToIdentificationid;
-
 
     /**
      * This constructor takes the DB connection to operate on as its argument.
      *
-     * @param aConn      Connection with the database connection.
-     * @param aThreshold double with the confidence interval for the parsing (eg. 0.05 for 95%)
+     * @param aConn Connection with the database connection.
+     * @param aThreshold double with the confidence interval for the parsing
+     * (eg. 0.05 for 95%)
      */
     public MascotResultsProcessor(Connection aConn, double aThreshold) {
         this(aConn, aThreshold, false);
@@ -89,10 +81,11 @@ public class MascotResultsProcessor {
     /**
      * This constructor takes the DB connection to operate on as its argument.
      *
-     * @param aConn                      Connection with the database connection.
-     * @param aThreshold                 double with the confidence interval for the parsing (eg. 0.05 for 95%)
-     * @param aMascotDistillerProcessing This boolean indicates whether Mascot Distiller was used for generating the
-     *                                   spectrum files.
+     * @param aConn Connection with the database connection.
+     * @param aThreshold double with the confidence interval for the parsing
+     * (eg. 0.05 for 95%)
+     * @param aMascotDistillerProcessing This boolean indicates whether Mascot
+     * Distiller was used for generating the spectrum files.
      */
     public MascotResultsProcessor(Connection aConn, double aThreshold, final boolean aMascotDistillerProcessing) {
         this.iConn = aConn;
@@ -100,25 +93,25 @@ public class MascotResultsProcessor {
         Query.setDistillerFilenameProcessing(aMascotDistillerProcessing);
     }
 
-
     /**
-     * This method processes all the ID's and returns a Vector filled with instances of the Persistable elements that
-     * have been parsed.
+     * This method processes all the ID's and returns a Vector filled with
+     * instances of the Persistable elements that have been parsed.
      *
      * @param aMergefile String with the filename for the mergefile
-     * @param aDatfile   String with the URL for the datfile.
+     * @param aDatfile String with the URL for the datfile.
      */
     public Vector processIDs(String aMergefile, String aDatfile, Flamable aParent) {
         return this.processIDs(aMergefile, aDatfile, aParent, null);
     }
 
     /**
-     * This method processes all the ID's and returns a Vector filled with instances of the Persistable elements that
-     * have been parsed.
+     * This method processes all the ID's and returns a Vector filled with
+     * instances of the Persistable elements that have been parsed.
      *
      * @param aMergefile String with the filename for the mergefile
-     * @param aDatfile   String with the URL for the datfile.
-     * @param aProgress  DefaultProgressBar to show progress on. Can be 'null', in which case it is ignored.
+     * @param aDatfile String with the URL for the datfile.
+     * @param aProgress DefaultProgressBar to show progress on. Can be 'null',
+     * in which case it is ignored.
      */
     public Vector processIDs(String aMergefile, String aDatfile, Flamable aParent, DefaultProgressBar aProgress) {
 
@@ -306,7 +299,6 @@ public class MascotResultsProcessor {
                     }
                 }
             }
-
             // Store all retrieved accession numbers.
             String[] accessions = new String[tempAccessions.size()];
             tempAccessions.toArray(accessions);
@@ -418,24 +410,29 @@ public class MascotResultsProcessor {
     }
 
     /**
-     * This method will store all the specified persistables (expected are Datfile and IdentificationTableAccessors) to
-     * the database and updates the corresponding spectrumfiles as well.
+     * This method will store all the specified persistables (expected are
+     * Datfile and IdentificationTableAccessors) to the database and updates the
+     * corresponding spectrumfiles as well.
      *
      * @param aPersistables Vector with the persistables to store.
-     * @param aParent       Flamable with the instance to notify when something goes wrong.
+     * @param aParent Flamable with the instance to notify when something goes
+     * wrong.
      */
     public void storeData(Vector aPersistables, Flamable aParent) {
         storeData(aPersistables, aParent, null);
     }
 
     /**
-     * This method will store all the specified persistables (expected are Datfile and IdentificationTableAccessors) to
-     * the database and updates the corresponding spectrumfiles as well, displaying a progressbar on screen if one is
-     * specified.
+     * This method will store all the specified persistables (expected are
+     * Datfile and IdentificationTableAccessors) to the database and updates the
+     * corresponding spectrumfiles as well, displaying a progressbar on screen
+     * if one is specified.
      *
      * @param aPersistables Vector with the persistables to store.
-     * @param aParent       Flamable with the instance to notify when something goes wrong.
-     * @param aProgress     DefaultProgressBar with the progressbar to use; can be 'null' for no progressbar.
+     * @param aParent Flamable with the instance to notify when something goes
+     * wrong.
+     * @param aProgress DefaultProgressBar with the progressbar to use; can be
+     * 'null' for no progressbar.
      */
     public void storeData(Vector aPersistables, Flamable aParent, DefaultProgressBar aProgress) {
         if (aProgress != null) {
@@ -484,44 +481,34 @@ public class MascotResultsProcessor {
                     ita.setL_spectrumid(lSpectrum.getSpectrumid());
                     // Now to find the datfile ID.
                     Object l_datfileid = iDatfilenameToDatfileid.get(ita.getTemporaryDatfilename());
-                    iMasterIdentificationToIdentificationid.put(ita.getTemporarySpectrumfilename(), ps.getGeneratedKeys()[0]);
-                    if (l_datfileid == null) {
-                        throw new SQLException("No datfile link found for datfile with filename '" + ita.getTemporaryDatfilename() + "'!");
-                    }
-                    ita.setL_datfileid(((Number) l_datfileid).longValue());
-                } else if(ps instanceof AlternativeIdentification) {
-                    AlternativeIdentification ita = (AlternativeIdentification) ps;
-                    ita.setL_spectrumid(Spectrum.findFromName(ita.getTemporarySpectrumfilename(), iConn).getSpectrumid());
-                    Object l_datfileid = iDatfilenameToDatfileid.get(ita.getTemporaryDatfilename());
                     if (l_datfileid == null) {
                         throw new SQLException("No datfile link found for datfile with filename '" + ita.getTemporaryDatfilename() + "'!");
                     }
                     ita.setL_datfileid(((Number) l_datfileid).longValue());
                 }
                 ps.persist(iConn);
-                
+
                 // See if we have:
                 //  - Datfile: in this case, we need to retrieve the generated key and store it in
                 //             a mapping.
                 if (ps instanceof Datfile) {
                     Datfile datfile = (Datfile) ps;
                     iDatfilenameToDatfileid.put(datfile.getFilename(), ps.getGeneratedKeys()[0]);
-                }
-                //  - Identification: in this case, we still need to store the fragment ions
+                } //  - Identification: in this case, we still need to store the fragment ions
                 //      & a neutral Validation entry (version 7.6).
                 else if (ps instanceof Identification) {
                     Identification id = (Identification) ps;
                     double tol = id.getFragmentMassTolerance();
-                    Iterator<com.compomics.mslimsdb.accessors.Fragmention> iter = id.getFragmentions().iterator();
+                    Iterator<FragmentIonImpl> iter = id.getFragmentions().iterator();
                     while (iter.hasNext()) {
-                        FragmentIonImpl fi = (FragmentIonImpl) FragmentionMiddleMan.asFragmentIonImpl(iter.next());
+                        FragmentIonImpl fi = iter.next();
 
                         HashMap hm = new HashMap();
                         hm.put(Fragmention.FRAGMENTIONNUMBER, new Long(fi.getNumber()));
                         hm.put(Fragmention.INTENSITY, new Long(new Double(fi.getIntensity()).longValue()));
                         hm.put(Fragmention.IONNAME, fi.getType());
                         hm.put(Fragmention.IONTYPE, new Long(fi.getID()));
-                        hm.put(Fragmention.L_IDENTIFICATIONID, (Long)(id.getGeneratedKeys()[0]));
+                        hm.put(Fragmention.L_IDENTIFICATIONID, (Long) (id.getGeneratedKeys()[0]));
                         hm.put(Fragmention.L_IONSCORINGID, new Long(fi.getImportance()));
                         hm.put(Fragmention.MASSDELTA, new Double(new BigDecimal(fi.getTheoreticalExperimantalMassError()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
                         hm.put(Fragmention.MASSERRORMARGIN, new Double(id.getFragmentMassTolerance()));
@@ -539,50 +526,26 @@ public class MascotResultsProcessor {
                     Validation lValidation = new Validation(lValidationMap);
                     lValidation.persist(iConn);
 
-                } else if (ps instanceof AlternativeIdentification) {
-                    AlternativeIdentification id = (AlternativeIdentification) ps;
-                    double tol = id.getFragmentMassTolerance();
-                    Iterator iter = id.getFragmentions().iterator();
-                    while (iter.hasNext()) {
-                        FragmentIonImpl fi = (FragmentIonImpl) iter.next();
-
-                        HashMap hm = new HashMap();
-                        hm.put(Fragmention.FRAGMENTIONNUMBER, new Long(fi.getNumber()));
-                        hm.put(Fragmention.INTENSITY, new Long(new Double(fi.getIntensity()).longValue()));
-                        hm.put(Fragmention.IONNAME, fi.getType());
-                        hm.put(Fragmention.IONTYPE, new Long(fi.getID()));
-                        hm.put(Fragmention.L_IDENTIFICATIONID, (Long)(id.getGeneratedKeys()[0]));
-                        hm.put(Fragmention.L_IONSCORINGID, new Long(fi.getImportance()));
-                        hm.put(Fragmention.MASSDELTA, new Double(new BigDecimal(fi.getTheoreticalExperimantalMassError()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
-                        hm.put(Fragmention.MASSERRORMARGIN, new Double(id.getFragmentMassTolerance()));
-                        hm.put(Fragmention.MZ, new Double(new BigDecimal(fi.getMZ()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
-
-                        AlternativeFragmentIon fi_db = new AlternativeFragmentIon(hm);
-                        fi_db.persist(iConn);
-                    }
-                                        // Create and persist Validation for the new Identification.
-                    HashMap lValidationMap = new HashMap();
-                    lValidationMap.put(Validation.L_IDENTIFICATIONID, (Long) id.getGeneratedKeys()[0]);
-                    lValidationMap.put(Validation.L_VALIDATIONTYPEID, new Long(Validationtype.NOT_VALIDATED));
+                }
                 if (aProgress != null) {
                     aProgress.setValue(aProgress.getValue() + 1);
                 }
-            }
-            // Now do all the updates for the spectrumfiles.
-            // Add the information about having been searched to the PKLfiles in the DB.
-            if (aProgress != null) {
-                aProgress.setMessage("Updating 'searched' flag on all spectra in the datfiles...");
-            }
-            Iterator iter = iAllSpectraInDatfiles.values().iterator();
-            while (iter.hasNext()) {
-                Set names = (Set) iter.next();
-                String[] filenames = new String[names.size()];
-                names.toArray(filenames);
-                Spectrum.addOneToSearchedFlag(filenames, iConn);
-            }
-            if (aProgress != null) {
-                aProgress.setValue(aProgress.getValue() + 1);
-            }
+
+                // Now do all the updates for the spectrumfiles.
+                // Add the information about having been searched to the PKLfiles in the DB.
+                if (aProgress != null) {
+                    aProgress.setMessage("Updating 'searched' flag on all spectra in the datfiles...");
+                }
+                Iterator iter = iAllSpectraInDatfiles.values().iterator();
+                while (iter.hasNext()) {
+                    Set names = (Set) iter.next();
+                    String[] filenames = new String[names.size()];
+                    names.toArray(filenames);
+                    Spectrum.addOneToSearchedFlag(filenames, iConn);
+                }
+                if (aProgress != null) {
+                    aProgress.setValue(aProgress.getValue() + 1);
+                }
             }
         } catch (Exception e) {
             // Do a rollback if possible.
@@ -802,7 +765,7 @@ public class MascotResultsProcessor {
                     break;
 
                 default:
-                    // Skip other fragmentions.
+                // Skip other fragmentions.
             }
         }
         // Now simply add formatting.
@@ -842,12 +805,11 @@ public class MascotResultsProcessor {
             }
             // Actually add the next char.
             formattedSequence.append(
-                    (italic ? "<u>" : "") +
-                            (bold ? "<font color=\"red\">" : "") +
-                            modifiedAA[i].replaceAll("<", "&lt;").replaceAll(">", "&gt;") +
-                            (italic ? "</u>" : "") +
-                            (bold ? "</font>" : "")
-            );
+                    (italic ? "<u>" : "")
+                    + (bold ? "<font color=\"red\">" : "")
+                    + modifiedAA[i].replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+                    + (italic ? "</u>" : "")
+                    + (bold ? "</font>" : ""));
         }
         // Finalize HTML'ized label text.
         formattedSequence.append("</html>");
@@ -856,8 +818,9 @@ public class MascotResultsProcessor {
     }
 
     /**
-     * This method adds all the searched spectra from this datfile to the 'iAllSpectraInDatfiles' map, if the spectra
-     * are already present, it will update their count.
+     * This method adds all the searched spectra from this datfile to the
+     * 'iAllSpectraInDatfiles' map, if the spectra are already present, it will
+     * update their count.
      *
      * @param aMDF MascotDatfile from which the spectra are read.
      */
@@ -877,6 +840,4 @@ public class MascotResultsProcessor {
             logger.error("\n\nFound duplicate processed datfilename: '" + aMDF.getFileName() + "'!");
         }
     }
-
-
 }

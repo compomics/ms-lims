@@ -8,22 +8,23 @@ import java.io.File;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
- * Created by IntelliJ IDEA. User: Kenny Date: 14-okt-2008 Time: 17:00:56 The 'MascotDistillerMergeFileReader ' class
- * was created to adapt the MascotGenericMergeFileReader to specific Mascot Distiller behaviour. More in specific, the
- * creation of the filenames differs. Also thereby we must maintain the 'TITLE' value of of the spectrum that is being
- * processed.
+ * Created by IntelliJ IDEA. User: Kenny Date: 14-okt-2008 Time: 17:00:56 The
+ * 'MascotDistillerMergeFileReader ' class was created to adapt the
+ * MascotGenericMergeFileReader to specific Mascot Distiller behaviour. More in
+ * specific, the creation of the filenames differs. Also thereby we must
+ * maintain the 'TITLE' value of of the spectrum that is being processed.
  */
 public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader {
     // Class specific log4j logger for MascotDistillerMergeFileReader instances.
-    private static Logger logger = Logger.getLogger(MascotDistillerMergeFileReader.class);
 
+    private static Logger logger = Logger.getLogger(MascotDistillerMergeFileReader.class);
     private String iCurrentSpectrumTitle;
     private String iCurrentSpectrumScans;
     private String iCurrentCharge;
-
 
     /**
      * Default constructor.
@@ -46,10 +47,11 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
     }
 
     /**
-     * {@inheritDoc} This extension keeps track of the 'TITLE' value for usage in the 'createSpectrumFilename' method.
+     * {@inheritDoc} This extension keeps track of the 'TITLE' value for usage
+     * in the 'createSpectrumFilename' method.
      */
     public void load(final File aFile) throws IOException {
-        iSpectrumFiles = new Vector(300, 10);
+        iSpectrumFiles = new ArrayList(300);
         if (!aFile.exists()) {
             throw new IOException("Mergefile '" + aFile.getCanonicalPath() + "' could not be found!");
         } else {
@@ -82,8 +84,7 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
                 // Skip empty lines and file-level charge statement.
                 if (line.equals("") || (lineCounter == 1 && line.startsWith("CHARGE"))) {
                     continue;
-                }
-                // Comment lines.
+                } // Comment lines.
                 else if (line.startsWith("#") && !inSpectrum) {
                     // First strip off the comment markings in a new String ('cleanLine').
                     String cleanLine = super.cleanCommentMarks(line);
@@ -92,8 +93,7 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
                     String cleanLineTrimmed = cleanLine.trim();
                     if (cleanLineTrimmed.equals("")) {
                         continue;
-                    }
-                    // If it is not empty String, yet starts with a space (note that we verify
+                    } // If it is not empty String, yet starts with a space (note that we verify
                     // using the untrimmed cleanLine!), it is a header
                     // comment, so we start by counting it!
                     else if (cleanLine.startsWith(" ") || cleanLine.startsWith("\t")) {
@@ -102,19 +102,16 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
                         // StringBuffer, the contents of which are afterwards copied into
                         // the 'iComments' variable.
                         tempComments.append(line + "\n");
-                    }
-                    // Spectrum comment. Start a new Spectrum!
+                    } // Spectrum comment. Start a new Spectrum!
                     else {
                         inSpectrum = true;
                         spectrum.append(line + "\n");
                     }
-                }
-                // It could that multiple raw files were used to create the mergefile. If there are different lines with something like
+                } // It could that multiple raw files were used to create the mergefile. If there are different lines with something like
                 //'_DISTILLER_RAWFILE[0]={1}C:\Users\mascot\...\QstarE04494.wiff' this is the case
                 else if (line.startsWith("_DISTILLER_RAWFILE")) {
                     lMultiRawFileNames.add(line.substring(line.lastIndexOf("}")));
-                }
-                // Not an empty line, not an initial charge line, not a comment line and inside a spectrum.
+                } // Not an empty line, not an initial charge line, not a comment line and inside a spectrum.
                 // It could be 'BEGIN IONS', 'END IONS', 'TITLE=...', 'PEPMASS=...',
                 // in-spectrum 'CHARGE=...' or, finally, a genuine peak line.
                 // Whatever it is, add it to the spectrum StringBuffer.
@@ -169,8 +166,7 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
                         // Reset the spectrum StringBuffer.
                         spectrum = new StringBuffer();
                     }
-                }
-                // If we're not in a spectrum, see if the line is 'BEGIN IONS', which marks the begin of a spectrum!
+                } // If we're not in a spectrum, see if the line is 'BEGIN IONS', which marks the begin of a spectrum!
                 else if (line.startsWith("BEGIN IONS")) {
                     inSpectrum = true;
                     spectrum.append(line + "\n");
@@ -200,12 +196,13 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
         }
     }
 
-
     /**
-     * This method reports whether this MergeFileReader can read the specified file.
+     * This method reports whether this MergeFileReader can read the specified
+     * file.
      *
      * @param aFile File with the file to check readability for.
-     * @return boolean that indicates whether this MergeFileReader can read the specified file.
+     * @return boolean that indicates whether this MergeFileReader can read the
+     * specified file.
      */
     public boolean canRead(File aFile) {
         boolean result = false;
@@ -279,6 +276,7 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
     protected String createSpectrumFilename(final int aNumber, boolean aMultiFile, String[] aMultiFileNames, String aScans, String aCharge) {
         return processMGFTitleToFilename(iCurrentSpectrumTitle, aMultiFile, aMultiFileNames, aScans, aCharge);
     }
+
     public static String processMGFTitleToFilename(String aTitle, boolean aMutliFile, String[] aMultiFileNames, String aScans, String aCharge) {
 
         String lLCRun = null;
@@ -297,8 +295,14 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
                 //merged spectrum from multiple files [1,7,8]
                 lTemp = lTemp.substring(0, lTemp.indexOf(","));
             }
-            int lIindex = Integer.valueOf(lTemp);
-            String lFileName = aMultiFileNames[lIindex];
+            String lFileName;
+            try {
+                int lIindex = Integer.valueOf(lTemp);
+                lFileName = aMultiFileNames[lIindex];
+            } catch (NumberFormatException ex){
+                lFileName = lTemp;
+            }
+
             int lStart = lFileName.lastIndexOf("\\") + 1;
             int lEnd = lFileName.lastIndexOf(".");
             lLCRun = lFileName.substring(lStart, lEnd);
@@ -321,7 +325,7 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
         lCompound = Integer.valueOf(aTitle.substring(0, aTitle.indexOf(':')));
 
         // c) Find out the sum of scans
-        if (aTitle.substring(aTitle.indexOf(':')+1).trim().startsWith("Sum")) {
+        if (aTitle.substring(aTitle.indexOf(':') + 1).trim().startsWith("Sum")) {
             // c1 Multiple scans from this spectrum!
             if (aMutliFile) {
                 //in the multifile title the scans are not there, it has to be parsed from the aScans string
@@ -366,13 +370,16 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
     }
 
     /**
-     * This method returns a filename for the .mgf file custom created by its 'TITLE' value.
+     * This method returns a filename for the .mgf file custom created by its
+     * 'TITLE' value.
      *
-     * @param aTitle          The 'TITLE' value from the .mgf file.
-     * @param aMutliFile      Boolean that indicates if we must find the filename in the multifilename vector.
+     * @param aTitle The 'TITLE' value from the .mgf file.
+     * @param aMutliFile Boolean that indicates if we must find the filename in
+     * the multifilename vector.
      * @param aMultiFileNames Vector with different filenames for the raw files.
-     * @param aScans          The 'SCANS' value from the .mgf file.
-     * @return The filename as created for the given 'TITLE' by the MascotDistillerMergeFileReader.
+     * @param aScans The 'SCANS' value from the .mgf file.
+     * @return The filename as created for the given 'TITLE' by the
+     * MascotDistillerMergeFileReader.
      */
     public static String processMGFTitleToFilename(String aTitle, boolean aMutliFile, Vector<String> aMultiFileNames, String aScans) {
 
@@ -448,6 +455,4 @@ public class MascotDistillerMergeFileReader extends MascotGenericMergeFileReader
         }
         return lResult;
     }
-
-
 }

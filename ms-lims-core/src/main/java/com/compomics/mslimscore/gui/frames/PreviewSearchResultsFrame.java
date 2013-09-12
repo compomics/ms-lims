@@ -1,8 +1,5 @@
 /**
- * Created by IntelliJ IDEA.
- * User: Lennart
- * Date: 22-jun-2004
- * Time: 15:03:11
+ * Created by IntelliJ IDEA. User: Lennart Date: 22-jun-2004 Time: 15:03:11
  */
 package com.compomics.mslimscore.gui.frames;
 
@@ -26,8 +23,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Vector;
 
 /*
@@ -36,48 +31,44 @@ import java.util.Vector;
  * $Revision: 1.10 $
  * $Date: 2008/11/28 16:07:18 $
  */
-
 /**
- * This class shows a preview of the search results which can subsequently be stored in the database.
+ * This class shows a preview of the search results which can subsequently be
+ * stored in the database.
  *
  * @author Lennart Martens
- * @version $Id: PreviewSearchResultsFrame.java,v 1.10 2008/11/28 16:07:18 kenny Exp $
+ * @version $Id: PreviewSearchResultsFrame.java,v 1.10 2008/11/28 16:07:18 kenny
+ * Exp $
  */
 public class PreviewSearchResultsFrame extends JFrame implements Flamable {
     // Class specific log4j logger for PreviewSearchResultsFrame instances.
-    private static Logger logger = Logger.getLogger(PreviewSearchResultsFrame.class);
 
+    private static Logger logger = Logger.getLogger(PreviewSearchResultsFrame.class);
     IdentificationSwitcherGUI identificationSwitcher;
-    
     /**
      * The searches to process.
      */
     private MascotSearch[] iSearches = null;
-
     /**
      * This Vector will hold all the results from the parsing.
      */
     private Vector iResults = null;
-
     /**
      * the working horse for this display.
      */
     private MascotResultsProcessor iMRP = null;
-
-
     JTableForDB tblResults = null;
-    
     private Vector<AlternativeIdentification> iAlternativeResults;
     private boolean identificationSwitcherUsed;
 
     /**
      * This constructor shows a preview of the search results.
      *
-     * @param aParent                    JFrame with the parent frame.
-     * @param aSearches                  MascotSearch[] with the searches to process.
-     * @param aConnection                Connection to store the search results to.
-     * @param aThreshold                 double with the confidence interval to use.
-     * @param aMascotDistillerProcessing boolean whether Mascot Distiller is used for Processing.
+     * @param aParent JFrame with the parent frame.
+     * @param aSearches MascotSearch[] with the searches to process.
+     * @param aConnection Connection to store the search results to.
+     * @param aThreshold double with the confidence interval to use.
+     * @param aMascotDistillerProcessing boolean whether Mascot Distiller is
+     * used for Processing.
      */
     public PreviewSearchResultsFrame(JFrame aParent, MascotSearch[] aSearches, Connection aConnection, double aThreshold, final boolean aMascotDistillerProcessing) {
         super();
@@ -91,19 +82,23 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
     }
 
     /**
-     * This method takes care of any unrecoverable exception or error, thrown by a child thread.
+     * This method takes care of any unrecoverable exception or error, thrown by
+     * a child thread.
      *
-     * @param aThrowable Throwable that represents the unrecoverable error or exception.
+     * @param aThrowable Throwable that represents the unrecoverable error or
+     * exception.
      */
     public void passHotPotato(Throwable aThrowable) {
         this.passHotPotato(aThrowable, aThrowable.getMessage());
     }
 
     /**
-     * This method takes care of any unrecoverable exception or error, thrown by a child thread.
+     * This method takes care of any unrecoverable exception or error, thrown by
+     * a child thread.
      *
-     * @param aThrowable Throwable that represents the unrecoverable error or exception.
-     * @param aMessage   String with an extra message to display.
+     * @param aThrowable Throwable that represents the unrecoverable error or
+     * exception.
+     * @param aMessage String with an extra message to display.
      */
     public void passHotPotato(Throwable aThrowable, String aMessage) {
         logger.error(aThrowable.getMessage(), aThrowable);
@@ -190,25 +185,25 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
                 }
             }
         });
-/*
-        JButton btnChangeMaster = new JButton("Change master ...");
-        if (iAlternativeResults != null) {
-            btnChangeMaster.setMnemonic(KeyEvent.VK_M);
-            btnChangeMaster.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent actionEvent) {
-                    editMasterTriggered();
-                }
-            });
-            btnChangeMaster.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent keyEvent) {
-                 editMasterTriggered();
-            }
-            });
-        } else {
-            btnChangeMaster.setEnabled(false);
-        }
-        */
+        /*
+         JButton btnChangeMaster = new JButton("Change master ...");
+         if (iAlternativeResults != null) {
+         btnChangeMaster.setMnemonic(KeyEvent.VK_M);
+         btnChangeMaster.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent actionEvent) {
+         editMasterTriggered();
+         }
+         });
+         btnChangeMaster.addKeyListener(new KeyAdapter() {
+         @Override
+         public void keyPressed(KeyEvent keyEvent) {
+         editMasterTriggered();
+         }
+         });
+         } else {
+         btnChangeMaster.setEnabled(false);
+         }
+         */
         // The column-selection checkbox.
         // Create the checkbox.
         final JCheckBox chkSelection = new JCheckBox("Column selection mode", false);
@@ -240,8 +235,9 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
 
         return jpanButtons;
     }
-        private void editMasterTriggered() {
-        identificationSwitcher = new IdentificationSwitcherGUI("master and alternative peptide identification overview",iResults,iAlternativeResults);
+
+    private void editMasterTriggered() {
+        identificationSwitcher = new IdentificationSwitcherGUI("master and alternative peptide identification overview", iResults, iAlternativeResults);
         identificationSwitcherUsed = true;
     }
 
@@ -253,29 +249,15 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
                 new DefaultProgressBar(this, "Processing search results...", 0, iResults.size() + 2);
         progress.setSize(350, 100);
         progress.setMessage("Starting up...");
-        if(identificationSwitcherUsed){
-            iResults = identificationSwitcher.getMastersToStore();
-            Vector<AlternativeIdentification> iAlternativeResultsToStore = identificationSwitcher.getAlternativesToStore();
-            if(iAlternativeResultsToStore == null){
-                iResults.addAll(iAlternativeResults);
-             } else {
-                iResults.addAll(iAlternativeResultsToStore);
-            }
-            MascotResultsStorageWorker worker =
-                    new MascotResultsStorageWorker(this.iMRP, iResults, iSearches, this, progress);
-            worker.start();
-            progress.setVisible(true);
-            JOptionPane.showMessageDialog(this, "Storage of identifications complete!", "Storage complete", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-        } else {
-            MascotResultsStorageWorker worker =
-                    new MascotResultsStorageWorker(this.iMRP, iResults, iSearches, this, progress);
-            worker.start();
-            progress.setVisible(true);
-            JOptionPane.showMessageDialog(this, "Storage of identifications complete!", "Storage complete", JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-        }
+
+        MascotResultsStorageWorker worker =
+                new MascotResultsStorageWorker(this.iMRP, iResults, iSearches, this, progress);
+        worker.start();
+        progress.setVisible(true);
+        JOptionPane.showMessageDialog(this, "Storage of identifications complete!", "Storage complete", JOptionPane.INFORMATION_MESSAGE);
+        this.dispose();
     }
+
     /**
      * This method is called when the user presses 'cancel'.
      */
@@ -334,14 +316,16 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
     }
 
     /**
-     * This method disposes the dialog. It does not close the DB connection, though!
+     * This method disposes the dialog. It does not close the DB connection,
+     * though!
      */
     private void close() {
         this.dispose();
     }
 
     /**
-     * This method collects the information needed for the preview from the MascotResultsProcessor.
+     * This method collects the information needed for the preview from the
+     * MascotResultsProcessor.
      */
     private void acquireData() {
         iResults = new Vector(3000, 750);
@@ -351,7 +335,7 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
         progress.setSize(350, 100);
         progress.setMessage("Starting up...");
         MascotResultsProcessorWorker worker =
-                new MascotResultsProcessorWorker(iMRP, iSearches,iAlternativeResults, iResults, this, progress);
+                new MascotResultsProcessorWorker(iMRP, iSearches, iResults, this, progress);
         worker.start();
         progress.setVisible(true);
     }

@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -75,14 +76,14 @@ public class MicroTOFQStorageEngine implements SpectrumStorageEngine {
             int lCounter = 0;
             for (int j = 0; j < lMGFFiles.length; j++) {
                 MascotGenericMergeFileReader lMascotGenericMergeFileReader = new MascotGenericMergeFileReader(lMGFFiles[j]);
-                Vector lSpectrumFiles = lMascotGenericMergeFileReader.getSpectrumFiles();
+                List lSpectrumFiles = lMascotGenericMergeFileReader.getSpectrumFiles();
                 // Cycle through all the files, storing each in the DB with the appropriate
                 // links (L_LCRUNID and L_PROJECTID). The SEARCHED and IDENTIFIED flags default to '0'.
                 // Filename and data are provided through the MascotGenericFile class, but note that we
                 // convert the file contents from a String into a byte[] using the platforms default encoding.
 
                 for (int i = 0; i < lSpectrumFiles.size(); i++) {
-                    MascotGenericFile lFile = (MascotGenericFile) lSpectrumFiles.elementAt(i);
+                    MascotGenericFile lFile = (MascotGenericFile) lSpectrumFiles.get(i);
 
                     HashMap data = new HashMap(9);
                     data.put(Spectrum.L_INSTRUMENTID, new Long(aInstrumentid));

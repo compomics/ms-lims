@@ -51,7 +51,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.compomics.mslimscore.gui.MS_LIMS</mainClass>
+                            <mainClass>com.compomics.mslimscore.MsLimsStarter</mainClass>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib</classpathPrefix>
                         </manifest>
@@ -301,7 +301,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics.thermo_msf_parser</groupId>
             <artifactId>thermo_msf_parser_API</artifactId>
-            <version>2.0.4</version>
+            <version>2.0.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.compomics</groupId>
@@ -423,7 +423,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
         <dependency>
             <groupId>com.compomics.thermo_msf_parser</groupId>
             <artifactId>thermo_msf_parser_GUI</artifactId>
-            <version>2.0.4</version>
+            <version>2.0.5</version>
             <type>jar</type>
         </dependency>
     </dependencies>

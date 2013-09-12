@@ -9,6 +9,7 @@ package com.compomics.mslimscore.util.fileio.mergefiles;
 
 import com.compomics.mslimscore.util.fileio.interfaces.MergeFileReader;
 import com.compomics.util.interfaces.SpectrumFile;
+import java.util.List;
 
 import java.util.Vector;
 
@@ -30,7 +31,7 @@ public abstract class MergeFileReaderAncestor implements MergeFileReader {
     /**
      * This Vector will hold all the spectrum files in the mergefile.
      */
-    protected Vector iSpectrumFiles = null;
+    protected List iSpectrumFiles = null;
 
     /**
      * The filename for this mergefile.
@@ -42,7 +43,7 @@ public abstract class MergeFileReaderAncestor implements MergeFileReader {
      *
      * @return Vector  with the currently held SpectrumFiles.
      */
-    public Vector getSpectrumFiles() {
+    public List getSpectrumFiles() {
         return this.iSpectrumFiles;
     }
 
@@ -68,7 +69,7 @@ public abstract class MergeFileReaderAncestor implements MergeFileReader {
         result = new String[liSize];
         // Cycle all and add the names to the array.
         for (int i = 0; i < liSize; i++) {
-            SpectrumFile lFile = (SpectrumFile) iSpectrumFiles.elementAt(i);
+            SpectrumFile lFile = (SpectrumFile) iSpectrumFiles.get(i);
             result[i] = lFile.getFilename();
         }
         // Voila.

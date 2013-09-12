@@ -2,8 +2,6 @@ package com.compomics.mslimscore;
 
 import com.compomics.software.CompomicsWrapper;
 import java.io.*;
-import java.net.URISyntaxException;
-import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 
@@ -25,17 +23,12 @@ public class MsLimsStarter extends CompomicsWrapper {
      * class in the jar file.
      */
     public MsLimsStarter(String[] args) {
-        while (1 == 1) {
-            try {
-                cleanOldFiles();
-                JOptionPane.showConfirmDialog(null, "relaunch");
-                launch(args);
-            } catch (Exception e) {
-                logger.error(e);
-            }
+        try {
+            cleanOldFiles();
+            launch(args);
+        } catch (Exception e) {
+            logger.error(e);
         }
-
-
     }
 
     /**
@@ -44,16 +37,13 @@ public class MsLimsStarter extends CompomicsWrapper {
      * @throws java.lang.Exception
      */
     private void launch(String[] args) throws Exception {
-        try {
-            File jarFile = new File(MsLimsStarter.class
-                    .getProtectionDomain().getCodeSource().getLocation().toURI());
-            String mainClass = "com.compomics.mslimscore.gui.MS_LIMS";
 
-            launchTool(
-                    "Ms Lims", jarFile, null, mainClass, args);
-        } catch (URISyntaxException ex) {
-            logger.error(ex);
-        }
+        File jarFile = new File(MsLimsStarter.class
+        .getProtectionDomain().getCodeSource().getLocation().getPath());
+        //File jarFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getFile());
+        String mainClass = "com.compomics.mslimscore.gui.MS_LIMS";
+
+        launchTool("Ms Lims", jarFile, null, mainClass, args);
     }
 
     /**

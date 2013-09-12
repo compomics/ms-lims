@@ -12,6 +12,7 @@ import com.compomics.util.interfaces.SpectrumFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 
 /*
@@ -41,7 +42,7 @@ public interface MergeFileReader {
      *
      * @return Vector  with the currently held SpectrumFile implementations.
      */
-    public abstract Vector getSpectrumFiles();
+    public abstract List getSpectrumFiles();
 
     /**
      * This method returns the filename of the spectrum file that was found matching the specified

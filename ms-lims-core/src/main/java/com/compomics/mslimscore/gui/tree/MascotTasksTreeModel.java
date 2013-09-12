@@ -33,7 +33,7 @@ public class MascotTasksTreeModel implements TreeModel {
     /**
      * This Vector will hold all the searches done. key
      */
-    private Vector iTasks = null;
+    private Vector iTasks = new Vector();
 
     /**
      * This constructor takes a list of MascotTask instances that have been retrieved from the database.
