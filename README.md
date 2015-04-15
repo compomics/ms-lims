@@ -15,7 +15,7 @@ The ms_lims project provides a lightweight, portable yet production-grade soluti
 MS-based proteomics produces large amounts of mass spectra that require processing, identification and possibly quantification before interpretation can be undertaken. High-throughput studies require automation of these various steps, and management of the data in association with the results obtained. We here present ms_lims, a freely available, open-source system based on a central database to automate data management and processing in MS-driven proteomics analyses.
 
 ### Citation
-*Helsens, K., Colaert, N., Barsnes, H., Muth, T., Flikka, K., Staes, A., Timmerman, E., Wortelkamp, S., Sickmann, A., Vandekerckhove, J., et al. (2010). ms_lims, a simple yet powerful open source LIMS for mass spectrometry-driven proteomics. Proteomics epub (([pid: 20058248]http://www.ncbi.nlm.nih.gov/pubmed/20058248))._
+*Helsens, K., Colaert, N., Barsnes, H., Muth, T., Flikka, K., Staes, A., Timmerman, E., Wortelkamp, S., Sickmann, A., Vandekerckhove, J., et al. (2010). ms_lims, a simple yet powerful open source LIMS for mass spectrometry-driven proteomics. Proteomics epub (([pid: 20058248]http://www.ncbi.nlm.nih.gov/pubmed/20058248)).*
 
 [Go to top of page](#ms-lims)
 
