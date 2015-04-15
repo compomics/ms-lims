@@ -22,22 +22,16 @@ MS-based proteomics produces large amounts of mass spectra that require processi
 ----
 
 ## Downloads
-Download jTraML 1.0.4 [here](http://genesis.ugent.be/maven2/com/compomics/jtraml/jtraml-core/1.0.4/jtraml-core-1.0.4.zip).
-
-### Example Files
-  * [Example transition file - TraML 0.9.5 document](http://genesis.ugent.be/uvpublicdata/jtraml/tsq_example_095.traml)
-  * [Example transition file - Agilent](http://genesis.ugent.be/uvpublicdata/jtraml/AgilentQQQ_example.tsv)
-  * [Example transition file - ABI QTRAP](http://genesis.ugent.be/uvpublicdata/jtraml/QTRAP5500_example.csv)
-  * [Example transition file - Thermo](http://genesis.ugent.be/uvpublicdata/jtraml/TSQ_example.csv)
-  * [traml-core-0.9](http://genesis.ugent.be/uvpublicdata/jtraml/jtraml-core-0.9.zip)
+Download ms-lims 7.7.7 [here](http://genesis.ugent.be/uvpublicdata/ms-lims/ms-lims-7.7.7.zip). 
 
 [Go to top of page](#ms-lims)
 
 ----
 
 ## Usage
- * The [zip file](http://genesis.ugent.be/uvpublicdata/ms-lims/ms-lims-7.7.7.zip) contains the *ms-lims* jar file and all the libraries needed to run the tool. *Double clicking this resulting jar file will start ms-lims.*
-  * Download the manual [here](http://genesis.ugent.be/uvpublicdata/ms-lims/ms_lims_manual.pdf).
+ * The zip file contains the *ms-lims* jar file and all the libraries needed to run the tool. *Double clicking this resulting jar file will start ms-lims.*
+ * Download the manual [here](http://genesis.ugent.be/uvpublicdata/ms-lims/ms_lims_manual.pdf).
+ * Check out the [release notes](https://github.com/compomics/ms-lims/wiki/ReleaseNotes) and [database updates](https://github.com/compomics/ms-lims/wiki/DatabaseUpdates) in the [wiki](https://github.com/compomics/ms-lims/wiki) section.
 
 ### Troubleshooting
 Please report any issues or requests in the [http://code.google.com/p/ms-lims/issues/list issues section]. We will attempt to come up with a solution as soon as possible.
