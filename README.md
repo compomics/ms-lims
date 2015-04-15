@@ -36,10 +36,24 @@ Download jTraML 1.0.4 [here](http://genesis.ugent.be/maven2/com/compomics/jtraml
 ----
 
 ## Usage
-See the [wiki](https://github.com/compomics/jtraml/wiki) for additional information on how to setup, run and configure jTraML.
+ * The [zip file](http://genesis.ugent.be/uvpublicdata/ms-lims/ms-lims-7.7.7.zip) contains the *ms-lims* jar file and all the libraries needed to run the tool. *Double clicking this resulting jar file will start ms-lims.*
+  * Download the manual [here](http://genesis.ugent.be/uvpublicdata/ms-lims/ms_lims_manual.pdf).
 
 ### Troubleshooting
 Please report any issues or requests in the [http://code.google.com/p/ms-lims/issues/list issues section]. We will attempt to come up with a solution as soon as possible.
+
+[Go to top of page](#ms-lims)
+
+----
+
+## Related Projects
+Ms-lims makes use of [compomics-utilities](http://code.google.com/p/compomics-utilities).
+
+You might also find some of the following projects interesting: [Peptizer](http://code.google.com/p/peptizer),
+[dbtoolkit](https://github.com/compomics/dbtoolkit),
+[ms-lims](http://code.google.com/p/ms-lims),
+[Rover](http://code.google.com/p/compomics-rover) and
+[PeptideShaker](http://code.google.com/p/peptide-shaker)
 
 [Go to top of page](#ms-lims)
 
