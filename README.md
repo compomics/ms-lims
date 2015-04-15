@@ -1,5 +1,5 @@
 # ms-lims
-![logo](http://genesis.ugent.be/uvpublicdata/jtraml/jtraml_logo.png) 
+![logo](http://genesis.ugent.be/uvpublicdata/ms-lims/ms-lims_logo.png) 
 
  * [Project Description](#project-description)
  * [Downloads](#downloads)
