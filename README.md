@@ -36,7 +36,7 @@ Download ms-lims 7.7.7 [here](http://genesis.ugent.be/uvpublicdata/ms-lims/ms-li
  * Check out the [release notes](https://github.com/compomics/ms-lims/wiki/ReleaseNotes) and [database updates](https://github.com/compomics/ms-lims/wiki/DatabaseUpdates) in the [wiki](https://github.com/compomics/ms-lims/wiki) section.
 
 ### Troubleshooting
-Please report any issues or requests in the [http://code.google.com/p/ms-lims/issues/list issues section]. We will attempt to come up with a solution as soon as possible.
+Please report any issues or requests in the [issues section](https://github.com/compomics/ms-lims/issues). We will attempt to come up with a solution as soon as possible.
 
 [Go to top of page](#ms-lims)
 
