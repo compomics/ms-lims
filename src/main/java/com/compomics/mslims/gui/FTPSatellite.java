@@ -4,12 +4,11 @@
  * Date: 26-nov-02
  * Time: 15:00:19
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
-import org.apache.log4j.Logger;
+import com.compomics.mslims.gui.dialogs.SettingsDialog;
+import com.compomics.mslims.util.fileio.mergers.PKLMergerAndStorer;
 
-import com.compomics.mslimscore.gui.dialogs.SettingsDialog;
-import com.compomics.mslimscore.util.fileio.mergers.PKLMergerAndStorer;
 import com.compomics.util.interfaces.PickUp;
 import com.compomics.util.io.FTPClient;
 import com.compomics.util.io.FolderMonitor;

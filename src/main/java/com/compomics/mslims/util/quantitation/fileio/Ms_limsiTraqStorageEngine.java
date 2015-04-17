@@ -66,7 +66,7 @@ public class Ms_limsiTraqStorageEngine implements QuantitationStorageEngine {
         if (Quantitation_file.isStoredInDatabase((String) aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME), iConnection)) {
             //iFlamable.passHotPotato(new Throwable("Distiller output xml file '" + aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME) + "' has allready been processed!!"));
             //this distiller rov file is already stored in the database, ask the user if they want to store it again
-            int answer = JOptionPane.showConfirmDialog(new JFrame(), "The .dat file with iTraq information ( " + (String) aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME) + " ) was already stored in the database.\n Do you want to store it again?", "Problem storing .dat file", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(new JFrame(), "The .dat file with iTraq information ( " + aRatioGroupCollection.getMetaData(QuantitationMetaType.FILENAME) + " ) was already stored in the database.\n Do you want to store it again?", "Problem storing .dat file", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (answer == JOptionPane.YES_OPTION) {
                 //ok store it again
             } else {
@@ -156,7 +156,7 @@ public class Ms_limsiTraqStorageEngine implements QuantitationStorageEngine {
 
         int lNumberOfHits = aRatioGroupCollection.size();
         for (int i = 0; i < lNumberOfHits; i++) {
-            RatioGroup lRatioGroup = (RatioGroup) aRatioGroupCollection.get(i);
+            RatioGroup lRatioGroup = aRatioGroupCollection.get(i);
             //Check if we need to store these ratios
             if (lRatioGroup.getNumberOfIdentifications() > 0) {
                 //Identifications linked to the ratios, store them
@@ -173,7 +173,7 @@ public class Ms_limsiTraqStorageEngine implements QuantitationStorageEngine {
                 //now store the ratios
                 int lNumberOfRatios = lRatioGroup.getNumberOfRatios();
                 for (int r = 0; r < lNumberOfRatios; r++) {
-                    Ratio lRatio = (Ratio) lRatioGroup.getRatio(r);
+                    Ratio lRatio = lRatioGroup.getRatio(r);
 
                     HashMap hm = new HashMap();
                     hm.put(Quantitation.TYPE, lRatio.getType());

@@ -604,7 +604,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
                         txtInfo.append("\nAn error occured in the following projects : ");
                         for (int i = 0; i < errorProjects.size(); i++) {
                             Project pro = (Project) errorProjects.get(i);
-                            txtInfo.append((Long) pro.getProjectid() + " , ");
+                            txtInfo.append(pro.getProjectid() + " , ");
                         }
                     }
                 } else {
@@ -683,7 +683,7 @@ public class MS_LIMS_7_Data_Updater extends JFrame implements Connectable {
      * @throws IllegalArgumentException
      * @throws NumberFormatException
      */
-    private void setUpdateParameters2(MascotDatfile aMDF) throws IllegalArgumentException, NumberFormatException {
+    private void setUpdateParameters2(MascotDatfile aMDF) throws IllegalArgumentException {
 
         // create the arrays
         iQuery = new int[iIdentifications.length];

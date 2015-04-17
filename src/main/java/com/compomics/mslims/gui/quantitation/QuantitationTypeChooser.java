@@ -1,8 +1,8 @@
-package com.compomics.mslimscore.gui.quantitation;
+package com.compomics.mslims.gui.quantitation;
 
+import com.compomics.mslims.gui.QuantitationGUI;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimscore.gui.QuantitationGUI;
 
 import javax.swing.*;
 import java.awt.*;

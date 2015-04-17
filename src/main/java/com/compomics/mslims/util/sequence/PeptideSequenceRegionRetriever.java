@@ -91,17 +91,17 @@ public class PeptideSequenceRegionRetriever {
                         int count = ((Integer) check).intValue();
                         // Add it to the end.
                         count++;
-                        all.put(s.getAccession() + "ง" + count, s);
+                        all.put(s.getAccession() + "ยง" + count, s);
                         // Update the counter.
                         all.put(s.getAccession(), new Integer(count));
                     } else {
                         // First one, split it out.
                         int count = 1;
                         // Original one gets index '1'.
-                        all.put(s.getAccession() + "ง" + count, check);
+                        all.put(s.getAccession() + "ยง" + count, check);
                         // Current one gets one more.
                         count++;
-                        all.put(s.getAccession() + "ง" + count, s);
+                        all.put(s.getAccession() + "ยง" + count, s);
                         // Store a counter as a flag.
                         all.put(s.getAccession(), new Integer(count));
                     }
@@ -116,7 +116,7 @@ public class PeptideSequenceRegionRetriever {
         Iterator iter = all.keySet().iterator();
         while (iter.hasNext()) {
             String accession = (String) iter.next();
-            int start = accession.indexOf("ง");
+            int start = accession.indexOf("ยง");
             if (start >= 0) {
                 continue;
             }
@@ -154,7 +154,7 @@ public class PeptideSequenceRegionRetriever {
                 int count = ((Integer) stored).intValue();
                 // Simply cycle them all.
                 for (int i = 1; i <= count; i++) {
-                    this.processRegionInProtein((SequenceRegion) all.get(accession + "ง" + i), sequence);
+                    this.processRegionInProtein((SequenceRegion) all.get(accession + "ยง" + i), sequence);
                 }
             }
         }

@@ -1,12 +1,12 @@
-package com.compomics.mslimscore.gui.table;
+package com.compomics.mslims.gui.table;
 
+import com.compomics.mslims.db.accessors.Identification;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Identification;
-import com.compomics.mslimscore.util.quantitation.ratios.RatioGroupCollection;
-import com.compomics.mslimscore.util.quantitation.ratios.DistillerRatioGroup;
-import com.compomics.mslimscore.util.quantitation.ratios.DistillerRatio;
-import com.compomics.mslimscore.util.enumeration.QuantitationMetaType;
+import com.compomics.rover.general.enumeration.QuantitationMetaType;
+import com.compomics.rover.general.quantitation.RatioGroupCollection;
+import com.compomics.rover.general.quantitation.source.distiller.DistillerRatio;
+import com.compomics.rover.general.quantitation.source.distiller.DistillerRatioGroup;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;
@@ -128,7 +128,7 @@ public class DistillerQuantitationTableModel extends AbstractTableModel {
 
             RatioGroupCollection lCollection = iCollections.get(0);
             Vector<String> lRatioTypes = lCollection.getRatioTypes();
-            lHeader = (String) lRatioTypes.get(lZeroIndex);
+            lHeader = lRatioTypes.get(lZeroIndex);
 
         } else if (column < iNumberOfComponents + iNumberOfRatios + iNumberOfRatioGroupMetaData + iNumberOfCollectionMetaData) {
             // Components in the end!
@@ -137,7 +137,7 @@ public class DistillerQuantitationTableModel extends AbstractTableModel {
 
             RatioGroupCollection lCollection = iCollections.get(0);
             Vector<String> lComponentTypes = lCollection.getComponentTypes();
-            lHeader = (String) lComponentTypes.get(lZeroIndex);
+            lHeader = lComponentTypes.get(lZeroIndex);
 
         }
         return lHeader;
@@ -212,7 +212,7 @@ public class DistillerQuantitationTableModel extends AbstractTableModel {
             int lZeroIndex = columnIndex - iNumberOfRatios - iNumberOfRatioGroupMetaData - iNumberOfCollectionMetaData;
             RatioGroupCollection lCollection = iCollections.get(0);
             Vector<String> lComponentTypes = lCollection.getComponentTypes();
-            String lType = (String) lComponentTypes.get(lZeroIndex);
+            String lType = lComponentTypes.get(lZeroIndex);
 
             o = iGroups[rowIndex].getIdentificationForType(lType);
 

@@ -4,7 +4,7 @@
  * Date: 30/11/2010
  * Time: 13:56:55
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import java.sql.*;
 import java.io.*;
@@ -295,7 +295,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Spectrumid' column
-	 * 
+	 *
 	 * @return	long	with the value for the Spectrumid column.
 	 */
 	public long getSpectrumid() {
@@ -304,7 +304,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'L_lcrunid' column
-	 * 
+	 *
 	 * @return	long	with the value for the L_lcrunid column.
 	 */
 	public long getL_lcrunid() {
@@ -313,7 +313,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'L_projectid' column
-	 * 
+	 *
 	 * @return	long	with the value for the L_projectid column.
 	 */
 	public long getL_projectid() {
@@ -322,7 +322,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'L_fragmentationid' column
-	 * 
+	 *
 	 * @return	long	with the value for the L_fragmentationid column.
 	 */
 	public long getL_fragmentationid() {
@@ -331,7 +331,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'L_instrumentid' column
-	 * 
+	 *
 	 * @return	long	with the value for the L_instrumentid column.
 	 */
 	public long getL_instrumentid() {
@@ -340,7 +340,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Searched' column
-	 * 
+	 *
 	 * @return	long	with the value for the Searched column.
 	 */
 	public long getSearched() {
@@ -349,7 +349,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Identified' column
-	 * 
+	 *
 	 * @return	long	with the value for the Identified column.
 	 */
 	public long getIdentified() {
@@ -358,7 +358,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Filename' column
-	 * 
+	 *
 	 * @return	String	with the value for the Filename column.
 	 */
 	public String getFilename() {
@@ -367,7 +367,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Charge' column
-	 * 
+	 *
 	 * @return	long	with the value for the Charge column.
 	 */
 	public long getCharge() {
@@ -376,7 +376,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Mass_to_charge' column
-	 * 
+	 *
 	 * @return	Number	with the value for the Mass_to_charge column.
 	 */
 	public Number getMass_to_charge() {
@@ -385,7 +385,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Total_spectrum_intensity' column
-	 * 
+	 *
 	 * @return	Number	with the value for the Total_spectrum_intensity column.
 	 */
 	public Number getTotal_spectrum_intensity() {
@@ -394,7 +394,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Highest_peak_in_spectrum' column
-	 * 
+	 *
 	 * @return	Number	with the value for the Highest_peak_in_spectrum column.
 	 */
 	public Number getHighest_peak_in_spectrum() {
@@ -403,7 +403,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Username' column
-	 * 
+	 *
 	 * @return	String	with the value for the Username column.
 	 */
 	public String getUsername() {
@@ -412,7 +412,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Creationdate column.
 	 */
 	public java.sql.Timestamp getCreationdate() {
@@ -421,7 +421,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method returns the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Modificationdate column.
 	 */
 	public java.sql.Timestamp getModificationdate() {
@@ -430,7 +430,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Spectrumid' column
-	 * 
+	 *
 	 * @param	aSpectrumid	long with the value for the Spectrumid column.
 	 */
 	public void setSpectrumid(long aSpectrumid) {
@@ -440,7 +440,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'L_lcrunid' column
-	 * 
+	 *
 	 * @param	aL_lcrunid	long with the value for the L_lcrunid column.
 	 */
 	public void setL_lcrunid(long aL_lcrunid) {
@@ -450,7 +450,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'L_projectid' column
-	 * 
+	 *
 	 * @param	aL_projectid	long with the value for the L_projectid column.
 	 */
 	public void setL_projectid(long aL_projectid) {
@@ -460,7 +460,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'L_fragmentationid' column
-	 * 
+	 *
 	 * @param	aL_fragmentationid	long with the value for the L_fragmentationid column.
 	 */
 	public void setL_fragmentationid(long aL_fragmentationid) {
@@ -470,7 +470,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'L_instrumentid' column
-	 * 
+	 *
 	 * @param	aL_instrumentid	long with the value for the L_instrumentid column.
 	 */
 	public void setL_instrumentid(long aL_instrumentid) {
@@ -480,7 +480,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Searched' column
-	 * 
+	 *
 	 * @param	aSearched	long with the value for the Searched column.
 	 */
 	public void setSearched(long aSearched) {
@@ -490,7 +490,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Identified' column
-	 * 
+	 *
 	 * @param	aIdentified	long with the value for the Identified column.
 	 */
 	public void setIdentified(long aIdentified) {
@@ -500,7 +500,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Filename' column
-	 * 
+	 *
 	 * @param	aFilename	String with the value for the Filename column.
 	 */
 	public void setFilename(String aFilename) {
@@ -510,7 +510,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Charge' column
-	 * 
+	 *
 	 * @param	aCharge	long with the value for the Charge column.
 	 */
 	public void setCharge(long aCharge) {
@@ -520,7 +520,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Mass_to_charge' column
-	 * 
+	 *
 	 * @param	aMass_to_charge	Number with the value for the Mass_to_charge column.
 	 */
 	public void setMass_to_charge(Number aMass_to_charge) {
@@ -530,7 +530,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Total_spectrum_intensity' column
-	 * 
+	 *
 	 * @param	aTotal_spectrum_intensity	Number with the value for the Total_spectrum_intensity column.
 	 */
 	public void setTotal_spectrum_intensity(Number aTotal_spectrum_intensity) {
@@ -540,7 +540,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Highest_peak_in_spectrum' column
-	 * 
+	 *
 	 * @param	aHighest_peak_in_spectrum	Number with the value for the Highest_peak_in_spectrum column.
 	 */
 	public void setHighest_peak_in_spectrum(Number aHighest_peak_in_spectrum) {
@@ -550,7 +550,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Username' column
-	 * 
+	 *
 	 * @param	aUsername	String with the value for the Username column.
 	 */
 	public void setUsername(String aUsername) {
@@ -560,7 +560,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @param	aCreationdate	java.sql.Timestamp with the value for the Creationdate column.
 	 */
 	public void setCreationdate(java.sql.Timestamp aCreationdate) {
@@ -570,7 +570,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 
 	/**
 	 * This method sets the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @param	aModificationdate	java.sql.Timestamp with the value for the Modificationdate column.
 	 */
 	public void setModificationdate(java.sql.Timestamp aModificationdate) {
@@ -796,7 +796,7 @@ public class SpectrumTableAccessor implements Deleteable, Retrievable, Updateabl
 	}
 
 	/**
-	 * This method will return the automatically generated key for the insert if 
+	 * This method will return the automatically generated key for the insert if
 	 * one was triggered, or 'null' otherwise.
 	 *
 	 * @return	Object[]	with the generated keys.

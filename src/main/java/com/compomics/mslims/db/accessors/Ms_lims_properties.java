@@ -1,4 +1,4 @@
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -49,7 +49,7 @@ public class Ms_lims_properties extends Ms_lims_propertiesTableAccessor {
     }
 
      /**
-     * This method will give the modification conversion version number as an int. If there is no version stored in ms_lims version number 0 will be given 
+     * This method will give the modification conversion version number as an int. If there is no version stored in ms_lims version number 0 will be given
      * @param iConn
      * @return Double with the version
      * @throws SQLException

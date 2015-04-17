@@ -4,20 +4,25 @@
  * Date: 18-jun-2003
  * Time: 6:58:54
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mslims.db.accessors.Fragmentation;
+import com.compomics.mslims.db.accessors.Instrument;
+import com.compomics.mslims.db.accessors.LCRun;
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.db.accessors.Protocol;
+import com.compomics.mslims.db.accessors.User;
+import com.compomics.mslims.gui.dialogs.InstrumentSelectionDialog;
+import com.compomics.mslims.gui.dialogs.ProjectDialog;
+import com.compomics.mslims.gui.interfaces.Informable;
+import com.compomics.mslims.gui.interfaces.ProjectManager;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.*;
 import com.compomics.mslimscore.gui.dialogs.DescriptionDialog;
-import com.compomics.mslimscore.gui.dialogs.InstrumentSelectionDialog;
-import com.compomics.mslimscore.gui.dialogs.ProjectDialog;
-import com.compomics.mslimscore.gui.interfaces.Informable;
-import com.compomics.mslimscore.gui.interfaces.ProjectManager;
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslimscore.util.fileio.FileExtensionFilter;
-import com.compomics.mslimscore.util.fileio.interfaces.SpectrumStorageEngine;
+import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.util.fileio.FileExtensionFilter;
+import com.compomics.mslims.util.fileio.interfaces.SpectrumStorageEngine;
 import com.compomics.util.general.CommandLineParser;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Connectable;

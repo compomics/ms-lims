@@ -48,7 +48,7 @@ public interface SpectrumStorageEngine {
      * @param aParent       Flamable    with the paent that will do the error handling.
      * @param aProgress     DefaulProgressBar   to display the progress on.
      */
-    public abstract void findAllLCRunsFromFileSystem(File[] aList, Vector aStoredLCRuns, Vector aFoundLCRuns, Flamable aParent, DefaultProgressBar aProgress);
+    void findAllLCRunsFromFileSystem(File[] aList, Vector aStoredLCRuns, Vector aFoundLCRuns, Flamable aParent, DefaultProgressBar aProgress);
 
     /**
      * This method actually takes care of finding all the spectrumfiles for the indiciated LCRun and transforming these
@@ -62,6 +62,6 @@ public interface SpectrumStorageEngine {
      * @throws java.io.IOException   when the filereading goes wrong.
      * @throws java.sql.SQLException when the DB storage goes wrong.
      */
-    public abstract int
+    int
     loadAndStoreSpectrumFiles(LCRun aLCRun, long aProjectid, long aInstrumentid, Connection aConn, Fragmentation aFragmentation) throws IOException, SQLException;
 }

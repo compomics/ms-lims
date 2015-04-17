@@ -1,4 +1,4 @@
-package com.compomics.mslimscore.gui.interfaces;
+package com.compomics.mslims.gui.interfaces;
 
 
 import java.awt.*;
@@ -21,16 +21,16 @@ public interface TableColor {
      * folowing the selection of columns.
      */
 
-    public Color getSelectedLight();
+    Color getSelectedLight();
 
-    public Color getSelectedDark();
+    Color getSelectedDark();
 
-    public Color getNonSelectedLight();
+    Color getNonSelectedLight();
 
-    public Color getNonSelectedDark();
+    Color getNonSelectedDark();
 
-    public Color getHeaderLight();
+    Color getHeaderLight();
 
-    public Color getHeaderDark();
+    Color getHeaderDark();
 
 }

@@ -1,6 +1,6 @@
-package com.compomics.mslimscore.gui.table.renderers;
+package com.compomics.mslims.gui.table.renderers;
 
-import com.compomics.mslimsdb.accessors.Identification;
+import com.compomics.mslims.db.accessors.Identification;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

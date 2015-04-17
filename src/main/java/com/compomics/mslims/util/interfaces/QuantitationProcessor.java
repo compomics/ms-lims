@@ -14,12 +14,12 @@ public interface QuantitationProcessor {
      *
      * @return true if more, false if else.
      */
-    public boolean hasNext();
+    boolean hasNext();
 
     /**
      * Returns the next RatioGroupCollection.
      *
      * @return The next RatioGroupCollection.
      */
-    public RatioGroupCollection next();
+    RatioGroupCollection next();
 }

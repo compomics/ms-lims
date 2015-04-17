@@ -4,7 +4,7 @@
  * Date: 16-jul-2003
  * Time: 15:03:19
  */
-package com.compomics.mslimscore.gui.progressbars;
+package com.compomics.mslims.gui.progressbars;
 
 import org.apache.log4j.Logger;
 

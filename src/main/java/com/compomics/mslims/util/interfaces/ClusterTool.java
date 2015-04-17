@@ -31,5 +31,5 @@ public interface ClusterTool {
      * @param aSpectra SpectrumFile[] with the spectra to cluster
      * @return Cluster[]   with the clusters composed of the specified spectra
      */
-    public abstract Cluster[] clusterSpectra(SpectrumFile[] aSpectra);
+    Cluster[] clusterSpectra(SpectrumFile[] aSpectra);
 }

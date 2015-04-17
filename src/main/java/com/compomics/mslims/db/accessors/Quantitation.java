@@ -4,7 +4,7 @@
  * Date: 18-jun-2003
  * Time: 16:15:36
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -222,9 +222,6 @@ public class Quantitation extends QuantitationTableAccessor {
             return false;
         }
         final Quantitation other = (Quantitation) obj;
-        if ((this.iQuantitatioFileName == null) ? (other.iQuantitatioFileName != null) : !this.iQuantitatioFileName.equals(other.iQuantitatioFileName)) {
-            return false;
-        }
-        return true;
+        return !((this.iQuantitatioFileName == null) ? (other.iQuantitatioFileName != null) : !this.iQuantitatioFileName.equals(other.iQuantitatioFileName));
     }
 }

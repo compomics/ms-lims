@@ -192,7 +192,7 @@ public class MALDIDiffAnalysisWorker implements Runnable {
                     iProgress.pack();
                     iProgress.setIndeterminate(true);
                 }
-                File[] compoundListFiles = this.getAllCompoundListsForFolder(iInput, iProgress);
+                File[] compoundListFiles = getAllCompoundListsForFolder(iInput, iProgress);
                 if (iProgress != null) {
                     iProgress.setMessage("Found " + compoundListFiles.length + " compoundlists to parse.");
                     iProgress.setIndeterminate(false);

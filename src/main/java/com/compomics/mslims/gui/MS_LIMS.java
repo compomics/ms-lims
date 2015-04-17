@@ -1,23 +1,23 @@
 /**
  * Created by IntelliJ IDEA. User: martlenn Date: 08-Mar-2007 Time: 09:27:03
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
-import com.compomics.mslimsdb.accessors.Modification_conversion;
-import com.compomics.mslimsdb.accessors.Ms_lims_properties;
+import com.compomics.mslims.db.accessors.Modification_conversion;
+import com.compomics.mslims.db.accessors.Ms_lims_properties;
+import com.compomics.mslims.gui.quantitation.QuantitationTypeChooser;
+import com.compomics.mslims.util.fileio.ModificationConversionIO;
+import com.compomics.mslims.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import com.compomics.mslimscore.gui.dialogs.AboutDialog;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import com.compomics.mslimscore.gui.dialogs.CustomLauncherDialog;
-import com.compomics.mslimscore.gui.quantitation.QuantitationTypeChooser;
-import com.compomics.mslimscore.util.config.PropertiesManager;
-import com.compomics.mslimscore.util.fileio.ModificationConversionIO;
-import com.compomics.mslimscore.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;
 import com.compomics.peptizer.util.fileio.ConnectionManager;
 import com.compomics.rover.gui.wizard.WizardFrameHolder;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.interfaces.Connectable;
+import com.compomics.util.io.PropertiesManager;
 //import com.compomics.util.io.PropertiesManager;
 import com.compomics.util.io.StartBrowser;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
@@ -121,7 +121,7 @@ public class MS_LIMS extends JFrame implements Connectable {
         int frameHeight = 770;
         setSize(frameWidth, frameHeight);
 
-        //Before we start we will delete all the files and folders in temp/mslims. Files could 
+        //Before we start we will delete all the files and folders in temp/mslims. Files could
         //still be there if the quantitation storage gui was not quited correctly.
         try {
             File lTempfolder = File.createTempFile("temp", "temp").getParentFile();

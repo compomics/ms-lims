@@ -4,12 +4,12 @@
  * Date: 22-jun-2004
  * Time: 16:43:06
  */
-package com.compomics.mslimscore.gui.table;
+package com.compomics.mslims.gui.table;
 
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.db.accessors.IdentificationTableAccessor;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.IdentificationTableAccessor;
-import com.compomics.mslimsdb.accessors.Identification;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;

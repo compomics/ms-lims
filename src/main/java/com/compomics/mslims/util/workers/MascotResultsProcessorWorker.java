@@ -117,7 +117,7 @@ public class MascotResultsProcessorWorker extends SwingWorker {
                 Identification ita = (Identification) tempObj;
                 String name = ita.getTemporarySpectrumfilename();
                 if (uniquenessChecker.containsKey(name)) {
-                    Identification oldID = (Identification) uniquenessChecker.get(name);
+                    Identification oldID = uniquenessChecker.get(name);
                     long oldScore = oldID.getScore();
                     if (oldScore < ita.getScore()) {
                         uniquenessChecker.put(name, ita);

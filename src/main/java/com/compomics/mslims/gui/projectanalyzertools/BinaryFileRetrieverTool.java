@@ -4,15 +4,15 @@
  * Date: 21-mrt-2005
  * Time: 10:23:56
  */
-package com.compomics.mslimscore.gui.projectanalyzertools;
+package com.compomics.mslims.gui.projectanalyzertools;
 
+import com.compomics.mslims.db.accessors.Binfile;
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.gui.ProjectAnalyzer;
+import com.compomics.mslims.gui.interfaces.ProjectAnalyzerTool;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Binfile;
 import com.compomics.mslimsdb.accessors.Filedescriptor;
-import com.compomics.mslimsdb.accessors.Project;
-import com.compomics.mslimscore.gui.ProjectAnalyzer;
-import com.compomics.mslimscore.gui.interfaces.ProjectAnalyzerTool;
 import com.compomics.util.gui.FlamableJFrame;
 
 import javax.swing.*;

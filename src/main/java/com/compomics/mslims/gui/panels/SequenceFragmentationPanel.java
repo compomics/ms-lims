@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.compomics.mslimscore.gui.panels;
-import com.compomics.mslimscore.util.interfaces.FragmentIon;
-import com.compomics.mslimsdb.accessors.Fragmention;
-import java.awt.BorderLayout;
+package com.compomics.mslims.gui.panels;
+import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
+import com.compomics.mslims.db.accessors.Fragmention;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,11 +13,7 @@ import java.awt.Graphics2D;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Vector;
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 

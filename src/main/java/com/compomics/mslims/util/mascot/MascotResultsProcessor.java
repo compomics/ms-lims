@@ -501,7 +501,7 @@ public class MascotResultsProcessor {
                         hm.put(Fragmention.INTENSITY, new Long(new Double(fi.getIntensity()).longValue()));
                         hm.put(Fragmention.IONNAME, fi.getType());
                         hm.put(Fragmention.IONTYPE, new Long(fi.getID()));
-                        hm.put(Fragmention.L_IDENTIFICATIONID, (Long)(id.getGeneratedKeys()[0]));
+                        hm.put(Fragmention.L_IDENTIFICATIONID, id.getGeneratedKeys()[0]);
                         hm.put(Fragmention.L_IONSCORINGID, new Long(fi.getImportance()));
                         hm.put(Fragmention.MASSDELTA, new Double(new BigDecimal(fi.getTheoreticalExperimantalMassError()).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue()));
                         hm.put(Fragmention.MASSERRORMARGIN, new Double(id.getFragmentMassTolerance()));
@@ -513,7 +513,7 @@ public class MascotResultsProcessor {
 
                     // Create and persist Validation for the new Identification.
                     HashMap lValidationMap = new HashMap();
-                    lValidationMap.put(Validation.L_IDENTIFICATIONID, (Long) id.getGeneratedKeys()[0]);
+                    lValidationMap.put(Validation.L_IDENTIFICATIONID, id.getGeneratedKeys()[0]);
                     lValidationMap.put(Validation.L_VALIDATIONTYPEID, new Long(Validationtype.NOT_VALIDATED));
 
                     Validation lValidation = new Validation(lValidationMap);

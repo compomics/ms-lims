@@ -23,10 +23,6 @@ public class MascotGenericFileFilter implements FileFilter {
      */
     public boolean accept(File aFile) {
         String lFileName = aFile.getName().toLowerCase();
-        if (lFileName.endsWith(iExtension)) {
-            return true;
-        } else {
-            return false;
-        }
+        return lFileName.endsWith(iExtension);
     }
 }

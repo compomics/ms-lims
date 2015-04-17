@@ -4,7 +4,7 @@
  * Date: 13/04/2010
  * Time: 15:53:29
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import java.sql.*;
 import java.io.*;

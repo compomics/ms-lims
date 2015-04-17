@@ -34,19 +34,19 @@ public interface FormToObjectParser {
      *
      * @return Colelction  with all the InputInterface implementations.
      */
-    public Collection getAllInputs();
+    Collection getAllInputs();
 
     /**
      * This method reports on the number of inputs found in the form.
      *
      * @return int the number of inputs found in the form.
      */
-    public int getInputCount();
+    int getInputCount();
 
     /**
      * This method reports on the form parameters (parameters in the FORM tag) that have been found in the form.
      *
      * @return HashMap with the form parameters as key-value pairs as occurring in the FORM tag.
      */
-    public HashMap getFormParams();
+    HashMap getFormParams();
 }

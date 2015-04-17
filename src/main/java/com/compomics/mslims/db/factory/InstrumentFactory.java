@@ -1,6 +1,6 @@
-package com.compomics.mslimsdb.factory;
+package com.compomics.mslims.db.factory;
 
-import com.compomics.mslimsdb.accessors.Instrument;
+import com.compomics.mslims.db.accessors.Instrument;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;

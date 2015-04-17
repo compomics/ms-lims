@@ -4,7 +4,7 @@
  * Date: 21-jun-2003
  * Time: 16:35:15
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -76,7 +76,6 @@ public class LCRun extends LcrunTableAccessor implements Comparable {
     public LCRun(ResultSet aRS) throws SQLException {
         iLcrunid = aRS.getLong(1);
         iL_projectid = aRS.getLong(2);
-        ;
         iDescription = aRS.getString(3);
         iFilecount = aRS.getLong(4);
         iName = aRS.getString(5);

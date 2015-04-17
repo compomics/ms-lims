@@ -4,7 +4,7 @@
  * Date: 26-jan-2004
  * Time: 11:22:40
  */
-package com.compomics.mslimscore.gui.interfaces;
+package com.compomics.mslims.gui.interfaces;
 
 
 import com.compomics.util.interfaces.Flamable;
@@ -28,5 +28,5 @@ public interface ProjectManager extends Flamable {
     /**
      * This method will be called by the ProjectDialog whenever an operation changed the projects.
      */
-    public void projectsChanged();
+    void projectsChanged();
 }

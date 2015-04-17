@@ -115,7 +115,7 @@ public class AboutDialog extends JDialog {
         // The labels.
         lblLabels = new JLabel[8];
 
-        lblLabels[0] = new JLabel("ms_lims program version " + this.getLastVersion());
+        lblLabels[0] = new JLabel("ms_lims program version " + getLastVersion());
         lblLabels[1] = new JLabel(" ");
         lblLabels[2] = new JLabel("Lennart Martens (lennart.martens@UGent.be)");
         lblLabels[3] = new JLabel("          Ghent University (www.UGent.be)");

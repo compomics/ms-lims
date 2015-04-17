@@ -593,7 +593,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
                     txtInfo.append("\nAn error occured in the following projects : ");
                     for (int i = 0; i < errorProjects.size(); i++) {
                         Project pro = (Project) errorProjects.get(i);
-                        txtInfo.append((Long) pro.getProjectid() + " , ");
+                        txtInfo.append(pro.getProjectid() + " , ");
                     }
                 } else {
                     progress.setIndeterminate(false);
@@ -613,7 +613,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
         updateProject((Project) cmbProjects.getSelectedItem());
     }
 
-    private void setUpdateParameters(MascotDatfile aMDF) throws IllegalArgumentException, NumberFormatException {
+    private void setUpdateParameters(MascotDatfile aMDF) throws IllegalArgumentException {
         // create the arrays
         iMod_seqs = new String[iIdentifications.length];
         iIoncoverages = new String[iIdentifications.length];
@@ -694,7 +694,7 @@ public class MS_LIMS_6_Data_Updater extends JFrame implements Connectable {
     *This method will be used id not all the identifications could be updated with the method setUpdateParamters
     */
 
-    private void setUpdateParameters2(MascotDatfile aMDF) throws IllegalArgumentException, NumberFormatException {
+    private void setUpdateParameters2(MascotDatfile aMDF) throws IllegalArgumentException {
         // create the arrays
         iMod_seqs = new String[iIdentifications.length];
         iIoncoverages = new String[iIdentifications.length];

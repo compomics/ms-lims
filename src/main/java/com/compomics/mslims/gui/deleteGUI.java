@@ -1,6 +1,6 @@
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
-import com.compomics.mslimsdb.accessors.Project;
+import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslimsdb.utils.dbDeleteQueryGenerator;
 import com.compomics.util.gui.FlamableJFrame;
 

@@ -4,15 +4,15 @@
  * Date: 4-okt-2005
  * Time: 10:27:41
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mslims.gui.dialogs.MALDIStatisticsResultsDialog;
 import org.apache.log4j.Logger;
 
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Flamable;
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslimscore.gui.dialogs.MALDIStatisticsResultsDialog;
-import com.compomics.mslimscore.util.workers.MALDIDiffAnalysisWorker;
+import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.util.workers.MALDIDiffAnalysisWorker;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;

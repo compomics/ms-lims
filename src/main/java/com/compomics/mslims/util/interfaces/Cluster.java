@@ -28,7 +28,7 @@ public interface Cluster {
      *
      * @return String with a display name for the cluster of spectra.
      */
-    public abstract String getName();
+    String getName();
 
     /**
      * This method should return the number of spectra that were grouped to form this cluster. A valid return value is
@@ -36,19 +36,19 @@ public interface Cluster {
      *
      * @return int with the number of spectra in this cluster. Result should be a positive, non-zero integer.
      */
-    public abstract int getSpectrumCount();
+    int getSpectrumCount();
 
     /**
      * This method returns the spectra that this cluster is composed of as an array of SpectrumFile instances.
      *
      * @return SpectrumFile[] with the spectra that this cluster is composed of.
      */
-    public abstract SpectrumFile[] getSpectra();
+    SpectrumFile[] getSpectra();
 
     /**
      * This method allows the caller to add a spectrum to the cluster.
      *
      * @param aSpectrum SpectrumFile to add to the cluster.
      */
-    public abstract void addSpectrum(SpectrumFile aSpectrum);
+    void addSpectrum(SpectrumFile aSpectrum);
 }

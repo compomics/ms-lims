@@ -1,24 +1,38 @@
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 //TODO move this to thermo-msf parser and add it to storage options just call it from there
-import com.compomics.mslimscore.util.interfaces.FragmentIon;
+import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
 import com.compomics.mascotdatfile.util.interfaces.MascotDatfileInf;
 import com.compomics.mascotdatfile.util.interfaces.QueryToPeptideMapInf;
 import com.compomics.mascotdatfile.util.mascot.*;
 import com.compomics.mascotdatfile.util.mascot.fragmentions.FragmentIonImpl;
-import com.compomics.mslimsdb.accessors.*;
-import com.compomics.mslimscore.util.fileio.MascotGenericFile;
-import com.compomics.mslimscore.util.mascot.MascotIdentifiedSpectrum;
-import com.compomics.mslimscore.util.mascot.MascotIsoforms;
-import com.compomics.thermo_msf_parser_API.highmeminstance.Event;
-import com.compomics.thermo_msf_parser_API.highmeminstance.Parser;
-import com.compomics.thermo_msf_parser_API.highmeminstance.Peptide;
-import com.compomics.thermo_msf_parser_API.highmeminstance.QuanResult;
-import com.compomics.thermo_msf_parser_API.highmeminstance.RatioType;
-import com.compomics.thermo_msf_parser_API.highmeminstance.RawFile;
-import com.compomics.thermo_msf_parser_API.highmeminstance.ScoreType;
-import com.compomics.thermo_msf_parser_API.highmeminstance.WorkflowInfo;
-import com.compomics.thermo_msf_parser_GUI.Thermo_msf_parserGUI;
+import com.compomics.mslims.db.accessors.Datfile;
+import com.compomics.mslims.db.accessors.Fragmentation;
+import com.compomics.mslims.db.accessors.Fragmention;
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.db.accessors.IdentificationTableAccessor;
+import com.compomics.mslims.db.accessors.Identification_to_quantitation;
+import com.compomics.mslims.db.accessors.Instrument;
+import com.compomics.mslims.db.accessors.LCRun;
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.db.accessors.Quantitation_file;
+import com.compomics.mslims.db.accessors.Quantitation_group;
+import com.compomics.mslims.db.accessors.ScanTableAccessor;
+import com.compomics.mslims.db.accessors.Spectrum;
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import com.compomics.mslims.db.accessors.Validation;
+import com.compomics.mslims.db.accessors.Validationtype;
+import com.compomics.mslims.util.fileio.MascotGenericFile;
+import com.compomics.mslims.util.mascot.MascotIdentifiedSpectrum;
+import com.compomics.mslims.util.mascot.MascotIsoforms;
+import com.compomics.rover.general.quantitation.RatioType;
+import com.compomics.thermo_msf_parser.gui.Thermo_msf_parserGUI;
+import com.compomics.thermo_msf_parser.msf.Event;
+import com.compomics.thermo_msf_parser.msf.QuanResult;
+import com.compomics.thermo_msf_parser.msf.RawFile;
+import com.compomics.thermo_msf_parser.msf.ScoreType;
+import com.compomics.thermo_msf_parser.msf.WorkflowInfo;
 import com.compomics.util.db.interfaces.Persistable;
+import com.compomics.util.experiment.biology.Peptide;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -40,6 +54,7 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.Vector;
+import javax.swing.text.html.HTMLEditorKit.Parser;
 
 /**
  * Created by IntelliJ IDEA.
@@ -487,7 +502,7 @@ public class MsfStorer extends JFrame {
                 previewMsfFilesButton.setEnabled(true);
                 chbCombine.setEnabled(true);
                 iMsfFileLocations.clear();
-                
+
                 if (lLoaded) {
                     //give a message to the user that everything is loaded
                     JOptionPane.showMessageDialog(new JFrame(), "All data was stored", "Info", JOptionPane.INFORMATION_MESSAGE);

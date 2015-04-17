@@ -1,15 +1,15 @@
-package com.compomics.mslimscore.gui.projectanalyzertools;
+package com.compomics.mslims.gui.projectanalyzertools;
 
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.gui.ProjectAnalyzer;
+import com.compomics.mslims.gui.interfaces.ProjectAnalyzerTool;
+import com.compomics.mslims.util.quantitation.quantitationvalidation.sequenceretriever.IpiSequenceRetriever;
+import com.compomics.mslims.util.quantitation.quantitationvalidation.sequenceretriever.NcbiSequenceRetriever;
+import com.compomics.mslims.util.quantitation.quantitationvalidation.sequenceretriever.UniprotSequenceRetriever;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Identification;
-import com.compomics.mslimsdb.accessors.Project;
-import com.compomics.mslimscore.gui.interfaces.ProjectAnalyzerTool;
-import com.compomics.mslimscore.gui.ProjectAnalyzer;
-import com.compomics.mslimscore.util.enumeration.ProteinDatabaseType;
-import com.compomics.mslimscore.util.http.sequenceretrievers.UniprotSequenceRetriever;
-import com.compomics.mslimscore.util.http.sequenceretrievers.NcbiSequenceRetriever;
-import com.compomics.mslimscore.util.http.sequenceretrievers.IpiSequenceRetriever;
+import com.compomics.rover.general.enumeration.ProteinDatabaseType;
 import com.compomics.util.sun.SwingWorker;
 
 import javax.swing.*;

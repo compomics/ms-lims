@@ -4,19 +4,19 @@
  * Date: 17-dec-02
  * Time: 15:56:21
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
 import com.compomics.mascotdatfile.util.gui.SequenceFragmentationPanel;
+import com.compomics.mascotdatfile.util.interfaces.FragmentIon;
+import com.compomics.mslims.db.accessors.Spectrum;
+import com.compomics.mslims.db.accessors.Spectrum_file;
+import com.compomics.mslims.gui.dialogs.QueryCacheDialog;
+import com.compomics.mslims.gui.interfaces.Informable;
+import com.compomics.mslims.util.config.MslimsConfiguration;
+import com.compomics.mslims.util.fileio.MascotGenericFile;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
-import com.compomics.mslimscore.util.interfaces.FragmentIon;
-import com.compomics.mslimsdb.accessors.Spectrum;
-import com.compomics.mslimsdb.accessors.Spectrum_file;
 import com.compomics.mslimscore.gui.dialogs.ExportDialog;
-import com.compomics.mslimscore.gui.dialogs.QueryCacheDialog;
-import com.compomics.mslimscore.gui.interfaces.Informable;
 import com.compomics.mslimscore.util.FragmentionMiddleMan;
-import com.compomics.mslimscore.util.config.MslimsConfiguration;
-import com.compomics.mslimscore.util.fileio.MascotGenericFile;
 //TODO change to call with reflection
 import com.compomics.peptizer.gui.PeptizerGUI;
 import com.compomics.peptizer.gui.dialog.CreateTaskDialog;

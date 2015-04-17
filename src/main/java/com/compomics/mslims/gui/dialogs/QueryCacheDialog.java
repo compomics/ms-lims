@@ -4,11 +4,11 @@
  * Date: 24-aug-2005
  * Time: 7:37:31
  */
-package com.compomics.mslimscore.gui.dialogs;
+package com.compomics.mslims.gui.dialogs;
 
+import com.compomics.mslims.gui.interfaces.Informable;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimscore.gui.interfaces.Informable;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;

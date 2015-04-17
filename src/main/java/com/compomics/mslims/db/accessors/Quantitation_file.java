@@ -1,4 +1,4 @@
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -38,7 +38,7 @@ public class Quantitation_file extends Quantitation_fileTableAccessor {
             try {
                 this.setFileFromName((String) aParams.get(FROMFILE));
             } catch (IOException ioe) {
-                throw new IllegalArgumentException("Unable to process file '" + (String) aParams.get(FROMFILE) + "': " + ioe.getMessage() + "!");
+                throw new IllegalArgumentException("Unable to process file '" + aParams.get(FROMFILE) + "': " + ioe.getMessage() + "!");
             }
         }
     }

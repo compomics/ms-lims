@@ -190,7 +190,6 @@ public class MascotSequenceRetriever {
         }
         URL url = new URL(iUrl + "/cgi/getseq.pl?" + database + "+" + aAccession + "+" + aMode);
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-        ;
 
         return br;
     }
@@ -317,7 +316,6 @@ public class MascotSequenceRetriever {
             accessions.add(param);
         }
         String[] result = null;
-        ;
 
         if (clp.hasFlag("a")) {
             result = msr.getRawSequences(accessions);

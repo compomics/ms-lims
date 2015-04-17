@@ -4,15 +4,15 @@
  * Date: 2-apr-03
  * Time: 15:41:15
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mslims.db.accessors.Instrument;
+import com.compomics.mslims.db.accessors.Project;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Instrument;
-import com.compomics.mslimsdb.accessors.Project;
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslimscore.util.fileio.mergers.MGFMerger;
+import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.util.fileio.mergers.MGFMerger;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Connectable;
 

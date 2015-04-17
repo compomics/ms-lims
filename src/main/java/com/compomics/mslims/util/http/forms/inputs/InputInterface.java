@@ -29,50 +29,50 @@ public interface InputInterface {
     /**
      * Can be checked to see if type of implementation is Checkbox.
      */
-    public static final int CHECKBOX = 1;
+    int CHECKBOX = 1;
 
     /**
      * Can be checked to see if type of implementation is RadioButton.
      */
-    public static final int RADIOINPUT = 2;
+    int RADIOINPUT = 2;
 
     /**
      * Can be checked to see if type of implementation is a kind of list (dropdown or full).
      */
-    public static final int SELECTINPUT = 3;
+    int SELECTINPUT = 3;
 
     /**
      * Can be checked to see if type of implementation is TextField (including hidden and file fields).
      */
-    public static final int TEXTFIELDINPUT = 4;
+    int TEXTFIELDINPUT = 4;
 
     /**
      * This method will return an int, which is an element of the public static final variables in this class.
      *
      * @return int which can be matched against the variables in this interface to find the type of the implementation.
      */
-    public int getType();
+    int getType();
 
     /**
      * The name of an input is used in the construction of the URL parameters.
      *
      * @return String  the name of this particular input field.
      */
-    public String getName();
+    String getName();
 
     /**
      * The name of an input is used in the construction of the URL parameters.
      *
      * @param aName the String with the name for this particular input field.
      */
-    public void setName(String aName);
+    void setName(String aName);
 
     /**
      * The value of the inputfield is combined with its name to yield the final submit URL.
      *
      * @return String  with the value for this particular input field.
      */
-    public String getValue();
+    String getValue();
 
     /**
      * This method allows for programmatic setting of the value. <br /> Note that calling this method will result in the
@@ -80,7 +80,7 @@ public interface InputInterface {
      *
      * @param aValue the String with the value that has to be set.
      */
-    public void setValue(String aValue);
+    void setValue(String aValue);
 
     /**
      * The comment for an input field often contains an elucidation for the user, which is more verbose than the name,
@@ -88,7 +88,7 @@ public interface InputInterface {
      *
      * @return String  with the comment for this particular input field.
      */
-    public String getComment();
+    String getComment();
 
     /**
      * The comment for an input field often contains an elucidation for the user, which is more verbose than the name,
@@ -96,7 +96,7 @@ public interface InputInterface {
      *
      * @param aComment the String with the comment for this particular input field.
      */
-    public void setComment(String aComment);
+    void setComment(String aComment);
 
     /**
      * This method will return the contents of this input in a HTTP post parameter style.
@@ -104,5 +104,5 @@ public interface InputInterface {
      * @param BOUNDARY the delimiter used in the post String.
      * @return String  with the name and value of this input, structured in a HHTP post format.
      */
-    public String getHTTPPostString(final String BOUNDARY);
+    String getHTTPPostString(final String BOUNDARY);
 }

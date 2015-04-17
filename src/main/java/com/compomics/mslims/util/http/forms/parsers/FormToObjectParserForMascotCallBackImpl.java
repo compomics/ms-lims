@@ -192,12 +192,8 @@ public class FormToObjectParserForMascotCallBackImpl extends HTMLEditorKit.Parse
                 this.currentSelect.setMultiple(true);
             }
         } else if (t.equals(HTML.Tag.OPTION)) {
-            state = this.IN_OPTION;
-            if (a.getAttribute(HTML.Attribute.SELECTED) != null) {
-                selectDefault = true;
-            } else {
-                selectDefault = false;
-            }
+            state = IN_OPTION;
+            selectDefault = a.getAttribute(HTML.Attribute.SELECTED) != null;
         } else if (t.equals(HTML.Tag.TD)) {
             inTD = true;
         } else if (t.equals(HTML.Tag.A)) {

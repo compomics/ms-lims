@@ -1,5 +1,6 @@
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mslims.util.fileio.MascotGenericFile;
 import org.apache.log4j.Logger;
 
 /**
@@ -17,7 +18,6 @@ import org.apache.log4j.Logger;
  */
 
 import com.compomics.mslimscore.gui.tree.ClusterTreeModel;
-import com.compomics.mslimscore.util.fileio.MascotGenericFile;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.gui.events.RescalingEvent;
 import com.compomics.util.gui.interfaces.SpectrumPanelListener;

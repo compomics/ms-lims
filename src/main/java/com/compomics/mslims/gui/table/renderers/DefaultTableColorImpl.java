@@ -1,8 +1,8 @@
-package com.compomics.mslimscore.gui.table.renderers;
+package com.compomics.mslims.gui.table.renderers;
 
+import com.compomics.mslims.gui.interfaces.TableColor;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimscore.gui.interfaces.TableColor;
 
 import java.awt.*;
 /**

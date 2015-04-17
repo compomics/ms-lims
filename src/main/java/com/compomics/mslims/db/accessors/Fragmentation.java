@@ -1,4 +1,4 @@
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -76,6 +76,6 @@ public class Fragmentation extends FragmentationTableAccessor {
 
 
     public String toString(){
-        return iDescription; 
+        return iDescription;
     }
 }

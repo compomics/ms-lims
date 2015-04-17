@@ -1,12 +1,12 @@
-package com.compomics.mslimscore.gui.table;
+package com.compomics.mslims.gui.table;
 
+import com.compomics.mslims.db.accessors.Identification;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Identification;
-import com.compomics.mslimscore.util.quantitation.ratios.RatioGroupCollection;
-import com.compomics.mslimscore.util.quantitation.ratios.RatioGroup;
-import com.compomics.mslimscore.util.quantitation.ratios.DefaultRatio;
-import com.compomics.mslimscore.util.enumeration.QuantitationMetaType;
+import com.compomics.rover.general.enumeration.QuantitationMetaType;
+import com.compomics.rover.general.quantitation.DefaultRatio;
+import com.compomics.rover.general.quantitation.RatioGroup;
+import com.compomics.rover.general.quantitation.RatioGroupCollection;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Vector;
@@ -122,7 +122,7 @@ public class ITraqQuantitationTableModel extends AbstractTableModel {
 
             RatioGroupCollection lCollection = iCollections.get(0);
             Vector<String> lRatioTypes = lCollection.getRatioTypes();
-            lHeader = (String) lRatioTypes.get(lZeroIndex);
+            lHeader = lRatioTypes.get(lZeroIndex);
 
         } else if (column < iNumberOfComponents + iNumberOfRatios + iNumberOfCollectionMetaData) {
             //get the quantitation type from the first identification from the first RatioGroupCollection

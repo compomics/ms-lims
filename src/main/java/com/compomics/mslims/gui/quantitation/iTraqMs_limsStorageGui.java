@@ -1,11 +1,11 @@
-package com.compomics.mslimscore.gui.quantitation;
+package com.compomics.mslims.gui.quantitation;
 
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.db.accessors.Protocol;
+import com.compomics.mslims.gui.frames.PreviewQuantitationResultsFrame;
+import com.compomics.mslims.util.enumeration.RatioSourceType;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Project;
-import com.compomics.mslimsdb.accessors.Protocol;
-import com.compomics.mslimscore.gui.frames.PreviewQuantitationResultsFrame;
-import com.compomics.mslimscore.util.enumeration.RatioSourceType;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.util.interfaces.Connectable;
 
@@ -21,8 +21,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.io.File;
-import java.io.IOException;
 import java.util.Vector;
 
 /**

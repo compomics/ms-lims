@@ -4,32 +4,42 @@
  * Date: 22-jun-2004
  * Time: 15:03:11
  */
-package com.compomics.mslimscore.gui.frames;
+package com.compomics.mslims.gui.frames;
 
-import com.compomics.mslims.db.accessors.Identification;
-import org.apache.log4j.Logger;
-
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslimscore.gui.projectanalyzertools.IdentificationSwitcherGUI;
-import com.compomics.mslimscore.gui.table.IdentificationTableAccessorsTableModel;
-import com.compomics.mslimscore.gui.tree.MascotSearch;
-import com.compomics.mslimscore.util.mascot.MascotResultsProcessor;
-import com.compomics.mslimscore.util.workers.MascotResultsProcessorWorker;
-import com.compomics.mslimscore.util.workers.MascotResultsStorageWorker;
+import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.gui.projectanalyzertools.IdentificationSwitcherGUI;
+import com.compomics.mslims.gui.table.IdentificationTableAccessorsTableModel;
+import com.compomics.mslims.gui.tree.MascotSearch;
+import com.compomics.mslims.util.mascot.MascotResultsProcessor;
+import com.compomics.mslims.util.workers.MascotResultsProcessorWorker;
+import com.compomics.mslims.util.workers.MascotResultsStorageWorker;
 import com.compomics.mslimsdb.accessors.AlternativeIdentification;
 import com.compomics.util.gui.JTableForDB;
 import com.compomics.util.interfaces.Flamable;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Vector;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import org.apache.log4j.Logger;
 
 /*
  * CVS information:
@@ -49,7 +59,7 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
     private static Logger logger = Logger.getLogger(PreviewSearchResultsFrame.class);
 
     IdentificationSwitcherGUI identificationSwitcher;
-    
+
     /**
      * The searches to process.
      */
@@ -67,7 +77,7 @@ public class PreviewSearchResultsFrame extends JFrame implements Flamable {
 
 
     JTableForDB tblResults = null;
-    
+
     private Vector<AlternativeIdentification> iAlternativeResults;
     private boolean identificationSwitcherUsed;
 

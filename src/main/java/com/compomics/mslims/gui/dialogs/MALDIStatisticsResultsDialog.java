@@ -4,12 +4,12 @@
  * Date: 5-okt-2005
  * Time: 11:44:01
  */
-package com.compomics.mslimscore.gui.dialogs;
+package com.compomics.mslims.gui.dialogs;
 
+import com.compomics.mslims.util.fileio.BrukerCompoundCouple;
+import com.compomics.mslims.util.workers.MALDIDiffAnalysisWorker;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimscore.util.workers.MALDIDiffAnalysisWorker;
-import com.compomics.mslimscore.util.fileio.BrukerCompoundCouple;
 
 import javax.swing.*;
 import java.awt.*;

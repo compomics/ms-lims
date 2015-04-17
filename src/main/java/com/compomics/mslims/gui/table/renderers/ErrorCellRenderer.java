@@ -4,7 +4,7 @@
  * Date: 24-nov-2004
  * Time: 12:23:55
  */
-package com.compomics.mslimscore.gui.table.renderers;
+package com.compomics.mslims.gui.table.renderers;
 
 import org.apache.log4j.Logger;
 

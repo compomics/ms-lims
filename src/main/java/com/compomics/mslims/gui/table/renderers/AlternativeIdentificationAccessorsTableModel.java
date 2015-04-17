@@ -1,7 +1,5 @@
-package com.compomics.mslimscore.gui.table.renderers;
+package com.compomics.mslims.gui.table.renderers;
 
-import com.compomics.mslimsdb.accessors.AlternativeIdentification;
-import com.compomics.mslimsdb.accessors.AlternativeIdentificationTableAccessor;
 import org.apache.log4j.Logger;
 
 import javax.swing.table.AbstractTableModel;

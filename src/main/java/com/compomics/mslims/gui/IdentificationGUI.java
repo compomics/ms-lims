@@ -4,23 +4,23 @@
  * Date: 18-jun-2004
  * Time: 17:58:34
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mslims.gui.frames.PreviewSearchResultsFrame;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import com.healthmarketscience.jackcess.Database;
 import org.apache.log4j.Logger;
 
 import com.compomics.util.enumeration.CompomicsTools;
-import com.compomics.mslimscore.gui.frames.PreviewSearchResultsFrame;
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslimscore.gui.table.MascotSearchTableModel;
-import com.compomics.mslimscore.gui.table.renderers.ErrorCellRenderer;
-import com.compomics.mslimscore.gui.table.renderers.ErrorObject;
-import com.compomics.mslimscore.gui.tree.MascotSearch;
-import com.compomics.mslimscore.gui.tree.MascotTask;
-import com.compomics.mslimscore.gui.tree.MascotTasksTreeModel;
-import com.compomics.mslimscore.gui.tree.renderers.MascotTasksTreeCellRenderer;
-import com.compomics.mslimscore.util.workers.ReadMascotTaskDBWorker;
+import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.gui.table.MascotSearchTableModel;
+import com.compomics.mslims.gui.table.renderers.ErrorCellRenderer;
+import com.compomics.mslims.gui.table.renderers.ErrorObject;
+import com.compomics.mslims.gui.tree.MascotSearch;
+import com.compomics.mslims.gui.tree.MascotTask;
+import com.compomics.mslims.gui.tree.MascotTasksTreeModel;
+import com.compomics.mslims.gui.tree.renderers.MascotTasksTreeCellRenderer;
+import com.compomics.mslims.util.workers.ReadMascotTaskDBWorker;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.interfaces.Flamable;
 import com.compomics.util.io.PropertiesManager;

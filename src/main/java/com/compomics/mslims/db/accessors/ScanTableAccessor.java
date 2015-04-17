@@ -4,7 +4,7 @@
  * Date: 01/09/2010
  * Time: 15:36:30
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import java.sql.*;
 import java.io.*;
@@ -160,7 +160,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method returns the value for the 'Scanid' column
-	 * 
+	 *
 	 * @return	long	with the value for the Scanid column.
 	 */
 	public long getScanid() {
@@ -169,7 +169,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method returns the value for the 'L_spectrumid' column
-	 * 
+	 *
 	 * @return	long	with the value for the L_spectrumid column.
 	 */
 	public long getL_spectrumid() {
@@ -178,7 +178,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method returns the value for the 'Number' column
-	 * 
+	 *
 	 * @return	int	with the value for the Number column.
 	 */
 	public int getNumber() {
@@ -187,7 +187,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method returns the value for the 'Rtsec' column
-	 * 
+	 *
 	 * @return	Number	with the value for the Rtsec column.
 	 */
 	public Number getRtsec() {
@@ -196,7 +196,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method returns the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Creationdate column.
 	 */
 	public java.sql.Timestamp getCreationdate() {
@@ -205,7 +205,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method returns the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Modificationdate column.
 	 */
 	public java.sql.Timestamp getModificationdate() {
@@ -214,7 +214,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method sets the value for the 'Scanid' column
-	 * 
+	 *
 	 * @param	aScanid	long with the value for the Scanid column.
 	 */
 	public void setScanid(long aScanid) {
@@ -224,7 +224,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method sets the value for the 'L_spectrumid' column
-	 * 
+	 *
 	 * @param	aL_spectrumid	long with the value for the L_spectrumid column.
 	 */
 	public void setL_spectrumid(long aL_spectrumid) {
@@ -234,7 +234,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method sets the value for the 'Number' column
-	 * 
+	 *
 	 * @param	aNumber	int with the value for the Number column.
 	 */
 	public void setNumber(int aNumber) {
@@ -244,7 +244,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method sets the value for the 'Rtsec' column
-	 * 
+	 *
 	 * @param	aRtsec	Number with the value for the Rtsec column.
 	 */
 	public void setRtsec(Number aRtsec) {
@@ -254,7 +254,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method sets the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @param	aCreationdate	java.sql.Timestamp with the value for the Creationdate column.
 	 */
 	public void setCreationdate(java.sql.Timestamp aCreationdate) {
@@ -264,7 +264,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 
 	/**
 	 * This method sets the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @param	aModificationdate	java.sql.Timestamp with the value for the Modificationdate column.
 	 */
 	public void setModificationdate(java.sql.Timestamp aModificationdate) {
@@ -432,7 +432,7 @@ public class ScanTableAccessor implements Deleteable, Retrievable, Updateable, P
 	}
 
 	/**
-	 * This method will return the automatically generated key for the insert if 
+	 * This method will return the automatically generated key for the insert if
 	 * one was triggered, or 'null' otherwise.
 	 *
 	 * @return	Object[]	with the generated keys.

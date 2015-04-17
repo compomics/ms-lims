@@ -4,7 +4,7 @@
  * Date: 31-jul-03
  * Time: 14:01
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -53,7 +53,7 @@ public class Identification extends IdentificationTableAccessor {
      * Temporary storage of the fragment mass tolerance for this ID.
      */
     private double iFragmentMassTolerance = -1.0;
-    
+
     private boolean hasAlternative = false;
 
     /**
@@ -355,7 +355,7 @@ public class Identification extends IdentificationTableAccessor {
 
         return lIDs;
     }
-    
+
         public void setAlternative(boolean hasAnAlternative){
         hasAlternative = hasAnAlternative;
     }
@@ -373,7 +373,7 @@ public class Identification extends IdentificationTableAccessor {
     public String toString() {
         return "" + iIdentificationid;
     }
-    
+
     public HashMap getHashMap() {
         HashMap tempMap = new HashMap();
         tempMap.put("IDENTIFICATIONID",this.iIdentificationid);

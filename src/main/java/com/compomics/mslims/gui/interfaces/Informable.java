@@ -4,7 +4,7 @@
  * Date: 12-feb-2004
  * Time: 12:19:36
  */
-package com.compomics.mslimscore.gui.interfaces;
+package com.compomics.mslims.gui.interfaces;
 
 /*
  * CVS information:
@@ -27,5 +27,5 @@ public interface Informable {
      *
      * @param o Object with the information to transfer.
      */
-    public void inform(Object o);
+    void inform(Object o);
 }

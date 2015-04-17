@@ -4,7 +4,7 @@
  * Date: 11-feb-03
  * Time: 9:57:22
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -53,7 +53,7 @@ public class Pklfiles extends PklfilesTableAccessor {
             try {
                 this.setFileFromName((String) aParams.get(FROMFILE));
             } catch (IOException ioe) {
-                throw new IllegalArgumentException("Unable to process file '" + (String) aParams.get(FROMFILE) + "': " + ioe.getMessage() + "!");
+                throw new IllegalArgumentException("Unable to process file '" + aParams.get(FROMFILE) + "': " + ioe.getMessage() + "!");
             }
         }
     }

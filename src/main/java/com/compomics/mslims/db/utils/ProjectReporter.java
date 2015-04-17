@@ -4,12 +4,12 @@
  * Date: 23-mrt-2005
  * Time: 12:10:46
  */
-package com.compomics.mslimsdb.utils;
+package com.compomics.mslims.db.utils;
 
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.db.accessors.Protocol;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Protocol;
-import com.compomics.mslimsdb.accessors.Project;
 
 import javax.swing.*;
 import java.math.BigDecimal;

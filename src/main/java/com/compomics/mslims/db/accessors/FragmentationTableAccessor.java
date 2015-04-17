@@ -4,7 +4,7 @@
  * Date: 30/11/2010
  * Time: 13:29:48
  */
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import java.sql.*;
 import java.io.*;
@@ -145,7 +145,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method returns the value for the 'Fragmentationid' column
-	 * 
+	 *
 	 * @return	long	with the value for the Fragmentationid column.
 	 */
 	public long getFragmentationid() {
@@ -154,7 +154,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method returns the value for the 'Description' column
-	 * 
+	 *
 	 * @return	String	with the value for the Description column.
 	 */
 	public String getDescription() {
@@ -163,7 +163,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method returns the value for the 'Username' column
-	 * 
+	 *
 	 * @return	String	with the value for the Username column.
 	 */
 	public String getUsername() {
@@ -172,7 +172,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method returns the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Creationdate column.
 	 */
 	public java.sql.Timestamp getCreationdate() {
@@ -181,7 +181,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method returns the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Modificationdate column.
 	 */
 	public java.sql.Timestamp getModificationdate() {
@@ -190,7 +190,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method sets the value for the 'Fragmentationid' column
-	 * 
+	 *
 	 * @param	aFragmentationid	long with the value for the Fragmentationid column.
 	 */
 	public void setFragmentationid(long aFragmentationid) {
@@ -200,7 +200,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method sets the value for the 'Description' column
-	 * 
+	 *
 	 * @param	aDescription	String with the value for the Description column.
 	 */
 	public void setDescription(String aDescription) {
@@ -210,7 +210,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method sets the value for the 'Username' column
-	 * 
+	 *
 	 * @param	aUsername	String with the value for the Username column.
 	 */
 	public void setUsername(String aUsername) {
@@ -220,7 +220,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method sets the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @param	aCreationdate	java.sql.Timestamp with the value for the Creationdate column.
 	 */
 	public void setCreationdate(java.sql.Timestamp aCreationdate) {
@@ -230,7 +230,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 
 	/**
 	 * This method sets the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @param	aModificationdate	java.sql.Timestamp with the value for the Modificationdate column.
 	 */
 	public void setModificationdate(java.sql.Timestamp aModificationdate) {
@@ -386,7 +386,7 @@ public class FragmentationTableAccessor implements Deleteable, Retrievable, Upda
 	}
 
 	/**
-	 * This method will return the automatically generated key for the insert if 
+	 * This method will return the automatically generated key for the insert if
 	 * one was triggered, or 'null' otherwise.
 	 *
 	 * @return	Object[]	with the generated keys.

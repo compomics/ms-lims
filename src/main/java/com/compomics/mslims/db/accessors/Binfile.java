@@ -4,8 +4,7 @@
  * Date: 04-mrt-05
  * Time: 17:09:23
  */
-package com.compomics.mslimsdb.accessors;
-
+package com.compomics.mslims.db.accessors;
 
 import org.apache.log4j.Logger;
 
@@ -54,7 +53,7 @@ public class Binfile extends BinfileTableAccessor {
             try {
                 this.setFileFromName((String) aParams.get(FROMFILE));
             } catch (IOException ioe) {
-                throw new IllegalArgumentException("Unable to process file '" + (String) aParams.get(FROMFILE) + "': " + ioe.getMessage() + "!");
+                throw new IllegalArgumentException("Unable to process file '" + aParams.get(FROMFILE) + "': " + ioe.getMessage() + "!");
             }
         }
     }

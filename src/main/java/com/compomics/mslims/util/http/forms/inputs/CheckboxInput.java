@@ -90,11 +90,7 @@ public class CheckboxInput extends AbstractInput {
                 String input = bReader.readLine();
                 if (input.trim().equals("")) {
                     // Do nothing, as the user requested the default.
-                } else if (input.trim().equalsIgnoreCase("yes") || input.trim().equalsIgnoreCase("y")) {
-                    ibChecked = true;
-                } else {
-                    ibChecked = false;
-                }
+                } else ibChecked = input.trim().equalsIgnoreCase("yes") || input.trim().equalsIgnoreCase("y");
             } catch (IOException ioe) {
                 logger.error(ioe.getMessage(), ioe);
             }

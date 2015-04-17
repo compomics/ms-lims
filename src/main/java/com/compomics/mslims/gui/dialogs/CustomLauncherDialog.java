@@ -158,7 +158,7 @@ public class CustomLauncherDialog extends JDialog {
         }
         // OK, we've got a class. Now try to invoke the right constructor.
         try {
-            Constructor toCall = classToExecute.getConstructor(new Class[]{java.sql.Connection.class, java.lang.String.class});
+            Constructor toCall = classToExecute.getConstructor(Connection.class, String.class);
             // Right, we have a constructor, call it!
             Object[] arguments = new Object[]{iConn, iDBName};
             toCall.newInstance(arguments);

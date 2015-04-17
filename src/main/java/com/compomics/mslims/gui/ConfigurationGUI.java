@@ -1,17 +1,21 @@
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mascotdatfile.util.mascot.ModificationConversion;
+import com.compomics.mslims.db.accessors.Instrument;
+import com.compomics.mslims.db.accessors.Modification_conversion;
+import com.compomics.mslims.db.accessors.Ms_lims_properties;
+import com.compomics.mslims.db.accessors.Protocol;
+import com.compomics.mslims.db.accessors.User;
+import com.compomics.mslims.db.conversiontool.DbConversionToolGuiEdition;
+import com.compomics.mslims.db.conversiontool.MS_LIMS_6_Data_Updater;
+import com.compomics.mslims.db.conversiontool.MS_LIMS_7_7_Data_Updater;
+import com.compomics.mslims.db.conversiontool.MS_LIMS_7_Data_Updater;
+import com.compomics.mslims.db.factory.InstrumentFactory;
+import com.compomics.mslims.util.fileio.ModificationConversionIO;
+import com.compomics.mslims.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
-import com.compomics.mslimscore.util.modificationconversion.ModificationConversion;
-import com.compomics.mslimsdb.accessors.*;
-import com.compomics.mslimscore.util.conversiontool.MS_LIMS_7_7_Data_Updater;
-import com.compomics.mslimscore.util.fileio.ModificationConversionIO;
-import com.compomics.mslimscore.util.mascot.MascotWebConnector.MascotAuthenticatedConnection;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimscore.util.conversiontool.DbConversionToolGuiEdition;
-import com.compomics.mslimscore.util.conversiontool.MS_LIMS_6_Data_Updater;
-import com.compomics.mslimscore.util.conversiontool.MS_LIMS_7_Data_Updater;
-import com.compomics.mslimsdb.factory.InstrumentFactory;
 import com.compomics.util.enumeration.CompomicsTools;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Connectable;

@@ -8,17 +8,17 @@
  *
  * Created on Feb 2, 2012, 12:04:52 PM
  */
-package com.compomics.mslimscore.gui.projectanalyzertools;
+package com.compomics.mslims.gui.projectanalyzertools;
 
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.gui.ProjectAnalyzer;
+import com.compomics.mslims.gui.interfaces.ProjectAnalyzerTool;
+import com.compomics.mslims.gui.table.IdentificationTableAccessorsTableModel;
+import com.compomics.mslims.gui.table.renderers.AlternativeIdentificationAccessorsTableModel;
+import com.compomics.mslims.gui.table.renderers.MasterAlternativeRenderer;
 import com.compomics.mslimsdb.accessors.AlternativeIdentification;
 import com.compomics.mslimsdb.accessors.AlternativeIdentificationTableAccessor;
-import com.compomics.mslimsdb.accessors.Identification;
-import com.compomics.mslimsdb.accessors.Project;
-import com.compomics.mslimscore.gui.ProjectAnalyzer;
-import com.compomics.mslimscore.gui.interfaces.ProjectAnalyzerTool;
-import com.compomics.mslimscore.gui.table.IdentificationTableAccessorsTableModel;
-import com.compomics.mslimscore.gui.table.renderers.AlternativeIdentificationAccessorsTableModel;
-import com.compomics.mslimscore.gui.table.renderers.MasterAlternativeRenderer;
 import com.compomics.util.gui.JTableForDB;
 
 import javax.swing.*;
@@ -346,7 +346,7 @@ public class IdentificationSwitcherGUI extends javax.swing.JFrame implements Pro
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

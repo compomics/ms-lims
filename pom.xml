@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd
 http://www.w3.org/2001/XMLSchema-instance ">
     <modelVersion>4.0.0</modelVersion>
@@ -42,8 +42,8 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <showDeprecation>true</showDeprecation>
                     <debug>true</debug>
                 </configuration>
@@ -482,6 +482,10 @@ http://www.w3.org/2001/XMLSchema-instance ">
                 <exclusion>
                     <groupId>uk.ac.ebi.pride.jaxb</groupId>
                     <artifactId>pride-jaxb</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>uk.ac.ebi.uniprot.kraken</groupId>
+                    <artifactId>uniprotjapi</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

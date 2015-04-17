@@ -1,4 +1,4 @@
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 
 import com.compomics.util.db.interfaces.Deleteable;
@@ -189,7 +189,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'Validationid' column
-	 * 
+	 *
 	 * @return	long	with the value for the Validationid column.
 	 */
 	public long getValidationid() {
@@ -198,7 +198,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'L_identificationid' column
-	 * 
+	 *
 	 * @return	long	with the value for the L_identificationid column.
 	 */
 	public long getL_identificationid() {
@@ -207,7 +207,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'L_validationtypeid' column
-	 * 
+	 *
 	 * @return	long	with the value for the L_validationtypeid column.
 	 */
 	public long getL_validationtypeid() {
@@ -216,7 +216,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'Auto_comment' column
-	 * 
+	 *
 	 * @return	String	with the value for the Auto_comment column.
 	 */
 	public String getAuto_comment() {
@@ -225,7 +225,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'Manual_comment' column
-	 * 
+	 *
 	 * @return	String	with the value for the Manual_comment column.
 	 */
 	public String getManual_comment() {
@@ -234,7 +234,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'Username' column
-	 * 
+	 *
 	 * @return	String	with the value for the Username column.
 	 */
 	public String getUsername() {
@@ -243,7 +243,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Creationdate column.
 	 */
 	public java.sql.Timestamp getCreationdate() {
@@ -252,7 +252,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method returns the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @return	java.sql.Timestamp	with the value for the Modificationdate column.
 	 */
 	public java.sql.Timestamp getModificationdate() {
@@ -261,7 +261,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'Validationid' column
-	 * 
+	 *
 	 * @param	aValidationid	long with the value for the Validationid column.
 	 */
 	public void setValidationid(long aValidationid) {
@@ -271,7 +271,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'L_identificationid' column
-	 * 
+	 *
 	 * @param	aL_identificationid	long with the value for the L_identificationid column.
 	 */
 	public void setL_identificationid(long aL_identificationid) {
@@ -281,7 +281,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'L_validationtypeid' column
-	 * 
+	 *
 	 * @param	aL_validationtypeid	long with the value for the L_validationtypeid column.
 	 */
 	public void setL_validationtypeid(long aL_validationtypeid) {
@@ -291,7 +291,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'Auto_comment' column
-	 * 
+	 *
 	 * @param	aAuto_comment	String with the value for the Auto_comment column.
 	 */
 	public void setAuto_comment(String aAuto_comment) {
@@ -301,7 +301,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'Manual_comment' column
-	 * 
+	 *
 	 * @param	aManual_comment	String with the value for the Manual_comment column.
 	 */
 	public void setManual_comment(String aManual_comment) {
@@ -311,7 +311,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'Username' column
-	 * 
+	 *
 	 * @param	aUsername	String with the value for the Username column.
 	 */
 	public void setUsername(String aUsername) {
@@ -321,7 +321,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'Creationdate' column
-	 * 
+	 *
 	 * @param	aCreationdate	java.sql.Timestamp with the value for the Creationdate column.
 	 */
 	public void setCreationdate(java.sql.Timestamp aCreationdate) {
@@ -331,7 +331,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 
 	/**
 	 * This method sets the value for the 'Modificationdate' column
-	 * 
+	 *
 	 * @param	aModificationdate	java.sql.Timestamp with the value for the Modificationdate column.
 	 */
 	public void setModificationdate(java.sql.Timestamp aModificationdate) {
@@ -508,7 +508,7 @@ public class ValidationTableAccessor implements Deleteable, Retrievable, Updatea
 	}
 
 	/**
-	 * This method will return the automatically generated key for the insert if 
+	 * This method will return the automatically generated key for the insert if
 	 * one was triggered, or 'null' otherwise.
 	 *
 	 * @return	Object[]	with the generated keys.

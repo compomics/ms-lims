@@ -31,5 +31,5 @@ public interface DBConverterStep {
      * @param aConn Connection on which to perform the step.
      * @return boolean that indicates success ('false') or failure ('true').
      */
-    public abstract boolean performConversionStep(Connection aConn);
+    boolean performConversionStep(Connection aConn);
 }

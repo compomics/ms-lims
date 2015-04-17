@@ -1,7 +1,9 @@
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mslims.db.accessors.Identification;
+import com.compomics.mslims.db.accessors.Spectrum;
+import com.compomics.mslims.db.accessors.Spectrum_file;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
-import com.compomics.mslimsdb.accessors.Spectrum_file;
 import org.apache.log4j.Logger;
 
 /**
@@ -18,15 +20,13 @@ import org.apache.log4j.Logger;
  * $Date: 2009/07/28 14:48:33 $
  */
 
-import com.compomics.mslimsdb.accessors.Identification;
-import com.compomics.mslimsdb.accessors.Spectrum;
 import com.compomics.util.enumeration.CompomicsTools;
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
-import com.compomics.mslimscore.gui.table.IdentificationTableModel;
+import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.gui.table.IdentificationTableModel;
+import com.compomics.mslims.util.fileio.MascotGenericFile;
+import com.compomics.mslims.util.workers.LoadDBDataWorker;
 import com.compomics.mslimscore.gui.tree.ClusterTreeModel;
 import com.compomics.mslimscore.gui.tree.renderers.ClusterTreeCellRenderer;
-import com.compomics.mslimscore.util.fileio.MascotGenericFile;
-import com.compomics.mslimscore.util.workers.LoadDBDataWorker;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.gui.JTableForDB;
 import com.compomics.util.gui.events.RescalingEvent;

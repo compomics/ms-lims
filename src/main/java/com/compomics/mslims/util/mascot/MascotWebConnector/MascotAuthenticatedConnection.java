@@ -94,7 +94,7 @@ public class MascotAuthenticatedConnection {
      * @throws org.apache.commons.httpclient.HttpException
      * @throws java.io.IOException
      */
-    public int executeMethod(PostMethod method) throws HttpException, IOException {
+    public int executeMethod(PostMethod method) throws IOException {
         if(lConnectionProperties.contains("mascotserverport")) {
         client.getHostConfiguration().setHost(lConnectionProperties.getProperty("mascotserverlocation"), Integer.parseInt(lConnectionProperties.getProperty("mascotserverport")));
         } else{
@@ -112,7 +112,7 @@ public class MascotAuthenticatedConnection {
      * login with username from the settings file
      * @return login success
      */
-    public boolean login() throws HttpException, IOException {
+    public boolean login() throws IOException {
         return login(lConnectionProperties.getProperty("mascotloginname"), lConnectionProperties.getProperty("mascotserverpassword"));
     }
 
@@ -122,7 +122,7 @@ public class MascotAuthenticatedConnection {
      * @param password
      * @return login success
      */
-    public boolean login(String username, String password) throws HttpException, IOException {
+    public boolean login(String username, String password) throws IOException {
         executeMethod(logoutMethod());
         executeMethod(loginMethod(username, password));
         return areCredentialsPresent();
@@ -134,7 +134,7 @@ public class MascotAuthenticatedConnection {
      * @throws org.apache.commons.httpclient.HttpException
      * @throws java.io.IOException
      */
-    public boolean logout() throws HttpException, IOException {
+    public boolean logout() throws IOException {
 
         executeMethod(logoutMethod());
         return !areCredentialsPresent();

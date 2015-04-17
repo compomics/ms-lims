@@ -31,5 +31,5 @@ public interface SpectrumQualityAssigner {
      * @return double with a value representing the quality judgement for the spectrum. The implementation should
      *         document how this value needs to be evaluated.
      */
-    public abstract double getSpectrumQualityScore(SpectrumFile aSpectrum);
+    double getSpectrumQualityScore(SpectrumFile aSpectrum);
 }

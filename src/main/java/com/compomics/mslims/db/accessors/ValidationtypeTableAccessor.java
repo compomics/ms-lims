@@ -1,4 +1,4 @@
-package com.compomics.mslimsdb.accessors;
+package com.compomics.mslims.db.accessors;
 
 import com.compomics.util.db.interfaces.Deleteable;
 import com.compomics.util.db.interfaces.Persistable;
@@ -98,7 +98,7 @@ public class ValidationtypeTableAccessor implements Deleteable, Retrievable, Upd
 
 	/**
 	 * This method returns the value for the 'Validationtypeid' column
-	 * 
+	 *
 	 * @return	long	with the value for the Validationtypeid column.
 	 */
 	public long getValidationtypeid() {
@@ -107,7 +107,7 @@ public class ValidationtypeTableAccessor implements Deleteable, Retrievable, Upd
 
 	/**
 	 * This method returns the value for the 'Name' column
-	 * 
+	 *
 	 * @return	String	with the value for the Name column.
 	 */
 	public String getName() {
@@ -116,7 +116,7 @@ public class ValidationtypeTableAccessor implements Deleteable, Retrievable, Upd
 
 	/**
 	 * This method sets the value for the 'Validationtypeid' column
-	 * 
+	 *
 	 * @param	aValidationtypeid	long with the value for the Validationtypeid column.
 	 */
 	public void setValidationtypeid(long aValidationtypeid) {
@@ -126,7 +126,7 @@ public class ValidationtypeTableAccessor implements Deleteable, Retrievable, Upd
 
 	/**
 	 * This method sets the value for the 'Name' column
-	 * 
+	 *
 	 * @param	aName	String with the value for the Name column.
 	 */
 	public void setName(String aName) {
@@ -277,7 +277,7 @@ public class ValidationtypeTableAccessor implements Deleteable, Retrievable, Upd
 	}
 
 	/**
-	 * This method will return the automatically generated key for the insert if 
+	 * This method will return the automatically generated key for the insert if
 	 * one was triggered, or 'null' otherwise.
 	 *
 	 * @return	Object[]	with the generated keys.

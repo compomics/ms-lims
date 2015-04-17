@@ -4,17 +4,17 @@
  * Date: 4-mrt-2005
  * Time: 20:27:38
  */
-package com.compomics.mslimscore.gui;
+package com.compomics.mslims.gui;
 
+import com.compomics.mslims.db.accessors.Binfile;
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.gui.dialogs.FiledescriptorDialog;
 import com.compomics.mslimscore.gui.dialogs.ConnectionDialog;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimsdb.accessors.Binfile;
-import com.compomics.mslimsdb.accessors.Filedescriptor;
-import com.compomics.mslimsdb.accessors.Project;
 import com.compomics.mslimscore.gui.dialogs.DescriptionDialog;
-import com.compomics.mslimscore.gui.dialogs.FiledescriptorDialog;
-import com.compomics.mslimscore.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslims.gui.progressbars.DefaultProgressBar;
+import com.compomics.mslimsdb.accessors.Filedescriptor;
 import com.compomics.util.gui.FlamableJFrame;
 import com.compomics.util.interfaces.Connectable;
 import com.compomics.util.sun.SwingWorker;

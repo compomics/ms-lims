@@ -35,14 +35,14 @@ public interface MergeFileReader {
      * @param aMis MascotIdentifiedSpectrum to compare to.
      * @return SpectrumFile with the corresponding SpectrumFile or 'null' if none found.
      */
-    public abstract SpectrumFile findMatchingSpectrumFile(MascotIdentifiedSpectrum aMis);
+    SpectrumFile findMatchingSpectrumFile(MascotIdentifiedSpectrum aMis);
 
     /**
      * This method reports on the spectrum files currently held in this merge file.
      *
      * @return Vector  with the currently held SpectrumFile implementations.
      */
-    public abstract Vector getSpectrumFiles();
+    Vector getSpectrumFiles();
 
     /**
      * This method returns the filename of the spectrum file that was found matching the specified
@@ -51,28 +51,28 @@ public interface MergeFileReader {
      * @param aMis MascotIdentifiedSpectrum to compare to.
      * @return String  with the filename of the corresponding spectrum file, or 'null' if none was found.
      */
-    public abstract String getCorrespondingSpectrumFilename(MascotIdentifiedSpectrum aMis);
+    String getCorrespondingSpectrumFilename(MascotIdentifiedSpectrum aMis);
 
     /**
      * This method returns a String representation of this instance.
      *
      * @return String  with the String representation of the object.
      */
-    public abstract String toString();
+    String toString();
 
     /**
      * Simple getter for the filename for this Mergefile.
      *
      * @return String  with the filename.
      */
-    public abstract String getFilename();
+    String getFilename();
 
     /**
      * Shortcut method that reports all the known spectrum filenames (present in this mergefile) in a String array.
      *
      * @return String[]    with the filenames of all the spectrum files in this mergefile.
      */
-    public String[] getAllSpectrumFilenames();
+    String[] getAllSpectrumFilenames();
 
     /**
      * This method reports whether this MergeFileReader can read the specified file.
@@ -80,7 +80,7 @@ public interface MergeFileReader {
      * @param aFile File with the file to check readability for.
      * @return boolean that indicates whether this MergeFileReader can read the specified file.
      */
-    public boolean canRead(File aFile);
+    boolean canRead(File aFile);
 
     /**
      * This method loads the specified file in this MergeFileReader.
@@ -88,5 +88,5 @@ public interface MergeFileReader {
      * @param aFile File with the file to load.
      * @throws IOException when the loading operation failed.
      */
-    public void load(File aFile) throws IOException;
+    void load(File aFile) throws IOException;
 }

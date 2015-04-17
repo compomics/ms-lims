@@ -156,7 +156,7 @@ public class SequenceRegion {
     /**
      * This method reports on the number of N-terminal residues the user requested to be retrieved. This number is a
      * setting, NOT a result. When the rertieved length is requested, one must first request the N-terminal addition and
-     * then request the length on that String. This is because a user can request 1à residues, but sometimes less (or
+     * then request the length on that String. This is because a user can request 1Ã  residues, but sometimes less (or
      * even no) N-terminal residues are present relative to the query sequence.
      *
      * @return int with the requested number of N-terminally retrieved residues.
@@ -168,7 +168,7 @@ public class SequenceRegion {
     /**
      * This method reports on the number of C-terminal residues the user requested to be retrieved. This number is a
      * setting, NOT a result. When the rertieved length is requested, one must first request the C-terminal addition and
-     * then request the length on that String. This is because a user can request 1à residues, but sometimes less (or
+     * then request the length on that String. This is because a user can request 1Ã  residues, but sometimes less (or
      * even no) C-terminal residues are present relative to the query sequence.
      *
      * @return int with the requested number of C-terminally retrieved residues.

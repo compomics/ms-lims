@@ -4,11 +4,11 @@
  * Date: 26-nov-02
  * Time: 16:16:03
  */
-package com.compomics.mslimscore.gui.dialogs;
+package com.compomics.mslims.gui.dialogs;
 
+import com.compomics.mslims.gui.FTPSatellite;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimscore.gui.FTPSatellite;
 import com.compomics.util.gui.JLabelAndComponentPanel;
 import com.compomics.util.io.FTPClient;
 

@@ -4,11 +4,11 @@
  * Date: 7-mrt-2005
  * Time: 7:39:58
  */
-package com.compomics.mslimscore.gui.interfaces;
+package com.compomics.mslims.gui.interfaces;
 
 
-import com.compomics.mslimsdb.accessors.Project;
-import com.compomics.mslimscore.gui.ProjectAnalyzer;
+import com.compomics.mslims.db.accessors.Project;
+import com.compomics.mslims.gui.ProjectAnalyzer;
 
 import java.sql.Connection;
 
@@ -39,22 +39,22 @@ public interface ProjectAnalyzerTool {
      * @param aDBName     String with the name of the database we're connected to via 'aConn'.
      * @param aProject    Project with the project we should be analyzing.
      */
-    public abstract void engageTool(ProjectAnalyzer aParent, String aToolName, String aParameters, Connection aConn, String aDBName, Project aProject);
+    void engageTool(ProjectAnalyzer aParent, String aToolName, String aParameters, Connection aConn, String aDBName, Project aProject);
 
     /**
      * This method should return a meaningful name for the tool.
      *
      * @return String with a meaningful name for the tool.
      */
-    public abstract String getToolName();
+    String getToolName();
 
     /**
      * This method will be called when the tool should show itself on the foreground and request the focus.
      */
-    public void setActive();
+    void setActive();
 
     /**
      * This method should be called when the tool has to shut down.
      */
-    public void close();
+    void close();
 }

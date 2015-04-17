@@ -4,15 +4,15 @@
  * Date: 12-okt-2004
  * Time: 13:13:58
  */
-package com.compomics.mslimscore.gui.frames;
+package com.compomics.mslims.gui.frames;
 
+import com.compomics.mslims.gui.table.DiffCoupleTableModel;
+import com.compomics.mslims.gui.table.renderers.ErrorCellRenderer;
+import com.compomics.mslims.gui.table.renderers.ErrorObject;
+import com.compomics.mslims.util.diff.DiffCouple;
+import com.compomics.mslims.util.diff.DifferentialProject;
 import org.apache.log4j.Logger;
 
-import com.compomics.mslimscore.gui.table.DiffCoupleTableModel;
-import com.compomics.mslimscore.gui.table.renderers.ErrorCellRenderer;
-import com.compomics.mslimscore.gui.table.renderers.ErrorObject;
-import com.compomics.mslimscore.util.diff.DiffCouple;
-import com.compomics.mslimscore.util.diff.DifferentialProject;
 import com.compomics.util.gui.JTableForDB;
 
 import javax.swing.*;
