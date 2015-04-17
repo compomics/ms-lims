@@ -1,1 +1,4 @@
 /target/
+.idea/
+ms-lims.iml
+.gitignore~
