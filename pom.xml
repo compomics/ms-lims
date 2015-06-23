@@ -57,6 +57,9 @@ http://www.w3.org/2001/XMLSchema-instance ">
                             <goals>
                                 <goal>jar</goal>
                             </goals>
+                            <configuration>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
                         </execution>
                     </executions>
                 </plugin>
